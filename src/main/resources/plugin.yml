@@ -1,0 +1,27 @@
+name: RevolutionSMP
+version: '${project.version}'
+main: me.notpseudo.revolutionsmp.RevolutionSMP
+api-version: 1.18
+load: STARTUP
+authors: [ NotPseudo ]
+description: A custom plugin for the RevolutionSMP
+commands:
+  potatobook:
+    description: Applies a Potato Book to an item
+    aliases:
+      - hpb
+      - pb
+    usage: /potatobook
+  recombobulate:
+    description: Recombobulates an item
+    aliases:
+      - recomb
+    usage: /recombobulate
+  reforge:
+    description: Applies a Reforge to an item
+    aliases:
+      - rf
+    usage: /reforge REFORGE
+  test:
+    description: This is a test command!
+    usage: /test
