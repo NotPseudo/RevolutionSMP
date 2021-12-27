@@ -306,6 +306,26 @@ public enum Reforge {
     public ArmorStats getArmorStats() {return new ArmorStats(50, 0, 0);}
     @Override
     public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+  },
+  ARMORTEST {
+    @Override
+    public List<ItemType> getItemTypes() {return List.of(ItemType.HELMET, ItemType.CHESTPLATE, ItemType.LEGGINGS, ItemType.BOOTS);}
+    @Override
+    public WeaponStats getWeaponStats() {return new WeaponStats(0, 100, 100, 100, 0);}
+    @Override
+    public ArmorStats getArmorStats() {return new ArmorStats(100, 100, 20);}
+    @Override
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+  },
+  WEAPONTEST {
+    @Override
+    public List<ItemType> getItemTypes() {return List.of(ItemType.SWORD, ItemType.BOW);}
+    @Override
+    public WeaponStats getWeaponStats() {return new WeaponStats(100, 1000, 100, 100, 0);}
+    @Override
+    public ArmorStats getArmorStats() {return new ArmorStats(0, 0, 0);}
+    @Override
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
   };
   public abstract List<ItemType> getItemTypes();
   public abstract WeaponStats getWeaponStats();

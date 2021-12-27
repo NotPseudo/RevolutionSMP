@@ -33,8 +33,14 @@ public class StatsListeners implements Listener {
 
   public StatsListeners(RevolutionSMP plugin) {
     this.plugin = plugin;
-    dataManager = new DataManager(this.plugin);
+    dataManager = plugin.getDataManager();
     Bukkit.getPluginManager().registerEvents(this, this.plugin);
+    Bukkit.getScheduler().scheduleAsyncRepeatingTask(this.plugin, () -> {
+      for(Player player : Bukkit.getOnlinePlayers()) {
+        naturalRegen(player);
+        showActionBar(player);
+      }
+    }, 20, 20);
   }
 
   public static void updateStats(Player player, ItemStack mainHandItem) {
@@ -181,9 +187,39 @@ public class StatsListeners implements Listener {
     player.setWalkSpeed((float) dataManager.getConfig().getDouble(player.getUniqueId() + ".speed") / 500);
   }
 
+  public static void naturalRegen(Player player) {
+    double health = dataManager.getConfig().getDouble(player.getUniqueId() + ".health"), intelligence = dataManager.getConfig().getDouble(player.getUniqueId() + ".intelligence"), mana = dataManager.getConfig().getDouble(player.getUniqueId() + ".mana");
+    if(!player.isDead()) {
+      if(player.getHealth() != health) {
+        double addHealth = Math.ceil((0.75 + (health * 0.005)) * 10) / 10;
+        if((player.getHealth() + addHealth) >= health) {
+          player.setHealth(health);
+        } else {
+          player.setHealth(player.getHealth() + addHealth);
+        }
+      }
+    }
+    if(mana != intelligence) {
+      double addMana = intelligence * 0.02;
+      if((mana + addMana) >= intelligence) {
+        mana = intelligence;
+      } else {
+        mana += addMana;
+      }
+      dataManager.getConfig().set(player.getUniqueId() + ".mana", mana);
+    }
+  }
+
+  public static void showActionBar(Player player) {
+    double health = dataManager.getConfig().getDouble(player.getUniqueId() + ".health"), defense = dataManager.getConfig().getDouble(player.getUniqueId() + ".defense"), intelligence = dataManager.getConfig().getDouble(player.getUniqueId() + ".intelligence"), mana = dataManager.getConfig().getDouble(player.getUniqueId() + ".mana");
+    player.sendActionBar(Component.text(Math.round(player.getHealth()) + "/" + Math.round(health) + "❤     ", NamedTextColor.RED).append(Component.text(Math.round(defense) + "❈ Defense     ", NamedTextColor.GREEN)).append(Component.text(Math.round(mana) + "/" + Math.round(intelligence) + "✎ Mana", NamedTextColor.AQUA)));
+  }
+
   @EventHandler
   public void onJoin(PlayerJoinEvent event) {
     updateStats(event.getPlayer(), event.getPlayer().getInventory().getItemInMainHand());
+    dataManager.getConfig().set(event.getPlayer().getUniqueId() + ".mana", dataManager.getConfig().getDouble(event.getPlayer().getUniqueId() + ".intelligence"));
+    showActionBar(event.getPlayer());
   }
 
   @EventHandler

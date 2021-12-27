@@ -8,6 +8,7 @@ import me.notpseudo.revolutionsmp.datacontainers.WeaponStats;
 import me.notpseudo.revolutionsmp.datacontainers.WeaponStatsDataType;
 import me.notpseudo.revolutionsmp.datamanager.DataManager;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -27,7 +28,7 @@ public class HealthListeners implements Listener {
 
   public HealthListeners(RevolutionSMP plugin) {
     this.plugin = plugin;
-    dataManager = new DataManager(this.plugin);
+    dataManager = plugin.getDataManager();
     Bukkit.getPluginManager().registerEvents(this, this.plugin);
   }
 
@@ -132,7 +133,7 @@ public class HealthListeners implements Listener {
 
   @EventHandler
   public void onDamage(EntityDamageEvent event) {
-    if(event.getEntity() instanceof LivingEntity && !(event.getEntity() instanceof ArmorStand) && !(event.getEntity() instanceof Player)) {
+    if(event.getEntity() instanceof LivingEntity && !(event.getEntity() instanceof ArmorStand)) {
       if(event instanceof EntityDamageByEntityEvent) {
         return;
       }
@@ -148,16 +149,22 @@ public class HealthListeners implements Listener {
       if(!(entity instanceof Player)) {
         int health = (int) Math.round(entity.getHealth() - finalDamage);
         updateHealthBar(entity, health);
+      } else {
+        StatsListeners.showActionBar((Player) entity);
       }
     }
   }
 
   @EventHandler
   public void onRegen(EntityRegainHealthEvent event) {
-    if(event.getEntity() instanceof LivingEntity && !(event.getEntity() instanceof ArmorStand) && !(event.getEntity() instanceof Player)) {
+    if(event.getEntity() instanceof LivingEntity && !(event.getEntity() instanceof ArmorStand)) {
       LivingEntity entity = (LivingEntity) event.getEntity();
       int health = (int) Math.round(entity.getHealth() + event.getAmount());
-      updateHealthBar(entity, health);
+      if(!(entity instanceof Player)) {
+        updateHealthBar(entity, health);
+      } else {
+        StatsListeners.showActionBar((Player) entity);
+      }
     }
   }
 
@@ -166,8 +173,16 @@ public class HealthListeners implements Listener {
     if(event.getEntity() instanceof LivingEntity && !(event.getEntity() instanceof ArmorStand)) {
       LivingEntity entity = (LivingEntity) event.getEntity();
       double weaponDamage = event.getDamage(), strength = 0, critDamage = 50, critChance = 30, defense, actualDamagePercent = 1;
+      Player player = null;
       if(event.getDamager() instanceof Player) {
-        Player player = (Player) event.getDamager();
+        player = (Player) event.getDamager();
+      }
+      if(event.getDamager() instanceof Arrow) {
+        if(((Arrow) event.getDamager()).getShooter() instanceof Player) {
+          player = (Player) ((Arrow) event.getDamager()).getShooter();
+        }
+      }
+      if(player != null) {
         strength = dataManager.getConfig().getDouble(player.getUniqueId() + ".strength");
         critDamage = dataManager.getConfig().getDouble(player.getUniqueId() + ".critDamage");
         critChance = dataManager.getConfig().getDouble(player.getUniqueId() + ".critChance");
@@ -183,7 +198,8 @@ public class HealthListeners implements Listener {
           }
         }
       }
-      boolean critical = Math.random() <= (critChance / 100);
+      double randomCrit = Math.random() * 100;
+      boolean critical = randomCrit <= critChance;
       if(!critical) {
         critDamage = 0;
       }
@@ -198,6 +214,8 @@ public class HealthListeners implements Listener {
       if(!(entity instanceof Player)) {
         int health = (int) Math.round(entity.getHealth() - finalDamage);
         updateHealthBar(entity, health);
+      } else {
+        StatsListeners.showActionBar((Player) entity);
       }
       showDamage(entity, finalDamage, critical);
     }
