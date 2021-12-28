@@ -36,18 +36,15 @@ public class HealthListeners implements Listener {
     this.plugin = plugin;
     dataManager = plugin.getDataManager();
     Bukkit.getPluginManager().registerEvents(this, this.plugin);
-    Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, new Runnable() {
-      @Override
-      public void run() {
-        for(Player player : Bukkit.getOnlinePlayers()) {
-          for(Entity entity : player.getNearbyEntities(10, 10, 10)) {
-            if(entity instanceof LivingEntity && !(entity instanceof ArmorStand)) {
-              updateHealthBar((LivingEntity) entity, (int) Math.round(((LivingEntity) entity).getHealth()), player);
-            }
+    Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
+      for(Player player : Bukkit.getOnlinePlayers()) {
+        for(Entity entity : player.getNearbyEntities(15, 10, 15)) {
+          if(entity instanceof LivingEntity && !(entity instanceof ArmorStand)) {
+            updateHealthBar((LivingEntity) entity, (int) Math.round(((LivingEntity) entity).getHealth()), player);
           }
         }
       }
-    }, 100, 20);
+    }, 100, 15);
   }
 
   private final static NamespacedKey weaponKey = ItemEditor.getWeaponKey();
@@ -138,14 +135,15 @@ public class HealthListeners implements Listener {
       damageString = critString;
     }
     int entityID = getNextIndicatorCount();
-    List<Integer> entityIDList = Arrays.asList(entityID);
-    PacketContainer spawnPacket = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.SPAWN_ENTITY);
+    UUID uuid = UUID.randomUUID();
+    PacketContainer spawnPacket = new PacketContainer(PacketType.Play.Server.SPAWN_ENTITY);
     spawnPacket.getIntegers().write(0, entityID);
+    spawnPacket.getUUIDs().write(0, uuid);
     spawnPacket.getEntityTypeModifier().write(0, EntityType.ARMOR_STAND);
     spawnPacket.getDoubles().write(0, entity.getLocation().getX() + getRandomOffset());
     spawnPacket.getDoubles().write(1, entity.getLocation().getY() + entity.getHeight() + getRandomOffset());
     spawnPacket.getDoubles().write(2, entity.getLocation().getZ() + getRandomOffset());
-    PacketContainer editPacket = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.ENTITY_METADATA);
+    PacketContainer editPacket = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
     WrappedDataWatcher dataWatcher = new WrappedDataWatcher();
     WrappedDataWatcher.Serializer chatSerializer = WrappedDataWatcher.Registry.getChatComponentSerializer(true);
     WrappedDataWatcher.WrappedDataWatcherObject watcherObject = new WrappedDataWatcher.WrappedDataWatcherObject(2, chatSerializer);
@@ -157,23 +155,21 @@ public class HealthListeners implements Listener {
     dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(3, WrappedDataWatcher.Registry.get(Boolean.class)), true); //customNameVisible
     editPacket.getWatchableCollectionModifier().write(0, dataWatcher.getWatchableObjects());
     editPacket.getIntegers().write(0, entityID);
+    List<Integer> entityIDList = Arrays.asList(entityID);
     PacketContainer removePacket = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
     removePacket.getIntLists().write(0, entityIDList);
-    for(Player player : Bukkit.getOnlinePlayers()) {
-      try {
-        ProtocolLibrary.getProtocolManager().sendServerPacket(player, spawnPacket);
-        ProtocolLibrary.getProtocolManager().sendServerPacket(player, editPacket);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, () -> {
-          try {
-            ProtocolLibrary.getProtocolManager().sendServerPacket(player, removePacket);
-          } catch (InvocationTargetException e) {
-            e.printStackTrace();
-          }
-        }, 30);
-      } catch (InvocationTargetException e) {
-        plugin.getLogger().severe("Unable to update Damage Indicator Edit packet for player " + player.getName() + "! Stack trace:");
-        e.printStackTrace();
-      }
+    try {
+      ProtocolLibrary.getProtocolManager().broadcastServerPacket(spawnPacket);
+      ProtocolLibrary.getProtocolManager().broadcastServerPacket(editPacket);
+      Bukkit.getScheduler().runTaskLaterAsynchronously(this.plugin, () -> {
+        try {
+          ProtocolLibrary.getProtocolManager().broadcastServerPacket(removePacket);
+        } catch (FieldAccessException e) {
+          e.printStackTrace();
+        }}, 20);
+    } catch (FieldAccessException e) {
+      plugin.getLogger().severe("Unable to update Damage Indicator Edit packet for player! Stack trace:");
+      e.printStackTrace();
     }
   }
 
