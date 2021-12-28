@@ -5,6 +5,7 @@ api-version: 1.18
 load: STARTUP
 authors: [ NotPseudo ]
 description: A custom plugin for the RevolutionSMP
+depend: [ProtocolLib]
 commands:
   potatobook:
     description: Applies a Potato Book to an item

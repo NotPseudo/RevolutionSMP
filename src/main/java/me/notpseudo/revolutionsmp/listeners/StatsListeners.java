@@ -35,7 +35,7 @@ public class StatsListeners implements Listener {
     this.plugin = plugin;
     dataManager = plugin.getDataManager();
     Bukkit.getPluginManager().registerEvents(this, this.plugin);
-    Bukkit.getScheduler().scheduleAsyncRepeatingTask(this.plugin, () -> {
+    Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
       for(Player player : Bukkit.getOnlinePlayers()) {
         naturalRegen(player);
         showActionBar(player);
@@ -185,6 +185,7 @@ public class StatsListeners implements Listener {
     player.setHealthScale(40);
     player.setHealth(healthPercent * player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
     player.setWalkSpeed((float) dataManager.getConfig().getDouble(player.getUniqueId() + ".speed") / 500);
+    showActionBar(player);
   }
 
   public static void naturalRegen(Player player) {

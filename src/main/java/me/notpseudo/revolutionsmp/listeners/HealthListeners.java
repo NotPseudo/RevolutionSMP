@@ -1,14 +1,17 @@
 package me.notpseudo.revolutionsmp.listeners;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.reflect.FieldAccessException;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
-import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
-import io.papermc.paper.event.entity.EntityMoveEvent;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.datacontainers.WeaponStats;
 import me.notpseudo.revolutionsmp.datacontainers.WeaponStatsDataType;
 import me.notpseudo.revolutionsmp.datamanager.DataManager;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -19,23 +22,37 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class HealthListeners implements Listener {
 
-  private final RevolutionSMP plugin;
+  private static RevolutionSMP plugin = RevolutionSMP.getPlugin();
   private DataManager dataManager;
+  private static int indicatorCount = 0;
 
   public HealthListeners(RevolutionSMP plugin) {
     this.plugin = plugin;
     dataManager = plugin.getDataManager();
     Bukkit.getPluginManager().registerEvents(this, this.plugin);
+    Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, new Runnable() {
+      @Override
+      public void run() {
+        for(Player player : Bukkit.getOnlinePlayers()) {
+          for(Entity entity : player.getNearbyEntities(10, 10, 10)) {
+            if(entity instanceof LivingEntity && !(entity instanceof ArmorStand)) {
+              updateHealthBar((LivingEntity) entity, (int) Math.round(((LivingEntity) entity).getHealth()), player);
+            }
+          }
+        }
+      }
+    }, 100, 20);
   }
 
   private final static NamespacedKey weaponKey = ItemEditor.getWeaponKey();
   private final ChatColor[] chatColors = {ChatColor.WHITE, ChatColor.GOLD, ChatColor.YELLOW, ChatColor.RED};
-  private static ConcurrentHashMap<LivingEntity, ArmorStand> healthBars = new ConcurrentHashMap<>();
-  private ConcurrentHashMap<LivingEntity, String> names = new ConcurrentHashMap<>();
+  private static ConcurrentHashMap<LivingEntity, String> names = new ConcurrentHashMap<>();
 
   private double getRandomOffset() {
     double random = Math.random();
@@ -46,17 +63,14 @@ public class HealthListeners implements Listener {
     return random;
   }
 
-  private void updateHealthBar(LivingEntity entity, int health) {
-    ArmorStand healthBar = healthBars.get(entity);
-    if(healthBar == null) {
-      healthBar = (ArmorStand) entity.getWorld().spawnEntity(entity.getLocation().add(0, entity.getHeight(), 0), EntityType.ARMOR_STAND);
-      healthBar.setInvisible(true);
-      healthBar.setMarker(true);
-      healthBar.setCustomNameVisible(true);
-      healthBars.put(entity, healthBar);
-    }
+  private static int getNextIndicatorCount() {
+    indicatorCount++;
+    return indicatorCount - 1;
+  }
+
+  public static void updateHealthBar(LivingEntity entity, int health) {
     String nameString = "" + ChatColor.RED + getName(entity);
-    String healthString = "";
+    String healthString;
     double maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
     if(health < maxHealth) {
       if(health < 0) {health = 0;}
@@ -65,14 +79,54 @@ public class HealthListeners implements Listener {
       if(health > maxHealth) {health = (int) maxHealth;}
       healthString = "" + ChatColor.GREEN + health;
     }
-    healthBar.setCustomName(nameString + healthString + ChatColor.GRAY + "/" + ChatColor.GREEN + Math.round(maxHealth) + ChatColor.RED + "❤");
+    String healthBarString = nameString + healthString + ChatColor.GRAY + "/" + ChatColor.GREEN + Math.round(maxHealth) + ChatColor.RED + "❤";
+    WrappedDataWatcher dataWatcher = WrappedDataWatcher.getEntityWatcher(entity).deepClone();
+    WrappedDataWatcher.Serializer chatSerializer = WrappedDataWatcher.Registry.getChatComponentSerializer(true);
+    WrappedDataWatcher.WrappedDataWatcherObject watcherObject = new WrappedDataWatcher.WrappedDataWatcherObject(2, chatSerializer);
+    Optional<Object> optional = Optional.of(WrappedChatComponent.fromChatMessage(healthBarString)[0].getHandle());
+    dataWatcher.setObject(watcherObject, optional);
+    dataWatcher.setObject(3, true);
+    PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.ENTITY_METADATA);
+    packet.getWatchableCollectionModifier().write(0, dataWatcher.getWatchableObjects());
+    packet.getIntegers().write(0, entity.getEntityId());
+    try {
+      ProtocolLibrary.getProtocolManager().broadcastServerPacket(packet);
+    } catch (FieldAccessException e) {
+      plugin.getLogger().severe("Unable to update Health Bar packet! Stack trace:");
+      e.printStackTrace();
+    }
+  }
+
+  public static void updateHealthBar(LivingEntity entity, int health, Player player) {
+    String nameString = "" + ChatColor.RED + getName(entity);
+    String healthString;
+    double maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+    if(health < maxHealth) {
+      if(health < 0) {health = 0;}
+      healthString = "" + ChatColor.YELLOW + health;
+    } else {
+      if(health > maxHealth) {health = (int) maxHealth;}
+      healthString = "" + ChatColor.GREEN + health;
+    }
+    String healthBarString = nameString + healthString + ChatColor.GRAY + "/" + ChatColor.GREEN + Math.round(maxHealth) + ChatColor.RED + "❤";
+    WrappedDataWatcher dataWatcher = WrappedDataWatcher.getEntityWatcher(entity).deepClone();
+    WrappedDataWatcher.Serializer chatSerializer = WrappedDataWatcher.Registry.getChatComponentSerializer(true);
+    WrappedDataWatcher.WrappedDataWatcherObject watcherObject = new WrappedDataWatcher.WrappedDataWatcherObject(2, chatSerializer);
+    Optional<Object> optional = Optional.of(WrappedChatComponent.fromChatMessage(healthBarString)[0].getHandle());
+    dataWatcher.setObject(watcherObject, optional);
+    dataWatcher.setObject(3, true);
+    PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.ENTITY_METADATA);
+    packet.getWatchableCollectionModifier().write(0, dataWatcher.getWatchableObjects());
+    packet.getIntegers().write(0, entity.getEntityId());
+    try {
+      ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
+    } catch (InvocationTargetException e) {
+      plugin.getLogger().severe("Unable to update Health Bar packet for player " + player.getName() + "! Stack trace:");
+      e.printStackTrace();
+    }
   }
 
   private void showDamage(LivingEntity entity, double damage, boolean critical) {
-    ArmorStand damageIndicator = (ArmorStand) entity.getWorld().spawnEntity(entity.getLocation().add(getRandomOffset(), 2 + getRandomOffset(), getRandomOffset()), EntityType.ARMOR_STAND);
-    damageIndicator.setInvisible(true);
-    damageIndicator.setGravity(false);
-    damageIndicator.setMarker(true);
     String damageString = "" + ChatColor.GRAY + Math.round(damage);
     if(critical) {
       damageString = "✧" + Math.round(damage) + "✧";
@@ -83,12 +137,47 @@ public class HealthListeners implements Listener {
       }
       damageString = critString;
     }
-    damageIndicator.setCustomName(damageString);
-    damageIndicator.setCustomNameVisible(true);
-    Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, damageIndicator::remove, 20);
+    int entityID = getNextIndicatorCount();
+    List<Integer> entityIDList = Arrays.asList(entityID);
+    PacketContainer spawnPacket = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.SPAWN_ENTITY);
+    spawnPacket.getIntegers().write(0, entityID);
+    spawnPacket.getEntityTypeModifier().write(0, EntityType.ARMOR_STAND);
+    spawnPacket.getDoubles().write(0, entity.getLocation().getX() + getRandomOffset());
+    spawnPacket.getDoubles().write(1, entity.getLocation().getY() + entity.getHeight() + getRandomOffset());
+    spawnPacket.getDoubles().write(2, entity.getLocation().getZ() + getRandomOffset());
+    PacketContainer editPacket = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.ENTITY_METADATA);
+    WrappedDataWatcher dataWatcher = new WrappedDataWatcher();
+    WrappedDataWatcher.Serializer chatSerializer = WrappedDataWatcher.Registry.getChatComponentSerializer(true);
+    WrappedDataWatcher.WrappedDataWatcherObject watcherObject = new WrappedDataWatcher.WrappedDataWatcherObject(2, chatSerializer);
+    Optional<Object> optional = Optional.of(WrappedChatComponent.fromChatMessage(damageString)[0].getHandle());
+    dataWatcher.setObject(watcherObject, optional);
+    dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(0, WrappedDataWatcher.Registry.get(Byte.class)), (byte) 0x20); //invisible
+    dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(5, WrappedDataWatcher.Registry.get(Boolean.class)), true); //noGravity
+    dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(15, WrappedDataWatcher.Registry.get(Byte.class)), (byte) (0x01 | 0x08 | 0x10)); //isSmall, noBasePlate, set Marker
+    dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(3, WrappedDataWatcher.Registry.get(Boolean.class)), true); //customNameVisible
+    editPacket.getWatchableCollectionModifier().write(0, dataWatcher.getWatchableObjects());
+    editPacket.getIntegers().write(0, entityID);
+    PacketContainer removePacket = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
+    removePacket.getIntLists().write(0, entityIDList);
+    for(Player player : Bukkit.getOnlinePlayers()) {
+      try {
+        ProtocolLibrary.getProtocolManager().sendServerPacket(player, spawnPacket);
+        ProtocolLibrary.getProtocolManager().sendServerPacket(player, editPacket);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, () -> {
+          try {
+            ProtocolLibrary.getProtocolManager().sendServerPacket(player, removePacket);
+          } catch (InvocationTargetException e) {
+            e.printStackTrace();
+          }
+        }, 30);
+      } catch (InvocationTargetException e) {
+        plugin.getLogger().severe("Unable to update Damage Indicator Edit packet for player " + player.getName() + "! Stack trace:");
+        e.printStackTrace();
+      }
+    }
   }
 
-  private String getName(LivingEntity entity) {
+  private static String getName(LivingEntity entity) {
     String name = entity.getCustomName();
     if(name == null) {
       String[] nameList = entity.getType().getKey().getKey().split("_");
@@ -103,31 +192,12 @@ public class HealthListeners implements Listener {
     return name;
   }
 
-  public static void clearHealthBars() {
-    for(LivingEntity entity : healthBars.keySet()) {
-      healthBars.get(entity).remove();
-    }
-  }
-
   @EventHandler
   public void onSpawn(EntityAddToWorldEvent event) {
     if(event.getEntity() instanceof LivingEntity && !(event.getEntity() instanceof ArmorStand) && !(event.getEntity() instanceof Player)) {
       LivingEntity entity = (LivingEntity) event.getEntity();
       int health = (int) Math.round(entity.getHealth());
       updateHealthBar(entity, health);
-    }
-  }
-
-  @EventHandler
-  public void onDespawn(EntityRemoveFromWorldEvent event) {
-    if(event.getEntity() instanceof LivingEntity && !(event.getEntity() instanceof ArmorStand) && !(event.getEntity() instanceof Player)) {
-      LivingEntity entity = (LivingEntity) event.getEntity();
-      if(healthBars.get(entity) != null) {
-        healthBars.get(entity).remove();
-      }
-      if(healthBars.containsKey(entity)) {
-        healthBars.remove(entity);
-      }
     }
   }
 
@@ -218,17 +288,6 @@ public class HealthListeners implements Listener {
         StatsListeners.showActionBar((Player) entity);
       }
       showDamage(entity, finalDamage, critical);
-    }
-  }
-
-  @EventHandler
-  public void onEntityMove(EntityMoveEvent event) {
-    if(!(event.getEntity() instanceof Player) && event.hasChangedPosition()) {
-      LivingEntity entity = event.getEntity();
-      ArmorStand healthBar = healthBars.get(entity);
-      if(healthBar != null) {
-        healthBar.teleport(entity.getLocation().add(0, entity.getHeight(), 0));
-      }
     }
   }
 

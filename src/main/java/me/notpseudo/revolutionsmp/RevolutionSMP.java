@@ -16,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class RevolutionSMP extends JavaPlugin {
 
   private DataManager dataManager = new DataManager(this);
+  private static RevolutionSMP plugin;
 
   @Override
   public void onEnable() {
@@ -29,16 +30,20 @@ public final class RevolutionSMP extends JavaPlugin {
     WeaponCreator.createWeapons();
     ArmorCreator.createArmors();
     Abilities.createPassSet();
-
+    plugin = this;
   }
 
   @Override
   public void onDisable() {
-    HealthListeners.clearHealthBars();
+
   }
 
   public DataManager getDataManager() {
     return dataManager;
+  }
+
+  public static RevolutionSMP getPlugin() {
+    return plugin;
   }
 
 }
