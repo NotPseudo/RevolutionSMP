@@ -204,19 +204,13 @@ public class HealthListeners implements Listener {
         return;
       }
       LivingEntity entity = (LivingEntity) event.getEntity();
-      double finalDamage = event.getDamage(), defense, actualDamagePercent = 1;
-      if(entity instanceof Player) {
-        Player player = (Player) entity;
-        defense = dataManager.getConfig().getDouble(player.getUniqueId() + ".defense");
-        actualDamagePercent = 1 - (defense / (defense + 100));
-      }
-      finalDamage *= actualDamagePercent;
-      event.setDamage(finalDamage);
       if(!(entity instanceof Player)) {
-        int health = (int) Math.round(entity.getHealth() - finalDamage);
+        int health = (int) Math.round(entity.getHealth() - event.getDamage());
         updateHealthBar(entity, health);
       } else {
-        StatsListeners.showActionBar((Player) entity);
+        Bukkit.getScheduler().runTaskLaterAsynchronously(this.plugin, () -> {
+          StatsListeners.showActionBar((Player) entity);
+        }, 5);
       }
     }
   }
