@@ -8,14 +8,12 @@ import me.notpseudo.revolutionsmp.items.ItemEditor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
@@ -37,13 +35,14 @@ public class StatsListeners implements Listener {
     Bukkit.getPluginManager().registerEvents(this, this.plugin);
     Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
       for(Player player : Bukkit.getOnlinePlayers()) {
+        updateStats(player);
         naturalRegen(player);
         showActionBar(player);
       }
     }, 20, 20);
   }
 
-  public static void updateStats(Player player, ItemStack mainHandItem) {
+  public static void updateStats(Player player) {
     double health = 20, defense = 0, strength = 0, speed = 100, critChance = 30, critDamage = 50, intelligence = 100, abilityDamage = 0, ferocity = 0;
     if(player.getInventory().getHelmet() != null) {
       if(player.getInventory().getHelmet().getItemMeta() != null) {
@@ -145,9 +144,9 @@ public class StatsListeners implements Listener {
         }
       }
     }
-    if(mainHandItem != null) {
-      if(mainHandItem.getItemMeta() != null) {
-        ItemMeta mainHandMeta = mainHandItem.getItemMeta();
+    if(player.getInventory().getItemInMainHand().getType() != Material.AIR) {
+      if(player.getInventory().getItemInMainHand().getItemMeta() != null) {
+        ItemMeta mainHandMeta = player.getInventory().getItemInMainHand().getItemMeta();
         if (mainHandMeta != null) {
           WeaponStats mainHandWeaponStats = mainHandMeta.getPersistentDataContainer().get(weaponKey, new WeaponStatsDataType());
           ArmorStats mainHandArmorStats = mainHandMeta.getPersistentDataContainer().get(armorKey, new ArmorStatsDataType());
@@ -213,46 +212,29 @@ public class StatsListeners implements Listener {
 
   public static void showActionBar(Player player) {
     double health = dataManager.getConfig().getDouble(player.getUniqueId() + ".health"), defense = dataManager.getConfig().getDouble(player.getUniqueId() + ".defense"), intelligence = dataManager.getConfig().getDouble(player.getUniqueId() + ".intelligence"), mana = dataManager.getConfig().getDouble(player.getUniqueId() + ".mana");
-    player.sendActionBar(Component.text(Math.round(player.getHealth()) + "/" + Math.round(health) + "❤     ", NamedTextColor.RED).append(Component.text(Math.round(defense) + "❈ Defense     ", NamedTextColor.GREEN)).append(Component.text(Math.round(mana) + "/" + Math.round(intelligence) + "✎ Mana", NamedTextColor.AQUA)));
+    NamedTextColor healthColor = NamedTextColor.RED;
+    double currentAbsorption = player.getAbsorptionAmount();
+    if(currentAbsorption != 0) {
+      healthColor = NamedTextColor.GOLD;
+    }
+    player.sendActionBar(Component.text(Math.round(player.getHealth() + currentAbsorption) + "/" + Math.round(health) + "❤     ", healthColor).append(Component.text(Math.round(defense) + "❈ Defense     ", NamedTextColor.GREEN)).append(Component.text(Math.round(mana) + "/" + Math.round(intelligence) + "✎ Mana", NamedTextColor.AQUA)));
   }
 
   @EventHandler
   public void onJoin(PlayerJoinEvent event) {
-    updateStats(event.getPlayer(), event.getPlayer().getInventory().getItemInMainHand());
+    updateStats(event.getPlayer());
     dataManager.getConfig().set(event.getPlayer().getUniqueId() + ".mana", dataManager.getConfig().getDouble(event.getPlayer().getUniqueId() + ".intelligence"));
     showActionBar(event.getPlayer());
   }
 
   @EventHandler
   public void onArmorSwitch(PlayerArmorChangeEvent event) {
-    updateStats(event.getPlayer(), event.getPlayer().getInventory().getItemInMainHand());
+    updateStats(event.getPlayer());
   }
 
   @EventHandler
   public void onHandItemSwitch(PlayerItemHeldEvent event) {
-    if(event.getPlayer().getInventory().getItem(event.getNewSlot()) != null) {
-      updateStats(event.getPlayer(), event.getPlayer().getInventory().getItem(event.getNewSlot()));
-    }
-  }
-
-  @EventHandler
-  public void onItemPickup(EntityPickupItemEvent event) {
-    if(event.getEntity() instanceof Player) {
-      Player player = (Player) event.getEntity();
-      Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> updateStats(player, player.getInventory().getItemInMainHand()), 20);
-    }
-  }
-
-  @EventHandler
-  public void onItemDrop(PlayerDropItemEvent event) {
-    Player player = event.getPlayer();
-    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> updateStats(player, player.getInventory().getItemInMainHand()), 20);
-  }
-
-  @EventHandler
-  public void onInventoryClick(InventoryClickEvent event) {
-    Player player = (Player) event.getWhoClicked();
-    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> updateStats(player, player.getInventory().getItemInMainHand()), 20);
+    Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> updateStats(event.getPlayer()), 5);
   }
 
 }
