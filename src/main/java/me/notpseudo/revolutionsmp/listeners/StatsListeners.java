@@ -16,12 +16,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class StatsListeners implements Listener {
 
-  private final static NamespacedKey itemKey = ItemEditor.getItemKey();
   private final static NamespacedKey weaponKey = ItemEditor.getWeaponKey();
   private final static NamespacedKey armorKey = ItemEditor.getArmorKey();
   private final static NamespacedKey abilityKey = ItemEditor.getAbilityKey();
