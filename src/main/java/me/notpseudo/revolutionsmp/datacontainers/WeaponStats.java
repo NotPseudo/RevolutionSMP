@@ -2,6 +2,7 @@ package me.notpseudo.revolutionsmp.datacontainers;
 
 import java.io.Serializable;
 
+// Weapon stats stored in an ItemStack's PersistentDataContainer
 public class WeaponStats implements Serializable {
 
   private double damage;

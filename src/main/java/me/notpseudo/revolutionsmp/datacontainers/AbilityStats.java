@@ -4,6 +4,7 @@ import me.notpseudo.revolutionsmp.abilities.Ability;
 
 import java.io.Serializable;
 
+// Ability stats stored in an ItemStack's PersistentDataContainer
 public class AbilityStats implements Serializable {
 
   private double abilityDamage;

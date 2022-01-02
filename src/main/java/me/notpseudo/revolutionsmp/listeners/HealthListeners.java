@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class HealthListeners implements Listener {
 
+  // Instance of main plugin class, DataManager to access config files, indicatorCount to make entity IDs for Damage Indicators
   private static RevolutionSMP plugin = RevolutionSMP.getPlugin();
   private DataManager dataManager;
   private static int indicatorCount = 0;
@@ -37,6 +38,7 @@ public class HealthListeners implements Listener {
     dataManager = plugin.getDataManager();
     Bukkit.getPluginManager().registerEvents(this, this.plugin);
     Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
+      // Every 15 ticks, for every player, get LivingEntities in specified radius and show their health bars
       for(Player player : Bukkit.getOnlinePlayers()) {
         for(Entity entity : player.getNearbyEntities(15, 10, 15)) {
           if(entity instanceof LivingEntity && !(entity instanceof ArmorStand)) {
@@ -47,10 +49,12 @@ public class HealthListeners implements Listener {
     }, 100, 15);
   }
 
+  // NamespacedKey to access item stats, list of colors for critical Damage Indicator, HashMap for every LivingEntity and its name
   private final static NamespacedKey weaponKey = ItemEditor.getWeaponKey();
   private final ChatColor[] chatColors = {ChatColor.WHITE, ChatColor.GOLD, ChatColor.YELLOW, ChatColor.RED};
   private static ConcurrentHashMap<LivingEntity, String> names = new ConcurrentHashMap<>();
 
+  // Generates random offset for location coordinates
   private double getRandomOffset() {
     double random = Math.random();
     if (Math.random() > 0.5) {
@@ -60,40 +64,58 @@ public class HealthListeners implements Listener {
     return random;
   }
 
+  // Gets next entity ID to create a Damage Indicator
   private static int getNextIndicatorCount() {
     indicatorCount++;
     return indicatorCount - 1;
   }
 
+  // Edits the LivingEntity's health bar
   public static void updateHealthBar(LivingEntity entity, int health) {
+    // Makes the LivingEntity's name red
     String nameString = "" + ChatColor.RED + getName(entity);
     String healthString;
+    // Gets max Health of the LivingEntity
     double maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
     if(health < maxHealth) {
-      if(health < 0) {health = 0;}
+      // If the current Health is not full
+      if(health < 0) {health = 0;} // If current Health is negative, display it as 0
+      // Not-full health is displayed as yellow
       healthString = "" + ChatColor.YELLOW + health;
     } else {
-      if(health > maxHealth) {health = (int) maxHealth;}
+      if(health > maxHealth) {health = (int) maxHealth;} // If current Health exceeds max Health, display it as max Health
+      // Full health is displayed as Green
       healthString = "" + ChatColor.GREEN + health;
     }
+    // Health bar shows name and current Health out of max Health
     String healthBarString = nameString + healthString + ChatColor.GRAY + "/" + ChatColor.GREEN + Math.round(maxHealth) + ChatColor.RED + "❤";
+    // Working with packets using ProtocolLib
     WrappedDataWatcher dataWatcher = WrappedDataWatcher.getEntityWatcher(entity).deepClone();
     WrappedDataWatcher.Serializer chatSerializer = WrappedDataWatcher.Registry.getChatComponentSerializer(true);
     WrappedDataWatcher.WrappedDataWatcherObject watcherObject = new WrappedDataWatcher.WrappedDataWatcherObject(2, chatSerializer);
     Optional<Object> optional = Optional.of(WrappedChatComponent.fromChatMessage(healthBarString)[0].getHandle());
+    // Sets entity data's custom name as the healthBarString with a chat serializer that reads the healthBarString
     dataWatcher.setObject(watcherObject, optional);
+    // Allows the entity's custom name to be visible
     dataWatcher.setObject(3, true);
+    // Creates new Entity Metadata or info packet to be sent
     PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.ENTITY_METADATA);
+    // The data with the custom name is added to the packet
     packet.getWatchableCollectionModifier().write(0, dataWatcher.getWatchableObjects());
+    // The entity this packet refers to is the entity's health bar we want to update or display
     packet.getIntegers().write(0, entity.getEntityId());
     try {
+      // Tries to send this info packet or health bar to all players
       ProtocolLibrary.getProtocolManager().broadcastServerPacket(packet);
     } catch (FieldAccessException e) {
+      // Prints stack trace in console if an error occurs
       plugin.getLogger().severe("Unable to update Health Bar packet! Stack trace:");
       e.printStackTrace();
     }
   }
 
+  // Edits the LivingEntity's health bar but shows only to the specified Player
+  // Very similar to above overloaded method
   public static void updateHealthBar(LivingEntity entity, int health, Player player) {
     String nameString = "" + ChatColor.RED + getName(entity);
     String healthString;
@@ -116,17 +138,23 @@ public class HealthListeners implements Listener {
     packet.getWatchableCollectionModifier().write(0, dataWatcher.getWatchableObjects());
     packet.getIntegers().write(0, entity.getEntityId());
     try {
+      // Tries to send this info packet or health bar to specified Player
       ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
     } catch (InvocationTargetException e) {
+      // Prints stack trace in console if the packet could not be sent to the Player
       plugin.getLogger().severe("Unable to update Health Bar packet for player " + player.getName() + "! Stack trace:");
       e.printStackTrace();
     }
   }
 
+  // Shows a Damage Indicator
   private void showDamage(LivingEntity entity, double damage, boolean critical) {
+    // Puts the damage dealt into a gray message
     String damageString = "" + ChatColor.GRAY + Math.round(damage);
     if(critical) {
+      // If it was a critical hit, add stars before and after
       damageString = "✧" + Math.round(damage) + "✧";
+      // Adds colors to critical damage message
       String[] critStringList = damageString.split("");
       String critString = "";
       for(int i= 0; i < critStringList.length; i++) {
@@ -134,35 +162,48 @@ public class HealthListeners implements Listener {
       }
       damageString = critString;
     }
+    // Generates entity ID and unique ID for packet
     int entityID = getNextIndicatorCount();
     UUID uuid = UUID.randomUUID();
+    // Creates a new Spawn Entity packet to be sent. This is a fake packet that will trick clients that an invisible Armor Stand spawned
     PacketContainer spawnPacket = new PacketContainer(PacketType.Play.Server.SPAWN_ENTITY);
+    // Packet will refer to unique entity
     spawnPacket.getIntegers().write(0, entityID);
     spawnPacket.getUUIDs().write(0, uuid);
+    // Make the entity that spawns an Armor Stand
     spawnPacket.getEntityTypeModifier().write(0, EntityType.ARMOR_STAND);
+    // Sets the X, Y, and Z location coordinates for the Damage Indicator
     spawnPacket.getDoubles().write(0, entity.getLocation().getX() + getRandomOffset());
     spawnPacket.getDoubles().write(1, entity.getLocation().getY() + entity.getHeight() + getRandomOffset());
     spawnPacket.getDoubles().write(2, entity.getLocation().getZ() + getRandomOffset());
+    // Creates a new Entity Metadata packet to be sent. This fake packet will trick clients that the invisible armor stand's name is the damageString
     PacketContainer editPacket = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
     WrappedDataWatcher dataWatcher = new WrappedDataWatcher();
     WrappedDataWatcher.Serializer chatSerializer = WrappedDataWatcher.Registry.getChatComponentSerializer(true);
     WrappedDataWatcher.WrappedDataWatcherObject watcherObject = new WrappedDataWatcher.WrappedDataWatcherObject(2, chatSerializer);
     Optional<Object> optional = Optional.of(WrappedChatComponent.fromChatMessage(damageString)[0].getHandle());
+    // Sets entity data's custom name as the damageString with a chat serializer that reads the damageString
     dataWatcher.setObject(watcherObject, optional);
-    dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(0, WrappedDataWatcher.Registry.get(Byte.class)), (byte) 0x20); //invisible
-    dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(5, WrappedDataWatcher.Registry.get(Boolean.class)), true); //noGravity
-    dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(15, WrappedDataWatcher.Registry.get(Byte.class)), (byte) (0x01 | 0x08 | 0x10)); //isSmall, noBasePlate, set Marker
-    dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(3, WrappedDataWatcher.Registry.get(Boolean.class)), true); //customNameVisible
+    dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(0, WrappedDataWatcher.Registry.get(Byte.class)), (byte) 0x20); // Invisible
+    dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(5, WrappedDataWatcher.Registry.get(Boolean.class)), true); // noGravity
+    dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(15, WrappedDataWatcher.Registry.get(Byte.class)), (byte) (0x01 | 0x08 | 0x10)); // isSmall, noBasePlate, set Marker
+    dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(3, WrappedDataWatcher.Registry.get(Boolean.class)), true); // customNameVisible
+    // Puts the data into the packet
     editPacket.getWatchableCollectionModifier().write(0, dataWatcher.getWatchableObjects());
+    // Makes the packet edit the invisible armor stand that was spawned
     editPacket.getIntegers().write(0, entityID);
     List<Integer> entityIDList = Arrays.asList(entityID);
+    // Makes an Entity Destroy packet to remove the invisible armor stand
     PacketContainer removePacket = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
+    // Makes the packet remove the invisible armor stand that was created and edited
     removePacket.getIntLists().write(0, entityIDList);
     try {
+      // Try to send the spawn and edit packet
       ProtocolLibrary.getProtocolManager().broadcastServerPacket(spawnPacket);
       ProtocolLibrary.getProtocolManager().broadcastServerPacket(editPacket);
       Bukkit.getScheduler().runTaskLaterAsynchronously(this.plugin, () -> {
         try {
+          // After 20 game ticks, try to send the remove packet
           ProtocolLibrary.getProtocolManager().broadcastServerPacket(removePacket);
         } catch (FieldAccessException e) {
           e.printStackTrace();
@@ -173,6 +214,7 @@ public class HealthListeners implements Listener {
     }
   }
 
+  // Gets and sets LivingEntity's name
   private static String getName(LivingEntity entity) {
     String name = entity.getCustomName();
     if(name == null) {
@@ -188,6 +230,7 @@ public class HealthListeners implements Listener {
     return name;
   }
 
+  // When a LivingEntity is added to the world for any reason
   @EventHandler
   public void onSpawn(EntityAddToWorldEvent event) {
     if(event.getEntity() instanceof LivingEntity && !(event.getEntity() instanceof ArmorStand) && !(event.getEntity() instanceof Player)) {
@@ -197,6 +240,7 @@ public class HealthListeners implements Listener {
     }
   }
 
+  // WHen a LivingEntity takes damage not caused by another entity
   @EventHandler
   public void onDamage(EntityDamageEvent event) {
     if(event.getEntity() instanceof LivingEntity && !(event.getEntity() instanceof ArmorStand)) {
@@ -215,6 +259,7 @@ public class HealthListeners implements Listener {
     }
   }
 
+  // When a LivingEntity regenerates Health
   @EventHandler
   public void onRegen(EntityRegainHealthEvent event) {
     if(event.getEntity() instanceof LivingEntity && !(event.getEntity() instanceof ArmorStand)) {
@@ -228,21 +273,26 @@ public class HealthListeners implements Listener {
     }
   }
 
+  // When a LivingEntity gets attacked by another Entity
   @EventHandler
   public void onDamageEntity(EntityDamageByEntityEvent event) {
     if(event.getEntity() instanceof LivingEntity && !(event.getEntity() instanceof ArmorStand)) {
       LivingEntity entity = (LivingEntity) event.getEntity();
+      // Sets base stat values
       double weaponDamage = event.getDamage(), strength = 0, critDamage = 50, critChance = 30, defense, actualDamagePercent = 1;
       Player player = null;
       if(event.getDamager() instanceof Player) {
+        // If the attacker is a player
         player = (Player) event.getDamager();
       }
       if(event.getDamager() instanceof Arrow) {
         if(((Arrow) event.getDamager()).getShooter() instanceof Player) {
+          // If a player-shot arrow caused the damage
           player = (Player) ((Arrow) event.getDamager()).getShooter();
         }
       }
       if(player != null) {
+        // Gets damage stats from the player
         strength = dataManager.getConfig().getDouble(player.getUniqueId() + ".strength");
         critDamage = dataManager.getConfig().getDouble(player.getUniqueId() + ".critDamage");
         critChance = dataManager.getConfig().getDouble(player.getUniqueId() + ".critChance");
@@ -258,17 +308,21 @@ public class HealthListeners implements Listener {
           }
         }
       }
+      // Determine if the hit should be critical
       double randomCrit = Math.random() * 100;
       boolean critical = randomCrit <= critChance;
       if(!critical) {
         critDamage = 0;
       }
+      // Damage calculation
       double finalDamage = (weaponDamage * (1 + (strength / 100))) * (1 + (critDamage / 100));
       if(entity instanceof Player) {
+        // If the damaged LivingEntity is a player, get their Defense
         Player damagedPlayer = (Player) entity;
         defense = dataManager.getConfig().getDouble(damagedPlayer.getUniqueId() + ".defense");
         actualDamagePercent = 1 - (defense / (defense + 100));
       }
+      // Adjust the final damage and set it
       finalDamage *= actualDamagePercent;
       event.setDamage(finalDamage);
       if(!(entity instanceof Player)) {

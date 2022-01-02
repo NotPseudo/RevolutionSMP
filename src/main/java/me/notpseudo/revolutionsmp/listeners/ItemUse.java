@@ -13,6 +13,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 
+// Methods that run to simulate Abilities
 public class ItemUse implements Listener {
 
   private RevolutionSMP plugin;

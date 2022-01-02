@@ -10,6 +10,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 
+// Credit: CodedRed's Custom Config File tutorial: https://www.youtube.com/watch?v=-ZrIjYXOkn0
+// Used to work with config files
 public class DataManager {
 
   private RevolutionSMP plugin;

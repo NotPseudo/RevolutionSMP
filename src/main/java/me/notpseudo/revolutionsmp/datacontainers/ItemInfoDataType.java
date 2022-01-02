@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 
+// Credit: CodedRed's Custom Persistent Data Types Tutorial: https://youtu.be/3OLSfOkgPMw
+// PersistentDataType for ItemInfo
 public class ItemInfoDataType implements PersistentDataType<byte[], ItemInfo> {
   @Override
   public Class<byte[]> getPrimitiveType() {

@@ -7,7 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
+// Command to add a Potato Book to the current held item
 public class PotatoBook implements CommandExecutor {
 
   private RevolutionSMP plugin;

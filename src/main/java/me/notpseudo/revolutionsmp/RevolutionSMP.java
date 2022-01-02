@@ -15,9 +15,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class RevolutionSMP extends JavaPlugin {
 
+  // DataManager to work with config files and instance of this main plugin class
   private DataManager dataManager = new DataManager(this);
   private static RevolutionSMP plugin;
 
+  // Initializes many of the classes when the plugin gets loaded
   @Override
   public void onEnable() {
     new StatsListeners(this);
@@ -33,15 +35,18 @@ public final class RevolutionSMP extends JavaPlugin {
     plugin = this;
   }
 
+  // Nothing is required to run when this plugin gets disabled
   @Override
   public void onDisable() {
 
   }
 
+  // Returns the DataManager for working with config files
   public DataManager getDataManager() {
     return dataManager;
   }
 
+  // Returns the instance of this main plugin class
   public static RevolutionSMP getPlugin() {
     return plugin;
   }

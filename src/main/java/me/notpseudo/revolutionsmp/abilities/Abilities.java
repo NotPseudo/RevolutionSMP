@@ -10,8 +10,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+// Methods that will run to simulate abilities
 public class Abilities {
 
+  // A Set of non-solid block materials that players can walk through. Used in teleportation abilities
   private static Set<Material> passSet = new HashSet<>();
 
   public static void createPassSet() {
@@ -32,6 +34,7 @@ public class Abilities {
     passSet.add(Material.BIRCH_SIGN);
   }
 
+  // Method that runs when Instant Transmission ability is used
   public static void instantTransmission(Player player) {
     Float yaw = player.getLocation().getYaw();
     Float pitch = player.getLocation().getPitch();

@@ -9,7 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
+// Command to Reforge the current held item to a specified reforge
 public class ReforgeCommand implements CommandExecutor {
 
   private RevolutionSMP plugin;

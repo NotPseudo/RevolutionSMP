@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 
+// Creates custom weapons
 public class WeaponCreator {
 
   private static NamespacedKey itemKey = ItemEditor.getItemKey();

@@ -18,12 +18,15 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 
+// Methods that deal with updating player stats
 public class StatsListeners implements Listener {
 
+  // Gets NamespacedKeys from ItemEditor to access stats stored in Persistent Data
   private final static NamespacedKey weaponKey = ItemEditor.getWeaponKey();
   private final static NamespacedKey armorKey = ItemEditor.getArmorKey();
   private final static NamespacedKey abilityKey = ItemEditor.getAbilityKey();
 
+  // Get DataManager to access and edit config files
   private RevolutionSMP plugin;
   private static DataManager dataManager;
 
@@ -32,6 +35,7 @@ public class StatsListeners implements Listener {
     dataManager = plugin.getDataManager();
     Bukkit.getPluginManager().registerEvents(this, this.plugin);
     Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
+      // Every 20 game ticks, for all players, update player stats. regen health and mana, show action bar with info
       for(Player player : Bukkit.getOnlinePlayers()) {
         updateStats(player);
         naturalRegen(player);
@@ -40,8 +44,12 @@ public class StatsListeners implements Listener {
     }, 20, 20);
   }
 
+  // Updates a Player's stats
   public static void updateStats(Player player) {
+    // Assigns base values for each stat
     double health = 20, defense = 0, strength = 0, speed = 100, critChance = 30, critDamage = 50, intelligence = 100, abilityDamage = 0, ferocity = 0;
+    // Checks to make sure each item that will affect stats is not null, checks to make sure each item's meta is not null
+    // Gets and adds item stat boosts to base amounts
     if(player.getInventory().getHelmet() != null) {
       if(player.getInventory().getHelmet().getItemMeta() != null) {
         ItemMeta helmetMeta = player.getInventory().getHelmet().getItemMeta();
@@ -167,6 +175,7 @@ public class StatsListeners implements Listener {
         }
       }
     }
+    // Edits the Player's stat values in the config file
     dataManager.getConfig().set(player.getUniqueId() + ".health", health);
     dataManager.getConfig().set(player.getUniqueId() + ".defense", defense);
     dataManager.getConfig().set(player.getUniqueId() + ".strength", strength);
@@ -177,59 +186,81 @@ public class StatsListeners implements Listener {
     dataManager.getConfig().set(player.getUniqueId() + ".abilityDamage", abilityDamage);
     dataManager.getConfig().set(player.getUniqueId() + ".ferocity", ferocity);
     dataManager.saveConfig();
+    // Adjusts Player's Health to new max Health by keeping the same percentage
     double healthPercent = player.getHealth() / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
     player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(dataManager.getConfig().getDouble(player.getUniqueId() + ".health"));
+    // Player will always see 40 hit points or 20 hearts on their screen
     player.setHealthScale(40);
     player.setHealth(healthPercent * player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+    // Adjusts a Player's Speed based on their Speed stat in the config file
     player.setWalkSpeed((float) dataManager.getConfig().getDouble(player.getUniqueId() + ".speed") / 500);
     showActionBar(player);
   }
 
+  // Regenerates Health and Mana for the Player
   public static void naturalRegen(Player player) {
+    // Gets max Health, Intelligence, and current Mana from the config file
     double health = dataManager.getConfig().getDouble(player.getUniqueId() + ".health"), intelligence = dataManager.getConfig().getDouble(player.getUniqueId() + ".intelligence"), mana = dataManager.getConfig().getDouble(player.getUniqueId() + ".mana");
     if(!player.isDead()) {
       if(player.getHealth() != health) {
+        // If the Player is not dead and their current Health is not already full
+        // Amount of Health to add is (0.75 + 0.5% of max Health) rounded up to the nearest tenth
         double addHealth = Math.ceil((0.75 + (health * 0.005)) * 10) / 10;
         if((player.getHealth() + addHealth) >= health) {
+          // If adding the amount to add will exceed the max Health, it will just regenerate up to the max Health
           player.setHealth(health);
         } else {
+          // Adds the amount to add to the Player's current Health
           player.setHealth(player.getHealth() + addHealth);
         }
       }
     }
     if(mana != intelligence) {
+      // If current Mana is not already full
+      // Amount of Mana to add is 2% of max Mana
       double addMana = intelligence * 0.02;
       if((mana + addMana) >= intelligence) {
+        // If adding the amount to add will exceed the max Mana, it will just regenerate up to the max Mana
         mana = intelligence;
       } else {
+        // Adds the amount to add to the Player's current Mana
         mana += addMana;
       }
+      // Edits the Player's Mana value in the config file
       dataManager.getConfig().set(player.getUniqueId() + ".mana", mana);
     }
   }
 
+  // SHows action bar with health, defense, mana
   public static void showActionBar(Player player) {
+    // Gets max Health, Defense, Intelligence or max Mana, and current Mana
     double health = dataManager.getConfig().getDouble(player.getUniqueId() + ".health"), defense = dataManager.getConfig().getDouble(player.getUniqueId() + ".defense"), intelligence = dataManager.getConfig().getDouble(player.getUniqueId() + ".intelligence"), mana = dataManager.getConfig().getDouble(player.getUniqueId() + ".mana");
     NamedTextColor healthColor = NamedTextColor.RED;
     double currentAbsorption = player.getAbsorptionAmount();
     if(currentAbsorption != 0) {
+      // If Player has any absorption, the Health section will be gold instead of red
       healthColor = NamedTextColor.GOLD;
     }
+    // Shows player their current Health out of max Health, Defense, and current Mana out of max Mana
     player.sendActionBar(Component.text(Math.round(player.getHealth() + currentAbsorption) + "/" + Math.round(health) + "❤     ", healthColor).append(Component.text(Math.round(defense) + "❈ Defense     ", NamedTextColor.GREEN)).append(Component.text(Math.round(mana) + "/" + Math.round(intelligence) + "✎ Mana", NamedTextColor.AQUA)));
   }
 
+  // When a Player joins
   @EventHandler
   public void onJoin(PlayerJoinEvent event) {
+    // Update stats, give full mana
     updateStats(event.getPlayer());
     dataManager.getConfig().set(event.getPlayer().getUniqueId() + ".mana", dataManager.getConfig().getDouble(event.getPlayer().getUniqueId() + ".intelligence"));
     showActionBar(event.getPlayer());
   }
 
+  // When a Player switches any armor piece
   @EventHandler
   public void onArmorSwitch(PlayerArmorChangeEvent event) {
     updateStats(event.getPlayer());
   }
 
+  // When a Player switches to holding a different item
   @EventHandler
   public void onHandItemSwitch(PlayerItemHeldEvent event) {
     Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> updateStats(event.getPlayer()), 5);

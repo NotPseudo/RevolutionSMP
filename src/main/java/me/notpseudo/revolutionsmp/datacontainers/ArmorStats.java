@@ -2,6 +2,7 @@ package me.notpseudo.revolutionsmp.datacontainers;
 
 import java.io.Serializable;
 
+// Armor stats stored in an ItemStack's PersistentDataContainer
 public class ArmorStats implements Serializable {
 
   private double health;

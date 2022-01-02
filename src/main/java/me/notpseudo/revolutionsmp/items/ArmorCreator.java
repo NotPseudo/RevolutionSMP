@@ -9,6 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 
+// Creates custom armors
 public class ArmorCreator {
 
   private static NamespacedKey itemKey = ItemEditor.getItemKey();

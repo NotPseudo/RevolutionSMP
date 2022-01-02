@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 
+// Credit: CodedRed's Custom Persistent Data Types Tutorial: https://youtu.be/3OLSfOkgPMw
+// PersistentDataType for WeaponStats
 public class WeaponStatsDataType implements PersistentDataType<byte[], WeaponStats> {
   @Override
   public Class<byte[]> getPrimitiveType() {

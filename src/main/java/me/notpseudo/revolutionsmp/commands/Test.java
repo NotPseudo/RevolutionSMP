@@ -8,6 +8,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+// Development and testing command to obtain custom items
 public class Test implements CommandExecutor {
 
   private RevolutionSMP plugin;

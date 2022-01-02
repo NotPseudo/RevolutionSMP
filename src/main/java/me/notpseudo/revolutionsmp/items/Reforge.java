@@ -6,6 +6,7 @@ import me.notpseudo.revolutionsmp.datacontainers.WeaponStats;
 
 import java.util.List;
 
+// Enum of Reforges that can be applied to a custom item
 public enum Reforge {
   EPIC {
     @Override
@@ -327,8 +328,12 @@ public enum Reforge {
     @Override
     public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
   };
+  // Gets list of ItemTypes the Reforge can be applied to
   public abstract List<ItemType> getItemTypes();
+  // Gets the weapon stats the Reforge boosts
   public abstract WeaponStats getWeaponStats();
+  // Gets the armor stats the Reforge boosts
   public abstract ArmorStats getArmorStats();
+  // Gets the ability statsd the Reforge boosts
   public abstract AbilityStats getAbilityStats();
 }
