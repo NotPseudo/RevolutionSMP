@@ -14,7 +14,7 @@ import java.util.logging.Level;
 // Used to work with config files
 public class DataManager {
 
-  private RevolutionSMP plugin;
+  private final RevolutionSMP plugin;
   private FileConfiguration dataConfig;
   private File configFile;
 

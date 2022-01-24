@@ -36,8 +36,8 @@ public class Abilities {
 
   // Method that runs when Instant Transmission ability is used
   public static void instantTransmission(Player player) {
-    Float yaw = player.getLocation().getYaw();
-    Float pitch = player.getLocation().getPitch();
+    float yaw = player.getLocation().getYaw();
+    float pitch = player.getLocation().getPitch();
     Location loc = player.getLocation();
     boolean cont = true;
     ArrayList<Block> Blocks = (ArrayList<Block>) player.getLineOfSight(passSet, 8);

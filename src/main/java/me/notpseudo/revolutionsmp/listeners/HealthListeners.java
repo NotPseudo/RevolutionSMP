@@ -8,18 +8,22 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
-import me.notpseudo.revolutionsmp.datacontainers.WeaponStats;
-import me.notpseudo.revolutionsmp.datacontainers.WeaponStatsDataType;
+import me.notpseudo.revolutionsmp.statobjects.ItemInfoDataType;
+import me.notpseudo.revolutionsmp.statobjects.WeaponStats;
 import me.notpseudo.revolutionsmp.datamanager.DataManager;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.NamespacedKey;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.lang.reflect.InvocationTargetException;
@@ -30,14 +34,14 @@ public class HealthListeners implements Listener {
 
   // Instance of main plugin class, DataManager to access config files, indicatorCount to make entity IDs for Damage Indicators
   private static RevolutionSMP plugin = RevolutionSMP.getPlugin();
-  private DataManager dataManager;
+  private final DataManager dataManager;
   private static int indicatorCount = 0;
 
   public HealthListeners(RevolutionSMP plugin) {
-    this.plugin = plugin;
+    HealthListeners.plugin = plugin;
     dataManager = plugin.getDataManager();
-    Bukkit.getPluginManager().registerEvents(this, this.plugin);
-    Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
+    Bukkit.getPluginManager().registerEvents(this, HealthListeners.plugin);
+    Bukkit.getScheduler().scheduleSyncRepeatingTask(HealthListeners.plugin, () -> {
       // Every 15 ticks, for every player, get LivingEntities in specified radius and show their health bars
       for(Player player : Bukkit.getOnlinePlayers()) {
         for(Entity entity : player.getNearbyEntities(15, 10, 15)) {
@@ -50,9 +54,8 @@ public class HealthListeners implements Listener {
   }
 
   // NamespacedKey to access item stats, list of colors for critical Damage Indicator, HashMap for every LivingEntity and its name
-  private final static NamespacedKey weaponKey = ItemEditor.getWeaponKey();
   private final ChatColor[] chatColors = {ChatColor.WHITE, ChatColor.GOLD, ChatColor.YELLOW, ChatColor.RED};
-  private static ConcurrentHashMap<LivingEntity, String> names = new ConcurrentHashMap<>();
+  private static final ConcurrentHashMap<LivingEntity, String> names = new ConcurrentHashMap<>();
 
   // Generates random offset for location coordinates
   private double getRandomOffset() {
@@ -156,11 +159,11 @@ public class HealthListeners implements Listener {
       damageString = "✧" + Math.round(damage) + "✧";
       // Adds colors to critical damage message
       String[] critStringList = damageString.split("");
-      String critString = "";
+      StringBuilder critString = new StringBuilder();
       for(int i= 0; i < critStringList.length; i++) {
-        critString += chatColors[i % 4] + critStringList[i];
+        critString.append(chatColors[i % 4]).append(critStringList[i]);
       }
-      damageString = critString;
+      damageString = critString.toString();
     }
     // Generates entity ID and unique ID for packet
     int entityID = getNextIndicatorCount();
@@ -192,7 +195,7 @@ public class HealthListeners implements Listener {
     editPacket.getWatchableCollectionModifier().write(0, dataWatcher.getWatchableObjects());
     // Makes the packet edit the invisible armor stand that was spawned
     editPacket.getIntegers().write(0, entityID);
-    List<Integer> entityIDList = Arrays.asList(entityID);
+    List<Integer> entityIDList = List.of(entityID);
     // Makes an Entity Destroy packet to remove the invisible armor stand
     PacketContainer removePacket = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
     // Makes the packet remove the invisible armor stand that was created and edited
@@ -201,7 +204,7 @@ public class HealthListeners implements Listener {
       // Try to send the spawn and edit packet
       ProtocolLibrary.getProtocolManager().broadcastServerPacket(spawnPacket);
       ProtocolLibrary.getProtocolManager().broadcastServerPacket(editPacket);
-      Bukkit.getScheduler().runTaskLaterAsynchronously(this.plugin, () -> {
+      Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
         try {
           // After 20 game ticks, try to send the remove packet
           ProtocolLibrary.getProtocolManager().broadcastServerPacket(removePacket);
@@ -216,10 +219,9 @@ public class HealthListeners implements Listener {
 
   // Gets and sets LivingEntity's name
   private static String getName(LivingEntity entity) {
-    String name = entity.getCustomName();
-    if(name == null) {
+    String name = "";
+    if(entity.getCustomName() == null) {
       String[] nameList = entity.getType().getKey().getKey().split("_");
-      name = "";
       for (String word : nameList) {
         name += word.substring(0, 1).toUpperCase() + word.substring(1) + " ";
       }
@@ -252,9 +254,7 @@ public class HealthListeners implements Listener {
         int health = (int) Math.round(entity.getHealth() - event.getDamage());
         updateHealthBar(entity, health);
       } else {
-        Bukkit.getScheduler().runTaskLaterAsynchronously(this.plugin, () -> {
-          StatsListeners.showActionBar((Player) entity);
-        }, 5);
+        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> StatsListeners.showActionBar((Player) entity), 5);
       }
     }
   }
@@ -296,14 +296,12 @@ public class HealthListeners implements Listener {
         strength = dataManager.getConfig().getDouble(player.getUniqueId() + ".strength");
         critDamage = dataManager.getConfig().getDouble(player.getUniqueId() + ".critDamage");
         critChance = dataManager.getConfig().getDouble(player.getUniqueId() + ".critChance");
-        if(player.getInventory().getItemInMainHand() != null) {
-          if(player.getInventory().getItemInMainHand().getItemMeta() != null) {
-            ItemMeta mainHandMeta = player.getInventory().getItemInMainHand().getItemMeta();
-            if(mainHandMeta != null) {
-              WeaponStats mainHandWeaponStats = mainHandMeta.getPersistentDataContainer().get(weaponKey, new WeaponStatsDataType());
-              if(mainHandWeaponStats != null) {
-                weaponDamage += mainHandWeaponStats.getDamage();
-              }
+        if(player.getInventory().getItemInMainHand().getType() != Material.AIR && player.getInventory().getItemInMainHand().getItemMeta() != null) {
+          ItemMeta mainHandMeta = player.getInventory().getItemInMainHand().getItemMeta();
+          if(mainHandMeta != null) {
+            WeaponStats mainHandWeaponStats = mainHandMeta.getPersistentDataContainer().get(ItemEditor.getItemKey(), new ItemInfoDataType()).getWeaponStats();
+            if(mainHandWeaponStats != null) {
+              weaponDamage += mainHandWeaponStats.getDamage();
             }
           }
         }

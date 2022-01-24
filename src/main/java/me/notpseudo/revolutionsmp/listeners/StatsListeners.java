@@ -2,7 +2,7 @@ package me.notpseudo.revolutionsmp.listeners;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
-import me.notpseudo.revolutionsmp.datacontainers.*;
+import me.notpseudo.revolutionsmp.statobjects.*;
 import me.notpseudo.revolutionsmp.datamanager.DataManager;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
 import net.kyori.adventure.text.Component;
@@ -22,12 +22,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class StatsListeners implements Listener {
 
   // Gets NamespacedKeys from ItemEditor to access stats stored in Persistent Data
-  private final static NamespacedKey weaponKey = ItemEditor.getWeaponKey();
-  private final static NamespacedKey armorKey = ItemEditor.getArmorKey();
-  private final static NamespacedKey abilityKey = ItemEditor.getAbilityKey();
+  private final static NamespacedKey itemKey = ItemEditor.getItemKey();
 
   // Get DataManager to access and edit config files
-  private RevolutionSMP plugin;
+  private final RevolutionSMP plugin;
   private static DataManager dataManager;
 
   public StatsListeners(RevolutionSMP plugin) {
@@ -50,13 +48,14 @@ public class StatsListeners implements Listener {
     double health = 20, defense = 0, strength = 0, speed = 100, critChance = 30, critDamage = 50, intelligence = 100, abilityDamage = 0, ferocity = 0;
     // Checks to make sure each item that will affect stats is not null, checks to make sure each item's meta is not null
     // Gets and adds item stat boosts to base amounts
-    if(player.getInventory().getHelmet() != null) {
-      if(player.getInventory().getHelmet().getItemMeta() != null) {
-        ItemMeta helmetMeta = player.getInventory().getHelmet().getItemMeta();
-        if(helmetMeta != null) {
-          WeaponStats helmetWeaponStats = helmetMeta.getPersistentDataContainer().get(weaponKey, new WeaponStatsDataType());
-          ArmorStats helmetArmorStats = helmetMeta.getPersistentDataContainer().get(armorKey, new ArmorStatsDataType());
-          AbilityStats helmetAbilityStats = helmetMeta.getPersistentDataContainer().get(abilityKey, new AbilityStatsDataType());
+    if(player.getInventory().getHelmet() != null && player.getInventory().getHelmet().getItemMeta() != null) {
+      ItemMeta helmetMeta = player.getInventory().getHelmet().getItemMeta();
+      if(helmetMeta != null) {
+        ItemInfo helmetItemInfo = helmetMeta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        if(helmetItemInfo != null) {
+          WeaponStats helmetWeaponStats = helmetItemInfo.getWeaponStats();
+          ArmorStats helmetArmorStats = helmetItemInfo.getArmorStats();
+          AbilityStats helmetAbilityStats = helmetItemInfo.getAbilityStats();
           if(helmetWeaponStats != null) {
             strength += helmetWeaponStats.getStrength();
             critChance += helmetWeaponStats.getCritChance();
@@ -75,38 +74,40 @@ public class StatsListeners implements Listener {
         }
       }
     }
-    if(player.getInventory().getChestplate() != null) {
-      if(player.getInventory().getChestplate().getItemMeta() != null) {
-        ItemMeta chestplateMeta = player.getInventory().getChestplate().getItemMeta();
-        if(chestplateMeta != null) {
-          WeaponStats chestplateWeaponStats = chestplateMeta.getPersistentDataContainer().get(weaponKey, new WeaponStatsDataType());
-          ArmorStats chestplateArmorStats = chestplateMeta.getPersistentDataContainer().get(armorKey, new ArmorStatsDataType());
-          AbilityStats chestplateAbilityStats = chestplateMeta.getPersistentDataContainer().get(abilityKey, new AbilityStatsDataType());
-          if(chestplateWeaponStats != null) {
-            strength += chestplateWeaponStats.getStrength();
-            critChance += chestplateWeaponStats.getCritChance();
-            critDamage += chestplateWeaponStats.getCritDamage();
-            ferocity += chestplateWeaponStats.getFerocity();
-          }
-          if(chestplateArmorStats != null) {
-            health += chestplateArmorStats.getHealth();
-            defense += chestplateArmorStats.getDefense();
-            speed += chestplateArmorStats.getSpeed();
-          }
-          if(chestplateAbilityStats != null) {
-            abilityDamage += chestplateAbilityStats.getAbilityDamage();
-            intelligence += chestplateAbilityStats.getIntelligence();
-          }
-        }
+    if(player.getInventory().getChestplate() != null && player.getInventory().getChestplate().getItemMeta() != null) {
+      ItemMeta chestplateMeta = player.getInventory().getChestplate().getItemMeta();
+      if(chestplateMeta != null) {
+        ItemInfo chestplateItemInfo = chestplateMeta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        if(chestplateItemInfo != null) {
+         WeaponStats chestplateWeaponStats = chestplateItemInfo.getWeaponStats();
+         ArmorStats chestplateArmorStats = chestplateItemInfo.getArmorStats();
+         AbilityStats chestplateAbilityStats = chestplateItemInfo.getAbilityStats();
+         if(chestplateWeaponStats != null) {
+           strength += chestplateWeaponStats.getStrength();
+           critChance += chestplateWeaponStats.getCritChance();
+           critDamage += chestplateWeaponStats.getCritDamage();
+           ferocity += chestplateWeaponStats.getFerocity();
+         }
+         if(chestplateArmorStats != null) {
+           health += chestplateArmorStats.getHealth();
+           defense += chestplateArmorStats.getDefense();
+           speed += chestplateArmorStats.getSpeed();
+         }
+         if(chestplateAbilityStats != null) {
+           abilityDamage += chestplateAbilityStats.getAbilityDamage();
+           intelligence += chestplateAbilityStats.getIntelligence();
+         }
+       }
       }
     }
-    if(player.getInventory().getLeggings() != null) {
-      if(player.getInventory().getLeggings().getItemMeta() != null) {
-        ItemMeta leggingsMeta = player.getInventory().getLeggings().getItemMeta();
-        if(leggingsMeta != null) {
-          WeaponStats leggingsWeaponStats = leggingsMeta.getPersistentDataContainer().get(weaponKey, new WeaponStatsDataType());
-          ArmorStats leggingsArmorStats = leggingsMeta.getPersistentDataContainer().get(armorKey, new ArmorStatsDataType());
-          AbilityStats leggingsAbilityStats = leggingsMeta.getPersistentDataContainer().get(abilityKey, new AbilityStatsDataType());
+    if(player.getInventory().getLeggings() != null && player.getInventory().getLeggings().getItemMeta() != null) {
+      ItemMeta leggingsMeta = player.getInventory().getLeggings().getItemMeta();
+      if(leggingsMeta != null) {
+        ItemInfo leggingsItemInfo = leggingsMeta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        if(leggingsItemInfo != null) {
+          WeaponStats leggingsWeaponStats = leggingsItemInfo.getWeaponStats();
+          ArmorStats leggingsArmorStats = leggingsItemInfo.getArmorStats();
+          AbilityStats leggingsAbilityStats = leggingsItemInfo.getAbilityStats();
           if(leggingsWeaponStats != null) {
             strength += leggingsWeaponStats.getStrength();
             critChance += leggingsWeaponStats.getCritChance();
@@ -125,13 +126,14 @@ public class StatsListeners implements Listener {
         }
       }
     }
-    if(player.getInventory().getBoots() != null) {
-      if(player.getInventory().getBoots().getItemMeta() != null) {
-        ItemMeta bootsMeta = player.getInventory().getBoots().getItemMeta();
-        if(bootsMeta != null) {
-          WeaponStats bootsWeaponStats = bootsMeta.getPersistentDataContainer().get(weaponKey, new WeaponStatsDataType());
-          ArmorStats bootsArmorStats = bootsMeta.getPersistentDataContainer().get(armorKey, new ArmorStatsDataType());
-          AbilityStats bootsAbilityStats = bootsMeta.getPersistentDataContainer().get(abilityKey, new AbilityStatsDataType());
+    if(player.getInventory().getBoots() != null && player.getInventory().getBoots().getItemMeta() != null) {
+      ItemMeta bootsMeta = player.getInventory().getBoots().getItemMeta();
+      if(bootsMeta != null) {
+        ItemInfo bootsItemInfo = bootsMeta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        if(bootsItemInfo != null) {
+          WeaponStats bootsWeaponStats = bootsItemInfo.getWeaponStats();
+          ArmorStats bootsArmorStats = bootsItemInfo.getArmorStats();
+          AbilityStats bootsAbilityStats = bootsItemInfo.getAbilityStats();
           if(bootsWeaponStats != null) {
             strength += bootsWeaponStats.getStrength();
             critChance += bootsWeaponStats.getCritChance();
@@ -150,13 +152,14 @@ public class StatsListeners implements Listener {
         }
       }
     }
-    if(player.getInventory().getItemInMainHand().getType() != Material.AIR) {
-      if(player.getInventory().getItemInMainHand().getItemMeta() != null) {
-        ItemMeta mainHandMeta = player.getInventory().getItemInMainHand().getItemMeta();
-        if (mainHandMeta != null) {
-          WeaponStats mainHandWeaponStats = mainHandMeta.getPersistentDataContainer().get(weaponKey, new WeaponStatsDataType());
-          ArmorStats mainHandArmorStats = mainHandMeta.getPersistentDataContainer().get(armorKey, new ArmorStatsDataType());
-          AbilityStats mainHandAbilityStats = mainHandMeta.getPersistentDataContainer().get(abilityKey, new AbilityStatsDataType());
+    if(player.getInventory().getItemInMainHand().getType() != Material.AIR && player.getInventory().getItemInMainHand().getItemMeta() != null) {
+      ItemMeta mainHandMeta = player.getInventory().getItemInMainHand().getItemMeta();
+      if (mainHandMeta != null) {
+        ItemInfo weaponItemInfo = mainHandMeta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        if(weaponItemInfo != null) {
+          WeaponStats mainHandWeaponStats = weaponItemInfo.getWeaponStats();
+          ArmorStats mainHandArmorStats = weaponItemInfo.getArmorStats();
+          AbilityStats mainHandAbilityStats = weaponItemInfo.getAbilityStats();
           if (mainHandWeaponStats != null) {
             strength += mainHandWeaponStats.getStrength();
             critChance += mainHandWeaponStats.getCritChance();
@@ -206,13 +209,9 @@ public class StatsListeners implements Listener {
         // If the Player is not dead and their current Health is not already full
         // Amount of Health to add is (0.75 + 0.5% of max Health) rounded up to the nearest tenth
         double addHealth = Math.ceil((0.75 + (health * 0.005)) * 10) / 10;
-        if((player.getHealth() + addHealth) >= health) {
-          // If adding the amount to add will exceed the max Health, it will just regenerate up to the max Health
-          player.setHealth(health);
-        } else {
-          // Adds the amount to add to the Player's current Health
-          player.setHealth(player.getHealth() + addHealth);
-        }
+        // If adding the amount to add will exceed the max Health, it will just regenerate up to the max Health
+        // Adds the amount to add to the Player's current Health
+        player.setHealth(Math.min((player.getHealth() + addHealth), health));
       }
     }
     if(mana != intelligence) {

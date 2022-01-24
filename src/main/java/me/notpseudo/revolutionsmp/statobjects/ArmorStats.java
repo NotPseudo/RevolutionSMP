@@ -1,4 +1,4 @@
-package me.notpseudo.revolutionsmp.datacontainers;
+package me.notpseudo.revolutionsmp.statobjects;
 
 import java.io.Serializable;
 
@@ -6,11 +6,11 @@ import java.io.Serializable;
 public class ArmorStats implements Serializable {
 
   private double health;
-  private double baseHealth;
+  private final double baseHealth;
   private double defense;
-  private double baseDefense;
+  private final double baseDefense;
   private double speed;
-  private double baseSpeed;
+  private final double baseSpeed;
 
   public ArmorStats(double health, double defense, double speed) {
     this.health = health;

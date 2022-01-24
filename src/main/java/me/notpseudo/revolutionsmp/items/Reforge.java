@@ -1,8 +1,8 @@
 package me.notpseudo.revolutionsmp.items;
 
-import me.notpseudo.revolutionsmp.datacontainers.AbilityStats;
-import me.notpseudo.revolutionsmp.datacontainers.ArmorStats;
-import me.notpseudo.revolutionsmp.datacontainers.WeaponStats;
+import me.notpseudo.revolutionsmp.statobjects.AbilityStats;
+import me.notpseudo.revolutionsmp.statobjects.ArmorStats;
+import me.notpseudo.revolutionsmp.statobjects.WeaponStats;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(0, 0, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null);}
    },
   SHARP {
     @Override
@@ -26,7 +26,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(0, 0, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null);}
   },
   HEROIC {
     @Override
@@ -36,7 +36,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(0, 0, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 40,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 40,null);}
   },
   SPICY {
     @Override
@@ -46,7 +46,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(0, 0, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0, null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0, null);}
   },
   LEGENDARY {
     @Override
@@ -56,7 +56,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(0, 0, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 5,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 5,null);}
   },
   DIRTY {
     @Override
@@ -66,7 +66,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(0, 0, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null);}
   },
   FABLED {
     @Override
@@ -76,7 +76,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(0, 0, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null);}
   },
   SUSPICIOUS {
     @Override
@@ -86,7 +86,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(0, 0, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null);}
   },
   WITHERED {
     @Override
@@ -96,7 +96,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(0, 0, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null);}
   },
   BULKY {
     @Override
@@ -106,7 +106,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(4, 2, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null);}
   },
   GRAND {
     @Override
@@ -116,7 +116,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(0, 0, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null);}
   },
   HASTY {
     @Override
@@ -126,7 +126,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(0, 0, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null);}
   },
   RAPID {
     @Override
@@ -136,7 +136,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(0, 0, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null);}
   },
   UNREAL {
     @Override
@@ -146,7 +146,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(0, 0, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null);}
   },
   AWKWARD {
     @Override
@@ -156,7 +156,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(0, 0, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, -5,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, -5,null);}
   },
   PRECISE {
     @Override
@@ -166,7 +166,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(0, 0, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null);}
   },
   SPIRITUAL {
     @Override
@@ -176,7 +176,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(0, 0, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null);}
   },
   FIERCE {
     @Override
@@ -186,7 +186,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(0, 0, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null);}
   },
   HEAVY {
     @Override
@@ -196,7 +196,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(0, 25, -1);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null);}
   },
   LIGHT {
     @Override
@@ -206,7 +206,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(5, 1, 20);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null);}
   },
   MYTHIC {
     @Override
@@ -216,7 +216,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(2, 2, 2);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 20,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 20,null);}
   },
   SMART {
     @Override
@@ -226,7 +226,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(4, 4, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 20,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 20,null);}
   },
   TITANIC {
     @Override
@@ -236,7 +236,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(10, 10, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null);}
   },
   WISE {
     @Override
@@ -246,7 +246,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(6, 0, 1);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 25,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 25,null);}
   },
   PERFECT {
     @Override
@@ -256,7 +256,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(0, 25, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null);}
   },
   NECROTIC {
     @Override
@@ -266,7 +266,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(0, 0, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 30,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 30,null);}
   },
   ANCIENT {
     @Override
@@ -276,7 +276,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(7, 7, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 6,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 6,null);}
   },
   RENOWNED {
     @Override
@@ -286,7 +286,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(2, 2, 1);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 3,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 3,null);}
   },
   LOVING {
     @Override
@@ -296,7 +296,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(4, 4, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(5, 20,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(5, 20,null);}
   },
   GIANT {
     @Override
@@ -306,7 +306,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(50, 0, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null);}
   },
   ARMORTEST {
     @Override
@@ -316,7 +316,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(100, 100, 20);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null);}
   },
   WEAPONTEST {
     @Override
@@ -326,7 +326,7 @@ public enum Reforge {
     @Override
     public ArmorStats getArmorStats() {return new ArmorStats(0, 0, 0);}
     @Override
-    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null, false, null, false, null, false);}
+    public AbilityStats getAbilityStats() {return new AbilityStats(0, 0,null);}
   };
   // Gets list of ItemTypes the Reforge can be applied to
   public abstract List<ItemType> getItemTypes();

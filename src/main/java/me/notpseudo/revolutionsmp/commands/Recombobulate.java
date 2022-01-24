@@ -10,10 +10,7 @@ import org.bukkit.entity.Player;
 // Command to Recombobulate the current held item
 public class Recombobulate implements CommandExecutor {
 
-  private RevolutionSMP plugin;
-
   public Recombobulate(RevolutionSMP plugin) {
-    this.plugin = plugin;
     plugin.getCommand("recombobulate").setExecutor(this);
   }
 

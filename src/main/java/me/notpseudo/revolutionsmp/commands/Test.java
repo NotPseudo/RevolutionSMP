@@ -11,10 +11,7 @@ import org.bukkit.entity.Player;
 // Development and testing command to obtain custom items
 public class Test implements CommandExecutor {
 
-  private RevolutionSMP plugin;
-
   public Test(RevolutionSMP plugin) {
-    this.plugin = plugin;
     plugin.getCommand("test").setExecutor(this);
   }
 

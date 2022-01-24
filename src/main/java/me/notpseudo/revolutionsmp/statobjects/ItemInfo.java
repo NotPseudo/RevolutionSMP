@@ -1,5 +1,6 @@
-package me.notpseudo.revolutionsmp.datacontainers;
+package me.notpseudo.revolutionsmp.statobjects;
 
+import me.notpseudo.revolutionsmp.items.ItemID;
 import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.items.Rarity;
 import me.notpseudo.revolutionsmp.items.Reforge;
@@ -12,21 +13,27 @@ import java.util.List;
 public class ItemInfo implements Serializable {
 
   private String name;
+  private ItemID itemID;
   private Rarity rarity;
   private boolean recomb;
-  private List<Component> lore;
   private ItemType itemType;
   private int potatoBooks;
   private Reforge reforge;
+  private WeaponStats weaponStats;
+  private ArmorStats armorStats;
+  private AbilityStats abilityStats;
 
-  public ItemInfo(String name, Rarity rarity, List<Component> lore, ItemType itemType) {
-    this.name = name;
-    this.rarity = rarity;
+  public ItemInfo(ItemID itemID) {
+    this.itemID = itemID;
     this.recomb = false;
-    this.lore = lore;
-    this.itemType = itemType;
     this.potatoBooks = 0;
     this.reforge = null;
+    name = itemID.getDefaultName();
+    rarity = itemID.getDefaultRarity();
+    itemType = itemID.getItemType();
+    weaponStats = itemID.getDefaultWeaponStats();
+    armorStats = itemID.getDefaultArmorStats();
+    abilityStats = itemID.getDefaultAbilityStats();
   }
 
   public String getName() {
@@ -53,16 +60,12 @@ public class ItemInfo implements Serializable {
     this.recomb = recomb;
   }
 
-  public List<Component> getLore() {
-    return lore;
-  }
-
-  public void setLore(List<Component> lore) {
-    this.lore = lore;
-  }
-
   public ItemType getItemType() {
     return itemType;
+  }
+
+  public void setItemType(ItemType itemType) {
+    this.itemType = itemType;
   }
 
   public Reforge getReforge() {
@@ -83,6 +86,38 @@ public class ItemInfo implements Serializable {
     if(potatoBooks <= 15) {
       this.potatoBooks = potatoBooks;
     }
+  }
+
+  public ItemID getItemID() {
+    return itemID;
+  }
+
+  public void setItemID(ItemID itemID) {
+    this.itemID = itemID;
+  }
+
+  public WeaponStats getWeaponStats() {
+    return weaponStats;
+  }
+
+  public void setWeaponStats(WeaponStats weaponStats) {
+    this.weaponStats = weaponStats;
+  }
+
+  public ArmorStats getArmorStats() {
+    return armorStats;
+  }
+
+  public void setArmorStats(ArmorStats armorStats) {
+    this.armorStats = armorStats;
+  }
+
+  public AbilityStats getAbilityStats() {
+    return abilityStats;
+  }
+
+  public void setAbilityStats(AbilityStats abilityStats) {
+    this.abilityStats = abilityStats;
   }
 
 }

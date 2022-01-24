@@ -54,7 +54,7 @@ public enum Rarity {
   };
   // Gets the color associated with the Rarity
   public abstract NamedTextColor getRarityColor();
-  private static Rarity[] values = values();
+  private static final Rarity[] values = values();
 
   // Gets the next higher Rarity
   public Rarity next()

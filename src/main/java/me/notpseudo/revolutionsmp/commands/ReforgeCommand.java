@@ -12,10 +12,7 @@ import org.bukkit.entity.Player;
 // Command to Reforge the current held item to a specified reforge
 public class ReforgeCommand implements CommandExecutor {
 
-  private RevolutionSMP plugin;
-
   public ReforgeCommand(RevolutionSMP plugin) {
-    this.plugin = plugin;
     plugin.getCommand("reforge").setExecutor(this);
   }
 

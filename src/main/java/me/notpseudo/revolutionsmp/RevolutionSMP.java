@@ -16,7 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class RevolutionSMP extends JavaPlugin {
 
   // DataManager to work with config files and instance of this main plugin class
-  private DataManager dataManager = new DataManager(this);
+  private final DataManager dataManager = new DataManager(this);
   private static RevolutionSMP plugin;
 
   // Initializes many of the classes when the plugin gets loaded

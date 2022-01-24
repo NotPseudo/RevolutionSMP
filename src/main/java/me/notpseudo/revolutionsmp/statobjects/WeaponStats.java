@@ -1,4 +1,4 @@
-package me.notpseudo.revolutionsmp.datacontainers;
+package me.notpseudo.revolutionsmp.statobjects;
 
 import java.io.Serializable;
 
@@ -6,15 +6,15 @@ import java.io.Serializable;
 public class WeaponStats implements Serializable {
 
   private double damage;
-  private double baseDamage;
+  private final double baseDamage;
   private double strength;
-  private double baseStrength;
+  private final double baseStrength;
   private double critChance;
-  private double baseCritChance;
+  private final double baseCritChance;
   private double critDamage;
-  private double baseCritDamage;
+  private final double baseCritDamage;
   private double ferocity;
-  private double baseFerocity;
+  private final double baseFerocity;
 
   public WeaponStats( double damage, double strength, double critChance, double critDamage, double ferocity) {
     this.damage = damage;

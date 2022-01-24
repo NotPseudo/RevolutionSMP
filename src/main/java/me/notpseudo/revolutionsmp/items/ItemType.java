@@ -19,5 +19,5 @@ public enum ItemType {
   },
   BOW {
 
-  };
+  }
 }
