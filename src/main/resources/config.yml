@@ -1,0 +1,4 @@
+# You will need to enter a MongoDB cluster Java connection String here for many features to work
+# The connection String should look something like "mongodb+srv://USERNAME:PASSWORD@CLUSTERNAME.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+# Make sure to include the quotation marks
+mongodb_connection_string:

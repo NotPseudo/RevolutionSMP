@@ -7,13 +7,13 @@ import com.comphenix.protocol.reflect.FieldAccessException;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoDatabase;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.statobjects.ItemInfoDataType;
 import me.notpseudo.revolutionsmp.statobjects.WeaponStats;
-import me.notpseudo.revolutionsmp.datamanager.DataManager;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -21,9 +21,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.lang.reflect.InvocationTargetException;
@@ -32,14 +30,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class HealthListeners implements Listener {
 
-  // Instance of main plugin class, DataManager to access config files, indicatorCount to make entity IDs for Damage Indicators
+  // Instance of main plugin class, database with player info, indicatorCount to make entity IDs for Damage Indicators
   private static RevolutionSMP plugin = RevolutionSMP.getPlugin();
-  private final DataManager dataManager;
+  private MongoDatabase playerDatabase;
   private static int indicatorCount = 0;
 
   public HealthListeners(RevolutionSMP plugin) {
     HealthListeners.plugin = plugin;
-    dataManager = plugin.getDataManager();
+    MongoClient mongoClient = plugin.getMongoClient();
+    playerDatabase = mongoClient.getDatabase("players");
     Bukkit.getPluginManager().registerEvents(this, HealthListeners.plugin);
     Bukkit.getScheduler().scheduleSyncRepeatingTask(HealthListeners.plugin, () -> {
       // Every 15 ticks, for every player, get LivingEntities in specified radius and show their health bars
@@ -112,8 +111,7 @@ public class HealthListeners implements Listener {
       ProtocolLibrary.getProtocolManager().broadcastServerPacket(packet);
     } catch (FieldAccessException e) {
       // Prints stack trace in console if an error occurs
-      plugin.getLogger().severe("Unable to update Health Bar packet! Stack trace:");
-      e.printStackTrace();
+      plugin.getLogger().severe("Unable to update Health Bar packet! Stack trace:" + e);
     }
   }
 
@@ -145,8 +143,7 @@ public class HealthListeners implements Listener {
       ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
     } catch (InvocationTargetException e) {
       // Prints stack trace in console if the packet could not be sent to the Player
-      plugin.getLogger().severe("Unable to update Health Bar packet for player " + player.getName() + "! Stack trace:");
-      e.printStackTrace();
+      plugin.getLogger().severe("Unable to update Health Bar packet for player " + player.getName() + "! Stack trace:" + e);
     }
   }
 
@@ -281,6 +278,7 @@ public class HealthListeners implements Listener {
       // Sets base stat values
       double weaponDamage = event.getDamage(), strength = 0, critDamage = 50, critChance = 30, defense, actualDamagePercent = 1;
       Player player = null;
+      Document playerStats;
       if(event.getDamager() instanceof Player) {
         // If the attacker is a player
         player = (Player) event.getDamager();
@@ -293,9 +291,10 @@ public class HealthListeners implements Listener {
       }
       if(player != null) {
         // Gets damage stats from the player
-        strength = dataManager.getConfig().getDouble(player.getUniqueId() + ".strength");
-        critDamage = dataManager.getConfig().getDouble(player.getUniqueId() + ".critDamage");
-        critChance = dataManager.getConfig().getDouble(player.getUniqueId() + ".critChance");
+        playerStats = playerDatabase.getCollection("" + player.getUniqueId()).find(new Document("docType", "PLAYERSTATS")).first();
+        strength = playerStats.getDouble("strength");
+        critDamage = playerStats.getDouble("critDamage");
+        critChance = playerStats.getDouble("critChance");
         if(player.getInventory().getItemInMainHand().getType() != Material.AIR && player.getInventory().getItemInMainHand().getItemMeta() != null) {
           ItemMeta mainHandMeta = player.getInventory().getItemInMainHand().getItemMeta();
           if(mainHandMeta != null) {
@@ -317,7 +316,7 @@ public class HealthListeners implements Listener {
       if(entity instanceof Player) {
         // If the damaged LivingEntity is a player, get their Defense
         Player damagedPlayer = (Player) entity;
-        defense = dataManager.getConfig().getDouble(damagedPlayer.getUniqueId() + ".defense");
+        defense = playerDatabase.getCollection("" + damagedPlayer.getUniqueId()).find(new Document("docType", "PLAYERSTATS")).first().getDouble("defense");
         actualDamagePercent = 1 - (defense / (defense + 100));
       }
       // Adjust the final damage and set it

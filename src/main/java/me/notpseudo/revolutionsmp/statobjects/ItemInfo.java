@@ -4,10 +4,8 @@ import me.notpseudo.revolutionsmp.items.ItemID;
 import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.items.Rarity;
 import me.notpseudo.revolutionsmp.items.Reforge;
-import net.kyori.adventure.text.Component;
 
 import java.io.Serializable;
-import java.util.List;
 
 // Item info stored in an ItemStack's PersistentDataContainer
 public class ItemInfo implements Serializable {

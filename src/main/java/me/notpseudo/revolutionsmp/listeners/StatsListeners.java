@@ -1,12 +1,16 @@
 package me.notpseudo.revolutionsmp.listeners;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Updates;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.statobjects.*;
-import me.notpseudo.revolutionsmp.datamanager.DataManager;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -23,14 +27,16 @@ public class StatsListeners implements Listener {
 
   // Gets NamespacedKeys from ItemEditor to access stats stored in Persistent Data
   private final static NamespacedKey itemKey = ItemEditor.getItemKey();
+  // Gets the database with Player info
+  private static MongoDatabase playerDatabase;
 
-  // Get DataManager to access and edit config files
+  // Gets an instance of the main plugin
   private final RevolutionSMP plugin;
-  private static DataManager dataManager;
 
   public StatsListeners(RevolutionSMP plugin) {
     this.plugin = plugin;
-    dataManager = plugin.getDataManager();
+    MongoClient mongoClient = plugin.getMongoClient();
+    playerDatabase = mongoClient.getDatabase("players");
     Bukkit.getPluginManager().registerEvents(this, this.plugin);
     Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
       // Every 20 game ticks, for all players, update player stats. regen health and mana, show action bar with info
@@ -44,6 +50,7 @@ public class StatsListeners implements Listener {
 
   // Updates a Player's stats
   public static void updateStats(Player player) {
+    MongoCollection<Document> playerCollection = playerDatabase.getCollection("" + player.getUniqueId());
     // Assigns base values for each stat
     double health = 20, defense = 0, strength = 0, speed = 100, critChance = 30, critDamage = 50, intelligence = 100, abilityDamage = 0, ferocity = 0;
     // Checks to make sure each item that will affect stats is not null, checks to make sure each item's meta is not null
@@ -178,32 +185,47 @@ public class StatsListeners implements Listener {
         }
       }
     }
-    // Edits the Player's stat values in the config file
-    dataManager.getConfig().set(player.getUniqueId() + ".health", health);
-    dataManager.getConfig().set(player.getUniqueId() + ".defense", defense);
-    dataManager.getConfig().set(player.getUniqueId() + ".strength", strength);
-    dataManager.getConfig().set(player.getUniqueId() + ".speed", speed);
-    dataManager.getConfig().set(player.getUniqueId() + ".critChance", critChance);
-    dataManager.getConfig().set(player.getUniqueId() + ".critDamage", critDamage);
-    dataManager.getConfig().set(player.getUniqueId() + ".intelligence", intelligence);
-    dataManager.getConfig().set(player.getUniqueId() + ".abilityDamage", abilityDamage);
-    dataManager.getConfig().set(player.getUniqueId() + ".ferocity", ferocity);
-    dataManager.saveConfig();
+    // Edits the Player's stat values in the database
+    long count = playerCollection.countDocuments(new Document("docType", "PLAYERSTATS"));
+    if(count > 0) {
+      playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("health", health)));
+      playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("defense", defense)));
+      playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("strength", strength)));
+      playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("speed", speed)));
+      playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("critChance", critChance)));
+      playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("critDamage", critDamage)));
+      playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("intelligence", intelligence)));
+      playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("abilityDamage", abilityDamage)));
+      playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("ferocity", ferocity)));
+    } else {
+      playerCollection.insertOne(new Document("docType", "PLAYERSTATS")
+              .append("health", health)
+              .append("defense", defense)
+              .append("strength", strength)
+              .append("speed", speed)
+              .append("critChance",critChance)
+              .append("critDamage", critDamage)
+              .append("intelligence", intelligence)
+              .append("abilityDamage", abilityDamage)
+              .append("ferocity", ferocity));
+    }
     // Adjusts Player's Health to new max Health by keeping the same percentage
     double healthPercent = player.getHealth() / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-    player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(dataManager.getConfig().getDouble(player.getUniqueId() + ".health"));
+    player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
     // Player will always see 40 hit points or 20 hearts on their screen
     player.setHealthScale(40);
     player.setHealth(healthPercent * player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
-    // Adjusts a Player's Speed based on their Speed stat in the config file
-    player.setWalkSpeed((float) dataManager.getConfig().getDouble(player.getUniqueId() + ".speed") / 500);
+    // Adjusts a Player's Speed
+    player.setWalkSpeed((float) (speed / 500));
     showActionBar(player);
   }
 
   // Regenerates Health and Mana for the Player
   public static void naturalRegen(Player player) {
-    // Gets max Health, Intelligence, and current Mana from the config file
-    double health = dataManager.getConfig().getDouble(player.getUniqueId() + ".health"), intelligence = dataManager.getConfig().getDouble(player.getUniqueId() + ".intelligence"), mana = dataManager.getConfig().getDouble(player.getUniqueId() + ".mana");
+    MongoCollection<Document> playerCollection = playerDatabase.getCollection("" + player.getUniqueId());
+    Document playerStats = playerCollection.find(new Document("docType", "PLAYERSTATS")).first();
+    // Gets max Health, Intelligence, and current Mana from the database
+    double health = playerStats.getDouble("health"), intelligence = playerStats.getDouble("intelligence"), mana = playerStats.getDouble("mana");
     if(!player.isDead()) {
       if(player.getHealth() != health) {
         // If the Player is not dead and their current Health is not already full
@@ -225,15 +247,16 @@ public class StatsListeners implements Listener {
         // Adds the amount to add to the Player's current Mana
         mana += addMana;
       }
-      // Edits the Player's Mana value in the config file
-      dataManager.getConfig().set(player.getUniqueId() + ".mana", mana);
+      // Edits the Player's Mana value in the database
+      playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("mana", mana)));
     }
   }
 
-  // SHows action bar with health, defense, mana
+  // Shows action bar with health, defense, mana
   public static void showActionBar(Player player) {
+    Document playerStats = playerDatabase.getCollection("" + player.getUniqueId()).find(new Document().append("docType", "PLAYERSTATS")).first();
     // Gets max Health, Defense, Intelligence or max Mana, and current Mana
-    double health = dataManager.getConfig().getDouble(player.getUniqueId() + ".health"), defense = dataManager.getConfig().getDouble(player.getUniqueId() + ".defense"), intelligence = dataManager.getConfig().getDouble(player.getUniqueId() + ".intelligence"), mana = dataManager.getConfig().getDouble(player.getUniqueId() + ".mana");
+    double health = playerStats.getDouble("health"), defense = playerStats.getDouble("defense"), intelligence = playerStats.getDouble("intelligence"), mana = playerStats.getDouble("mana");
     NamedTextColor healthColor = NamedTextColor.RED;
     double currentAbsorption = player.getAbsorptionAmount();
     if(currentAbsorption != 0) {
@@ -247,9 +270,10 @@ public class StatsListeners implements Listener {
   // When a Player joins
   @EventHandler
   public void onJoin(PlayerJoinEvent event) {
-    // Update stats, give full mana
+    MongoCollection<Document> playerCollection = playerDatabase.getCollection("" + event.getPlayer().getUniqueId());
+    Document playerStats = playerCollection.find(new Document("docType", "PLAYERSTATS")).first();    // Update stats, give full mana
     updateStats(event.getPlayer());
-    dataManager.getConfig().set(event.getPlayer().getUniqueId() + ".mana", dataManager.getConfig().getDouble(event.getPlayer().getUniqueId() + ".intelligence"));
+    playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("mana", playerStats.getDouble("intelligence"))));
     showActionBar(event.getPlayer());
   }
 

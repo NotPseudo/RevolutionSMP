@@ -4,7 +4,6 @@ import me.notpseudo.revolutionsmp.abilities.Ability;
 import me.notpseudo.revolutionsmp.statobjects.AbilityStats;
 import me.notpseudo.revolutionsmp.statobjects.ArmorStats;
 import me.notpseudo.revolutionsmp.statobjects.WeaponStats;
-import net.kyori.adventure.text.Component;
 
 import java.util.ArrayList;
 import java.util.List;
