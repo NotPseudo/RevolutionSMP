@@ -24,7 +24,7 @@ public class ReforgeCommand implements CommandExecutor {
         String reforgeString = args[0];
         Reforge reforge = Reforge.valueOf(reforgeString);
         if(reforge != null) {
-          ItemEditor.reforge(player, reforge);
+          ItemEditor.reforge(player.getInventory().getItemInMainHand(), reforge, null);
         } else {
           player.sendMessage(Component.text("This reforge could not be found!"));
         }

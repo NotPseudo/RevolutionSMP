@@ -19,7 +19,7 @@ public class Recombobulate implements CommandExecutor {
     if(sender instanceof Player) {
       Player player = (Player) sender;
       if(player.isOp()) {
-        ItemEditor.recombobulate(player);
+        ItemEditor.recombobulate(player.getInventory().getItemInMainHand());
       }
     }
     return true;

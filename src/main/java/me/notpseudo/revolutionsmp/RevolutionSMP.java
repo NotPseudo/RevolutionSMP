@@ -46,7 +46,7 @@ public final class RevolutionSMP extends JavaPlugin {
   // Nothing is required to run when this plugin gets disabled
   @Override
   public void onDisable() {
-    mongoClient.close();
+
   }
 
   // Returns the instance of this main plugin class
