@@ -25,7 +25,7 @@ public enum ItemID {
         }
         @Override
         public WeaponStats getDefaultWeaponStats() {
-            return new WeaponStats(0, 0, 0, 0, 0);
+            return new WeaponStats(0, 0, 0, 0, 0, 0);
         }
         @Override
         public ArmorStats getDefaultArmorStats() {
@@ -55,7 +55,7 @@ public enum ItemID {
         }
         @Override
         public WeaponStats getDefaultWeaponStats() {
-            return new WeaponStats(0, 0, 0, 0, 0);
+            return new WeaponStats(0, 0, 0, 0, 0, 0);
         }
         @Override
         public ArmorStats getDefaultArmorStats() {
@@ -85,7 +85,7 @@ public enum ItemID {
         }
         @Override
         public WeaponStats getDefaultWeaponStats() {
-            return new WeaponStats(0, 0, 0, 0, 0);
+            return new WeaponStats(0, 0, 0, 0, 0, 0);
         }
         @Override
         public ArmorStats getDefaultArmorStats() {
@@ -115,7 +115,7 @@ public enum ItemID {
         }
         @Override
         public WeaponStats getDefaultWeaponStats() {
-            return new WeaponStats(260, 150, 0, 0, 30);
+            return new WeaponStats(260, 150, 0, 0, 0, 30);
         }
         @Override
         public ArmorStats getDefaultArmorStats() {
@@ -145,7 +145,7 @@ public enum ItemID {
         }
         @Override
         public WeaponStats getDefaultWeaponStats() {
-            return new WeaponStats(270, 145, 0, 0, 60);
+            return new WeaponStats(270, 145, 0, 0, 0, 60);
         }
         @Override
         public ArmorStats getDefaultArmorStats() {
@@ -175,7 +175,7 @@ public enum ItemID {
         }
         @Override
         public WeaponStats getDefaultWeaponStats() {
-            return new WeaponStats(270, 150, 12, 35, 30);
+            return new WeaponStats(270, 150, 12, 35, 0, 30);
         }
         @Override
         public ArmorStats getDefaultArmorStats() {
@@ -205,7 +205,7 @@ public enum ItemID {
         }
         @Override
         public WeaponStats getDefaultWeaponStats() {
-            return new WeaponStats(270, 150, 0, 0, 30);
+            return new WeaponStats(270, 150, 0, 0, 0, 30);
         }
         @Override
         public ArmorStats getDefaultArmorStats() {
@@ -235,7 +235,7 @@ public enum ItemID {
         }
         @Override
         public WeaponStats getDefaultWeaponStats() {
-            return new WeaponStats(100, 100, 0, 0, 0);
+            return new WeaponStats(100, 100, 0, 0, 0, 0);
         }
         @Override
         public ArmorStats getDefaultArmorStats() {
@@ -266,7 +266,7 @@ public enum ItemID {
         }
         @Override
         public WeaponStats getDefaultWeaponStats() {
-            return new WeaponStats(310, 40, 10, 110, 0);
+            return new WeaponStats(310, 40, 10, 110, 0, 0);
         }
         @Override
         public ArmorStats getDefaultArmorStats() {
@@ -296,7 +296,7 @@ public enum ItemID {
         }
         @Override
         public WeaponStats getDefaultWeaponStats() {
-            return new WeaponStats(310, 50, 0, 250, 0);
+            return new WeaponStats(310, 50, 0, 250, 0, 0);
         }
         @Override
         public ArmorStats getDefaultArmorStats() {

@@ -52,7 +52,7 @@ public class StatsListeners implements Listener {
   public static void updateStats(Player player) {
     MongoCollection<Document> playerCollection = playerDatabase.getCollection("" + player.getUniqueId());
     // Assigns base values for each stat
-    double health = 20, defense = 0, strength = 0, speed = 100, critChance = 30, critDamage = 50, intelligence = 100, abilityDamage = 0, ferocity = 0;
+    double health = 20, defense = 0, strength = 0, speed = 100, critChance = 30, critDamage = 50, attackSpeed = 0, intelligence = 100, abilityDamage = 0, ferocity = 0;
     // Checks to make sure each item that will affect stats is not null, checks to make sure each item's meta is not null
     // Gets and adds item stat boosts to base amounts
     if(player.getInventory().getHelmet() != null && player.getInventory().getHelmet().getItemMeta() != null) {
@@ -67,6 +67,7 @@ public class StatsListeners implements Listener {
             strength += helmetWeaponStats.getStrength();
             critChance += helmetWeaponStats.getCritChance();
             critDamage += helmetWeaponStats.getCritDamage();
+            attackSpeed += helmetWeaponStats.getAttackSpeed();
             ferocity += helmetWeaponStats.getFerocity();
           }
           if(helmetArmorStats != null) {
@@ -86,25 +87,26 @@ public class StatsListeners implements Listener {
       if(chestplateMeta != null) {
         ItemInfo chestplateItemInfo = chestplateMeta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
         if(chestplateItemInfo != null) {
-         WeaponStats chestplateWeaponStats = chestplateItemInfo.getWeaponStats();
-         ArmorStats chestplateArmorStats = chestplateItemInfo.getArmorStats();
-         AbilityStats chestplateAbilityStats = chestplateItemInfo.getAbilityStats();
-         if(chestplateWeaponStats != null) {
-           strength += chestplateWeaponStats.getStrength();
-           critChance += chestplateWeaponStats.getCritChance();
-           critDamage += chestplateWeaponStats.getCritDamage();
-           ferocity += chestplateWeaponStats.getFerocity();
-         }
-         if(chestplateArmorStats != null) {
-           health += chestplateArmorStats.getHealth();
-           defense += chestplateArmorStats.getDefense();
-           speed += chestplateArmorStats.getSpeed();
-         }
-         if(chestplateAbilityStats != null) {
-           abilityDamage += chestplateAbilityStats.getAbilityDamage();
-           intelligence += chestplateAbilityStats.getIntelligence();
-         }
-       }
+          WeaponStats chestplateWeaponStats = chestplateItemInfo.getWeaponStats();
+          ArmorStats chestplateArmorStats = chestplateItemInfo.getArmorStats();
+          AbilityStats chestplateAbilityStats = chestplateItemInfo.getAbilityStats();
+          if(chestplateWeaponStats != null) {
+            strength += chestplateWeaponStats.getStrength();
+            critChance += chestplateWeaponStats.getCritChance();
+            critDamage += chestplateWeaponStats.getCritDamage();
+            attackSpeed += chestplateWeaponStats.getAttackSpeed();
+            ferocity += chestplateWeaponStats.getFerocity();
+          }
+          if(chestplateArmorStats != null) {
+            health += chestplateArmorStats.getHealth();
+            defense += chestplateArmorStats.getDefense();
+            speed += chestplateArmorStats.getSpeed();
+          }
+          if(chestplateAbilityStats != null) {
+            abilityDamage += chestplateAbilityStats.getAbilityDamage();
+            intelligence += chestplateAbilityStats.getIntelligence();
+          }
+        }
       }
     }
     if(player.getInventory().getLeggings() != null && player.getInventory().getLeggings().getItemMeta() != null) {
@@ -119,6 +121,7 @@ public class StatsListeners implements Listener {
             strength += leggingsWeaponStats.getStrength();
             critChance += leggingsWeaponStats.getCritChance();
             critDamage += leggingsWeaponStats.getCritDamage();
+            attackSpeed += leggingsWeaponStats.getAttackSpeed();
             ferocity += leggingsWeaponStats.getFerocity();
           }
           if(leggingsArmorStats != null) {
@@ -145,6 +148,7 @@ public class StatsListeners implements Listener {
             strength += bootsWeaponStats.getStrength();
             critChance += bootsWeaponStats.getCritChance();
             critDamage += bootsWeaponStats.getCritDamage();
+            attackSpeed += bootsWeaponStats.getAttackSpeed();
             ferocity += bootsWeaponStats.getFerocity();
           }
           if(bootsArmorStats != null) {
@@ -171,6 +175,7 @@ public class StatsListeners implements Listener {
             strength += mainHandWeaponStats.getStrength();
             critChance += mainHandWeaponStats.getCritChance();
             critDamage += mainHandWeaponStats.getCritDamage();
+            attackSpeed += mainHandWeaponStats.getAttackSpeed();
             ferocity += mainHandWeaponStats.getFerocity();
           }
           if (mainHandArmorStats != null) {
@@ -194,6 +199,7 @@ public class StatsListeners implements Listener {
       playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("speed", speed)));
       playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("critChance", critChance)));
       playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("critDamage", critDamage)));
+      playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("attackSpeed", attackSpeed)));
       playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("intelligence", intelligence)));
       playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("abilityDamage", abilityDamage)));
       playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("ferocity", ferocity)));
@@ -205,6 +211,7 @@ public class StatsListeners implements Listener {
               .append("speed", speed)
               .append("critChance",critChance)
               .append("critDamage", critDamage)
+              .append("attackSpeed", attackSpeed)
               .append("intelligence", intelligence)
               .append("abilityDamage", abilityDamage)
               .append("ferocity", ferocity));
@@ -214,10 +221,11 @@ public class StatsListeners implements Listener {
     player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
     // Player will always see 40 hit points or 20 hearts on their screen
     player.setHealthScale(40);
-    player.setHealth(healthPercent * player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+    player.setHealth(healthPercent * health);
     // Adjusts a Player's Speed
     player.setWalkSpeed((float) (speed / 500));
-    showActionBar(player);
+    // Set a Player's Attack Speed
+    player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4 * (1 + (attackSpeed / 100)));
   }
 
   // Regenerates Health and Mana for the Player

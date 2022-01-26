@@ -10,19 +10,21 @@ import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.statobjects.ItemInfo;
 import me.notpseudo.revolutionsmp.statobjects.ItemInfoDataType;
-import me.notpseudo.revolutionsmp.statobjects.WeaponStats;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -276,7 +278,7 @@ public class HealthListeners implements Listener {
     if(event.getEntity() instanceof LivingEntity && !(event.getEntity() instanceof ArmorStand)) {
       LivingEntity entity = (LivingEntity) event.getEntity();
       // Sets base stat values
-      double weaponDamage = event.getDamage(), strength = 0, critDamage = 50, critChance = 30, defense, actualDamagePercent = 1;
+      double weaponDamage = event.getDamage(), strength = 0, critDamage = 50, critChance = 30, defense, actualDamagePercent = 1, ferocity = 0;
       Player player = null;
       Document playerStats;
       if(event.getDamager() instanceof Player) {
@@ -295,12 +297,13 @@ public class HealthListeners implements Listener {
         strength = playerStats.getDouble("strength");
         critDamage = playerStats.getDouble("critDamage");
         critChance = playerStats.getDouble("critChance");
+        ferocity = playerStats.getDouble("ferocity");
         if(player.getInventory().getItemInMainHand().getType() != Material.AIR && player.getInventory().getItemInMainHand().getItemMeta() != null) {
           ItemMeta mainHandMeta = player.getInventory().getItemInMainHand().getItemMeta();
           if(mainHandMeta != null) {
-            WeaponStats mainHandWeaponStats = mainHandMeta.getPersistentDataContainer().get(ItemEditor.getItemKey(), new ItemInfoDataType()).getWeaponStats();
-            if(mainHandWeaponStats != null) {
-              weaponDamage += mainHandWeaponStats.getDamage();
+            ItemInfo mainHandInfo = mainHandMeta.getPersistentDataContainer().get(ItemEditor.getItemKey(), new ItemInfoDataType());
+            if(mainHandInfo != null) {
+              weaponDamage += mainHandInfo.getWeaponStats().getDamage();
             }
           }
         }
@@ -322,13 +325,49 @@ public class HealthListeners implements Listener {
       // Adjust the final damage and set it
       finalDamage *= actualDamagePercent;
       event.setDamage(finalDamage);
+      showDamage(entity, finalDamage, critical);
       if(!(entity instanceof Player)) {
         int health = (int) Math.round(entity.getHealth() - finalDamage);
         updateHealthBar(entity, health);
       } else {
         StatsListeners.showActionBar((Player) entity);
       }
-      showDamage(entity, finalDamage, critical);
+      if(player != null && ferocity > 0) {
+        ferocityAttack(player, entity, finalDamage, ferocity, critical);
+      }
+    }
+  }
+
+  private void ferocityAttack(Player damager, LivingEntity target, double damage, double ferocity, boolean critical) {
+    int hits = (int) (ferocity / 100);
+    final int[] count = {0};
+    BukkitRunnable feroHit = new BukkitRunnable() {
+      @Override
+      public void run() {
+        count[0]++;
+        if(count[0] > hits) {
+          this.cancel();
+        } else {
+          if(!target.isDead()) {
+            target.setMaximumNoDamageTicks(0);
+            target.setNoDamageTicks(0);
+            target.damage(damage);
+            showDamage(target, damage, critical);
+            damager.playSound(damager, Sound.ITEM_FLINTANDSTEEL_USE, 2f, 0.605f);
+          } else {
+            count[0] = hits + 1;
+          }
+        }
+      }
+    };
+    feroHit.runTaskTimer(plugin, 2, 1);
+    double random = Math.random();
+    double ferocityChance = ((ferocity % 100) / 100);
+    if(random < ferocityChance) {
+      target.setMaximumNoDamageTicks(0);
+      target.setNoDamageTicks(0);
+      target.damage(damage);
+      showDamage(target, damage, critical);
     }
   }
 

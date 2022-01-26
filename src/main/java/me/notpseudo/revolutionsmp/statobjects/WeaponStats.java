@@ -13,10 +13,12 @@ public class WeaponStats implements Serializable {
   private final double baseCritChance;
   private double critDamage;
   private final double baseCritDamage;
+  private double attackSpeed;
+  private final double baseAttackSpeed;
   private double ferocity;
   private final double baseFerocity;
 
-  public WeaponStats( double damage, double strength, double critChance, double critDamage, double ferocity) {
+  public WeaponStats( double damage, double strength, double critChance, double critDamage, double attackSpeed, double ferocity) {
     this.damage = damage;
     this.baseDamage = damage;
     this.strength = strength;
@@ -25,6 +27,8 @@ public class WeaponStats implements Serializable {
     this.baseCritChance = critChance;
     this.critDamage = critDamage;
     this.baseCritDamage = critDamage;
+    this.attackSpeed = attackSpeed;
+    this.baseAttackSpeed = attackSpeed;
     this.ferocity = ferocity;
     this.baseFerocity = ferocity;
   }
@@ -75,6 +79,18 @@ public class WeaponStats implements Serializable {
 
   public void setCritDamage(double critDamage) {
     this.critDamage = critDamage;
+  }
+
+  public double getAttackSpeed() {
+    return attackSpeed;
+  }
+
+  public void setAttackSpeed(double attackSpeed) {
+    this.attackSpeed = attackSpeed;
+  }
+
+  public double getBaseAttackSpeed() {
+    return baseAttackSpeed;
   }
 
   public double getFerocity() {
