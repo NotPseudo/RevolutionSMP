@@ -1,8 +1,8 @@
 package me.notpseudo.revolutionsmp.items;
 
-import me.notpseudo.revolutionsmp.statobjects.AbilityStats;
-import me.notpseudo.revolutionsmp.statobjects.ArmorStats;
-import me.notpseudo.revolutionsmp.statobjects.WeaponStats;
+import me.notpseudo.revolutionsmp.itemstats.AbilityStats;
+import me.notpseudo.revolutionsmp.itemstats.ArmorStats;
+import me.notpseudo.revolutionsmp.itemstats.WeaponStats;
 
 import java.util.List;
 
@@ -43,7 +43,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-            return new AbilityStats(0, 0, null);
+            return new AbilityStats(0, 0);
         }
     },
     SHARP {
@@ -82,7 +82,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-            return new AbilityStats(0, 0, null);
+            return new AbilityStats(0, 0);
         }
     },
     HEROIC {
@@ -123,20 +123,20 @@ public enum Reforge {
         public AbilityStats getAbilityStats(Rarity rarity) {
             switch (rarity) {
                 case COMMON:
-                    return new AbilityStats(0, 40, null);
+                    return new AbilityStats(0, 40);
                 case UNCOMMON:
-                    return new AbilityStats(0, 50, null);
+                    return new AbilityStats(0, 50);
                 case RARE:
-                    return new AbilityStats(0, 65, null);
+                    return new AbilityStats(0, 65);
                 case EPIC:
-                    return new AbilityStats(0, 80, null);
+                    return new AbilityStats(0, 80);
                 case LEGENDARY:
-                    return new AbilityStats(0, 100, null);
+                    return new AbilityStats(0, 100);
                 case MYTHIC:
                 case SPECIAL:
-                    return new AbilityStats(0, 125, null);
+                    return new AbilityStats(0, 125);
                 case DIVINE:
-                    return new AbilityStats(0, 150, null);
+                    return new AbilityStats(0, 150);
                 default:
                   return null;
             }
@@ -178,7 +178,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-            return new AbilityStats(0, 0, null);
+            return new AbilityStats(0, 0);
         }
     },
     LEGENDARY {
@@ -219,20 +219,20 @@ public enum Reforge {
         public AbilityStats getAbilityStats(Rarity rarity) {
             switch (rarity) {
                 case COMMON:
-                    return new AbilityStats(0, 5, null);
+                    return new AbilityStats(0, 5);
                 case UNCOMMON:
-                    return new AbilityStats(0, 8, null);
+                    return new AbilityStats(0, 8);
                 case RARE:
-                    return new AbilityStats(0, 12, null);
+                    return new AbilityStats(0, 12);
                 case EPIC:
-                    return new AbilityStats(0, 18, null);
+                    return new AbilityStats(0, 18);
                 case LEGENDARY:
-                    return new AbilityStats(0, 25, null);
+                    return new AbilityStats(0, 25);
                 case MYTHIC:
                 case SPECIAL:
-                    return new AbilityStats(0, 35, null);
+                    return new AbilityStats(0, 35);
                 case DIVINE:
-                    return new AbilityStats(0, 45, null);
+                    return new AbilityStats(0, 45);
                 default:
                   return null;
             }
@@ -274,7 +274,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-            return new AbilityStats(0, 0, null);
+            return new AbilityStats(0, 0);
         }
     },
     FABLED {
@@ -313,7 +313,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-            return new AbilityStats(0, 0, null);
+            return new AbilityStats(0, 0);
         }
     },
     SUSPICIOUS {
@@ -352,7 +352,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-            return new AbilityStats(0, 0, null);
+            return new AbilityStats(0, 0);
         }
     },
 
@@ -392,7 +392,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-          return new AbilityStats(0, 0, null);
+          return new AbilityStats(0, 0);
         }
     },
 
@@ -432,7 +432,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-            return new AbilityStats(0, 0, null);
+            return new AbilityStats(0, 0);
         }
     },
 
@@ -472,7 +472,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-            return new AbilityStats(0, 0, null);
+            return new AbilityStats(0, 0);
         }
     },
 
@@ -512,7 +512,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-            return new AbilityStats(0, 0, null);
+            return new AbilityStats(0, 0);
         }
     },
 
@@ -552,7 +552,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-          return new AbilityStats(0, 0, null);
+          return new AbilityStats(0, 0);
         }
     },
 
@@ -592,7 +592,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-          return new AbilityStats(0, 0, null);
+          return new AbilityStats(0, 0);
         }
     },
 
@@ -634,20 +634,20 @@ public enum Reforge {
         public AbilityStats getAbilityStats(Rarity rarity) {
             switch (rarity) {
                 case COMMON:
-                    return new AbilityStats(0, -5, null);
+                    return new AbilityStats(0, -5);
                 case UNCOMMON:
-                    return new AbilityStats(0, -10, null);
+                    return new AbilityStats(0, -10);
                 case RARE:
-                    return new AbilityStats(0, -18, null);
+                    return new AbilityStats(0, -18);
                 case EPIC:
-                    return new AbilityStats(0, -32, null);
+                    return new AbilityStats(0, -32);
                 case LEGENDARY:
-                    return new AbilityStats(0, -50, null);
+                    return new AbilityStats(0, -50);
                 case MYTHIC:
                 case SPECIAL:
-                    return new AbilityStats(0, -72, null);
+                    return new AbilityStats(0, -72);
                 case DIVINE:
-                    return new AbilityStats(0, -94, null);
+                    return new AbilityStats(0, -94);
                 default:
                   return null;
             }
@@ -690,7 +690,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-            return new AbilityStats(0, 0, null);
+            return new AbilityStats(0, 0);
         }
     },
 
@@ -730,7 +730,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-            return new AbilityStats(0, 0, null);
+            return new AbilityStats(0, 0);
         }
     },
 
@@ -770,7 +770,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-            return new AbilityStats(0, 0, null);
+            return new AbilityStats(0, 0);
         }
     },
 
@@ -827,7 +827,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-            return new AbilityStats(0, 0, null);
+            return new AbilityStats(0, 0);
         }
     },
 
@@ -885,7 +885,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-            return new AbilityStats(0, 0, null);
+            return new AbilityStats(0, 0);
         }
     },
 
@@ -945,20 +945,20 @@ public enum Reforge {
         public AbilityStats getAbilityStats(Rarity rarity) {
             switch (rarity) {
                 case COMMON:
-                    return new AbilityStats(0, 20, null);
+                    return new AbilityStats(0, 20);
                 case UNCOMMON:
-                    return new AbilityStats(0, 25, null);
+                    return new AbilityStats(0, 25);
                 case RARE:
-                    return new AbilityStats(0, 30, null);
+                    return new AbilityStats(0, 30);
                 case EPIC:
-                    return new AbilityStats(0, 40, null);
+                    return new AbilityStats(0, 40);
                 case LEGENDARY:
-                    return new AbilityStats(0, 50, null);
+                    return new AbilityStats(0, 50);
                 case MYTHIC:
                 case SPECIAL:
-                    return new AbilityStats(0, 60, null);
+                    return new AbilityStats(0, 60);
                 case DIVINE:
-                    return new AbilityStats(0, 70, null);
+                    return new AbilityStats(0, 70);
                 default:
                   return null;
             }
@@ -1003,20 +1003,20 @@ public enum Reforge {
         public AbilityStats getAbilityStats(Rarity rarity) {
             switch (rarity) {
                 case COMMON:
-                    return new AbilityStats(0, 25, null);
+                    return new AbilityStats(0, 25);
                 case UNCOMMON:
-                    return new AbilityStats(0, 50, null);
+                    return new AbilityStats(0, 50);
                 case RARE:
-                    return new AbilityStats(0, 75, null);
+                    return new AbilityStats(0, 75);
                 case EPIC:
-                    return new AbilityStats(0, 100, null);
+                    return new AbilityStats(0, 100);
                 case LEGENDARY:
-                    return new AbilityStats(0, 125, null);
+                    return new AbilityStats(0, 125);
                 case MYTHIC:
                 case SPECIAL:
-                    return new AbilityStats(0, 150, null);
+                    return new AbilityStats(0, 150);
                 case DIVINE:
-                    return new AbilityStats(0, 175, null);
+                    return new AbilityStats(0, 175);
                 default:
                   return null;
             }
@@ -1059,7 +1059,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-            return new AbilityStats(0, 0, null);
+            return new AbilityStats(0, 0);
         }
     },
 
@@ -1101,20 +1101,20 @@ public enum Reforge {
         public AbilityStats getAbilityStats(Rarity rarity) {
             switch (rarity) {
                 case COMMON:
-                    return new AbilityStats(0, 25, null);
+                    return new AbilityStats(0, 25);
                 case UNCOMMON:
-                    return new AbilityStats(0, 50, null);
+                    return new AbilityStats(0, 50);
                 case RARE:
-                    return new AbilityStats(0, 75, null);
+                    return new AbilityStats(0, 75);
                 case EPIC:
-                    return new AbilityStats(0, 100, null);
+                    return new AbilityStats(0, 100);
                 case LEGENDARY:
-                    return new AbilityStats(0, 125, null);
+                    return new AbilityStats(0, 125);
                 case MYTHIC:
                 case SPECIAL:
-                    return new AbilityStats(0, 150, null);
+                    return new AbilityStats(0, 150);
                 case DIVINE:
-                    return new AbilityStats(0, 175, null);
+                    return new AbilityStats(0, 175);
                 default:
                   return null;
             }
@@ -1157,7 +1157,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-            return new AbilityStats(0, 0, null);
+            return new AbilityStats(0, 0);
         }
     },
 
@@ -1181,20 +1181,20 @@ public enum Reforge {
         public AbilityStats getAbilityStats(Rarity rarity) {
             switch (rarity) {
                 case COMMON:
-                    return new AbilityStats(0, 30, null);
+                    return new AbilityStats(0, 30);
                 case UNCOMMON:
-                    return new AbilityStats(0, 60, null);
+                    return new AbilityStats(0, 60);
                 case RARE:
-                    return new AbilityStats(0, 90, null);
+                    return new AbilityStats(0, 90);
                 case EPIC:
-                    return new AbilityStats(0, 120, null);
+                    return new AbilityStats(0, 120);
                 case LEGENDARY:
-                    return new AbilityStats(0, 150, null);
+                    return new AbilityStats(0, 150);
                 case MYTHIC:
                 case SPECIAL:
-                    return new AbilityStats(0, 200, null);
+                    return new AbilityStats(0, 200);
                 case DIVINE:
-                    return new AbilityStats(0, 250, null);
+                    return new AbilityStats(0, 250);
                 default:
                   return null;
             }
@@ -1239,20 +1239,20 @@ public enum Reforge {
         public AbilityStats getAbilityStats(Rarity rarity) {
             switch (rarity) {
                 case COMMON:
-                    return new AbilityStats(0, 6, null);
+                    return new AbilityStats(0, 6);
                 case UNCOMMON:
-                    return new AbilityStats(0, 9, null);
+                    return new AbilityStats(0, 9);
                 case RARE:
-                    return new AbilityStats(0, 12, null);
+                    return new AbilityStats(0, 12);
                 case EPIC:
-                    return new AbilityStats(0, 16, null);
+                    return new AbilityStats(0, 16);
                 case LEGENDARY:
-                    return new AbilityStats(0, 20, null);
+                    return new AbilityStats(0, 20);
                 case MYTHIC:
                 case SPECIAL:
-                    return new AbilityStats(0, 25, null);
+                    return new AbilityStats(0, 25);
                 case DIVINE:
-                    return new AbilityStats(0, 30, null);
+                    return new AbilityStats(0, 30);
                 default:
                   return null;
             }
@@ -1315,20 +1315,20 @@ public enum Reforge {
         public AbilityStats getAbilityStats(Rarity rarity) {
             switch (rarity) {
                 case COMMON:
-                    return new AbilityStats(0, 3, null);
+                    return new AbilityStats(0, 3);
                 case UNCOMMON:
-                    return new AbilityStats(0, 4, null);
+                    return new AbilityStats(0, 4);
                 case RARE:
-                    return new AbilityStats(0, 6, null);
+                    return new AbilityStats(0, 6);
                 case EPIC:
-                    return new AbilityStats(0, 8, null);
+                    return new AbilityStats(0, 8);
                 case LEGENDARY:
-                    return new AbilityStats(0, 10, null);
+                    return new AbilityStats(0, 10);
                 case MYTHIC:
                 case SPECIAL:
-                    return new AbilityStats(0, 12, null);
+                    return new AbilityStats(0, 12);
                 case DIVINE:
-                    return new AbilityStats(0, 14, null);
+                    return new AbilityStats(0, 14);
                 default:
                   return null;
             }
@@ -1373,20 +1373,20 @@ public enum Reforge {
         public AbilityStats getAbilityStats(Rarity rarity) {
             switch (rarity) {
                 case COMMON:
-                    return new AbilityStats(0, 20, null);
+                    return new AbilityStats(0, 20);
                 case UNCOMMON:
-                    return new AbilityStats(0, 40, null);
+                    return new AbilityStats(0, 40);
                 case RARE:
-                    return new AbilityStats(0, 60, null);
+                    return new AbilityStats(0, 60);
                 case EPIC:
-                    return new AbilityStats(0, 80, null);
+                    return new AbilityStats(0, 80);
                 case LEGENDARY:
-                    return new AbilityStats(0, 100, null);
+                    return new AbilityStats(0, 100);
                 case MYTHIC:
                 case SPECIAL:
-                    return new AbilityStats(0, 120, null);
+                    return new AbilityStats(0, 120);
                 case DIVINE:
-                    return new AbilityStats(0, 140, null);
+                    return new AbilityStats(0, 140);
                 default:
                   return null;
             }
@@ -1428,7 +1428,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-            return new AbilityStats(0, 0, null);
+            return new AbilityStats(0, 0);
         }
     },
     ARMORTEST {
@@ -1449,7 +1449,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-            return new AbilityStats(100, 500, null);
+            return new AbilityStats(100, 500);
         }
     },
     WEAPONTEST {
@@ -1470,7 +1470,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-            return new AbilityStats(100, 500, null);
+            return new AbilityStats(100, 500);
         }
     },
     FEROTEST {
@@ -1491,10 +1491,9 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-            return new AbilityStats(0, 0, null);
+            return new AbilityStats(0, 0);
         }
-    }
-    ;
+    };
 
     // Gets list of ItemTypes the Reforge can be applied to
     public abstract List<ItemType> getItemTypes();

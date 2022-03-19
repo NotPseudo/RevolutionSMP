@@ -6,18 +6,16 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.FieldAccessException;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
-import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
-import me.notpseudo.revolutionsmp.statobjects.ItemInfo;
-import me.notpseudo.revolutionsmp.statobjects.ItemInfoDataType;
+import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
+import me.notpseudo.revolutionsmp.itemstats.ItemInfoDataType;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
+import me.notpseudo.revolutionsmp.mobstats.MobInfo;
+import me.notpseudo.revolutionsmp.mobstats.MobInfoDataType;
 import org.bson.Document;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -28,14 +26,17 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class HealthListeners implements Listener {
 
   // Instance of main plugin class, database with player info, indicatorCount to make entity IDs for Damage Indicators
   private static RevolutionSMP plugin = RevolutionSMP.getPlugin();
+  private final static NamespacedKey mobKey = MobListeners.getMobKey();
   private MongoDatabase playerDatabase;
-  private static int indicatorCount = 0;
+  private static int indicatorCount = 999999;
+
+  // NamespacedKey to access item stats, list of colors for critical Damage Indicator, HashMap for every LivingEntity and its name
+  private final ChatColor[] chatColors = {ChatColor.WHITE, ChatColor.GOLD, ChatColor.YELLOW, ChatColor.RED};
 
   public HealthListeners(RevolutionSMP plugin) {
     HealthListeners.plugin = plugin;
@@ -47,16 +48,14 @@ public class HealthListeners implements Listener {
       for(Player player : Bukkit.getOnlinePlayers()) {
         for(Entity entity : player.getNearbyEntities(15, 10, 15)) {
           if(entity instanceof LivingEntity && !(entity instanceof ArmorStand)) {
-            updateHealthBar((LivingEntity) entity, (int) Math.round(((LivingEntity) entity).getHealth()), player);
+            if(entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType()) != null) {
+              updateHealthBar((LivingEntity) entity, (int) Math.round((entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getCurrentHealth())), player);
+            }
           }
         }
       }
     }, 100, 15);
   }
-
-  // NamespacedKey to access item stats, list of colors for critical Damage Indicator, HashMap for every LivingEntity and its name
-  private final ChatColor[] chatColors = {ChatColor.WHITE, ChatColor.GOLD, ChatColor.YELLOW, ChatColor.RED};
-  private static final ConcurrentHashMap<LivingEntity, String> names = new ConcurrentHashMap<>();
 
   // Generates random offset for location coordinates
   private double getRandomOffset() {
@@ -76,11 +75,13 @@ public class HealthListeners implements Listener {
 
   // Edits the LivingEntity's health bar
   public static void updateHealthBar(LivingEntity entity, int health) {
+    MobInfo mobInfo = entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
+    if(mobInfo == null) return;
     // Makes the LivingEntity's name red
-    String nameString = "" + ChatColor.RED + getName(entity);
+    String nameString = "" + mobInfo.getMobBehavior().getBehaviorColor() + mobInfo.getName();
     String healthString;
     // Gets max Health of the LivingEntity
-    double maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+    double maxHealth = mobInfo.getMaxHealth();
     if(health < maxHealth) {
       // If the current Health is not full
       if(health < 0) {health = 0;} // If current Health is negative, display it as 0
@@ -92,7 +93,7 @@ public class HealthListeners implements Listener {
       healthString = "" + ChatColor.GREEN + health;
     }
     // Health bar shows name and current Health out of max Health
-    String healthBarString = nameString + healthString + ChatColor.GRAY + "/" + ChatColor.GREEN + Math.round(maxHealth) + ChatColor.RED + "❤";
+    String healthBarString = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Lv" + mobInfo.getLevel() + ChatColor.DARK_GRAY + "] " + nameString + " " + healthString + ChatColor.GRAY + "/" + ChatColor.GREEN + Math.round(maxHealth) + ChatColor.RED + "❤";
     // Working with packets using ProtocolLib
     WrappedDataWatcher dataWatcher = WrappedDataWatcher.getEntityWatcher(entity).deepClone();
     WrappedDataWatcher.Serializer chatSerializer = WrappedDataWatcher.Registry.getChatComponentSerializer(true);
@@ -120,9 +121,11 @@ public class HealthListeners implements Listener {
   // Edits the LivingEntity's health bar but shows only to the specified Player
   // Very similar to above overloaded method
   public static void updateHealthBar(LivingEntity entity, int health, Player player) {
-    String nameString = "" + ChatColor.RED + getName(entity);
+    MobInfo mobInfo = entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
+    if(mobInfo == null) return;
+    String nameString = "" + mobInfo.getMobBehavior().getBehaviorColor() + mobInfo.getName();
     String healthString;
-    double maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+    double maxHealth = mobInfo.getMaxHealth();
     if(health < maxHealth) {
       if(health < 0) {health = 0;}
       healthString = "" + ChatColor.YELLOW + health;
@@ -130,7 +133,7 @@ public class HealthListeners implements Listener {
       if(health > maxHealth) {health = (int) maxHealth;}
       healthString = "" + ChatColor.GREEN + health;
     }
-    String healthBarString = nameString + healthString + ChatColor.GRAY + "/" + ChatColor.GREEN + Math.round(maxHealth) + ChatColor.RED + "❤";
+    String healthBarString = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Lv" + mobInfo.getLevel() + ChatColor.DARK_GRAY + "] " + nameString + " " + healthString + ChatColor.GRAY + "/" + ChatColor.GREEN + Math.round(maxHealth) + ChatColor.RED + "❤";
     WrappedDataWatcher dataWatcher = WrappedDataWatcher.getEntityWatcher(entity).deepClone();
     WrappedDataWatcher.Serializer chatSerializer = WrappedDataWatcher.Registry.getChatComponentSerializer(true);
     WrappedDataWatcher.WrappedDataWatcherObject watcherObject = new WrappedDataWatcher.WrappedDataWatcherObject(2, chatSerializer);
@@ -216,32 +219,7 @@ public class HealthListeners implements Listener {
     }
   }
 
-  // Gets and sets LivingEntity's name
-  private static String getName(LivingEntity entity) {
-    String name = "";
-    if(entity.getCustomName() == null) {
-      String[] nameList = entity.getType().getKey().getKey().split("_");
-      for (String word : nameList) {
-        name += word.substring(0, 1).toUpperCase() + word.substring(1) + " ";
-      }
-    } else {
-      name = entity.getCustomName() + " ";
-    }
-    names.put(entity, name);
-    return name;
-  }
-
-  // When a LivingEntity is added to the world for any reason
-  @EventHandler
-  public void onSpawn(EntityAddToWorldEvent event) {
-    if(event.getEntity() instanceof LivingEntity && !(event.getEntity() instanceof ArmorStand) && !(event.getEntity() instanceof Player)) {
-      LivingEntity entity = (LivingEntity) event.getEntity();
-      int health = (int) Math.round(entity.getHealth());
-      updateHealthBar(entity, health);
-    }
-  }
-
-  // WHen a LivingEntity takes damage not caused by another entity
+  // When a LivingEntity takes damage not caused by another entity
   @EventHandler
   public void onDamage(EntityDamageEvent event) {
     if(event.getEntity() instanceof LivingEntity && !(event.getEntity() instanceof ArmorStand)) {
@@ -249,12 +227,13 @@ public class HealthListeners implements Listener {
         return;
       }
       LivingEntity entity = (LivingEntity) event.getEntity();
-      if(!(entity instanceof Player)) {
-        int health = (int) Math.round(entity.getHealth() - event.getDamage());
-        updateHealthBar(entity, health);
-      } else {
-        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> StatsListeners.showActionBar((Player) entity), 5);
-      }
+      if(entity instanceof  Player) return;
+      MobInfo mobInfo = entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
+      if(mobInfo == null) return;
+      int health = (int) Math.round(mobInfo.getCurrentHealth() - event.getDamage());
+      mobInfo.setCurrentHealth(health);
+      entity.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
+      updateHealthBar(entity, health);
     }
   }
 
@@ -263,12 +242,13 @@ public class HealthListeners implements Listener {
   public void onRegen(EntityRegainHealthEvent event) {
     if(event.getEntity() instanceof LivingEntity && !(event.getEntity() instanceof ArmorStand)) {
       LivingEntity entity = (LivingEntity) event.getEntity();
-      int health = (int) Math.round(entity.getHealth() + event.getAmount());
-      if(!(entity instanceof Player)) {
-        updateHealthBar(entity, health);
-      } else {
-        StatsListeners.showActionBar((Player) entity);
-      }
+      if(entity instanceof Player) return;
+      MobInfo mobInfo = entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
+      if(mobInfo == null) return;
+      int health = (int) Math.round(mobInfo.getCurrentHealth() + event.getAmount());
+      mobInfo.setCurrentHealth(health);
+      entity.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
+      updateHealthBar(entity, health);
     }
   }
 
@@ -323,29 +303,43 @@ public class HealthListeners implements Listener {
         actualDamagePercent = 1 - (defense / (defense + 100));
       }
       // Adjust the final damage and set it
+      MobInfo mobInfo = entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
       finalDamage *= actualDamagePercent;
-      event.setDamage(finalDamage);
+      double actual = finalDamage / mobInfo.getMaxHealth() * entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+      event.setDamage(actual);
       showDamage(entity, finalDamage, critical);
-      if(!(entity instanceof Player)) {
-        int health = (int) Math.round(entity.getHealth() - finalDamage);
-        updateHealthBar(entity, health);
-      } else {
-        StatsListeners.showActionBar((Player) entity);
+      if(mobInfo != null) {
+        event.getDamager().sendMessage("MobInfo Current Health: " + mobInfo.getCurrentHealth());
+        event.getDamager().sendMessage("MobInfo Max Health: " + mobInfo.getMaxHealth());
+        event.getDamager().sendMessage("Mob Current Health: " + entity.getHealth());
+        event.getDamager().sendMessage("Mob Max Health: " + entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+        if(!(entity instanceof Player)) {
+          int health = (int) Math.round(mobInfo.getCurrentHealth() - finalDamage);
+          mobInfo.setCurrentHealth(health);
+          entity.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
+          updateHealthBar(entity, health);
+        }
       }
       if(player != null && ferocity > 0) {
-        ferocityAttack(player, entity, finalDamage, ferocity, critical);
+        ferocityAttack(player, entity, actual, ferocity, critical);
       }
     }
   }
 
   private void ferocityAttack(Player damager, LivingEntity target, double damage, double ferocity, boolean critical) {
     int hits = (int) (ferocity / 100);
+    double random = Math.random();
+    double extraFerocityChance = ((ferocity % 100) / 100);
+    if(random < extraFerocityChance) {
+      hits++;
+    }
     final int[] count = {0};
+    int finalHits = hits;
     BukkitRunnable feroHit = new BukkitRunnable() {
       @Override
       public void run() {
         count[0]++;
-        if(count[0] > hits) {
+        if(count[0] > finalHits) {
           this.cancel();
         } else {
           if(!target.isDead()) {
@@ -355,20 +349,12 @@ public class HealthListeners implements Listener {
             showDamage(target, damage, critical);
             damager.playSound(damager, Sound.ITEM_FLINTANDSTEEL_USE, 2f, 0.605f);
           } else {
-            count[0] = hits + 1;
+            count[0] = finalHits + 1;
           }
         }
       }
     };
     feroHit.runTaskTimer(plugin, 2, 1);
-    double random = Math.random();
-    double ferocityChance = ((ferocity % 100) / 100);
-    if(random < ferocityChance) {
-      target.setMaximumNoDamageTicks(0);
-      target.setNoDamageTicks(0);
-      target.damage(damage);
-      showDamage(target, damage, critical);
-    }
   }
 
 }

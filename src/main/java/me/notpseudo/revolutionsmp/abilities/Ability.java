@@ -1,6 +1,9 @@
 package me.notpseudo.revolutionsmp.abilities;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 // Enum of abilities that can be placed on items
 public enum Ability {
@@ -17,6 +20,10 @@ public enum Ability {
     public AbilityType getAbilityType() {
       return AbilityType.RIGHT_CLICK;
     }
+    @Override
+    public List<Component> getAbilityInfo() {
+      return null;
+    }
   },
   WITHER_IMPACT {
     @Override
@@ -30,6 +37,10 @@ public enum Ability {
     @Override
     public AbilityType getAbilityType() {
       return AbilityType.RIGHT_CLICK;
+    }
+    @Override
+    public List<Component> getAbilityInfo() {
+      return null;
     }
   },
   IMPLOSION {
@@ -45,6 +56,10 @@ public enum Ability {
     public AbilityType getAbilityType() {
       return AbilityType.RIGHT_CLICK;
     }
+    @Override
+    public List<Component> getAbilityInfo() {
+      return null;
+    }
   },
   WITHER_SHIELD {
     @Override
@@ -58,6 +73,10 @@ public enum Ability {
     @Override
     public AbilityType getAbilityType() {
       return AbilityType.RIGHT_CLICK;
+    }
+    @Override
+    public List<Component> getAbilityInfo() {
+      return null;
     }
   },
   SHADOW_WARP {
@@ -73,8 +92,13 @@ public enum Ability {
     public AbilityType getAbilityType() {
       return AbilityType.RIGHT_CLICK;
     }
+    @Override
+    public List<Component> getAbilityInfo() {
+      return null;
+    }
   };
   public abstract void use(Player player); // Method to use an ability
   public abstract String getAbilityName();
   public abstract AbilityType getAbilityType();
+  public abstract List<Component> getAbilityInfo();
 }

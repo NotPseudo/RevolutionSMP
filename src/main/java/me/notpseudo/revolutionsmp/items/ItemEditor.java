@@ -1,7 +1,7 @@
 package me.notpseudo.revolutionsmp.items;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
-import me.notpseudo.revolutionsmp.statobjects.*;
+import me.notpseudo.revolutionsmp.itemstats.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -17,10 +17,10 @@ import java.util.List;
 // Utility methods to edit item stats and lore
 public class ItemEditor {
 
-  // NamespacedKeys are needed to access PersistentData
+  // NamespacedKey to access PersistentData
   private final static NamespacedKey itemKey = new NamespacedKey(RevolutionSMP.getPlugin(RevolutionSMP.class), "items");
 
-  // Returns above NamespacedKeys for other classes to use
+  // Returns NamespacedKey for other classes to use
   public static NamespacedKey getItemKey() {
     return itemKey;
   }
@@ -155,7 +155,7 @@ public class ItemEditor {
       }
     }
     // If the stat's Component is not null, it will be added to the lore
-    if(name != null) {meta.displayName(name.decoration(TextDecoration.ITALIC, false));}
+    meta.displayName(name.decoration(TextDecoration.ITALIC, false));
     if(damage != null) {lore.add(damage.decoration(TextDecoration.ITALIC, false));}
     if(strength != null) {lore.add(strength.decoration(TextDecoration.ITALIC, false));}
     if(critChance != null) {lore.add(critChance.decoration(TextDecoration.ITALIC, false));}
@@ -167,16 +167,16 @@ public class ItemEditor {
     if(speed != null) {lore.add(speed.decoration(TextDecoration.ITALIC, false));}
     if(intelligence != null) {lore.add(intelligence.decoration(TextDecoration.ITALIC, false));}
     if(ferocity != null) {lore.add(ferocity.decoration(TextDecoration.ITALIC, false));}
-    /*if(abilityStats.getAbilityList() != null) {
-      lore.addAll(abilityStats.getAbilityLore());
-    }*/
+    if(itemInfo.getExtraInfo() != null) {
+      if(itemInfo.getExtraInfo().getAbilityLore() != null) {
+        lore.addAll(itemInfo.getExtraInfo().getAbilityLore());
+      }
+    }
     lore.add(Component.text(""));
     if(hasReforge != null) {
       lore.add(hasReforge.decoration(TextDecoration.ITALIC, false));
     }
-    if(rarity != null) {
-      lore.add(rarity.decoration(TextDecoration.ITALIC, false));
-    }
+    lore.add(rarity.decoration(TextDecoration.ITALIC, false));
     meta.lore(lore);
   }
 
@@ -328,31 +328,5 @@ public class ItemEditor {
     }
   }
 
-  // Sets default stats and information for new items
-  public static void applyDefaultStats(ItemMeta meta) {
-    ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
-    if(itemInfo == null) return;
-    ItemID itemID = itemInfo.getItemID();
-    meta.setUnbreakable(itemID.isUnbreakable());
-    if(itemInfo.getName() == null) {
-      itemInfo.setName(itemID.getDefaultName());
-    }
-    if(itemInfo.getItemType() == null) {
-      itemInfo.setItemType(itemID.getItemType());
-    }
-    if(itemInfo.getRarity() == null) {
-      itemInfo.setRarity(itemID.getDefaultRarity());
-    }
-    if(itemInfo.getWeaponStats() == null) {
-      itemInfo.setWeaponStats(itemID.getDefaultWeaponStats());
-    }
-    if(itemInfo.getArmorStats() == null) {
-      itemInfo.setArmorStats(itemID.getDefaultArmorStats());
-    }
-    if(itemInfo.getAbilityStats() == null) {
-      itemInfo.setAbilityStats(itemID.getDefaultAbilityStats());
-    }
-    meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), itemInfo);
-  }
 
 }

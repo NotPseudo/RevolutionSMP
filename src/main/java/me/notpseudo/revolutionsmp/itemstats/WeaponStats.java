@@ -1,4 +1,4 @@
-package me.notpseudo.revolutionsmp.statobjects;
+package me.notpseudo.revolutionsmp.itemstats;
 
 import java.io.Serializable;
 

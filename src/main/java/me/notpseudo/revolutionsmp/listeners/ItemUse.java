@@ -3,8 +3,8 @@ package me.notpseudo.revolutionsmp.listeners;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.abilities.Ability;
 import me.notpseudo.revolutionsmp.abilities.AbilityType;
-import me.notpseudo.revolutionsmp.statobjects.AbilityStats;
-import me.notpseudo.revolutionsmp.statobjects.ItemInfoDataType;
+import me.notpseudo.revolutionsmp.extraiteminfo.ExtraItemInfo;
+import me.notpseudo.revolutionsmp.itemstats.ItemInfoDataType;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -28,9 +28,9 @@ public class ItemUse implements Listener {
     if(!event.getItem().hasItemMeta()) return;
     if(!event.getItem().getItemMeta().getPersistentDataContainer().has(ItemEditor.getItemKey(), new ItemInfoDataType())) return;
     Player player = event.getPlayer();
-    AbilityStats abilityStats = event.getItem().getItemMeta().getPersistentDataContainer().get(ItemEditor.getItemKey(), new ItemInfoDataType()).getAbilityStats();
-    if(abilityStats == null) return;
-    List<Ability> abilityList = abilityStats.getAbilityList();
+    ExtraItemInfo extraInfo = event.getItem().getItemMeta().getPersistentDataContainer().get(ItemEditor.getItemKey(), new ItemInfoDataType()).getExtraInfo();
+    if(extraInfo == null) return;
+    List<Ability> abilityList = extraInfo.getAbilityList();
     if(abilityList == null) return;
     if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
       if(player.isSneaking()) {

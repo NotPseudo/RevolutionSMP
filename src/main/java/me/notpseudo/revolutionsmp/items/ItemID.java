@@ -1,12 +1,10 @@
 package me.notpseudo.revolutionsmp.items;
 
-import me.notpseudo.revolutionsmp.abilities.Ability;
-import me.notpseudo.revolutionsmp.statobjects.AbilityStats;
-import me.notpseudo.revolutionsmp.statobjects.ArmorStats;
-import me.notpseudo.revolutionsmp.statobjects.WeaponStats;
-
-import java.util.ArrayList;
-import java.util.List;
+import me.notpseudo.revolutionsmp.extraiteminfo.AspectOfTheEndInfo;
+import me.notpseudo.revolutionsmp.extraiteminfo.ExtraItemInfo;
+import me.notpseudo.revolutionsmp.itemstats.AbilityStats;
+import me.notpseudo.revolutionsmp.itemstats.ArmorStats;
+import me.notpseudo.revolutionsmp.itemstats.WeaponStats;
 
 // Enum used to identify the exact custom item type an item is
 public enum ItemID {
@@ -33,11 +31,15 @@ public enum ItemID {
         }
         @Override
         public AbilityStats getDefaultAbilityStats() {
-            return new AbilityStats(0, 250, null);
+            return new AbilityStats(0, 250);
         }
         @Override
         public boolean isUnbreakable() {
             return true;
+        }
+        @Override
+        public ExtraItemInfo getDefaultExtraInfo() {
+            return new ExtraItemInfo(null);
         }
     },
     STORM_LEGGINGS {
@@ -63,11 +65,15 @@ public enum ItemID {
         }
         @Override
         public AbilityStats getDefaultAbilityStats() {
-            return new AbilityStats(0, 250, null);
+            return new AbilityStats(0, 250);
         }
         @Override
         public boolean isUnbreakable() {
             return true;
+        }
+        @Override
+        public ExtraItemInfo getDefaultExtraInfo() {
+            return new ExtraItemInfo(null);
         }
     },
     STORM_BOOTS {
@@ -93,11 +99,15 @@ public enum ItemID {
         }
         @Override
         public AbilityStats getDefaultAbilityStats() {
-            return new AbilityStats(0, 250, null);
+            return new AbilityStats(0, 250);
         }
         @Override
         public boolean isUnbreakable() {
             return true;
+        }
+        @Override
+        public ExtraItemInfo getDefaultExtraInfo() {
+            return new ExtraItemInfo(null);
         }
     },
     HYPERION {
@@ -123,11 +133,15 @@ public enum ItemID {
         }
         @Override
         public AbilityStats getDefaultAbilityStats() {
-            return new AbilityStats(0, 350, null);
+            return new AbilityStats(0, 350);
         }
         @Override
         public boolean isUnbreakable() {
             return true;
+        }
+        @Override
+        public ExtraItemInfo getDefaultExtraInfo() {
+            return new ExtraItemInfo(null);
         }
     },
     VALKYRIE {
@@ -153,11 +167,15 @@ public enum ItemID {
         }
         @Override
         public AbilityStats getDefaultAbilityStats() {
-            return new AbilityStats(0, 60, null);
+            return new AbilityStats(0, 60);
         }
         @Override
         public boolean isUnbreakable() {
             return true;
+        }
+        @Override
+        public ExtraItemInfo getDefaultExtraInfo() {
+            return new ExtraItemInfo(null);
         }
     },
     SCYLLA {
@@ -183,11 +201,15 @@ public enum ItemID {
         }
         @Override
         public AbilityStats getDefaultAbilityStats() {
-            return new AbilityStats(0, 50, null);
+            return new AbilityStats(0, 50);
         }
         @Override
         public boolean isUnbreakable() {
             return true;
+        }
+        @Override
+        public ExtraItemInfo getDefaultExtraInfo() {
+            return new ExtraItemInfo(null);
         }
     },
     ASTRAEA {
@@ -213,11 +235,15 @@ public enum ItemID {
         }
         @Override
         public AbilityStats getDefaultAbilityStats() {
-            return new AbilityStats(0, 50, null);
+            return new AbilityStats(0, 50);
         }
         @Override
         public boolean isUnbreakable() {
             return true;
+        }
+        @Override
+        public ExtraItemInfo getDefaultExtraInfo() {
+            return new ExtraItemInfo(null);
         }
     },
     ASPECT_OF_THE_END {
@@ -243,12 +269,15 @@ public enum ItemID {
         }
         @Override
         public AbilityStats getDefaultAbilityStats() {
-            List<Ability> abilityList = new ArrayList<>(List.of(Ability.INSTANT_TRANSMISSION));
-            return new AbilityStats(0, 0, abilityList);
+            return new AbilityStats(0, 0);
         }
         @Override
         public boolean isUnbreakable() {
             return true;
+        }
+        @Override
+        public ExtraItemInfo getDefaultExtraInfo() {
+            return new AspectOfTheEndInfo();
         }
     },
     JUJU_SHORTBOW {
@@ -274,11 +303,15 @@ public enum ItemID {
         }
         @Override
         public AbilityStats getDefaultAbilityStats() {
-            return new AbilityStats(0, 0, null);
+            return new AbilityStats(0, 0);
         }
         @Override
         public boolean isUnbreakable() {
             return true;
+        }
+        @Override
+        public ExtraItemInfo getDefaultExtraInfo() {
+            return new ExtraItemInfo(null);
         }
     },
     TERMINATOR {
@@ -304,11 +337,15 @@ public enum ItemID {
         }
         @Override
         public AbilityStats getDefaultAbilityStats() {
-            return new AbilityStats(0, 0, null);
+            return new AbilityStats(0, 0);
         }
         @Override
         public boolean isUnbreakable() {
             return true;
+        }
+        @Override
+        public ExtraItemInfo getDefaultExtraInfo() {
+            return new ExtraItemInfo(null);
         }
     };
 
@@ -320,5 +357,6 @@ public enum ItemID {
     public abstract ArmorStats getDefaultArmorStats();
     public abstract AbilityStats getDefaultAbilityStats();
     public abstract boolean isUnbreakable();
+    public abstract ExtraItemInfo getDefaultExtraInfo();
 
 }

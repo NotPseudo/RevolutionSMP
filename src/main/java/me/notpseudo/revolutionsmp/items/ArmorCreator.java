@@ -1,6 +1,6 @@
 package me.notpseudo.revolutionsmp.items;
 
-import me.notpseudo.revolutionsmp.statobjects.*;
+import me.notpseudo.revolutionsmp.itemstats.*;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -29,7 +29,6 @@ public class ArmorCreator {
     LeatherArmorMeta leatherMeta = (LeatherArmorMeta) stormChestMeta;
     leatherMeta.setColor(Color.fromRGB(0x1793C4));
     stormChestMeta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), new ItemInfo(ItemID.STORM_CHESTPLATE));
-    ItemEditor.applyDefaultStats(stormChestMeta);
     ItemEditor.updateLore(stormChestMeta);
     stormChest.setItemMeta(stormChestMeta);
   }
@@ -40,7 +39,6 @@ public class ArmorCreator {
     LeatherArmorMeta leatherMeta = (LeatherArmorMeta) stormLegMeta;
     leatherMeta.setColor(Color.fromRGB(0x17A8C4));
     stormLegMeta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), new ItemInfo(ItemID.STORM_LEGGINGS));
-    ItemEditor.applyDefaultStats(stormLegMeta);
     ItemEditor.updateLore(stormLegMeta);
     stormLeg.setItemMeta(stormLegMeta);
   }
@@ -51,7 +49,6 @@ public class ArmorCreator {
     LeatherArmorMeta leatherMeta = (LeatherArmorMeta) stormBootMeta;
     leatherMeta.setColor(Color.fromRGB(0x1CD4E4));
     stormBootMeta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), new ItemInfo(ItemID.STORM_BOOTS));
-    ItemEditor.applyDefaultStats(stormBootMeta);
     ItemEditor.updateLore(stormBootMeta);
     stormBoot.setItemMeta(stormBootMeta);
   }

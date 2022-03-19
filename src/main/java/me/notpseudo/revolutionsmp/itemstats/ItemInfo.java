@@ -1,5 +1,6 @@
-package me.notpseudo.revolutionsmp.statobjects;
+package me.notpseudo.revolutionsmp.itemstats;
 
+import me.notpseudo.revolutionsmp.extraiteminfo.ExtraItemInfo;
 import me.notpseudo.revolutionsmp.items.ItemID;
 import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.items.Rarity;
@@ -20,6 +21,7 @@ public class ItemInfo implements Serializable {
   private WeaponStats weaponStats;
   private ArmorStats armorStats;
   private AbilityStats abilityStats;
+  private ExtraItemInfo extraInfo;
 
   public ItemInfo(ItemID itemID) {
     this.itemID = itemID;
@@ -32,6 +34,7 @@ public class ItemInfo implements Serializable {
     weaponStats = itemID.getDefaultWeaponStats();
     armorStats = itemID.getDefaultArmorStats();
     abilityStats = itemID.getDefaultAbilityStats();
+    extraInfo = itemID.getDefaultExtraInfo();
   }
 
   public String getName() {
@@ -116,6 +119,14 @@ public class ItemInfo implements Serializable {
 
   public void setAbilityStats(AbilityStats abilityStats) {
     this.abilityStats = abilityStats;
+  }
+
+  public ExtraItemInfo getExtraInfo() {
+    return extraInfo;
+  }
+
+  public void setExtraInfo(ExtraItemInfo extraInfo) {
+    this.extraInfo = extraInfo;
   }
 
 }

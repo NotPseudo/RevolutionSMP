@@ -6,8 +6,10 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Updates;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
-import me.notpseudo.revolutionsmp.statobjects.*;
+import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
+import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
+import me.notpseudo.revolutionsmp.playerstats.PlayerStatsDataType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bson.Document;
@@ -26,16 +28,18 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class StatsListeners implements Listener {
 
   // Gets NamespacedKeys from ItemEditor to access stats stored in Persistent Data
+  private final static NamespacedKey playerStatsKey = new NamespacedKey(RevolutionSMP.getPlugin(RevolutionSMP.class), "playerStats");
   private final static NamespacedKey itemKey = ItemEditor.getItemKey();
   // Gets the database with Player info
   private static MongoDatabase playerDatabase;
+  private static MongoClient mongoClient;
 
   // Gets an instance of the main plugin
   private final RevolutionSMP plugin;
 
   public StatsListeners(RevolutionSMP plugin) {
     this.plugin = plugin;
-    MongoClient mongoClient = plugin.getMongoClient();
+    mongoClient = plugin.getMongoClient();
     playerDatabase = mongoClient.getDatabase("players");
     Bukkit.getPluginManager().registerEvents(this, this.plugin);
     Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
@@ -48,11 +52,16 @@ public class StatsListeners implements Listener {
     }, 20, 20);
   }
 
+  // Returns NamespacedKey for other classes to use
+  public NamespacedKey getPlayerStatsKey() {
+    return playerStatsKey;
+  }
+
   // Updates a Player's stats
   public static void updateStats(Player player) {
     MongoCollection<Document> playerCollection = playerDatabase.getCollection("" + player.getUniqueId());
     // Assigns base values for each stat
-    double health = 20, defense = 0, strength = 0, speed = 100, critChance = 30, critDamage = 50, attackSpeed = 0, intelligence = 100, abilityDamage = 0, ferocity = 0;
+    double health = 100, defense = 0, strength = 0, speed = 100, critChance = 30, critDamage = 50, attackSpeed = 0, intelligence = 100, abilityDamage = 0, ferocity = 0;
     // Checks to make sure each item that will affect stats is not null, checks to make sure each item's meta is not null
     // Gets and adds item stat boosts to base amounts
     if(player.getInventory().getHelmet() != null && player.getInventory().getHelmet().getItemMeta() != null) {
@@ -190,6 +199,20 @@ public class StatsListeners implements Listener {
         }
       }
     }
+    PlayerStats playerStats = player.getPersistentDataContainer().get(playerStatsKey, new PlayerStatsDataType());
+    if(playerStats == null) {
+      playerStats = new PlayerStats();
+    }
+    playerStats.setMaxHealth(health);
+    playerStats.setDefense(defense);
+    playerStats.setSpeed(speed);
+    playerStats.setStrength(strength);
+    playerStats.setCritChance(critChance);
+    playerStats.setCritDamage(critDamage);
+    playerStats.setAttackSpeed(attackSpeed);
+    playerStats.setFerocity(ferocity);
+    playerStats.setIntelligence(intelligence);
+    playerStats.setAbilityDamage(abilityDamage);
     // Edits the Player's stat values in the database
     long count = playerCollection.countDocuments(new Document("docType", "PLAYERSTATS"));
     if(count > 0) {
@@ -215,17 +238,21 @@ public class StatsListeners implements Listener {
               .append("intelligence", intelligence)
               .append("abilityDamage", abilityDamage)
               .append("ferocity", ferocity));
+      playerDatabase = mongoClient.getDatabase("players");
     }
     // Adjusts Player's Health to new max Health by keeping the same percentage
+    double maxHealth = Math.min(2048, health);
     double healthPercent = player.getHealth() / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-    player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
+    player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth);
     // Player will always see 40 hit points or 20 hearts on their screen
     player.setHealthScale(40);
-    player.setHealth(healthPercent * health);
+    player.setHealth(healthPercent * maxHealth);
+    playerStats.setCurrentHealth(healthPercent * health);
     // Adjusts a Player's Speed
     player.setWalkSpeed((float) (speed / 500));
     // Set a Player's Attack Speed
     player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4 * (1 + (attackSpeed / 100)));
+    player.getPersistentDataContainer().set(playerStatsKey, new PlayerStatsDataType(), playerStats);
   }
 
   // Regenerates Health and Mana for the Player
