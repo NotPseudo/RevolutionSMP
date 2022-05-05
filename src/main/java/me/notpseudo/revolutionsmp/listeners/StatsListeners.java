@@ -6,6 +6,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Updates;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
@@ -59,7 +60,6 @@ public class StatsListeners implements Listener {
 
   // Updates a Player's stats
   public static void updateStats(Player player) {
-    MongoCollection<Document> playerCollection = playerDatabase.getCollection("" + player.getUniqueId());
     // Assigns base values for each stat
     double health = 100, defense = 0, strength = 0, speed = 100, critChance = 30, critDamage = 50, attackSpeed = 0, intelligence = 100, abilityDamage = 0, ferocity = 0;
     // Checks to make sure each item that will affect stats is not null, checks to make sure each item's meta is not null
@@ -176,7 +176,7 @@ public class StatsListeners implements Listener {
       ItemMeta mainHandMeta = player.getInventory().getItemInMainHand().getItemMeta();
       if (mainHandMeta != null) {
         ItemInfo weaponItemInfo = mainHandMeta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
-        if(weaponItemInfo != null) {
+        if(weaponItemInfo != null && !isArmor(weaponItemInfo)) {
           WeaponStats mainHandWeaponStats = weaponItemInfo.getWeaponStats();
           ArmorStats mainHandArmorStats = weaponItemInfo.getArmorStats();
           AbilityStats mainHandAbilityStats = weaponItemInfo.getAbilityStats();
@@ -213,33 +213,6 @@ public class StatsListeners implements Listener {
     playerStats.setFerocity(ferocity);
     playerStats.setIntelligence(intelligence);
     playerStats.setAbilityDamage(abilityDamage);
-    // Edits the Player's stat values in the database
-    long count = playerCollection.countDocuments(new Document("docType", "PLAYERSTATS"));
-    if(count > 0) {
-      playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("health", health)));
-      playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("defense", defense)));
-      playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("strength", strength)));
-      playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("speed", speed)));
-      playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("critChance", critChance)));
-      playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("critDamage", critDamage)));
-      playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("attackSpeed", attackSpeed)));
-      playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("intelligence", intelligence)));
-      playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("abilityDamage", abilityDamage)));
-      playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("ferocity", ferocity)));
-    } else {
-      playerCollection.insertOne(new Document("docType", "PLAYERSTATS")
-              .append("health", health)
-              .append("defense", defense)
-              .append("strength", strength)
-              .append("speed", speed)
-              .append("critChance",critChance)
-              .append("critDamage", critDamage)
-              .append("attackSpeed", attackSpeed)
-              .append("intelligence", intelligence)
-              .append("abilityDamage", abilityDamage)
-              .append("ferocity", ferocity));
-      playerDatabase = mongoClient.getDatabase("players");
-    }
     // Adjusts Player's Health to new max Health by keeping the same percentage
     double maxHealth = Math.min(2048, health);
     double healthPercent = player.getHealth() / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
@@ -257,10 +230,12 @@ public class StatsListeners implements Listener {
 
   // Regenerates Health and Mana for the Player
   public static void naturalRegen(Player player) {
-    MongoCollection<Document> playerCollection = playerDatabase.getCollection("" + player.getUniqueId());
-    Document playerStats = playerCollection.find(new Document("docType", "PLAYERSTATS")).first();
+    PlayerStats playerStats = player.getPersistentDataContainer().get(playerStatsKey, new PlayerStatsDataType());
+    if(playerStats == null) {
+      playerStats = new PlayerStats();
+    }
     // Gets max Health, Intelligence, and current Mana from the database
-    double health = playerStats.getDouble("health"), intelligence = playerStats.getDouble("intelligence"), mana = playerStats.getDouble("mana");
+    double health = playerStats.getMaxHealth(), intelligence = playerStats.getIntelligence(), mana = playerStats.getIntelligence();
     if(!player.isDead()) {
       if(player.getHealth() != health) {
         // If the Player is not dead and their current Health is not already full
@@ -268,30 +243,30 @@ public class StatsListeners implements Listener {
         double addHealth = Math.ceil((0.75 + (health * 0.005)) * 10) / 10;
         // If adding the amount to add will exceed the max Health, it will just regenerate up to the max Health
         // Adds the amount to add to the Player's current Health
-        player.setHealth(Math.min((player.getHealth() + addHealth), health));
+        double finalHealth = Math.min((player.getHealth() + addHealth), health);
+        playerStats.setCurrentHealth(finalHealth);
+        player.setHealth(finalHealth);
       }
     }
     if(mana != intelligence) {
       // If current Mana is not already full
       // Amount of Mana to add is 2% of max Mana
       double addMana = intelligence * 0.02;
-      if((mana + addMana) >= intelligence) {
-        // If adding the amount to add will exceed the max Mana, it will just regenerate up to the max Mana
-        mana = intelligence;
-      } else {
-        // Adds the amount to add to the Player's current Mana
-        mana += addMana;
-      }
+      double finalMana = Math.min(mana + addMana, intelligence);
+      playerStats.setMana(finalMana);
       // Edits the Player's Mana value in the database
-      playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("mana", mana)));
     }
+    player.getPersistentDataContainer().set(playerStatsKey, new PlayerStatsDataType(), playerStats);
   }
 
   // Shows action bar with health, defense, mana
   public static void showActionBar(Player player) {
-    Document playerStats = playerDatabase.getCollection("" + player.getUniqueId()).find(new Document().append("docType", "PLAYERSTATS")).first();
-    // Gets max Health, Defense, Intelligence or max Mana, and current Mana
-    double health = playerStats.getDouble("health"), defense = playerStats.getDouble("defense"), intelligence = playerStats.getDouble("intelligence"), mana = playerStats.getDouble("mana");
+    PlayerStats playerStats = player.getPersistentDataContainer().get(playerStatsKey, new PlayerStatsDataType());
+    if(playerStats == null) {
+      playerStats = new PlayerStats();
+    }
+    // Gets current Health, max Health, Defense, Intelligence or max Mana, and current Mana
+    double currentHealth = playerStats.getCurrentHealth(), maxHealth = playerStats.getMaxHealth(), defense = playerStats.getDefense(), intelligence = playerStats.getIntelligence(), mana = playerStats.getMana();
     NamedTextColor healthColor = NamedTextColor.RED;
     double currentAbsorption = player.getAbsorptionAmount();
     if(currentAbsorption != 0) {
@@ -299,17 +274,22 @@ public class StatsListeners implements Listener {
       healthColor = NamedTextColor.GOLD;
     }
     // Shows player their current Health out of max Health, Defense, and current Mana out of max Mana
-    player.sendActionBar(Component.text(Math.round(player.getHealth() + currentAbsorption) + "/" + Math.round(health) + "❤     ", healthColor).append(Component.text(Math.round(defense) + "❈ Defense     ", NamedTextColor.GREEN)).append(Component.text(Math.round(mana) + "/" + Math.round(intelligence) + "✎ Mana", NamedTextColor.AQUA)));
+    player.sendActionBar(Component.text(Math.round(currentHealth + currentAbsorption) + "/" + Math.round(maxHealth) + "❤     ", healthColor).append(Component.text(Math.round(defense) + "❈ Defense     ", NamedTextColor.GREEN)).append(Component.text(Math.round(mana) + "/" + Math.round(intelligence) + "✎ Mana", NamedTextColor.AQUA)));
   }
 
   // When a Player joins
   @EventHandler
   public void onJoin(PlayerJoinEvent event) {
-    MongoCollection<Document> playerCollection = playerDatabase.getCollection("" + event.getPlayer().getUniqueId());
-    Document playerStats = playerCollection.find(new Document("docType", "PLAYERSTATS")).first();    // Update stats, give full mana
-    updateStats(event.getPlayer());
-    playerCollection.updateOne(new Document("docType", "PLAYERSTATS"), Updates.combine(Updates.set("mana", playerStats.getDouble("intelligence"))));
-    showActionBar(event.getPlayer());
+    // Update stats, give full mana
+    Player player = event.getPlayer();
+    updateStats(player);
+    PlayerStats playerStats = player.getPersistentDataContainer().get(playerStatsKey, new PlayerStatsDataType());
+    if(playerStats == null) {
+      playerStats = new PlayerStats();
+    }
+    playerStats.setMana(playerStats.getIntelligence());
+    player.getPersistentDataContainer().set(playerStatsKey, new PlayerStatsDataType(), playerStats);
+    showActionBar(player);
   }
 
   // When a Player switches any armor piece
@@ -322,6 +302,16 @@ public class StatsListeners implements Listener {
   @EventHandler
   public void onHandItemSwitch(PlayerItemHeldEvent event) {
     Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> updateStats(event.getPlayer()), 5);
+  }
+
+  /**
+   * Returns if the item is a helmet, chestplate, leggings, or boots
+   * @param itemInfo The ItemInfo to check
+   * @return true if the item is can be worn as armor, false otherwise
+   */
+  private static boolean isArmor(ItemInfo itemInfo) {
+    ItemType type = itemInfo.getItemType();
+    return type == ItemType.HELMET || type == ItemType.CHESTPLATE || type == ItemType.LEGGINGS || type == ItemType.BOOTS;
   }
 
 }
