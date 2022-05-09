@@ -1,10 +1,6 @@
 package me.notpseudo.revolutionsmp.listeners;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Updates;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.*;
@@ -13,7 +9,6 @@ import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStatsDataType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -31,17 +26,12 @@ public class StatsListeners implements Listener {
   // Gets NamespacedKeys from ItemEditor to access stats stored in Persistent Data
   private final static NamespacedKey playerStatsKey = new NamespacedKey(RevolutionSMP.getPlugin(RevolutionSMP.class), "playerStats");
   private final static NamespacedKey itemKey = ItemEditor.getItemKey();
-  // Gets the database with Player info
-  private static MongoDatabase playerDatabase;
-  private static MongoClient mongoClient;
 
   // Gets an instance of the main plugin
   private final RevolutionSMP plugin;
 
   public StatsListeners(RevolutionSMP plugin) {
     this.plugin = plugin;
-    mongoClient = plugin.getMongoClient();
-    playerDatabase = mongoClient.getDatabase("players");
     Bukkit.getPluginManager().registerEvents(this, this.plugin);
     Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
       // Every 20 game ticks, for all players, update player stats. regen health and mana, show action bar with info
@@ -292,13 +282,19 @@ public class StatsListeners implements Listener {
     showActionBar(player);
   }
 
-  // When a Player switches any armor piece
+  /**
+   * Updates player stats when a player switches armor
+   * @param event The Event fired when a player
+   */
   @EventHandler
   public void onArmorSwitch(PlayerArmorChangeEvent event) {
     updateStats(event.getPlayer());
   }
 
-  // When a Player switches to holding a different item
+  /**
+   * Updates player stats when a player switched the item in their hand
+   * @param event The Event when a player switched items in hand
+   */
   @EventHandler
   public void onHandItemSwitch(PlayerItemHeldEvent event) {
     Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> updateStats(event.getPlayer()), 5);
