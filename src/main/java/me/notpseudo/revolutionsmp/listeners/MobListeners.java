@@ -43,8 +43,8 @@ public class MobListeners implements Listener {
         try {
             vanillaMobType = VanillaMobType.valueOf(entity.getType().name());
             MobInfo mobInfo = new MobInfo(vanillaMobType);
-            if(entity.getCustomName() != null) {
-                mobInfo.setName(entity.getCustomName());
+            if(entity.customName() != null) {
+                mobInfo.setName(String.valueOf(entity.customName()));
             }
             if(entity instanceof Tameable && (((Tameable) entity).isTamed())) {
                 mobInfo.setMobBehavior(MobBehavior.TAMED);
@@ -60,6 +60,7 @@ public class MobListeners implements Listener {
             entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(defaultSpeed * (1 + (speed / 100)));
             HealthListeners.updateHealthBar(entity, (int) health);
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             return;
         }
     }

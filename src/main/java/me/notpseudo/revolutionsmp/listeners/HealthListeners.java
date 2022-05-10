@@ -35,7 +35,6 @@ public class HealthListeners implements Listener {
   private MongoDatabase playerDatabase;
   private static int indicatorCount = 999999;
 
-  // NamespacedKey to access item stats, list of colors for critical Damage Indicator, HashMap for every LivingEntity and its name
   private final ChatColor[] chatColors = {ChatColor.WHITE, ChatColor.GOLD, ChatColor.YELLOW, ChatColor.RED};
 
   public HealthListeners(RevolutionSMP plugin) {
@@ -57,7 +56,10 @@ public class HealthListeners implements Listener {
     }, 100, 15);
   }
 
-  // Generates random offset for location coordinates
+  /**
+   * Generates a random number from -0.5 to 0.5
+   * @return The random number
+   */
   private double getRandomOffset() {
     double random = Math.random();
     if (Math.random() > 0.5) {
