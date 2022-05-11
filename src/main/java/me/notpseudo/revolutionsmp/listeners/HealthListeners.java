@@ -27,20 +27,36 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+/**
+ * This class holds listeners that handle how entities take damage and attack
+ */
 public class HealthListeners implements Listener {
 
-  // Instance of main plugin class, database with player info, indicatorCount to make entity IDs for Damage Indicators
+  /**
+   * Holds an instance of the plugin
+   */
   private static RevolutionSMP plugin = RevolutionSMP.getPlugin();
+  /**
+   * The NamedspacedKey from the MobListeners class used to access MobInfo stored in Persistent Data
+   */
   private final static NamespacedKey mobKey = MobListeners.getMobKey();
   private MongoDatabase playerDatabase;
+  /**
+   * Number to represent the next available Entity ID used for creating custom armor stands with packets
+   */
   private static int indicatorCount = 999999;
 
+  /**
+   * List of ChatColors used to decorate critical damage Strings
+   */
   private final ChatColor[] chatColors = {ChatColor.WHITE, ChatColor.GOLD, ChatColor.YELLOW, ChatColor.RED};
 
+  /**
+   * Instantiates a new HealthListeners object to allow the listeners to work<p>Starts a repeating task to show health bars of mobs each second</p>
+   * @param plugin Instance of the plugin
+   */
   public HealthListeners(RevolutionSMP plugin) {
     HealthListeners.plugin = plugin;
-    MongoClient mongoClient = plugin.getMongoClient();
-    playerDatabase = mongoClient.getDatabase("players");
     Bukkit.getPluginManager().registerEvents(this, HealthListeners.plugin);
     Bukkit.getScheduler().scheduleSyncRepeatingTask(HealthListeners.plugin, () -> {
       // Every 15 ticks, for every player, get LivingEntities in specified radius and show their health bars
@@ -61,21 +77,23 @@ public class HealthListeners implements Listener {
    * @return The random number
    */
   private double getRandomOffset() {
-    double random = Math.random();
-    if (Math.random() > 0.5) {
-      random *= -1;
-      random /= 2;
-    }
-    return random;
+    return ((int) (Math.random() * 2) - 0.5) / 2.0;
   }
 
-  // Gets next entity ID to create a Damage Indicator
+  /**
+   * Gets the next available Entity ID to create a custom armor stand with packets
+   * @return The available Entity ID
+   */
   private static int getNextIndicatorCount() {
     indicatorCount++;
     return indicatorCount - 1;
   }
 
-  // Edits the LivingEntity's health bar
+  /**
+   * Edits the specified LivingEntity's health bar with packets for all players
+   * @param entity The LivingEntity to update the health bar for
+   * @param health The health value to display on the health bar
+   */
   public static void updateHealthBar(LivingEntity entity, int health) {
     MobInfo mobInfo = entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
     if(mobInfo == null) return;
@@ -120,8 +138,12 @@ public class HealthListeners implements Listener {
     }
   }
 
-  // Edits the LivingEntity's health bar but shows only to the specified Player
-  // Very similar to above overloaded method
+  /**
+   * Edits the specified LivingEntity's health bar with packets for a specific player
+   * @param entity The LivingEntity to update the health bar for
+   * @param health The health value to display on the health bar
+   * @param player The Player to show the health bar to
+   */
   public static void updateHealthBar(LivingEntity entity, int health, Player player) {
     MobInfo mobInfo = entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
     if(mobInfo == null) return;
@@ -154,7 +176,12 @@ public class HealthListeners implements Listener {
     }
   }
 
-  // Shows a Damage Indicator
+  /**
+   * Creates and shows a Damage Indicator with custom armor stand packets
+   * @param entity The LivingEntity to spawn the Damage Indicator by
+   * @param damage The amount of damage dealt and to be shown
+   * @param critical Represents if the damage was a critical hit or not
+   */
   private void showDamage(LivingEntity entity, double damage, boolean critical) {
     // Puts the damage dealt into a gray message
     String damageString = "" + ChatColor.GRAY + Math.round(damage);
@@ -221,7 +248,10 @@ public class HealthListeners implements Listener {
     }
   }
 
-  // When a LivingEntity takes damage not caused by another entity
+  /**
+   * Handles damage taken when a LivingEntity takes damage not caused by an Entity
+   * @param event The Event fired when an Entity takes damage
+   */
   @EventHandler
   public void onDamage(EntityDamageEvent event) {
     if(event.getEntity() instanceof LivingEntity && !(event.getEntity() instanceof ArmorStand)) {
@@ -239,7 +269,10 @@ public class HealthListeners implements Listener {
     }
   }
 
-  // When a LivingEntity regenerates Health
+  /**
+   * Updates health bar when a LivingEntity regenerates health
+   * @param event The Event fired when an Entity regains health
+   */
   @EventHandler
   public void onRegen(EntityRegainHealthEvent event) {
     if(event.getEntity() instanceof LivingEntity && !(event.getEntity() instanceof ArmorStand)) {
@@ -254,7 +287,10 @@ public class HealthListeners implements Listener {
     }
   }
 
-  // When a LivingEntity gets attacked by another Entity
+  /**
+   * Handles damage when a LivingEntity is attacked by another Entity
+   * @param event The Event fired when an Entity takes damage from an Entity
+   */
   @EventHandler
   public void onDamageEntity(EntityDamageByEntityEvent event) {
     if(event.getEntity() instanceof LivingEntity && !(event.getEntity() instanceof ArmorStand)) {
@@ -328,6 +364,14 @@ public class HealthListeners implements Listener {
     }
   }
 
+  /**
+   * Repeatedly damages the target based on the attacker's ferocity
+   * @param damager The attacking Player
+   * @param target The LivingEntity to be attacked
+   * @param damage The amount of damage originally dealt
+   * @param ferocity The ferocity stat of the attacker
+   * @param critical Represents if the damage was a critical hit or not
+   */
   private void ferocityAttack(Player damager, LivingEntity target, double damage, double ferocity, boolean critical) {
     int hits = (int) (ferocity / 100);
     double random = Math.random();
