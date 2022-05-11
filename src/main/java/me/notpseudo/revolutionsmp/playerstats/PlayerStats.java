@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class PlayerStats implements Serializable {
 
     private double maxHealth;
+    private double currentHealth;
     private double defense;
     private double speed;
     private double strength;
@@ -14,7 +15,6 @@ public class PlayerStats implements Serializable {
     private double ferocity;
     private double intelligence;
     private double abilityDamage;
-    private double currentHealth;
     private double mana;
 
     public PlayerStats() {

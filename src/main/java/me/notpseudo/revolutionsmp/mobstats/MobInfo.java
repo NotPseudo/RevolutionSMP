@@ -2,25 +2,26 @@ package me.notpseudo.revolutionsmp.mobstats;
 
 import java.io.Serializable;
 
-public class MobInfo implements Serializable {
+public class MobInfo extends BaseEntityStats implements Serializable {
 
-    private int level;
-    private String name;
-    private double currentHealth;
     private double maxHealth;
+    private double currentHealth;
     private double defense;
     private double speed;
-    private double damage;
     private double strength;
     private double critChance;
     private double critDamage;
+
     private MobBehavior mobBehavior;
     private VanillaMobType vanillaMobType;
     private CustomMobType customMobType;
+    private String name;
+    private int level;
+    private double damage;
 
-    public MobInfo(VanillaMobType vanillaMobType) {
-        this.vanillaMobType = vanillaMobType;
-        updateMobStats();
+    public MobInfo(CustomMobType customMobType) {
+        super(customMobType);
+        this.vanillaMobType = ;
         name = customMobType.getName();
     }
 
