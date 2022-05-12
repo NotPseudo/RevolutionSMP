@@ -150,7 +150,7 @@ public class HealthListeners implements Listener {
     String nameString = "" + mobInfo.getMobBehavior().getBehaviorColor() + mobInfo.getName();
     String healthString;
     double maxHealth = mobInfo.getMaxHealth();
-    if(health < maxHealth) {
+    if(health < maxHealth / 2) {
       if(health < 0) {health = 0;}
       healthString = "" + ChatColor.YELLOW + health;
     } else {

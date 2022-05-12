@@ -1,5 +1,7 @@
 package me.notpseudo.revolutionsmp.mobstats;
 
+import org.bukkit.entity.EntityType;
+
 import java.io.Serializable;
 
 public class MobInfo extends BaseEntityStats implements Serializable {
@@ -13,15 +15,15 @@ public class MobInfo extends BaseEntityStats implements Serializable {
     private double critDamage;
 
     private MobBehavior mobBehavior;
-    private VanillaMobType vanillaMobType;
+    private EntityType vanillaMobType;
     private CustomMobType customMobType;
     private String name;
     private int level;
     private double damage;
 
-    public MobInfo(CustomMobType customMobType) {
+    public MobInfo(CustomMobType customMobType, EntityType vanillaMobType) {
         super(customMobType);
-        this.vanillaMobType = ;
+        this.vanillaMobType = vanillaMobType;
         name = customMobType.getName();
     }
 
@@ -109,12 +111,17 @@ public class MobInfo extends BaseEntityStats implements Serializable {
         this.mobBehavior = mobBehavior;
     }
 
-    public VanillaMobType getVanillaMobType() {
+    public EntityType getVanillaMobType() {
         return vanillaMobType;
     }
 
-    public void setVanillaMobType(VanillaMobType vanillaMobType) {
+    public void setVanillaMobType(EntityType vanillaMobType) {
         this.vanillaMobType = vanillaMobType;
+        CustomMobType[] customMobTypes = CustomMobType.getCustomMobTypeList(vanillaMobType);
+        if(customMobTypes == null) return;
+        CustomMobType newCustomType = customMobTypes[(int) (Math.random() * customMobTypes.length)];
+        customMobType = newCustomType;
+        super.updateMobStats(newCustomType);
     }
 
     public CustomMobType getCustomMobType() {
@@ -126,7 +133,6 @@ public class MobInfo extends BaseEntityStats implements Serializable {
     }
 
     public void updateMobStats() {
-        customMobType = vanillaMobType.getCustomTypes()[(int) (Math.random() * vanillaMobType.getCustomTypes().length)];
         mobBehavior = customMobType.getMobBehavior();
         level = (int) (Math.random() * (mobBehavior.getHighestLevel() - mobBehavior.getLowestLevel() + 1)) + mobBehavior.getLowestLevel();
         int increase = level - mobBehavior.getLowestLevel();
