@@ -6,14 +6,6 @@ import java.io.Serializable;
 
 public class MobInfo extends BaseEntityStats implements Serializable {
 
-    private double maxHealth;
-    private double currentHealth;
-    private double defense;
-    private double speed;
-    private double strength;
-    private double critChance;
-    private double critDamage;
-
     private MobBehavior mobBehavior;
     private EntityType vanillaMobType;
     private CustomMobType customMobType;
@@ -21,8 +13,9 @@ public class MobInfo extends BaseEntityStats implements Serializable {
     private int level;
     private double damage;
 
-    public MobInfo(CustomMobType customMobType, EntityType vanillaMobType) {
-        super(customMobType);
+    public MobInfo(CustomMobType customMobType, EntityType vanillaMobType, int level) {
+        super(customMobType, level);
+        this.customMobType = customMobType;
         this.vanillaMobType = vanillaMobType;
         name = customMobType.getName();
     }
@@ -39,68 +32,12 @@ public class MobInfo extends BaseEntityStats implements Serializable {
         this.name = name;
     }
 
-    public double getCurrentHealth() {
-        return currentHealth;
-    }
-
-    public void setCurrentHealth(double currentHealth) {
-        this.currentHealth = currentHealth;
-    }
-
-    public double getMaxHealth() {
-        return maxHealth;
-    }
-
-    public void setMaxHealth(double maxHealth) {
-        this.maxHealth = maxHealth;
-    }
-
-    public double getDefense() {
-        return defense;
-    }
-
-    public void setDefense(double defense) {
-        this.defense = defense;
-    }
-
-    public double getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
     public double getDamage() {
         return damage;
     }
 
     public void setDamage(double damage) {
         this.damage = damage;
-    }
-
-    public double getStrength() {
-        return strength;
-    }
-
-    public void setStrength(double strength) {
-        this.strength = strength;
-    }
-
-    public double getCritChance() {
-        return critChance;
-    }
-
-    public void setCritChance(double critChance) {
-        this.critChance = critChance;
-    }
-
-    public double getCritDamage() {
-        return critDamage;
-    }
-
-    public void setCritDamage(double critDamage) {
-        this.critDamage = critDamage;
     }
 
     public MobBehavior getMobBehavior() {
@@ -121,7 +58,7 @@ public class MobInfo extends BaseEntityStats implements Serializable {
         if(customMobTypes == null) return;
         CustomMobType newCustomType = customMobTypes[(int) (Math.random() * customMobTypes.length)];
         customMobType = newCustomType;
-        super.updateMobStats(newCustomType);
+        super.updateStats(newCustomType, calculateAndSetLevel());
     }
 
     public CustomMobType getCustomMobType() {
@@ -132,18 +69,19 @@ public class MobInfo extends BaseEntityStats implements Serializable {
         this.customMobType = customMobType;
     }
 
-    public void updateMobStats() {
+    public int calculateLevel() {
+        MobBehavior behavior = customMobType.getMobBehavior();
+        return (int) (Math.random() * (behavior.getHighestLevel() - behavior.getLowestLevel() + 1)) + behavior.getLowestLevel();
+    }
+
+    public int calculateAndSetLevel() {
         mobBehavior = customMobType.getMobBehavior();
         level = (int) (Math.random() * (mobBehavior.getHighestLevel() - mobBehavior.getLowestLevel() + 1)) + mobBehavior.getLowestLevel();
-        int increase = level - mobBehavior.getLowestLevel();
-        maxHealth = customMobType.getHealth() + (increase * customMobType.getHealth() / 10);
-        currentHealth = customMobType.getHealth() + (increase * customMobType.getHealth() / 10);
-        defense = customMobType.getDefense() + (increase * customMobType.getDefense() / 10);
-        speed = customMobType.getSpeed() + (increase * customMobType.getSpeed() / 10);
-        damage = customMobType.getDamage() + (increase * customMobType.getDamage() / 10);
-        strength = customMobType.getStrength() + (increase * customMobType.getStrength() / 10);
-        critChance = customMobType.getCritChance() + (increase * customMobType.getCritChance() / 10);
-        critDamage = customMobType.getCritDamage() + (increase * customMobType.getCritDamage() / 10);
+        return level;
+    }
+
+    public void updateMobStats() {
+        super.updateStats(customMobType, level);
     }
 
 }

@@ -1,16 +1,11 @@
 package me.notpseudo.revolutionsmp.playerstats;
 
+import me.notpseudo.revolutionsmp.mobstats.BaseEntityStats;
+
 import java.io.Serializable;
 
-public class PlayerStats implements Serializable {
+public class PlayerStats extends BaseEntityStats implements Serializable {
 
-    private double maxHealth;
-    private double currentHealth;
-    private double defense;
-    private double speed;
-    private double strength;
-    private double critChance;
-    private double critDamage;
     private double attackSpeed;
     private double ferocity;
     private double intelligence;
@@ -18,79 +13,20 @@ public class PlayerStats implements Serializable {
     private double mana;
 
     public PlayerStats() {
-        maxHealth = 100;
-        defense = 0;
-        speed = 100;
-        strength = 0;
-        critChance = 30;
-        critDamage = 50;
+        super(100, 0, 100, 0, 30, 50);
         attackSpeed = 0;
         ferocity = 0;
         intelligence = 100;
         abilityDamage = 0;
-        currentHealth = 100;
         mana = 100;
     }
 
     public PlayerStats(double maxHealth, double defense, double speed, double strength, double critChance, double critDamage, double attackSpeed, double ferocity, double intelligence, double abilityDamage) {
-        this.maxHealth = maxHealth;
-        this.defense = defense;
-        this.speed = speed;
-        this.strength = strength;
-        this.critChance = critChance;
-        this.critDamage = critDamage;
+        super(maxHealth, defense, speed, strength, critChance, critDamage);
         this.attackSpeed = attackSpeed;
         this.ferocity = ferocity;
         this.intelligence = intelligence;
         this.abilityDamage = abilityDamage;
-    }
-
-    public double getMaxHealth() {
-        return maxHealth;
-    }
-
-    public void setMaxHealth(double maxHealth) {
-        this.maxHealth = maxHealth;
-    }
-
-    public double getDefense() {
-        return defense;
-    }
-
-    public void setDefense(double defense) {
-        this.defense = defense;
-    }
-
-    public double getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
-    public double getStrength() {
-        return strength;
-    }
-
-    public void setStrength(double strength) {
-        this.strength = strength;
-    }
-
-    public double getCritChance() {
-        return critChance;
-    }
-
-    public void setCritChance(double critChance) {
-        this.critChance = critChance;
-    }
-
-    public double getCritDamage() {
-        return critDamage;
-    }
-
-    public void setCritDamage(double critDamage) {
-        this.critDamage = critDamage;
     }
 
     public double getAttackSpeed() {
@@ -123,14 +59,6 @@ public class PlayerStats implements Serializable {
 
     public void setAbilityDamage(double abilityDamage) {
         this.abilityDamage = abilityDamage;
-    }
-
-    public double getCurrentHealth() {
-        return currentHealth;
-    }
-
-    public void setCurrentHealth(double currentHealth) {
-        this.currentHealth = currentHealth;
     }
 
     public double getMana() {

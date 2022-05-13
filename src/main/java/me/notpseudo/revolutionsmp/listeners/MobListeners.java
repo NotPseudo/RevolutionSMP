@@ -35,11 +35,12 @@ public class MobListeners implements Listener {
     }
 
     // Creates MobInfo for the LivingEntity
-    private void createMobInfo(LivingEntity entity) {
+    private void createMobInfo(Creature entity) {
         CustomMobType[] customMobTypes = CustomMobType.getCustomMobTypeList(entity.getType());
         if (customMobTypes == null) return;
         CustomMobType customMobType = customMobTypes[(int) (Math.random() * customMobTypes.length)];
-        MobInfo mobInfo = new MobInfo(customMobType, entity.getType());
+        int level = (int) (Math.random() * (customMobType.getMobBehavior().getHighestLevel() - customMobType.getMobBehavior().getLowestLevel() + 1)) + customMobType.getMobBehavior().getLowestLevel();
+        MobInfo mobInfo = new MobInfo(customMobType, entity.getType(), level);
         if (entity.customName() != null) {
             mobInfo.setName(String.valueOf(entity.customName()));
         }
@@ -61,8 +62,8 @@ public class MobListeners implements Listener {
     // When a LivingEntity is added to the world for any reason
     @EventHandler
     public void onSpawn(EntityAddToWorldEvent event) {
-        if (event.getEntity() instanceof LivingEntity && !(event.getEntity() instanceof ArmorStand) && !(event.getEntity() instanceof Player)) {
-            LivingEntity entity = (LivingEntity) event.getEntity();
+        if (event.getEntity() instanceof Creature) {
+            Creature entity = (Creature) event.getEntity();
             createMobInfo(entity);
         }
     }
@@ -71,10 +72,10 @@ public class MobListeners implements Listener {
     @EventHandler
     public void onRename(PlayerInteractAtEntityEvent event) {
         if (event.getPlayer().getInventory().getItemInMainHand().getType() != Material.NAME_TAG) return;
-        if (!(event.getRightClicked() instanceof LivingEntity)) return;
+        if (!(event.getRightClicked() instanceof Creature)) return;
         MobInfo mobInfo = event.getRightClicked().getPersistentDataContainer().get(mobKey, new MobInfoDataType());
         if (mobInfo == null) {
-            createMobInfo((LivingEntity) event.getRightClicked());
+            createMobInfo((Creature) event.getRightClicked());
             return;
         }
         BukkitRunnable rename = new BukkitRunnable() {
@@ -91,10 +92,10 @@ public class MobListeners implements Listener {
     @EventHandler
     public void onTransform(EntityTransformEvent event) {
         Entity entity = event.getEntity();
-        if (!(entity instanceof LivingEntity)) return;
+        if (!(entity instanceof Creature)) return;
         MobInfo mobInfo = event.getEntity().getPersistentDataContainer().get(mobKey, new MobInfoDataType());
         if (mobInfo == null) {
-            createMobInfo((LivingEntity) entity);
+            createMobInfo((Creature) entity);
             return;
         }
         mobInfo.setVanillaMobType(entity.getType());
@@ -107,7 +108,7 @@ public class MobListeners implements Listener {
     public void onTame(EntityTameEvent event) {
         MobInfo mobInfo = event.getEntity().getPersistentDataContainer().get(mobKey, new MobInfoDataType());
         if (mobInfo == null) {
-            createMobInfo(event.getEntity());
+            createMobInfo((Creature) event.getEntity());
             return;
         }
         mobInfo.setMobBehavior(MobBehavior.TAMED);
@@ -120,13 +121,13 @@ public class MobListeners implements Listener {
     @EventHandler
     public void onTarget(EntityTargetLivingEntityEvent event) {
         Entity entity = event.getEntity();
-        if (!(entity instanceof LivingEntity)) return;
+        if (!(entity instanceof Creature)) return;
         MobInfo mobInfo = event.getEntity().getPersistentDataContainer().get(mobKey, new MobInfoDataType());
         if (mobInfo == null) {
-            createMobInfo((LivingEntity) event.getEntity());
+            createMobInfo((Creature) event.getEntity());
             return;
         }
-        if (entity instanceof Mob && mobInfo.getMobBehavior() != MobBehavior.TAMED && mobInfo.getMobBehavior() != MobBehavior.BOSS) {
+        if (mobInfo.getMobBehavior() != MobBehavior.TAMED && mobInfo.getMobBehavior() != MobBehavior.BOSS) {
             if (event.getTarget() != null) {
                 mobInfo.setMobBehavior(MobBehavior.HOSTILE);
             } else {

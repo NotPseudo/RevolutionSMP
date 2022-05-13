@@ -63,7 +63,7 @@ public class StatsListeners implements Listener {
      *
      * @return The PlayerStats NamespacedKey
      */
-    public NamespacedKey getPlayerStatsKey() {
+    public static NamespacedKey getPlayerStatsKey() {
         return playerStatsKey;
     }
 
