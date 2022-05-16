@@ -379,19 +379,21 @@ public class HealthListeners implements Listener {
         event.setDamage(vanillaDamage);
         showDamage(target, finalDamage, critical);
         if (targetStats != null) {
-            event.getDamager().sendMessage("MobInfo Current Health: " + mobInfo.getCurrentHealth());
-            event.getDamager().sendMessage("MobInfo Max Health: " + mobInfo.getMaxHealth());
+            event.getDamager().sendMessage("MobInfo Current Health: " + targetStats.getCurrentHealth());
+            event.getDamager().sendMessage("MobInfo Max Health: " + targetStats.getMaxHealth());
             event.getDamager().sendMessage("Mob Current Health: " + target.getHealth());
             event.getDamager().sendMessage("Mob Max Health: " + target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+            int health = (int) Math.round(targetStats.getCurrentHealth() - finalDamage);
+            targetStats.setCurrentHealth(health);
             if (!(target instanceof Player)) {
-                int health = (int) Math.round(mobInfo.getCurrentHealth() - finalDamage);
-                mobInfo.setCurrentHealth(health);
-                target.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
+                target.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), (MobInfo) targetStats);
                 updateHealthBar(target, health);
+            } else {
+                target.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), (PlayerStats) targetStats);
             }
         }
-        if (player != null && ferocity > 0) {
-            ferocityAttack(player, target, vanillaDamage, ferocity, critical);
+        if (damager instanceof Player && ferocity > 0) {
+            ferocityAttack((Player) damager, target, vanillaDamage, ferocity, critical);
         }
     }
 
