@@ -54,7 +54,7 @@ public class HealthListeners implements Listener {
     /**
      * List of ChatColors used to decorate critical damage Strings
      */
-    private final ChatColor[] chatColors = {ChatColor.WHITE, ChatColor.GOLD, ChatColor.YELLOW, ChatColor.RED};
+    private final ChatColor[] criticalColors = {ChatColor.WHITE, ChatColor.GOLD, ChatColor.YELLOW, ChatColor.RED};
 
     /**
      * Instantiates a new HealthListeners object to allow the listeners to work<p>Starts a repeating task to show health bars of mobs each second</p>
@@ -211,10 +211,9 @@ public class HealthListeners implements Listener {
             // If it was a critical hit, add stars before and after
             damageString = "✧" + Math.round(damage) + "✧";
             // Adds colors to critical damage message
-            String[] critStringList = damageString.split("");
             StringBuilder critString = new StringBuilder();
-            for (int i = 0; i < critStringList.length; i++) {
-                critString.append(chatColors[i % 4]).append(critStringList[i]);
+            for (int i = 0; i < damageString.length(); i++) {
+                critString.append(criticalColors[i % 4]).append(damageString.charAt(i));
             }
             damageString = critString.toString();
         }
@@ -385,11 +384,11 @@ public class HealthListeners implements Listener {
             event.getDamager().sendMessage("Mob Max Health: " + target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
             int health = (int) Math.round(targetStats.getCurrentHealth() - finalDamage);
             targetStats.setCurrentHealth(health);
-            if (!(target instanceof Player)) {
+            if (target instanceof Player) {
+                target.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), (PlayerStats) targetStats);
+            } else {
                 target.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), (MobInfo) targetStats);
                 updateHealthBar(target, health);
-            } else {
-                target.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), (PlayerStats) targetStats);
             }
         }
         if (damager instanceof Player && ferocity > 0) {

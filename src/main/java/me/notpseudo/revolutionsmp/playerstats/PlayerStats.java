@@ -11,6 +11,8 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
     private double intelligence;
     private double abilityDamage;
     private double mana;
+    private double healthRegenRate;
+    private double manaRegenRate;
 
     public PlayerStats() {
         super(100, 0, 100, 0, 30, 50);
@@ -19,6 +21,8 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
         intelligence = 100;
         abilityDamage = 0;
         mana = 100;
+        healthRegenRate = 1;
+        manaRegenRate = 1;
     }
 
     public PlayerStats(double maxHealth, double defense, double speed, double strength, double critChance, double critDamage, double attackSpeed, double ferocity, double intelligence, double abilityDamage) {
@@ -27,6 +31,18 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
         this.ferocity = ferocity;
         this.intelligence = intelligence;
         this.abilityDamage = abilityDamage;
+        healthRegenRate = 1;
+        manaRegenRate = 1;
+    }
+
+    public PlayerStats(double maxHealth, double defense, double speed, double strength, double critChance, double critDamage, double attackSpeed, double ferocity, double intelligence, double abilityDamage, double healthRegenRate, double manaRegenRate) {
+        super(maxHealth, defense, speed, strength, critChance, critDamage);
+        this.attackSpeed = attackSpeed;
+        this.ferocity = ferocity;
+        this.intelligence = intelligence;
+        this.abilityDamage = abilityDamage;
+        this.healthRegenRate = healthRegenRate;
+        this.manaRegenRate = manaRegenRate;
     }
 
     public double getAttackSpeed() {
@@ -67,6 +83,22 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
 
     public void setMana(double mana) {
         this.mana = mana;
+    }
+
+    public double getHealthRegenRate() {
+        return healthRegenRate;
+    }
+
+    public void setHealthRegenRate(double healthRegenRate) {
+        this.healthRegenRate = healthRegenRate;
+    }
+
+    public double getManaRegenRate() {
+        return manaRegenRate;
+    }
+
+    public void setManaRegenRate(double manaRegenRate) {
+        this.manaRegenRate = manaRegenRate;
     }
 
 }

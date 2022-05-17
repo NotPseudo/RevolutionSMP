@@ -42,4 +42,9 @@ public class AbilityStats implements Serializable {
     return baseIntelligence;
   }
 
+  public void combine(AbilityStats other) {
+    abilityDamage += other.abilityDamage;
+    intelligence += other.intelligence;
+  }
+
 }

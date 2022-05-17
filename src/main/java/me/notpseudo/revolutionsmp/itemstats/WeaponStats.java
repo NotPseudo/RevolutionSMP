@@ -105,4 +105,13 @@ public class WeaponStats implements Serializable {
     return baseFerocity;
   }
 
+  public void combine(WeaponStats other) {
+    damage += other.damage;
+    strength += other.strength;
+    critChance += other.critChance;
+    critDamage += other.critDamage;
+    attackSpeed += other.attackSpeed;
+    ferocity += other.ferocity;
+  }
+
 }

@@ -1,8 +1,8 @@
 package me.notpseudo.revolutionsmp.listeners;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
-import me.notpseudo.revolutionsmp.abilities.Ability;
 import me.notpseudo.revolutionsmp.abilities.AbilityType;
+import me.notpseudo.revolutionsmp.abilities.AbilityUseType;
 import me.notpseudo.revolutionsmp.extraiteminfo.ExtraItemInfo;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfoDataType;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
@@ -30,34 +30,34 @@ public class ItemUse implements Listener {
     Player player = event.getPlayer();
     ExtraItemInfo extraInfo = event.getItem().getItemMeta().getPersistentDataContainer().get(ItemEditor.getItemKey(), new ItemInfoDataType()).getExtraInfo();
     if(extraInfo == null) return;
-    List<Ability> abilityList = extraInfo.getAbilityList();
+    List<AbilityType> abilityList = extraInfo.getAbilityList();
     if(abilityList == null) return;
     if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
       if(player.isSneaking()) {
         int usedAbilities = 0;
-        for(Ability ability : abilityList) {
-          if(ability.getAbilityType() == AbilityType.SNEAK_RIGHT_CLICK) {
+        for(AbilityType ability : abilityList) {
+          if(ability.getAbilityType() == AbilityUseType.SNEAK_RIGHT_CLICK) {
             ability.use(player);
             usedAbilities++;
           }
         }
         if(usedAbilities == 0) {
-          for(Ability ability : abilityList) {
-            if(ability.getAbilityType() == AbilityType.RIGHT_CLICK) {
+          for(AbilityType ability : abilityList) {
+            if(ability.getAbilityType() == AbilityUseType.RIGHT_CLICK) {
               ability.use(player);
             }
           }
         }
       } else {
-        for(Ability ability : abilityList) {
-          if(ability.getAbilityType() == AbilityType.RIGHT_CLICK) {
+        for(AbilityType ability : abilityList) {
+          if(ability.getAbilityType() == AbilityUseType.RIGHT_CLICK) {
             ability.use(player);
           }
         }
       }
     } else if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
-      for(Ability ability : abilityList) {
-        if(ability.getAbilityType() == AbilityType.LEFT_CLICK) {
+      for(AbilityType ability : abilityList) {
+        if(ability.getAbilityType() == AbilityUseType.LEFT_CLICK) {
           ability.use(player);
         }
       }

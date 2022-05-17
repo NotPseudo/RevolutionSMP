@@ -57,4 +57,10 @@ public class ArmorStats implements Serializable {
     return baseSpeed;
   }
 
+  public void combine(ArmorStats other) {
+    health += other.health;
+    defense += other.defense;
+    speed += other.speed;
+  }
+
 }

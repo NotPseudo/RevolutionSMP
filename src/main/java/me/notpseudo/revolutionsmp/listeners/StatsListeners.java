@@ -256,7 +256,7 @@ public class StatsListeners implements Listener {
             if (currentHealth != maxHealth) {
                 // If the Player is not dead and their current Health is not already full
                 // Amount of Health to add is (0.75 + 0.5% of max Health) rounded up to the nearest tenth
-                double addHealth = Math.ceil((0.75 + (maxHealth * 0.005)) * 10) / 10;
+                double addHealth = (Math.ceil((0.75 + (maxHealth * 0.005)) * 10) / 10) * playerStats.getHealthRegenRate();
                 // If adding the amount to add will exceed the max Health, it will just regenerate up to the max Health
                 // Adds the amount to add to the Player's current Health
                 double finalHealth = Math.min((currentHealth + addHealth), maxHealth);
@@ -268,7 +268,7 @@ public class StatsListeners implements Listener {
             // If current Mana is not already full
             // Amount of Mana to add is 2% of max Mana
             double addMana = intelligence * 0.02;
-            double finalMana = Math.min(mana + addMana, intelligence);
+            double finalMana = (Math.min(mana + addMana, intelligence)) * playerStats.getManaRegenRate();
             playerStats.setMana(finalMana);
         }
         player.getPersistentDataContainer().set(playerStatsKey, new PlayerStatsDataType(), playerStats);

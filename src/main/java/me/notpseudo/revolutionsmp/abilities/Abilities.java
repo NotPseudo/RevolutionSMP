@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 // Methods that will run to simulate abilities
@@ -15,23 +16,16 @@ public class Abilities {
 
   // A Set of non-solid block materials that players can walk through. Used in teleportation abilities
   private static Set<Material> passSet = new HashSet<>();
+          /* List.of(Material.AIR, Material.WATER,
+          Material.GRASS, Material.TALL_GRASS, Material.SEAGRASS, Material.TALL_SEAGRASS,
+          Material.TORCH, Material.WALL_TORCH, Material.REDSTONE_TORCH, Material.REDSTONE_WALL_TORCH, Material.SOUL_TORCH, Material.SOUL_WALL_TORCH, Material.ACACIA_SIGN, Material.BIRCH_SIGN, Material.SPRUCE_SIGN));*/
 
   public static void createPassSet() {
-    passSet.add(Material.AIR);
-    passSet.add(Material.WATER);
-    passSet.add(Material.GRASS);
-    passSet.add(Material.TALL_GRASS);
-    passSet.add(Material.SEAGRASS);
-    passSet.add(Material.TALL_SEAGRASS);
-    passSet.add(Material.TORCH);
-    passSet.add(Material.WALL_TORCH);
-    passSet.add(Material.REDSTONE_TORCH);
-    passSet.add(Material.REDSTONE_WALL_TORCH);
-    passSet.add(Material.SOUL_TORCH);
-    passSet.add(Material.SOUL_WALL_TORCH);
-    passSet.add(Material.ACACIA_SIGN);
-    passSet.add(Material.SPRUCE_SIGN);
-    passSet.add(Material.BIRCH_SIGN);
+    for(Material material : Material.values()) {
+      if(material.isBlock() && !material.isCollidable()) {
+        passSet.add(material);
+      }
+    }
   }
 
   // Method that runs when Instant Transmission ability is used
@@ -44,9 +38,9 @@ public class Abilities {
     for (Block b : Blocks) {
       if (b.isPassable() && cont) {
         loc = b.getLocation();
-      }
-      if (!(b.isPassable())) {
+      } else {
         cont = false;
+        break;
       }
     }
     if (!cont) {
