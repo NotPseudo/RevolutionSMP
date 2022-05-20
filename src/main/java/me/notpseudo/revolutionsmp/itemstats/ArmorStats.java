@@ -58,6 +58,7 @@ public class ArmorStats implements Serializable {
   }
 
   public void combine(ArmorStats other) {
+    if(other == null) return;
     health += other.health;
     defense += other.defense;
     speed += other.speed;
