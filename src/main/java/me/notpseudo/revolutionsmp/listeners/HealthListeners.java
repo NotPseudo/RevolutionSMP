@@ -325,8 +325,7 @@ public class HealthListeners implements Listener {
     @EventHandler
     public void onDamageEntity(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof LivingEntity) || !(event.getDamager() instanceof LivingEntity)) return;
-        Creature target = (Creature) event.getEntity();
-        LivingEntity damager = (LivingEntity) event.getDamager();
+        LivingEntity target = (LivingEntity) event.getEntity(), damager = (LivingEntity) event.getDamager();
         // Sets base stat values
         double weaponDamage = event.getDamage(), strength = 0, critDamage = 50, critChance = 30, defense = 0, actualDamagePercent = 1, ferocity = 0;
         if (event.getDamager() instanceof Arrow) {
@@ -388,7 +387,7 @@ public class HealthListeners implements Listener {
                 target.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), (PlayerStats) targetStats);
             } else {
                 target.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), (MobInfo) targetStats);
-                updateHealthBar(target, health);
+                updateHealthBar((Creature) target, health);
             }
         }
         if (damager instanceof Player && ferocity > 0) {

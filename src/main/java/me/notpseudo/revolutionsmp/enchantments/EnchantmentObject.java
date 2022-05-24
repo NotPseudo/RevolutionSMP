@@ -6,13 +6,13 @@ public class EnchantmentObject {
 
     private final EnchantmentType type;
     private int level;
-    private int allowedMax;
+    private int enchTableMax;
     private int maxLevel;
 
     public EnchantmentObject(EnchantmentType type) {
         this.type = type;
         level = type.getMinLevel();
-        allowedMax = type.getAllowedMax();
+        enchTableMax = type.getEnchTableMax();
         maxLevel = type.getMaxLevel();
     }
 
@@ -27,15 +27,15 @@ public class EnchantmentObject {
     }
 
     public double getAddDamage(EntityDamageByEntityEvent event) {
-        return type.getAddDamage(event);
+        return type.getAddDamage(event, level);
     }
 
     public double getAddMultDamage(EntityDamageByEntityEvent event) {
-        return type.getAddDamageMult(event);
+        return type.getAddDamageMult(event, level);
     }
 
     public double getMultDamage(EntityDamageByEntityEvent event) {
-        return type.getMultDamage(event);
+        return type.getMultDamage(event, level);
     }
 
 }
