@@ -6,12 +6,17 @@ import me.notpseudo.revolutionsmp.itemstats.ArmorStats;
 import me.notpseudo.revolutionsmp.itemstats.WeaponStats;
 import me.notpseudo.revolutionsmp.listeners.MobListeners;
 import me.notpseudo.revolutionsmp.mobstats.BaseEntityStats;
+import me.notpseudo.revolutionsmp.mobstats.MobBehavior;
 import me.notpseudo.revolutionsmp.mobstats.MobInfoDataType;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.Creature;
+import org.bukkit.entity.EntityCategory;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+
+import java.util.Collection;
 
 public enum EnchantmentType {
 
@@ -24,21 +29,15 @@ public enum EnchantmentType {
             }
             switch (level) {
                 case 1:
-                    return 10;
                 case 2:
-                    return 20;
                 case 3:
-                    return 30;
                 case 4:
-                    return 40;
+                    return level * 10;
                 case 5:
-                    return 60;
                 case 6:
-                    return 80;
                 case 7:
-                    return 100;
                 default:
-                    return level * 15;
+                    return (level - 2) * 20;
             }
         }
 
@@ -68,15 +67,11 @@ public enum EnchantmentType {
         public WeaponStats getApplyWeaponStats(int level) {
             switch (level) {
                 case 1:
-                    return new WeaponStats(0, 0, 0, 10, 0, 0);
                 case 2:
-                    return new WeaponStats(0, 0, 0, 20, 0, 0);
                 case 3:
-                    return new WeaponStats(0, 0, 0, 30, 0, 0);
                 case 4:
-                    return new WeaponStats(0, 0, 0, 40, 0, 0);
                 case 5:
-                    return new WeaponStats(0, 0, 0, 50, 0, 0);
+                    return new WeaponStats(0, 0, 0, level * 10, 0, 0);
                 case 6:
                     return new WeaponStats(0, 0, 0, 70, 0, 0);
                 case 7:
@@ -98,11 +93,6 @@ public enum EnchantmentType {
     },
     CUBISM {
         @Override
-        public int getMaxLevel() {
-            return 6;
-        }
-
-        @Override
         public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
             LivingEntity target = (LivingEntity) event.getEntity();
             if (target.getType() != EntityType.CREEPER || target.getType() != EntityType.SLIME || target.getType() != EntityType.MAGMA_CUBE) {
@@ -110,13 +100,10 @@ public enum EnchantmentType {
             }
             switch (level) {
                 case 1:
-                    return 10;
                 case 2:
-                    return 20;
                 case 3:
-                    return 30;
                 case 4:
-                    return 40;
+                    return level * 10;
                 case 5:
                     return 60;
                 case 6:
@@ -124,6 +111,11 @@ public enum EnchantmentType {
                 default:
                     return level * 15;
             }
+        }
+
+        @Override
+        public int getMaxLevel() {
+            return 6;
         }
 
         @Override
@@ -160,21 +152,16 @@ public enum EnchantmentType {
             }
             switch (level) {
                 case 1:
-                    return 15;
                 case 2:
-                    return 30;
                 case 3:
-                    return 45;
                 case 4:
-                    return 60;
+                    return level * 15;
                 case 5:
-                    return 80;
                 case 6:
-                    return 100;
+                default:
+                    return (level - 1) * 20;
                 case 7:
                     return 130;
-                default:
-                    return level * 20;
             }
         }
 
@@ -201,19 +188,14 @@ public enum EnchantmentType {
             }
             switch (level) {
                 case 1:
-                    return 0.2 * percentMissing;
                 case 2:
-                    return 0.4 * percentMissing;
                 case 3:
-                    return 0.6 * percentMissing;
                 case 4:
-                    return 0.8 * percentMissing;
                 case 5:
-                    return percentMissing;
+                default:
+                    return level * 0.2 * percentMissing;
                 case 6:
                     return 1.25 * percentMissing;
-                default:
-                    return level * 1.25 * percentMissing;
             }
         }
 
@@ -274,7 +256,7 @@ public enum EnchantmentType {
         @Override
         public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
             LivingEntity target = (LivingEntity) event.getEntity(), damager = (LivingEntity) event.getDamager();
-            BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType()), damagerStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
+            BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType()), damagerStats = damager.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
             int morePercent;
             if (targetStats == null || damagerStats == null) {
                 morePercent = (int) ((target.getHealth() - damager.getHealth()) / damager.getHealth()) * 100;
@@ -283,13 +265,10 @@ public enum EnchantmentType {
             }
             switch (level) {
                 case 1:
-                    return Math.min(5, morePercent) * 0.1;
                 case 2:
-                    return Math.min(10, morePercent) * 0.2;
                 case 3:
-                    return Math.min(15, morePercent) * 0.3;
                 case 4:
-                    return Math.min(20, morePercent) * 0.4;
+                    return Math.min(level * 5, morePercent) * level * 0.1;
                 case 5:
                     return Math.min(30, morePercent) * 0.6;
                 case 6:
@@ -318,16 +297,7 @@ public enum EnchantmentType {
             if (target.getType() != EntityType.GUARDIAN || target.getType() != EntityType.SQUID || target.getType() != EntityType.GLOW_SQUID || target.getType() != EntityType.ELDER_GUARDIAN) {
                 return 0;
             }
-            switch (level) {
-                case 1:
-                    return 25;
-                case 2:
-                    return 50;
-                case 3:
-                    return 75;
-                default:
-                    return level * 15;
-            }
+            return level * 25;
         }
 
         @Override
@@ -423,6 +393,31 @@ public enum EnchantmentType {
     },
     PROSECUTE {
         @Override
+        public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
+            LivingEntity target = (LivingEntity) event.getEntity();
+            BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
+            int percentHealth;
+            if (targetStats == null) {
+                percentHealth = (int) (target.getHealth() / target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()) * 100;
+            } else {
+                percentHealth = (int) (targetStats.getCurrentHealth() / targetStats.getMaxHealth()) * 100;
+            }
+            switch (level) {
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                    return level * 0.1 * percentHealth;
+                case 5:
+                    return 0.7 * percentHealth;
+                case 6:
+                    return percentHealth;
+                default:
+                    return level * 1.2 * percentHealth;
+            }
+        }
+
+        @Override
         public int getMaxLevel() {
             return 6;
         }
@@ -445,6 +440,25 @@ public enum EnchantmentType {
     },
     SHARPNESS {
         @Override
+        public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
+            switch (level) {
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                    return level * 5;
+                case 5:
+                    return 30;
+                case 6:
+                    return 45;
+                case 7:
+                    return 65;
+                default:
+                    return level * 10;
+            }
+        }
+
+        @Override
         public int getMaxLevel() {
             return 7;
         }
@@ -456,6 +470,29 @@ public enum EnchantmentType {
     },
     SMITE {
         @Override
+        public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
+            LivingEntity target = (LivingEntity) event.getEntity();
+            if (target.getCategory() != EntityCategory.UNDEAD) {
+                return 0;
+            }
+            switch (level) {
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                    return level * 10;
+                case 5:
+                    return 60;
+                case 6:
+                    return 80;
+                case 7:
+                    return 100;
+                default:
+                    return level * 15;
+            }
+        }
+
+        @Override
         public int getMaxLevel() {
             return 7;
         }
@@ -466,6 +503,15 @@ public enum EnchantmentType {
         }
     },
     SMOLDERING {
+        @Override
+        public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
+            LivingEntity target = (LivingEntity) event.getEntity();
+            if (target.getType() != EntityType.BLAZE) {
+                return 0;
+            }
+            return level * 3;
+        }
+
         @Override
         public int getEnchTableMax() {
             return 0;
@@ -510,6 +556,31 @@ public enum EnchantmentType {
         }
     },
     TITAN_KILLER {
+        @Override
+        public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
+            LivingEntity target = (LivingEntity) event.getEntity();
+            BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
+            int defenseCount = 0;
+            if (targetStats != null) {
+                defenseCount = (int) (targetStats.getDefense() / 100);
+            }
+            switch (level) {
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                    return Math.min(level * 6, level * 2 * defenseCount);
+                case 5:
+                    return Math.min(40, 12 * defenseCount);
+                case 6:
+                    return Math.min(60, 16 * defenseCount);
+                case 7:
+                    return Math.min(80, 20 * defenseCount);
+                default:
+                    return Math.min(level * 15, level * 3 * defenseCount);
+            }
+        }
+
         @Override
         public int getMaxLevel() {
             return 7;
@@ -598,6 +669,11 @@ public enum EnchantmentType {
     },
     ONE_FOR_ALL {
         @Override
+        public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
+            return level * 500;
+        }
+
+        @Override
         public int getEnchTableMax() {
             return 0;
         }
@@ -624,6 +700,18 @@ public enum EnchantmentType {
         }
     },
     SWARM {
+        @Override
+        public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
+            LivingEntity damager = (LivingEntity) event.getDamager();
+            Collection<LivingEntity> enemies = damager.getLocation().getNearbyLivingEntities(10).stream()
+                    .filter(c -> c instanceof Creature && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()) != null
+                            && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobBehavior.PASSIVE
+                            && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobBehavior.TAMED
+                    ).toList();
+            int enemyCount = Math.min(16, enemies.size());
+            return level * 1.25 * enemyCount;
+        }
+
         @Override
         public int getEnchTableMax() {
             return 0;
