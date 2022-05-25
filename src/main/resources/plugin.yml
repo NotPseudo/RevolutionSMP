@@ -26,3 +26,16 @@ commands:
   test:
     description: This is a test command!
     usage: /test
+  profile:
+    description: Views player stats
+    aliases:
+      - mystats
+      - myinfo
+    usage: /profile
+  resetstats:
+    description: Resets player stats
+    aliases:
+      - clearstats
+      - newstats
+      - wipe
+    usage: /resetstats

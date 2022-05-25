@@ -45,6 +45,7 @@ public class ItemEditor {
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        meta.setUnbreakable(true);
         // Gets stats from PersistentData
         ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
         WeaponStats weaponStats = itemInfo.getWeaponStats();

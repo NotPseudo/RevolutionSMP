@@ -17,7 +17,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.stream.Collectors;
 
 /**
  * This class holds listeners that handle player stats and updating them accordingly
@@ -50,7 +53,7 @@ public class StatsListeners implements Listener {
         Bukkit.getPluginManager().registerEvents(this, this.plugin);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
             // Every 20 game ticks, for all players, update player stats. regen health and mana, show action bar with info
-            for (Player player : Bukkit.getOnlinePlayers()) {
+            for (Player player : Bukkit.getOnlinePlayers().stream().filter(p -> !p.isDead()).collect(Collectors.toList())) {
                 updateStats(player);
                 naturalRegen(player);
                 showActionBar(player);
@@ -73,6 +76,9 @@ public class StatsListeners implements Listener {
      * @param player The Player to update stats for
      */
     public static void updateStats(Player player) {
+        if(player.isDead()) {
+            return;
+        }
         // Assigns base values for each stat
         double maxHealth = 100, defense = 0, strength = 0, speed = 100, critChance = 30, critDamage = 50, attackSpeed = 0, intelligence = 100, abilityDamage = 0, ferocity = 0;
         // Checks to make sure each item that will affect stats is not null, checks to make sure each item's meta is not null
@@ -333,6 +339,23 @@ public class StatsListeners implements Listener {
     @EventHandler
     public void onHandItemSwitch(PlayerItemHeldEvent event) {
         Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> updateStats(event.getPlayer()), 5);
+    }
+
+    /**
+     * Updates player stats when a player respawns
+     * @param event The Event fired when a player respawns
+     */
+    @EventHandler
+    public void onRespawn(PlayerRespawnEvent event) {
+        Player player = event.getPlayer();
+        PlayerStats playerStats = player.getPersistentDataContainer().get(playerStatsKey, new PlayerStatsDataType());
+        if(playerStats == null) {
+            playerStats = new PlayerStats();
+        } else {
+            playerStats.setCurrentHealth(playerStats.getMaxHealth());
+            playerStats.setMana(playerStats.getIntelligence() / 2);
+        }
+        player.getPersistentDataContainer().set(playerStatsKey, new PlayerStatsDataType(), playerStats);
     }
 
 }

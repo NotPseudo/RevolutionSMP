@@ -15,9 +15,12 @@ public class MobInfo extends BaseEntityStats implements Serializable {
 
     public MobInfo(CustomMobType customMobType, EntityType vanillaMobType, int level) {
         super(customMobType, level);
-        this.customMobType = customMobType;
+        mobBehavior = customMobType.getMobBehavior();
         this.vanillaMobType = vanillaMobType;
+        this.customMobType = customMobType;
         name = customMobType.getName();
+        this.level = level;
+        damage = customMobType.getDamage();
     }
 
     public int getLevel() {

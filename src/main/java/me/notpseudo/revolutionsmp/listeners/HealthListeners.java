@@ -111,18 +111,15 @@ public class HealthListeners implements Listener {
         String healthString;
         // Gets max Health of the LivingEntity
         double maxHealth = mobInfo.getMaxHealth();
-        if (health < maxHealth) {
-            // If the current Health is not full
+        if (health < maxHealth / 2) {
             if (health < 0) {
                 health = 0;
-            } // If current Health is negative, display it as 0
-            // Not-full health is displayed as yellow
+            }
             healthString = "" + ChatColor.YELLOW + health;
         } else {
             if (health > maxHealth) {
                 health = (int) maxHealth;
-            } // If current Health exceeds max Health, display it as max Health
-            // Full health is displayed as Green
+            }
             healthString = "" + ChatColor.GREEN + health;
         }
         // Health bar shows name and current Health out of max Health
@@ -289,6 +286,9 @@ public class HealthListeners implements Listener {
                 if (mobInfo == null) return;
             }
             int health = (int) Math.round(mobInfo.getCurrentHealth() - event.getDamage());
+            if(mobInfo.getMaxHealth() > 2048) {
+                event.setDamage((event.getDamage() / mobInfo.getMaxHealth()) * 2048);
+            }
             mobInfo.setCurrentHealth(health);
             entity.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
             updateHealthBar(entity, health);
@@ -324,15 +324,17 @@ public class HealthListeners implements Listener {
      */
     @EventHandler
     public void onDamageEntity(EntityDamageByEntityEvent event) {
-        if (!(event.getEntity() instanceof LivingEntity) || !(event.getDamager() instanceof LivingEntity)) return;
-        LivingEntity target = (LivingEntity) event.getEntity(), damager = (LivingEntity) event.getDamager();
-        // Sets base stat values
-        double weaponDamage = event.getDamage(), strength = 0, critDamage = 50, critChance = 30, defense = 0, actualDamagePercent = 1, ferocity = 0;
-        if (event.getDamager() instanceof Arrow) {
+        if (!(event.getEntity() instanceof LivingEntity) || !(event.getDamager() instanceof LivingEntity || event.getDamager() instanceof Arrow)) return;
+        LivingEntity target = (LivingEntity) event.getEntity(), damager = null;
+        if(event.getDamager() instanceof LivingEntity) {
+            damager = (LivingEntity) event.getDamager();
+        } else if (event.getDamager() instanceof Arrow) {
             if (((Arrow) event.getDamager()).getShooter() instanceof LivingEntity) {
                 damager = (LivingEntity) ((Arrow) event.getDamager()).getShooter();
             }
         }
+        // Sets base stat values
+        double weaponDamage = event.getDamage(), strength = 0, critDamage = 50, critChance = 30, defense = 0, actualDamagePercent = 1, ferocity = 0;
         BaseEntityStats damagerStats = damager.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
         BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
         if (damager instanceof Player) {
@@ -373,15 +375,17 @@ public class HealthListeners implements Listener {
         actualDamagePercent = 1 - (defense / (defense + 100));
         // Adjust the final damage and set it
         finalDamage *= actualDamagePercent;
-        double vanillaDamage = finalDamage / targetStats.getMaxHealth() * target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-        event.setDamage(vanillaDamage);
+        if(targetStats != null && targetStats.getMaxHealth() > 2048) {
+            finalDamage = finalDamage / targetStats.getMaxHealth() * 2048;
+        }
+        event.setDamage(finalDamage);
         showDamage(target, finalDamage, critical);
         if (targetStats != null) {
             event.getDamager().sendMessage("MobInfo Current Health: " + targetStats.getCurrentHealth());
             event.getDamager().sendMessage("MobInfo Max Health: " + targetStats.getMaxHealth());
             event.getDamager().sendMessage("Mob Current Health: " + target.getHealth());
             event.getDamager().sendMessage("Mob Max Health: " + target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
-            int health = (int) Math.round(targetStats.getCurrentHealth() - finalDamage);
+            int health = Math.max(0, (int) Math.round(targetStats.getCurrentHealth() - finalDamage));
             targetStats.setCurrentHealth(health);
             if (target instanceof Player) {
                 target.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), (PlayerStats) targetStats);
@@ -391,7 +395,7 @@ public class HealthListeners implements Listener {
             }
         }
         if (damager instanceof Player && ferocity > 0) {
-            ferocityAttack((Player) damager, target, vanillaDamage, ferocity, critical);
+            ferocityAttack((Player) damager, target, finalDamage, ferocity, critical);
         }
     }
 
