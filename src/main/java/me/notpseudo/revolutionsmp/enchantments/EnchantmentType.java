@@ -22,8 +22,7 @@ public enum EnchantmentType {
 
     BANE_OF_ARTHROPODS {
         @Override
-        public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
-            LivingEntity target = (LivingEntity) event.getEntity();
+        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
             if (target.getType() != EntityType.SPIDER || target.getType() != EntityType.CAVE_SPIDER || target.getType() != EntityType.SILVERFISH || target.getType() != EntityType.ENDERMITE) {
                 return 0;
             }
@@ -47,7 +46,7 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
@@ -58,9 +57,15 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
+
+        @Override
+        public EnchantmentObject createObject(EnchantmentType type) {
+            return new CleaveEnchantmentObject();
+        }
+
     },
     CRITICAL {
         @Override
@@ -87,14 +92,13 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[0];
         }
     },
     CUBISM {
         @Override
-        public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
-            LivingEntity target = (LivingEntity) event.getEntity();
+        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
             if (target.getType() != EntityType.CREEPER || target.getType() != EntityType.SLIME || target.getType() != EntityType.MAGMA_CUBE) {
                 return 0;
             }
@@ -119,14 +123,13 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
     DRAGON_HUNTER {
         @Override
-        public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
-            LivingEntity target = (LivingEntity) event.getEntity();
+        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
             if (target.getType() != EntityType.ENDER_DRAGON) {
                 return 0;
             }
@@ -139,14 +142,13 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
     ENDER_SLAYER {
         @Override
-        public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
-            LivingEntity target = (LivingEntity) event.getEntity();
+        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
             if (target.getType() != EntityType.ENDER_DRAGON || target.getType() != EntityType.ENDERMAN || target.getType() != EntityType.ENDERMITE) {
                 return 0;
             }
@@ -171,14 +173,13 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
     EXECUTE {
         @Override
-        public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
-            LivingEntity target = (LivingEntity) event.getEntity();
+        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
             BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
             int percentMissing;
             if (targetStats == null) {
@@ -205,7 +206,7 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
@@ -221,7 +222,7 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
@@ -237,9 +238,15 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
+
+        @Override
+        public EnchantmentObject createObject(EnchantmentType type) {
+            return new FireAspectEnchantmentObject();
+        }
+
     },
     FIRST_STRIKE {
         @Override
@@ -248,14 +255,18 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
+        }
+
+        @Override
+        public EnchantmentObject createObject(EnchantmentType type) {
+            return new FirstStrikeEnchantmentObject();
         }
     },
     GIANT_KILLER {
         @Override
-        public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
-            LivingEntity target = (LivingEntity) event.getEntity(), damager = (LivingEntity) event.getDamager();
+        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
             BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType()), damagerStats = damager.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
             int morePercent;
             if (targetStats == null || damagerStats == null) {
@@ -286,14 +297,13 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
     IMPALING {
         @Override
-        public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
-            LivingEntity target = (LivingEntity) event.getEntity();
+        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
             if (target.getType() != EntityType.GUARDIAN || target.getType() != EntityType.SQUID || target.getType() != EntityType.GLOW_SQUID || target.getType() != EntityType.ELDER_GUARDIAN) {
                 return 0;
             }
@@ -311,7 +321,7 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
@@ -327,7 +337,7 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
@@ -338,7 +348,7 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
@@ -349,7 +359,7 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
@@ -360,7 +370,7 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
@@ -371,7 +381,7 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
@@ -387,14 +397,13 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
     PROSECUTE {
         @Override
-        public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
-            LivingEntity target = (LivingEntity) event.getEntity();
+        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
             BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
             int percentHealth;
             if (targetStats == null) {
@@ -423,7 +432,7 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
@@ -434,13 +443,13 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
     SHARPNESS {
         @Override
-        public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
+        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
             switch (level) {
                 case 1:
                 case 2:
@@ -464,14 +473,13 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
     SMITE {
         @Override
-        public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
-            LivingEntity target = (LivingEntity) event.getEntity();
+        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
             if (target.getCategory() != EntityCategory.UNDEAD) {
                 return 0;
             }
@@ -498,14 +506,13 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
     SMOLDERING {
         @Override
-        public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
-            LivingEntity target = (LivingEntity) event.getEntity();
+        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
             if (target.getType() != EntityType.BLAZE) {
                 return 0;
             }
@@ -518,7 +525,7 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
@@ -529,7 +536,7 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
@@ -540,7 +547,7 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
@@ -551,14 +558,13 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
     TITAN_KILLER {
         @Override
-        public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
-            LivingEntity target = (LivingEntity) event.getEntity();
+        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
             BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
             int defenseCount = 0;
             if (targetStats != null) {
@@ -587,7 +593,7 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
@@ -598,7 +604,7 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
@@ -609,7 +615,7 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
@@ -625,7 +631,7 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
@@ -641,7 +647,7 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
@@ -652,7 +658,7 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
@@ -663,13 +669,13 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
     ONE_FOR_ALL {
         @Override
-        public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
+        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
             return level * 500;
         }
 
@@ -684,7 +690,7 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
@@ -695,14 +701,13 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
     SWARM {
         @Override
-        public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
-            LivingEntity damager = (LivingEntity) event.getDamager();
+        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
             Collection<LivingEntity> enemies = damager.getLocation().getNearbyLivingEntities(10).stream()
                     .filter(c -> c instanceof Creature && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()) != null
                             && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobBehavior.PASSIVE
@@ -718,7 +723,7 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     },
@@ -729,7 +734,7 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getApplicableItemTypes() {
+        public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
     };
@@ -755,7 +760,7 @@ public enum EnchantmentType {
         return 0;
     }
 
-    public double getAddDamageMult(EntityDamageByEntityEvent event, int level) {
+    public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
         return 0;
     }
 
@@ -775,7 +780,7 @@ public enum EnchantmentType {
         return 5;
     }
 
-    public abstract ItemType[] getApplicableItemTypes();
+    public abstract ItemType[] getItemTypes();
 
     public EnchantmentObject createObject(EnchantmentType type) {
         return new EnchantmentObject(type);

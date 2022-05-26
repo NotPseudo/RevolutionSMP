@@ -54,7 +54,7 @@ public class HealthListeners implements Listener {
     /**
      * List of ChatColors used to decorate critical damage Strings
      */
-    private final ChatColor[] criticalColors = {ChatColor.WHITE, ChatColor.GOLD, ChatColor.YELLOW, ChatColor.RED};
+    private final static ChatColor[] criticalColors = {ChatColor.WHITE, ChatColor.GOLD, ChatColor.YELLOW, ChatColor.RED};
 
     /**
      * Instantiates a new HealthListeners object to allow the listeners to work<p>Starts a repeating task to show health bars of mobs each second</p>
@@ -81,7 +81,7 @@ public class HealthListeners implements Listener {
      *
      * @return The random number
      */
-    private double getRandomOffset() {
+    private static double getRandomOffset() {
         return ((int) (Math.random() * 2) - 0.5) / 2.0;
     }
 
@@ -201,9 +201,11 @@ public class HealthListeners implements Listener {
      * @param damage   The amount of damage dealt and to be shown
      * @param critical Represents if the damage was a critical hit or not
      */
-    private void showDamage(LivingEntity entity, double damage, boolean critical) {
-        // Puts the damage dealt into a gray message
-        String damageString = "" + ChatColor.GRAY + Math.round(damage);
+    public static void showDamage(LivingEntity entity, double damage, boolean critical, ChatColor color) {
+        if(color == null) {
+            color = ChatColor.GRAY;
+        }
+        String damageString = "" + color + Math.round(damage);
         if (critical) {
             // If it was a critical hit, add stars before and after
             damageString = "✧" + Math.round(damage) + "✧";
@@ -379,7 +381,7 @@ public class HealthListeners implements Listener {
             finalDamage = finalDamage / targetStats.getMaxHealth() * 2048;
         }
         event.setDamage(finalDamage);
-        showDamage(target, finalDamage, critical);
+        showDamage(target, finalDamage, critical, null);
         if (targetStats != null) {
             event.getDamager().sendMessage("MobInfo Current Health: " + targetStats.getCurrentHealth());
             event.getDamager().sendMessage("MobInfo Max Health: " + targetStats.getMaxHealth());
@@ -428,7 +430,7 @@ public class HealthListeners implements Listener {
                         target.setMaximumNoDamageTicks(0);
                         target.setNoDamageTicks(0);
                         target.damage(damage);
-                        showDamage(target, damage, critical);
+                        showDamage(target, damage, critical, null);
                         damager.playSound(damager, Sound.ITEM_FLINTANDSTEEL_USE, 2f, 0.605f);
                     } else {
                         count[0] = finalHits + 1;

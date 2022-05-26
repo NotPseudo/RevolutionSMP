@@ -1,5 +1,6 @@
 package me.notpseudo.revolutionsmp.enchantments;
 
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class EnchantmentObject {
@@ -22,6 +23,10 @@ public class EnchantmentObject {
         maxLevel = type.getMaxLevel();
     }
 
+    public int getLevel() {
+        return level;
+    }
+
     public EnchantmentType getType() {
         return type;
     }
@@ -30,8 +35,8 @@ public class EnchantmentObject {
         return type.getAddDamage(event, level);
     }
 
-    public double getAddMultDamage(EntityDamageByEntityEvent event) {
-        return type.getAddDamageMult(event, level);
+    public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target) {
+        return type.getDamagePercentIncrease(damager, target, level);
     }
 
     public double getMultDamage(EntityDamageByEntityEvent event) {
