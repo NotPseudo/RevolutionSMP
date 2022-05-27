@@ -41,7 +41,7 @@ public class ThunderboltEnchantmentObject extends EnchantmentObject implements A
                     damagePercent = level * 0.04;
                 case 6:
                 default:
-                    damagePercent = (level - 1) * 5;
+                    damagePercent = (level - 1) * 0.05;
             }
             Collection<LivingEntity> enemies = damager.getLocation().getNearbyLivingEntities(2).stream()
                     .filter(c -> c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()) != null

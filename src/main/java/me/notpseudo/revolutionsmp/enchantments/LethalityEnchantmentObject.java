@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,9 +42,6 @@ public class LethalityEnchantmentObject extends EnchantmentObject implements Act
             return;
         }
         final MobInfo[] targetStats = {target.getPersistentDataContainer().get(mobKey, new MobInfoDataType())};
-        if (targetStats[0] == null) {
-            return;
-        }
         double percentDecrease;
         int level = super.getLevel();
         switch (level) {
@@ -61,7 +59,7 @@ public class LethalityEnchantmentObject extends EnchantmentObject implements Act
         if (hits.containsKey(targetUUID)) {
             hits.put(targetUUID, hits.get(targetUUID) + 1);
         } else {
-            hits.put(targetUUID, 0);
+            hits.put(targetUUID, 1);
         }
         if (target instanceof Player) {
             final PlayerStats[] playerStats = {target.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType())};
@@ -70,32 +68,44 @@ public class LethalityEnchantmentObject extends EnchantmentObject implements Act
             }
             playerStats[0].setDefenseMultiplier(playerStats[0].getDefenseMultiplier() * remainingDefense);
             target.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats[0]);
-            Bukkit.getScheduler().runTaskLater(RevolutionSMP.getPlugin(), () -> {
-                if (!hits.containsKey(targetUUID)) {
-                    return;
+            BukkitRunnable playerLethality = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (!hits.containsKey(targetUUID)) {
+                        this.cancel();
+                        return;
+                    }
+                    playerStats[0] = target.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
+                    playerStats[0].setDefenseMultiplier(playerStats[0].getDefense() / remainingDefense);
+                    target.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats[0]);
+                    if (hits.get(targetUUID) - 1 == 0) {
+                        hits.remove(targetUUID);
+                    } else {
+                        hits.put(targetUUID, hits.get(targetUUID) - 1);
+                    }
                 }
-                playerStats[0] = target.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
-                playerStats[0].setDefenseMultiplier(playerStats[0].getDefense() / remainingDefense);
-                if (hits.get(targetUUID) - 1 == 0) {
-                    hits.remove(targetUUID);
-                } else {
-                    hits.put(targetUUID, hits.get(targetUUID) - 1);
-                }
-            }, 80);
+            };
+            playerLethality.runTaskLater(RevolutionSMP.getPlugin(), 80);
         } else {
+            if(targetStats[0] == null) {
+                return;
+            }
             targetStats[0].setDefense(targetStats[0].getDefense() * remainingDefense);
             target.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), targetStats[0]);
-            Bukkit.getScheduler().runTaskLater(RevolutionSMP.getPlugin(), new Runnable() {
+            BukkitRunnable mobLethality = new BukkitRunnable() {
                 @Override
                 public void run() {
                     if (target.isDead()) {
                         hits.remove(targetUUID);
+                        this.cancel();
                         return;
                     }
                     targetStats[0] = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
                     targetStats[0].setDefense(targetStats[0].getDefense() / remainingDefense);
+                    target.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), targetStats[0]);
                 }
-            }, 40);
+            };
+            mobLethality.runTaskLater(RevolutionSMP.getPlugin(), 80);
         }
     }
 

@@ -27,7 +27,7 @@ public class ThunderlordEnchantmentObject extends EnchantmentObject implements A
             lastHit = target.getUniqueId();
         }
         if (target.getUniqueId() != lastHit) {
-            hitCount = 0;
+            hitCount = 1;
             return;
         }
         hitCount++;

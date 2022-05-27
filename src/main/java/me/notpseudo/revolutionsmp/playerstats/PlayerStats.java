@@ -14,6 +14,7 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
     private double healthRegenRate;
     private double manaRegenRate;
     private double defenseMultiplier;
+    private double speedMultiplier;
 
     public PlayerStats() {
         super(100, 0, 100, 0, 30, 50);
@@ -25,6 +26,7 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
         healthRegenRate = 1;
         manaRegenRate = 1;
         defenseMultiplier = 1;
+        speedMultiplier = 1;
     }
 
     public PlayerStats(double maxHealth, double defense, double speed, double strength, double critChance, double critDamage, double attackSpeed, double ferocity, double intelligence, double abilityDamage) {
@@ -36,9 +38,10 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
         healthRegenRate = 1;
         manaRegenRate = 1;
         defenseMultiplier = 1;
+        speedMultiplier = 1;
     }
 
-    public PlayerStats(double maxHealth, double defense, double speed, double strength, double critChance, double critDamage, double attackSpeed, double ferocity, double intelligence, double abilityDamage, double healthRegenRate, double manaRegenRate, double defenseMultiplier) {
+    public PlayerStats(double maxHealth, double defense, double speed, double strength, double critChance, double critDamage, double attackSpeed, double ferocity, double intelligence, double abilityDamage, double healthRegenRate, double manaRegenRate, double defenseMultiplier, double speedMultiplier) {
         super(maxHealth, defense, speed, strength, critChance, critDamage);
         this.attackSpeed = attackSpeed;
         this.ferocity = ferocity;
@@ -47,6 +50,7 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
         this.healthRegenRate = healthRegenRate;
         this.manaRegenRate = manaRegenRate;
         this.defenseMultiplier = defenseMultiplier;
+        this.speedMultiplier = speedMultiplier;
     }
 
     public double getAttackSpeed() {
@@ -111,5 +115,13 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
 
     public void setDefenseMultiplier(double defenseMultiplier) {
         this.defenseMultiplier = defenseMultiplier;
+    }
+
+    public double getSpeedMultiplier() {
+        return speedMultiplier;
+    }
+
+    public void setSpeedMultiplier(double speedMultiplier) {
+        this.speedMultiplier = speedMultiplier;
     }
 }

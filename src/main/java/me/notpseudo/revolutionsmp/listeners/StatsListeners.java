@@ -230,13 +230,9 @@ public class StatsListeners implements Listener {
         double healthPercent = playerStats.getCurrentHealth() / playerStats.getMaxHealth();
         player.setHealth(healthPercent * vanillaMaxHealth);
         playerStats.setCurrentHealth(healthPercent * maxHealth);
-        // Adjusts a Player's Speed
-        player.setWalkSpeed((float) (speed / 500));
-        // Set a Player's Attack Speed
-        player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4 * (1 + (attackSpeed / 100)));
         playerStats.setMaxHealth(maxHealth);
         playerStats.setDefense(defense * playerStats.getDefenseMultiplier());
-        playerStats.setSpeed(speed);
+        playerStats.setSpeed(speed * playerStats.getSpeedMultiplier());
         playerStats.setStrength(strength);
         playerStats.setCritChance(critChance);
         playerStats.setCritDamage(critDamage);
@@ -244,6 +240,8 @@ public class StatsListeners implements Listener {
         playerStats.setFerocity(ferocity);
         playerStats.setIntelligence(intelligence);
         playerStats.setAbilityDamage(abilityDamage);
+        player.setWalkSpeed((float) (speed * playerStats.getSpeedMultiplier() / 500));
+        player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4 * (1 + (attackSpeed / 100)));
         player.getPersistentDataContainer().set(playerStatsKey, new PlayerStatsDataType(), playerStats);
     }
 
