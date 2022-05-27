@@ -235,7 +235,7 @@ public class StatsListeners implements Listener {
         // Set a Player's Attack Speed
         player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4 * (1 + (attackSpeed / 100)));
         playerStats.setMaxHealth(maxHealth);
-        playerStats.setDefense(defense);
+        playerStats.setDefense(defense * playerStats.getDefenseMultiplier());
         playerStats.setSpeed(speed);
         playerStats.setStrength(strength);
         playerStats.setCritChance(critChance);

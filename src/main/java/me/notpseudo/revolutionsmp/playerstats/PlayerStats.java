@@ -13,6 +13,7 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
     private double mana;
     private double healthRegenRate;
     private double manaRegenRate;
+    private double defenseMultiplier;
 
     public PlayerStats() {
         super(100, 0, 100, 0, 30, 50);
@@ -23,6 +24,7 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
         mana = 100;
         healthRegenRate = 1;
         manaRegenRate = 1;
+        defenseMultiplier = 1;
     }
 
     public PlayerStats(double maxHealth, double defense, double speed, double strength, double critChance, double critDamage, double attackSpeed, double ferocity, double intelligence, double abilityDamage) {
@@ -33,9 +35,10 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
         this.abilityDamage = abilityDamage;
         healthRegenRate = 1;
         manaRegenRate = 1;
+        defenseMultiplier = 1;
     }
 
-    public PlayerStats(double maxHealth, double defense, double speed, double strength, double critChance, double critDamage, double attackSpeed, double ferocity, double intelligence, double abilityDamage, double healthRegenRate, double manaRegenRate) {
+    public PlayerStats(double maxHealth, double defense, double speed, double strength, double critChance, double critDamage, double attackSpeed, double ferocity, double intelligence, double abilityDamage, double healthRegenRate, double manaRegenRate, double defenseMultiplier) {
         super(maxHealth, defense, speed, strength, critChance, critDamage);
         this.attackSpeed = attackSpeed;
         this.ferocity = ferocity;
@@ -43,6 +46,7 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
         this.abilityDamage = abilityDamage;
         this.healthRegenRate = healthRegenRate;
         this.manaRegenRate = manaRegenRate;
+        this.defenseMultiplier = defenseMultiplier;
     }
 
     public double getAttackSpeed() {
@@ -101,4 +105,11 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
         this.manaRegenRate = manaRegenRate;
     }
 
+    public double getDefenseMultiplier() {
+        return defenseMultiplier;
+    }
+
+    public void setDefenseMultiplier(double defenseMultiplier) {
+        this.defenseMultiplier = defenseMultiplier;
+    }
 }

@@ -23,7 +23,7 @@ public class CleaveEnchantmentObject extends EnchantmentObject implements Action
     }
 
     @Override
-    public void action(LivingEntity damager, LivingEntity target, int damage) {
+    public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical) {
         int level = super.getLevel();
         double damagePercent, range = 3 + (0.3 * level);
         switch (level) {
@@ -44,7 +44,7 @@ public class CleaveEnchantmentObject extends EnchantmentObject implements Action
                 .filter(c -> c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()) != null
                         && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobBehavior.TAMED
                 ).toList();
-        for(LivingEntity enemy : enemies) {
+        for (LivingEntity enemy : enemies) {
             enemy.damage(damagePercent * damage);
             HealthListeners.showDamage(enemy, damagePercent * damage, false, ChatColor.GRAY);
         }
