@@ -12,10 +12,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class RevolutionSMP extends JavaPlugin {
 
-  // MongoDB client to access database and instance of this main plugin class
   private static RevolutionSMP plugin;
 
-  // Initializes many of the classes when the plugin gets loaded
   @Override
   public void onEnable() {
     this.saveDefaultConfig();
@@ -35,7 +33,6 @@ public final class RevolutionSMP extends JavaPlugin {
     plugin = this;
   }
 
-  // Nothing is required to run when this plugin gets disabled
   @Override
   public void onDisable() {
 

@@ -13,6 +13,7 @@ public enum Reforge {
         public List<ItemType> getItemTypes() {
             return List.of(ItemType.SWORD);
         }
+
         @Override
         public WeaponStats getWeaponStats(Rarity rarity) {
             switch (rarity) {
@@ -32,7 +33,7 @@ public enum Reforge {
                 case DIVINE:
                     return new WeaponStats(0, 60, 0, 55, 20, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -71,7 +72,7 @@ public enum Reforge {
                 case DIVINE:
                     return new WeaponStats(0, 0, 30, 105, 0, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -110,7 +111,7 @@ public enum Reforge {
                 case DIVINE:
                     return new WeaponStats(0, 60, 0, 0, 9, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -138,7 +139,7 @@ public enum Reforge {
                 case DIVINE:
                     return new AbilityStats(0, 150);
                 default:
-                  return null;
+                    return null;
             }
         }
     },
@@ -167,7 +168,7 @@ public enum Reforge {
                 case DIVINE:
                     return new WeaponStats(0, 14, 1, 120, 20, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -206,7 +207,7 @@ public enum Reforge {
                 case DIVINE:
                     return new WeaponStats(0, 39, 21, 44, 20, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -234,7 +235,7 @@ public enum Reforge {
                 case DIVINE:
                     return new AbilityStats(0, 45);
                 default:
-                  return null;
+                    return null;
             }
         }
     },
@@ -263,7 +264,7 @@ public enum Reforge {
                 case DIVINE:
                     return new WeaponStats(0, 18, 0, 0, 25, 18);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -302,7 +303,7 @@ public enum Reforge {
                 case DIVINE:
                     return new WeaponStats(0, 90, 0, 60, 0, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -341,13 +342,13 @@ public enum Reforge {
                 case DIVINE:
                     return new WeaponStats(0, 0, 13, 135, 0, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
         @Override
         public ArmorStats getArmorStats(Rarity rarity) {
-            return  new ArmorStats(0, 0, 0);
+            return new ArmorStats(0, 0, 0);
         }
 
         @Override
@@ -381,7 +382,7 @@ public enum Reforge {
                 case DIVINE:
                     return new WeaponStats(0, 205, 0, 0, 0, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -392,7 +393,7 @@ public enum Reforge {
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-          return new AbilityStats(0, 0);
+            return new AbilityStats(0, 0);
         }
     },
 
@@ -461,13 +462,13 @@ public enum Reforge {
                 case DIVINE:
                     return new WeaponStats(0, 90, 0, 0, 0, 0);
                 default:
-                  return  null;
+                    return null;
             }
         }
 
         @Override
         public ArmorStats getArmorStats(Rarity rarity) {
-            return  new ArmorStats(0, 0, 0);
+            return new ArmorStats(0, 0, 0);
         }
 
         @Override
@@ -501,7 +502,7 @@ public enum Reforge {
                 case DIVINE:
                     return new WeaponStats(0, 25, 100, 0, 0, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -541,18 +542,18 @@ public enum Reforge {
                 case DIVINE:
                     return new WeaponStats(0, 20, 0, 105, 0, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
         @Override
         public ArmorStats getArmorStats(Rarity rarity) {
-          return new ArmorStats(0, 0, 0);
+            return new ArmorStats(0, 0, 0);
         }
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-          return new AbilityStats(0, 0);
+            return new AbilityStats(0, 0);
         }
     },
 
@@ -581,18 +582,18 @@ public enum Reforge {
                 case DIVINE:
                     return new WeaponStats(0, 43, 17, 90, 0, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
         @Override
         public ArmorStats getArmorStats(Rarity rarity) {
-          return new ArmorStats(0, 0, 0);
+            return new ArmorStats(0, 0, 0);
         }
 
         @Override
         public AbilityStats getAbilityStats(Rarity rarity) {
-          return new AbilityStats(0, 0);
+            return new AbilityStats(0, 0);
         }
     },
 
@@ -621,7 +622,7 @@ public enum Reforge {
                 case DIVINE:
                     return new WeaponStats(0, 0, 35, 40, 0, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -649,7 +650,7 @@ public enum Reforge {
                 case DIVINE:
                     return new AbilityStats(0, -94);
                 default:
-                  return null;
+                    return null;
             }
         }
     },
@@ -679,7 +680,7 @@ public enum Reforge {
                 case DIVINE:
                     return new WeaponStats(0, 43, 17, 90, 0, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -719,7 +720,7 @@ public enum Reforge {
                 case DIVINE:
                     return new WeaponStats(0, 48, 16, 95, 0, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -759,7 +760,7 @@ public enum Reforge {
                 case DIVINE:
                     return new WeaponStats(0, 14, 10, 30, 0, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -787,7 +788,7 @@ public enum Reforge {
                     return new WeaponStats(0, 0, 0, -1, 0, 0);
                 case UNCOMMON:
                 case RARE:
-                  return new WeaponStats(0, 0, 0, -2, 0, 0);
+                    return new WeaponStats(0, 0, 0, -2, 0, 0);
                 case EPIC:
                     return new WeaponStats(0, 0, 0, -3, 0, 0);
                 case LEGENDARY:
@@ -798,7 +799,7 @@ public enum Reforge {
                 case DIVINE:
                     return new WeaponStats(0, 0, 0, -9, 0, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -821,7 +822,7 @@ public enum Reforge {
                 case DIVINE:
                     return new ArmorStats(0, 140, -1);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -856,7 +857,7 @@ public enum Reforge {
                 case DIVINE:
                     return new WeaponStats(0, 0, 4, 7, 7, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -879,7 +880,7 @@ public enum Reforge {
                 case DIVINE:
                     return new ArmorStats(30, 7, 7);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -914,7 +915,7 @@ public enum Reforge {
                 case DIVINE:
                     return new WeaponStats(0, 14, 7, 0, 0, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -937,7 +938,7 @@ public enum Reforge {
                 case DIVINE:
                     return new ArmorStats(14, 14, 2);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -960,7 +961,7 @@ public enum Reforge {
                 case DIVINE:
                     return new AbilityStats(0, 70);
                 default:
-                  return null;
+                    return null;
             }
         }
     },
@@ -995,7 +996,7 @@ public enum Reforge {
                 case DIVINE:
                     return new ArmorStats(25, 25, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -1018,7 +1019,7 @@ public enum Reforge {
                 case DIVINE:
                     return new AbilityStats(0, 175);
                 default:
-                  return null;
+                    return null;
             }
         }
     },
@@ -1053,7 +1054,7 @@ public enum Reforge {
                 case DIVINE:
                     return new ArmorStats(65, 65, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -1093,7 +1094,7 @@ public enum Reforge {
                 case DIVINE:
                     return new ArmorStats(25, 0, 4);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -1116,7 +1117,7 @@ public enum Reforge {
                 case DIVINE:
                     return new AbilityStats(0, 175);
                 default:
-                  return null;
+                    return null;
             }
         }
     },
@@ -1151,7 +1152,7 @@ public enum Reforge {
                 case DIVINE:
                     return new ArmorStats(0, 140, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -1169,7 +1170,7 @@ public enum Reforge {
 
         @Override
         public WeaponStats getWeaponStats(Rarity rarity) {
-          return new WeaponStats(0, 0, 0, 0, 0, 0);
+            return new WeaponStats(0, 0, 0, 0, 0, 0);
         }
 
         @Override
@@ -1196,7 +1197,7 @@ public enum Reforge {
                 case DIVINE:
                     return new AbilityStats(0, 250);
                 default:
-                  return null;
+                    return null;
             }
         }
     },
@@ -1226,7 +1227,7 @@ public enum Reforge {
                 case DIVINE:
                     return new WeaponStats(0, 45, 18, 0, 0, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -1254,7 +1255,7 @@ public enum Reforge {
                 case DIVINE:
                     return new AbilityStats(0, 30);
                 default:
-                  return null;
+                    return null;
             }
         }
     },
@@ -1284,7 +1285,7 @@ public enum Reforge {
                 case DIVINE:
                     return new WeaponStats(0, 14, 14, 14, 6, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -1307,7 +1308,7 @@ public enum Reforge {
                 case DIVINE:
                     return new ArmorStats(12, 12, 1);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -1330,7 +1331,7 @@ public enum Reforge {
                 case DIVINE:
                     return new AbilityStats(0, 14);
                 default:
-                  return null;
+                    return null;
             }
         }
     },
@@ -1365,7 +1366,7 @@ public enum Reforge {
                 case DIVINE:
                     return new ArmorStats(18, 18, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -1388,7 +1389,7 @@ public enum Reforge {
                 case DIVINE:
                     return new AbilityStats(0, 140);
                 default:
-                  return null;
+                    return null;
             }
         }
     },
@@ -1422,7 +1423,7 @@ public enum Reforge {
                 case DIVINE:
                     return new ArmorStats(300, 0, 0);
                 default:
-                  return null;
+                    return null;
             }
         }
 
@@ -1460,7 +1461,7 @@ public enum Reforge {
 
         @Override
         public WeaponStats getWeaponStats(Rarity rarity) {
-          return new WeaponStats(100, 100, 100, 100, 100, 100);
+            return new WeaponStats(100, 100, 100, 100, 100, 100);
         }
 
         @Override
