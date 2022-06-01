@@ -16,6 +16,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public enum EnchantmentType {
@@ -693,6 +694,7 @@ public enum EnchantmentType {
         public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
+
     },
     SOUL_EATER {
         @Override
@@ -784,6 +786,10 @@ public enum EnchantmentType {
 
     public EnchantmentObject createObject(EnchantmentType type) {
         return new EnchantmentObject(type);
+    }
+
+    public ArrayList<EnchantmentType> getIncompatibleEnchants() {
+        return new ArrayList<>();
     }
 
 }

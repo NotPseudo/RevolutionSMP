@@ -2,8 +2,9 @@ package me.notpseudo.revolutionsmp.enchantments;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.jetbrains.annotations.NotNull;
 
-public class EnchantmentObject {
+public class EnchantmentObject implements Comparable<EnchantmentObject>{
 
     private final EnchantmentType type;
     private int level;
@@ -27,6 +28,10 @@ public class EnchantmentObject {
         return level;
     }
 
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
     public EnchantmentType getType() {
         return type;
     }
@@ -41,6 +46,11 @@ public class EnchantmentObject {
 
     public double getMultDamage(EntityDamageByEntityEvent event) {
         return type.getMultDamage(event, level);
+    }
+
+    @Override
+    public int compareTo(@NotNull EnchantmentObject o) {
+        return type.name().compareTo(o.getType().name());
     }
 
 }
