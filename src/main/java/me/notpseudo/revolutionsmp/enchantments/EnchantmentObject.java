@@ -50,7 +50,7 @@ public class EnchantmentObject implements Comparable<EnchantmentObject>{
 
     @Override
     public int compareTo(@NotNull EnchantmentObject o) {
-        return type.name().compareTo(o.getType().name());
+        return type.toString().compareTo(o.getType().toString());
     }
 
 }

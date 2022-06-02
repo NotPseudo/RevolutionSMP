@@ -662,6 +662,11 @@ public enum EnchantmentType {
         public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
+
+        @Override
+        public boolean isUltimate() {
+            return true;
+        }
     },
     INFERNO {
         @Override
@@ -672,6 +677,11 @@ public enum EnchantmentType {
         @Override
         public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
+        }
+
+        @Override
+        public boolean isUltimate() {
+            return true;
         }
     },
     ONE_FOR_ALL {
@@ -695,6 +705,10 @@ public enum EnchantmentType {
             return new ItemType[]{ItemType.SWORD};
         }
 
+        @Override
+        public boolean isUltimate() {
+            return true;
+        }
     },
     SOUL_EATER {
         @Override
@@ -705,6 +719,11 @@ public enum EnchantmentType {
         @Override
         public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
+        }
+
+        @Override
+        public boolean isUltimate() {
+            return true;
         }
     },
     SWARM {
@@ -728,6 +747,11 @@ public enum EnchantmentType {
         public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
+
+        @Override
+        public boolean isUltimate() {
+            return true;
+        }
     },
     ULTIMATE_WISE {
         @Override
@@ -738,6 +762,11 @@ public enum EnchantmentType {
         @Override
         public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
+        }
+
+        @Override
+        public boolean isUltimate() {
+            return true;
         }
     };
 
@@ -790,6 +819,22 @@ public enum EnchantmentType {
 
     public ArrayList<EnchantmentType> getIncompatibleEnchants() {
         return new ArrayList<>();
+    }
+
+    public String toString() {
+        String[] split = super.toString().split("_");
+        StringBuilder name = new StringBuilder();
+        for(int i = 0; i < split.length; i++) {
+            name.append(split[i].charAt(0)).append(split[i].substring(1).toLowerCase());
+            if(i < split.length - 1) {
+                name.append(" ");
+            }
+        }
+        return name.toString();
+    }
+
+    public boolean isUltimate() {
+        return false;
     }
 
 }
