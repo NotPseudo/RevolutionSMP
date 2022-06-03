@@ -1,6 +1,8 @@
 package me.notpseudo.revolutionsmp.items;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
+import me.notpseudo.revolutionsmp.enchantments.EnchantmentType;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -12,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -41,26 +44,22 @@ public class ItemEditor {
      * @param meta The ItemMeta to read stats from and generate lore for
      */
     public static void updateLore(ItemMeta meta) {
-        // Hides enchants and attributes
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
         meta.setUnbreakable(true);
-        // Gets stats from PersistentData
         ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        if (itemInfo == null) {
+            return;
+        }
         WeaponStats weaponStats = itemInfo.getWeaponStats();
         ArmorStats armorStats = itemInfo.getArmorStats();
         AbilityStats abilityStats = itemInfo.getAbilityStats();
-        // Represents the ItemStack's lore
+        EnchantmentsHolder enchantmentsHolder = itemInfo.getEnchantmentsHolder();
         List<Component> lore = new ArrayList<>();
-        // Components that show custom item stats
         Component name, rarity, damage = null, strength = null, critChance = null, critDamage = null, attackSpeed = null, ferocity = null, health = null, defense = null, speed = null, abilityDamage = null, intelligence = null, hasReforge = null;
-        // Components that show extra stats added by Potato Books
         Component potatoDamage = Component.text(""), potatoStrength = Component.text(""), potatoHealth = Component.text(""), potatoDefense = Component.text("");
-        // Components that show extra stats added by Reforge
         Component reforgeDamage = Component.text(""), reforgeStrength = Component.text(""), reforgeCritChance = Component.text(""), reforgeCritDamage = Component.text(""), reforgeAttackSpeed = Component.text(""), reforgeFerocity = Component.text(""), reforgeHealth = Component.text(""), reforgeDefense = Component.text(""), reforgeSpeed = Component.text(""), reforgeAbilityDamage = Component.text(""), reforgeIntelligence = Component.text("");
-        if (itemInfo == null)
-            return; // Makes sure the ItemInfo is not null before calling methods. Checks to make sure the ItemStack is a custom item
         String rarityName = itemInfo.getRarity().name();
         String itemType = itemInfo.getItemType().name();
         NamedTextColor rarityColor = itemInfo.getRarity().getRarityColor();
@@ -70,23 +69,21 @@ public class ItemEditor {
             rarity = Component.text(rarityName + " " + itemType).color(rarityColor).decoration(TextDecoration.BOLD, true);
         }
         if (itemInfo.getPotatoBooks() != 0) {
-            if (itemInfo.getItemType() == ItemType.HELMET || itemInfo.getItemType() == ItemType.CHESTPLATE || itemInfo.getItemType() == ItemType.LEGGINGS || itemInfo.getItemType() == ItemType.BOOTS) { // If the Item is armor, Potato Books add Health and Defense
-                potatoHealth = Component.text(" (+" + (itemInfo.getPotatoBooks() * 4) + ")", NamedTextColor.YELLOW);
-                potatoDefense = Component.text(" (+" + (itemInfo.getPotatoBooks() * 2) + ")", NamedTextColor.YELLOW);
-            } else if (itemInfo.getItemType() == ItemType.SWORD || itemInfo.getItemType() == ItemType.BOW) { // If the Item is a weapon, Potato Books add Damage and Strength
-                potatoDamage = Component.text(" (+" + (itemInfo.getPotatoBooks() * 2) + ")", NamedTextColor.YELLOW);
-                potatoStrength = Component.text(" (+" + (itemInfo.getPotatoBooks() * 2) + ")", NamedTextColor.YELLOW);
+            if (isArmor(itemInfo)) {
+                potatoHealth = Component.text(" (" + getStatString(itemInfo.getPotatoBooks() * 4) + ")", NamedTextColor.YELLOW);
+                potatoDefense = Component.text(" (" + getStatString(itemInfo.getPotatoBooks() * 2) + ")", NamedTextColor.YELLOW);
+            } else if (isWeapon(itemInfo)) {
+                potatoDamage = Component.text(" (" + getStatString(itemInfo.getPotatoBooks() * 2) + ")", NamedTextColor.YELLOW);
+                potatoStrength = Component.text(" (" + getStatString(itemInfo.getPotatoBooks() * 2) + ")", NamedTextColor.YELLOW);
             }
         }
         String reforgeName = "";
-        if (itemInfo.getReforge() != null) { // If the Item has a Reforge
+        if (itemInfo.getReforge() != null) {
             Reforge reforge = itemInfo.getReforge();
             reforgeName = reforge.name().charAt(0) + reforge.name().substring(1).toLowerCase() + " ";
-            // Gets stats added by Reforge
             WeaponStats reforgeWeaponStats = reforge.getWeaponStats(itemInfo.getRarity());
             ArmorStats reforgeArmorStats = reforge.getArmorStats(itemInfo.getRarity());
             AbilityStats reforgeAbilityStats = reforge.getAbilityStats(itemInfo.getRarity());
-            // Each stat's Component will only show if the Reforge increases or decreases the stat
             if (reforgeWeaponStats.getDamage() != 0) {
                 reforgeDamage = Component.text(" (" + reforgeName + getStatString(reforgeWeaponStats.getDamage()) + ")", NamedTextColor.BLUE);
             }
@@ -120,13 +117,11 @@ public class ItemEditor {
             if (reforgeAbilityStats.getIntelligence() != 0) {
                 reforgeIntelligence = Component.text(" (" + reforgeName + getStatString(reforgeAbilityStats.getIntelligence()) + ")", NamedTextColor.BLUE);
             }
-        } else { // If the Item does not have a Reforge, the Item lore will indicate the item can be Reforged
+        } else {
             hasReforge = Component.text("This item can be reforged!", NamedTextColor.DARK_GRAY);
         }
         name = Component.text(reforgeName + itemInfo.getName()).color(itemInfo.getRarity().getRarityColor()); // The displayed name of the item is Reforge + Item Name
-        if (weaponStats != null) { // Makes sure the WeaponStats is not null before calling methods
-            // Each stat's Component will only show if the Item increases or decreases the stat
-            // Appends the Reforge stat boost Component after the custom item's stats
+        if (weaponStats != null) {
             if (weaponStats.getDamage() != 0) {
                 damage = Component.text("Damage: ", NamedTextColor.GRAY).append(Component.text(getStatString(weaponStats.getDamage()), NamedTextColor.RED)).append(potatoDamage).append(reforgeDamage);
             }
@@ -146,9 +141,7 @@ public class ItemEditor {
                 ferocity = Component.text("Ferocity: ", NamedTextColor.GRAY).append(Component.text(getStatString(weaponStats.getFerocity()), NamedTextColor.GREEN)).append(reforgeFerocity);
             }
         }
-        if (armorStats != null) { // Makes sure the ArmorStats is not null before calling methods
-            // Each stat's Component will only show if the Item increases or decreases the stat
-            // Appends the Reforge stat boost Component after the custom item's stats
+        if (armorStats != null) {
             if (armorStats.getHealth() != 0) {
                 health = Component.text("Health: ", NamedTextColor.GRAY).append(Component.text(getStatString(armorStats.getHealth()), NamedTextColor.GREEN)).append(potatoHealth).append(reforgeHealth);
             }
@@ -159,9 +152,7 @@ public class ItemEditor {
                 speed = Component.text("Speed: ", NamedTextColor.GRAY).append(Component.text(getStatString(armorStats.getSpeed()), NamedTextColor.GREEN)).append(reforgeSpeed);
             }
         }
-        if (abilityStats != null) { // Makes sure the AbilityStats is not null before calling methods
-            // Each stat's Component will only show if the Item increases or decreases the stat
-            // Appends the Reforge stat boost Component after the custom item's stats
+        if (abilityStats != null) {
             if (abilityStats.getAbilityDamage() != 0) {
                 abilityDamage = Component.text("Ability Damage: ", NamedTextColor.GRAY).append(Component.text(getStatString(abilityStats.getAbilityDamage()) + "%", NamedTextColor.RED)).append(reforgeAbilityDamage);
             }
@@ -169,7 +160,6 @@ public class ItemEditor {
                 intelligence = Component.text("Intelligence: ", NamedTextColor.GRAY).append(Component.text(getStatString(abilityStats.getIntelligence()), NamedTextColor.GREEN)).append(reforgeIntelligence);
             }
         }
-        // If the stat's Component is not null, it will be added to the lore
         meta.displayName(name.decoration(TextDecoration.ITALIC, false));
         if (damage != null) {
             lore.add(damage.decoration(TextDecoration.ITALIC, false));
@@ -204,12 +194,19 @@ public class ItemEditor {
         if (ferocity != null) {
             lore.add(ferocity.decoration(TextDecoration.ITALIC, false));
         }
+        lore.add(Component.text(""));
+        if (enchantmentsHolder != null) {
+            for(String str : enchantmentsHolder.getLoreList()) {
+                lore.add(Component.text(str).decoration(TextDecoration.ITALIC, false));
+            }
+            lore.add(Component.text(""));
+        }
         if (itemInfo.getExtraInfo() != null) {
             if (itemInfo.getExtraInfo().getAbilityLore() != null) {
                 lore.addAll(itemInfo.getExtraInfo().getAbilityLore());
+                lore.add(Component.text(""));
             }
         }
-        lore.add(Component.text(""));
         if (hasReforge != null) {
             lore.add(hasReforge.decoration(TextDecoration.ITALIC, false));
         }
@@ -245,42 +242,8 @@ public class ItemEditor {
             Rarity currentRarity = info.getRarity();
             if (currentRarity != Rarity.SPECIAL && !(info.isRecomb())) {
                 Rarity recombRarity = currentRarity.next();
-                info.setRarity(recombRarity);
                 info.setRecomb(true);
-                if (info.getReforge() != null) {
-                    Reforge reforge = info.getReforge();
-                    WeaponStats weaponStats = info.getWeaponStats();
-                    ArmorStats armorStats = info.getArmorStats();
-                    AbilityStats abilityStats = info.getAbilityStats();
-                    WeaponStats reforgeWeaponStats = reforge.getWeaponStats(recombRarity);
-                    ArmorStats reforgeArmorStats = reforge.getArmorStats(recombRarity);
-                    AbilityStats reforgeAbilityStats = reforge.getAbilityStats(recombRarity);
-                    info.setReforge(reforge);
-                    if (info.getItemType() == ItemType.SWORD || info.getItemType() == ItemType.BOW) {
-                        weaponStats.setDamage(weaponStats.getBaseDamage() + info.getPotatoBooks() * 2 + reforgeWeaponStats.getDamage());
-                        weaponStats.setStrength(weaponStats.getBaseStrength() + info.getPotatoBooks() * 2 + reforgeWeaponStats.getStrength());
-                    } else {
-                        weaponStats.setDamage(weaponStats.getBaseDamage() + reforgeWeaponStats.getDamage());
-                        weaponStats.setStrength(weaponStats.getBaseStrength() + reforgeWeaponStats.getStrength());
-                    }
-                    weaponStats.setCritChance(weaponStats.getBaseCritChance() + reforgeWeaponStats.getCritChance());
-                    weaponStats.setCritDamage(weaponStats.getBaseCritDamage() + reforgeWeaponStats.getCritDamage());
-                    weaponStats.setAttackSpeed(weaponStats.getBaseAttackSpeed() + reforgeWeaponStats.getAttackSpeed());
-                    weaponStats.setFerocity(weaponStats.getBaseFerocity() + reforgeWeaponStats.getFerocity());
-                    if (info.getItemType() == ItemType.HELMET || info.getItemType() == ItemType.CHESTPLATE || info.getItemType() == ItemType.LEGGINGS || info.getItemType() == ItemType.BOOTS) {
-                        armorStats.setHealth(armorStats.getBaseHealth() + info.getPotatoBooks() * 4 + reforgeArmorStats.getHealth());
-                        armorStats.setDefense(armorStats.getBaseDefense() + info.getPotatoBooks() * 2 + reforgeArmorStats.getDefense());
-                    } else {
-                        armorStats.setHealth(armorStats.getBaseHealth() + reforgeArmorStats.getHealth());
-                        armorStats.setDefense(armorStats.getBaseDefense() + reforgeArmorStats.getDefense());
-                    }
-                    armorStats.setSpeed(armorStats.getBaseSpeed() + reforgeArmorStats.getSpeed());
-                    abilityStats.setAbilityDamage(abilityStats.getBaseAbilityDamage() + reforgeAbilityStats.getAbilityDamage());
-                    abilityStats.setIntelligence(abilityStats.getBaseIntelligence() + reforgeAbilityStats.getIntelligence());
-                    info.setWeaponStats(weaponStats);
-                    info.setArmorStats(armorStats);
-                    info.setAbilityStats(abilityStats);
-                }
+                info.setRarity(recombRarity);
                 meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), info);
                 updateLore(meta);
                 item.setItemMeta(meta);
@@ -291,43 +254,44 @@ public class ItemEditor {
     /**
      * Adds a potato book to the Item held in the Player's main hand
      *
-     * @param player The player holding the item to add the book to
+     * @param item The item to add the book to
      */
-    public static void hotPotatoBook(Player player) {
-        ItemStack item = player.getInventory().getItemInMainHand();
+    public static void addHotPotatoBook(ItemStack item) {
         ItemMeta meta = item.getItemMeta();
         ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
-        if (itemInfo == null) return;
-        int currentPotatoBooks = itemInfo.getPotatoBooks();
-        if (currentPotatoBooks < 15) {
-            itemInfo.setPotatoBooks(currentPotatoBooks + 1);
-            WeaponStats weaponStats = itemInfo.getWeaponStats();
-            ArmorStats armorStats = itemInfo.getArmorStats();
-            double reforgeHealth = 0, reforgeDefense = 0, reforgeDamage = 0, reforgeStrength = 0;
-            if (itemInfo.getReforge() != null) {
-                WeaponStats reforgeWeaponStats = itemInfo.getReforge().getWeaponStats(itemInfo.getRarity());
-                ArmorStats reforgeArmorStats = itemInfo.getReforge().getArmorStats(itemInfo.getRarity());
-                reforgeHealth = reforgeArmorStats.getHealth();
-                reforgeDefense = reforgeArmorStats.getDefense();
-                reforgeDamage = reforgeWeaponStats.getDamage();
-                reforgeStrength = reforgeWeaponStats.getStrength();
-            }
-            if (itemInfo.getItemType() == ItemType.HELMET || itemInfo.getItemType() == ItemType.CHESTPLATE || itemInfo.getItemType() == ItemType.LEGGINGS || itemInfo.getItemType() == ItemType.BOOTS) {
-                armorStats.setHealth(armorStats.getBaseHealth() + itemInfo.getPotatoBooks() * 4 + reforgeHealth);
-                armorStats.setDefense(armorStats.getBaseDefense() + itemInfo.getPotatoBooks() * 2 + reforgeDefense);
-            } else if (itemInfo.getItemType() == ItemType.SWORD || itemInfo.getItemType() == ItemType.BOW) {
-                weaponStats.setDamage(weaponStats.getBaseDamage() + itemInfo.getPotatoBooks() * 2 + reforgeDamage);
-                weaponStats.setStrength(weaponStats.getBaseStrength() + itemInfo.getPotatoBooks() * 2 + reforgeStrength);
-            }
-            itemInfo.setWeaponStats(weaponStats);
-            itemInfo.setArmorStats(armorStats);
-            meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), itemInfo);
-            updateLore(meta);
-            item.setItemMeta(meta);
-            player.sendMessage(Component.text("You applied a Potato Book to your item with").append(Component.text(" " + currentPotatoBooks, NamedTextColor.GOLD)).append(Component.text(" Potato Books. It now has")).append(Component.text(" " + (currentPotatoBooks + 1), NamedTextColor.GOLD)).append(Component.text(" Potato Books out of a maximum of")).append(Component.text(" 15", NamedTextColor.GOLD)).decoration(TextDecoration.ITALIC, false));
-        } else {
-            player.sendMessage(Component.text("Your held item already has a maximum of").append(Component.text(" 15", NamedTextColor.GOLD)).append(Component.text(" Potato Books")).decoration(TextDecoration.ITALIC, false));
+        if (itemInfo == null) {
+            return;
         }
+        int currentPotatoBooks = itemInfo.getPotatoBooks();
+        itemInfo.setPotatoBooks(currentPotatoBooks + 1);
+        meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), itemInfo);
+        updateLore(meta);
+        item.setItemMeta(meta);
+    }
+
+    public static void addHotPotatoBook(ItemStack item, int books) {
+        ItemMeta meta = item.getItemMeta();
+        ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        if (itemInfo == null) {
+            return;
+        }
+        int currentPotatoBooks = itemInfo.getPotatoBooks();
+        itemInfo.setPotatoBooks(currentPotatoBooks + books);
+        meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), itemInfo);
+        updateLore(meta);
+        item.setItemMeta(meta);
+    }
+
+    public static void setHotPotatoBook(ItemStack item, int books) {
+        ItemMeta meta = item.getItemMeta();
+        ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        if (itemInfo == null) {
+            return;
+        }
+        itemInfo.setPotatoBooks(books);
+        meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), itemInfo);
+        updateLore(meta);
+        item.setItemMeta(meta);
     }
 
     /**
@@ -335,52 +299,44 @@ public class ItemEditor {
      *
      * @param item    The Item to add the Reforge to
      * @param reforge The specific Reforge to apply
-     * @param rarity  The Rarity level of R+eforge stats
      */
-    public static void reforge(ItemStack item, Reforge reforge, Rarity rarity) {
-        if (reforge == null) return;
+    public static void reforge(ItemStack item, Reforge reforge) {
+        if (reforge == null) {
+            return;
+        }
         ItemMeta meta = item.getItemMeta();
         ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
-        if (itemInfo == null) return;
-        if (rarity == null) {
-            rarity = itemInfo.getRarity();
+        if (itemInfo == null) {
+            return;
         }
         if (reforge.getItemTypes().contains(itemInfo.getItemType())) {
-            WeaponStats weaponStats = itemInfo.getWeaponStats();
-            ArmorStats armorStats = itemInfo.getArmorStats();
-            AbilityStats abilityStats = itemInfo.getAbilityStats();
-            WeaponStats reforgeWeaponStats = reforge.getWeaponStats(rarity);
-            ArmorStats reforgeArmorStats = reforge.getArmorStats(rarity);
-            AbilityStats reforgeAbilityStats = reforge.getAbilityStats(rarity);
             itemInfo.setReforge(reforge);
-            if (itemInfo.getItemType() == ItemType.SWORD || itemInfo.getItemType() == ItemType.BOW) {
-                weaponStats.setDamage(weaponStats.getBaseDamage() + itemInfo.getPotatoBooks() * 2 + reforgeWeaponStats.getDamage());
-                weaponStats.setStrength(weaponStats.getBaseStrength() + itemInfo.getPotatoBooks() * 2 + reforgeWeaponStats.getStrength());
-            } else {
-                weaponStats.setDamage(weaponStats.getBaseDamage() + reforgeWeaponStats.getDamage());
-                weaponStats.setStrength(weaponStats.getBaseStrength() + reforgeWeaponStats.getStrength());
-            }
-            weaponStats.setCritChance(weaponStats.getBaseCritChance() + reforgeWeaponStats.getCritChance());
-            weaponStats.setCritDamage(weaponStats.getBaseCritDamage() + reforgeWeaponStats.getCritDamage());
-            weaponStats.setAttackSpeed(weaponStats.getBaseAttackSpeed() + reforgeWeaponStats.getAttackSpeed());
-            weaponStats.setFerocity(weaponStats.getBaseFerocity() + reforgeWeaponStats.getFerocity());
-            if (itemInfo.getItemType() == ItemType.HELMET || itemInfo.getItemType() == ItemType.CHESTPLATE || itemInfo.getItemType() == ItemType.LEGGINGS || itemInfo.getItemType() == ItemType.BOOTS) {
-                armorStats.setHealth(armorStats.getBaseHealth() + itemInfo.getPotatoBooks() * 4 + reforgeArmorStats.getHealth());
-                armorStats.setDefense(armorStats.getBaseDefense() + itemInfo.getPotatoBooks() * 2 + reforgeArmorStats.getDefense());
-            } else {
-                armorStats.setHealth(armorStats.getBaseHealth() + reforgeArmorStats.getHealth());
-                armorStats.setDefense(armorStats.getBaseDefense() + reforgeArmorStats.getDefense());
-            }
-            armorStats.setSpeed(armorStats.getBaseSpeed() + reforgeArmorStats.getSpeed());
-            abilityStats.setAbilityDamage(abilityStats.getBaseAbilityDamage() + reforgeAbilityStats.getAbilityDamage());
-            abilityStats.setIntelligence(abilityStats.getBaseIntelligence() + reforgeAbilityStats.getIntelligence());
-            itemInfo.setWeaponStats(weaponStats);
-            itemInfo.setArmorStats(armorStats);
-            itemInfo.setAbilityStats(abilityStats);
             meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), itemInfo);
             updateLore(meta);
             item.setItemMeta(meta);
         }
+    }
+
+    public static void addEnchant(ItemStack item, EnchantmentType type, int level) {
+        ItemMeta meta = item.getItemMeta();
+        ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        if (itemInfo == null) {
+            return;
+        }
+        if (!(Arrays.asList(type.getItemTypes()).contains(itemInfo.getItemType()))) {
+            return;
+        }
+        EnchantmentsHolder enchantHolder = itemInfo.getEnchantmentsHolder();
+        if (enchantHolder == null) {
+            enchantHolder = new EnchantmentsHolder();
+        }
+        EnchantmentObject enchant = type.createObject(type);
+        enchant.setLevel(level);
+        enchantHolder.addEnchant(enchant);
+        itemInfo.setEnchantmentsHolder(enchantHolder);
+        meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), itemInfo);
+        updateLore(meta);
+        item.setItemMeta(meta);
     }
 
     /**
@@ -392,6 +348,11 @@ public class ItemEditor {
     public static boolean isArmor(ItemInfo itemInfo) {
         ItemType type = itemInfo.getItemType();
         return type == ItemType.HELMET || type == ItemType.CHESTPLATE || type == ItemType.LEGGINGS || type == ItemType.BOOTS;
+    }
+
+    public static boolean isWeapon(ItemInfo itemInfo) {
+        ItemType type = itemInfo.getItemType();
+        return type == ItemType.SWORD || type == ItemType.BOW;
     }
 
 }

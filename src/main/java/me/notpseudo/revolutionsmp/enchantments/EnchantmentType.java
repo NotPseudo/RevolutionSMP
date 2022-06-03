@@ -352,6 +352,11 @@ public enum EnchantmentType {
         public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
+
+        @Override
+        public EnchantmentObject createObject(EnchantmentType type) {
+            return new LethalityEnchantmentObject();
+        }
     },
     LIFE_STEAL {
         @Override
@@ -362,6 +367,11 @@ public enum EnchantmentType {
         @Override
         public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
+        }
+
+        @Override
+        public EnchantmentObject createObject(EnchantmentType type) {
+            return new LifeStealEnchantmentObject();
         }
     },
     LOOTING {
@@ -400,6 +410,11 @@ public enum EnchantmentType {
         @Override
         public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
+        }
+
+        @Override
+        public EnchantmentObject createObject(EnchantmentType type) {
+            return new ManaStealEnchantmentObject();
         }
     },
     PROSECUTE {
@@ -540,6 +555,11 @@ public enum EnchantmentType {
         public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
+
+        @Override
+        public EnchantmentObject createObject(EnchantmentType type) {
+            return new SyphonEnchantmentObject();
+        }
     },
     THUNDERBOLT {
         @Override
@@ -551,6 +571,11 @@ public enum EnchantmentType {
         public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
+
+        @Override
+        public EnchantmentObject createObject(EnchantmentType type) {
+            return new ThunderboltEnchantmentObject();
+        }
     },
     THUNDERLORD {
         @Override
@@ -561,6 +586,11 @@ public enum EnchantmentType {
         @Override
         public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
+        }
+
+        @Override
+        public EnchantmentObject createObject(EnchantmentType type) {
+            return new ThunderlordEnchantmentObject();
         }
     },
     TITAN_KILLER {
@@ -608,6 +638,11 @@ public enum EnchantmentType {
         public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
         }
+
+        @Override
+        public EnchantmentObject createObject(EnchantmentType type) {
+            return new TripleStrikeEnchantmentObject();
+        }
     },
     VAMPIRISM {
         @Override
@@ -618,6 +653,11 @@ public enum EnchantmentType {
         @Override
         public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
+        }
+
+        @Override
+        public EnchantmentObject createObject(EnchantmentType type) {
+            return new VampirismEnchantmentObject();
         }
     },
     VENEMOUS {
@@ -634,6 +674,11 @@ public enum EnchantmentType {
         @Override
         public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.SWORD};
+        }
+
+        @Override
+        public EnchantmentObject createObject(EnchantmentType type) {
+            return new VenemousEnchantmentObject();
         }
     },
     VICIOUS {
@@ -682,6 +727,11 @@ public enum EnchantmentType {
         @Override
         public boolean isUltimate() {
             return true;
+        }
+
+        @Override
+        public EnchantmentObject createObject(EnchantmentType type) {
+            return new InfernoEnchantmentObject();
         }
     },
     ONE_FOR_ALL {
@@ -824,9 +874,9 @@ public enum EnchantmentType {
     public String toString() {
         String[] split = super.toString().split("_");
         StringBuilder name = new StringBuilder();
-        for(int i = 0; i < split.length; i++) {
+        for (int i = 0; i < split.length; i++) {
             name.append(split[i].charAt(0)).append(split[i].substring(1).toLowerCase());
-            if(i < split.length - 1) {
+            if (i < split.length - 1) {
                 name.append(" ");
             }
         }

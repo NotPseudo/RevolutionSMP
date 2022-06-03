@@ -26,7 +26,7 @@ public class ThunderboltEnchantmentObject extends EnchantmentObject implements A
     }
 
     @Override
-    public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical) {
+    public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
         count++;
         if (count >= 3) {
             count = 0;
@@ -50,7 +50,7 @@ public class ThunderboltEnchantmentObject extends EnchantmentObject implements A
             for (LivingEntity entity : enemies) {
                 entity.getWorld().strikeLightningEffect(entity.getLocation());
                 entity.damage(damagePercent * damage);
-                HealthListeners.showDamage(entity, damagePercent * damage, false, ChatColor.YELLOW);
+                HealthListeners.showDamage(entity, damagePercent * showDamage, false, ChatColor.YELLOW);
             }
         }
     }

@@ -27,6 +27,7 @@ public final class RevolutionSMP extends JavaPlugin {
     new ResetStats(this);
     new PotatoBook(this);
     new ReforgeCommand(this);
+    new EnchantCommand(this);
     WeaponCreator.createWeapons();
     ArmorCreator.createArmors();
     Abilities.createPassSet();

@@ -20,7 +20,7 @@ public class ManaStealEnchantmentObject extends EnchantmentObject implements Act
     }
 
     @Override
-    public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical) {
+    public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
         if (!(damager instanceof Player)) {
             return;
         }

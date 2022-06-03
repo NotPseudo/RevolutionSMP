@@ -22,7 +22,7 @@ public class ThunderlordEnchantmentObject extends EnchantmentObject implements A
     }
 
     @Override
-    public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical) {
+    public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
         if (lastHit == null) {
             lastHit = target.getUniqueId();
         }
@@ -49,7 +49,7 @@ public class ThunderlordEnchantmentObject extends EnchantmentObject implements A
             }
             target.getWorld().strikeLightningEffect(target.getLocation());
             target.damage(damagePercent * damage);
-            HealthListeners.showDamage(target, damagePercent * damage, false, ChatColor.YELLOW);
+            HealthListeners.showDamage(target, damagePercent * showDamage, false, ChatColor.YELLOW);
         }
     }
 }

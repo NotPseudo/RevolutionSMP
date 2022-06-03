@@ -39,7 +39,6 @@ public class AspectOfTheEndInfo extends ExtraItemInfo {
     @Override
     public List<Component> getAbilityLore() {
         List<Component> abilityLore = new ArrayList<>();
-        abilityLore.add(Component.text(""));
         abilityLore.add(Component.text("Ability: Instant Transmission ", NamedTextColor.GOLD).append(Component.text(AbilityType.INSTANT_TRANSMISSION.getAbilityType().getName(), NamedTextColor.YELLOW, TextDecoration.BOLD)).decoration(TextDecoration.ITALIC, false));
         abilityLore.add(Component.text("Teleport ", NamedTextColor.GRAY).append(Component.text(8 + teleportUpgrades + " blocks ", NamedTextColor.GREEN)).append(Component.text("ahead of", NamedTextColor.GRAY)).decoration(TextDecoration.ITALIC, false));
         abilityLore.add(Component.text("you and gain +50 ", NamedTextColor.GRAY).append(Component.text("✦ Speed", NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false));

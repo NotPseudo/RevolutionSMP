@@ -1494,17 +1494,34 @@ public enum Reforge {
         public AbilityStats getAbilityStats(Rarity rarity) {
             return new AbilityStats(0, 0);
         }
+    },
+    NODAMAGE {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD, ItemType.BOW, ItemType.HELMET, ItemType.CHESTPLATE, ItemType.LEGGINGS, ItemType.BOOTS);
+        }
+
+        @Override
+        public WeaponStats getWeaponStats(Rarity rarity) {
+            return new WeaponStats(0, 10, 30, 5, 20, 5);
+        }
     };
 
     // Gets list of ItemTypes the Reforge can be applied to
     public abstract List<ItemType> getItemTypes();
 
     // Gets the weapon stats the Reforge boosts
-    public abstract WeaponStats getWeaponStats(Rarity rarity);
+    public WeaponStats getWeaponStats(Rarity rarity) {
+        return new WeaponStats(0, 0, 0, 0, 0, 0);
+    };
 
     // Gets the armor stats the Reforge boosts
-    public abstract ArmorStats getArmorStats(Rarity rarity);
+    public ArmorStats getArmorStats(Rarity rarity) {
+        return new ArmorStats(0, 0, 0);
+    };
 
     // Gets the ability statsd the Reforge boosts
-    public abstract AbilityStats getAbilityStats(Rarity rarity);
+    public AbilityStats getAbilityStats(Rarity rarity) {
+        return new AbilityStats(0, 0);
+    };
 }

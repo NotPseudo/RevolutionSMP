@@ -41,7 +41,7 @@ public class VenemousEnchantmentObject extends EnchantmentObject implements Acti
     }
 
     @Override
-    public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical) {
+    public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
         if (hitCount >= 40) {
             return;
         }
@@ -87,7 +87,7 @@ public class VenemousEnchantmentObject extends EnchantmentObject implements Acti
                     return;
                 }
                 target.damage(damagePercent * damagePercent);
-                HealthListeners.showDamage(target, damage, false, ChatColor.GREEN);
+                HealthListeners.showDamage(target, damagePercent * showDamage, false, ChatColor.GREEN);
                 count++;
             }
         };

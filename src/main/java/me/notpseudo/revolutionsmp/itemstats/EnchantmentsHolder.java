@@ -19,6 +19,10 @@ public class EnchantmentsHolder implements Serializable {
         enchants = new ArrayList<>();
     }
 
+    public ArrayList<EnchantmentObject> getEnchants() {
+        return enchants;
+    }
+
     public void addEnchant(EnchantmentObject addEnchant) {
         for (EnchantmentType incompatibleType : addEnchant.getType().getIncompatibleEnchants()) {
             removeEnchant(incompatibleType);
@@ -84,36 +88,20 @@ public class EnchantmentsHolder implements Serializable {
         enchants = ultimate;
     }
 
-    public List<Component> getLoreList() {
-        List<Component> loreList = new ArrayList<>();
-        int count = 0;
-        for (int i = 0; i < Math.ceil(enchants.size() / 3.0); i++) {
-            Component line = Component.text("");
-            for (int j = 0; j < 3; j++) {
-                if (count < enchants.size()) {
-                    EnchantmentObject enchant = enchants.get(count);
-                    NamedTextColor color = NamedTextColor.BLUE;
-                    Component enchantComponent;
-                    if(enchant.getLevel() >= enchant.getType().getMaxLevel()) {
-                        color = NamedTextColor.GOLD;
+    public List<String> getLoreList() {
+        List<String> loreList = new ArrayList<>();
+        for(int i = 0; i < Math.ceil(enchants.size() / 3.0); i++) {
+            StringBuilder line = new StringBuilder();
+            for(int j = 0; j < 3; j++) {
+                int index = i * 3 + j;
+                if(index < enchants.size()) {
+                    line.append(enchants.get(index).getText());
+                    if(index % 3 != 2 && index != enchants.size() - 1) {
+                        line.append(", ");
                     }
-                    if(enchant.getType().isUltimate()) {
-                        color = NamedTextColor.LIGHT_PURPLE;
-                    }
-                    if(count % 3 == 2) {
-                        enchantComponent = Component.text(enchant.getType().toString() + " " + enchant.getLevel(), color);
-                    } else {
-                        enchantComponent = Component.text(enchant.getType().toString() + " " + enchant.getLevel() + ", ", color);
-                    }
-                    if(enchant.getType().isUltimate()) {
-                        enchantComponent.decoration(TextDecoration.BOLD, true);
-                    }
-                    line.append(enchantComponent);
                 }
-                count++;
             }
-            line.decoration(TextDecoration.ITALIC, false);
-            loreList.add(line);
+            loreList.add(line.toString());
         }
         return loreList;
     }

@@ -18,7 +18,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.stream.Collectors;
 
@@ -336,7 +338,17 @@ public class StatsListeners implements Listener {
      */
     @EventHandler
     public void onHandItemSwitch(PlayerItemHeldEvent event) {
-        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> updateStats(event.getPlayer()), 5);
+        BukkitRunnable update = new BukkitRunnable() {
+            @Override
+            public void run() {
+                ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
+                ItemMeta meta = item.getItemMeta();
+                ItemEditor.updateLore(meta);
+                item.setItemMeta(meta);
+                updateStats(event.getPlayer());
+            }
+        };
+        update.runTaskLaterAsynchronously(plugin, 1);
     }
 
     /**

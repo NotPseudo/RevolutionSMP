@@ -7,10 +7,12 @@ import me.notpseudo.revolutionsmp.listeners.StatsListeners;
 import me.notpseudo.revolutionsmp.mobstats.BaseEntityStats;
 import me.notpseudo.revolutionsmp.mobstats.MobInfo;
 import me.notpseudo.revolutionsmp.mobstats.MobInfoDataType;
+import me.notpseudo.revolutionsmp.particles.Particles;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStatsDataType;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -45,16 +47,26 @@ public class InfernoEnchantmentObject extends EnchantmentObject implements Actio
     }
 
     @Override
-    public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical) {
-        if (lastHit == null) {
+    public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
+        damager.sendMessage("inferno detected");
+        /*if (lastHit == null) {
             lastHit = target.getUniqueId();
+            damager.sendMessage("last hit was " + lastHit + " , now " + target.getUniqueId());
+        }*/
+        UUID targetUUID = target.getUniqueId();
+        if(lastHit == null) {
+            lastHit = targetUUID;
         }
-        if (target.getUniqueId() != lastHit) {
-            hitCount = 1;
-            return;
+        damager.sendMessage("target UUID equals last Hit? " + targetUUID.equals(lastHit));
+        if (target.getUniqueId().toString().equals(lastHit.toString())) {
+            hitCount++;
+        } else {
+            hitCount = 0;
+            lastHit = target.getUniqueId();
+            damager.sendMessage("last hit " + lastHit + " was not target " + target.getUniqueId() + " , hitCount now 0");
         }
-        hitCount++;
         if (hitCount >= 10) {
+            damager.sendMessage("hit count above 10");
             hitCount = 0;
             BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
             double speed = 100, vanillaMoveSpeed = 1, vanillaFlySpeed = 1;
@@ -79,6 +91,8 @@ public class InfernoEnchantmentObject extends EnchantmentObject implements Actio
             double damagePercent = 1 + (super.getLevel() * 0.25);
             BaseEntityStats finalTargetStats = targetStats;
             double finalSpeed = speed, finalVanillaMoveSpeed = vanillaMoveSpeed, finalVanillaFlySpeed = vanillaFlySpeed;
+            Particles.dualSpiralUp(Particle.FLAME, target, 1, target.getHeight(), 5);
+            Particles.dualSpiralUp(Particle.DRIP_LAVA, target, 1, target.getHeight(), 5);
             BukkitRunnable inferno = new BukkitRunnable() {
 
                 int count = 0;
@@ -108,11 +122,11 @@ public class InfernoEnchantmentObject extends EnchantmentObject implements Actio
                         return;
                     }
                     target.damage(damagePercent * damage / 5);
-                    HealthListeners.showDamage(target, damagePercent * damage / 5, false, ChatColor.GOLD);
+                    HealthListeners.showDamage(target, damagePercent * showDamage / 5, false, ChatColor.GOLD);
                     count++;
                 }
             };
-            inferno.runTaskTimer(RevolutionSMP.getPlugin(), 0, 20);
+            inferno.runTaskTimerAsynchronously(RevolutionSMP.getPlugin(), 0, 20);
         }
     }
 

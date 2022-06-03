@@ -7,6 +7,9 @@ import com.comphenix.protocol.reflect.FieldAccessException;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.enchantments.ActionEnchantment;
+import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
+import me.notpseudo.revolutionsmp.itemstats.EnchantmentsHolder;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfoDataType;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
@@ -69,7 +72,7 @@ public class HealthListeners implements Listener {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 for (Entity entity : player.getLocation().getNearbyLivingEntities(15, 10, 15)) {
                     if (entity instanceof Creature) {
-                        updateHealthBar((Creature) entity, (int) Math.round((entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getCurrentHealth())), player);
+                        updateHealthBar((Creature) entity, (entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getCurrentHealth()), player);
                     }
                 }
             }
@@ -101,7 +104,7 @@ public class HealthListeners implements Listener {
      * @param entity The LivingEntity to update the health bar for
      * @param health The health value to display on the health bar
      */
-    public static void updateHealthBar(Creature entity, int health) {
+    public static void updateHealthBar(Creature entity, double health) {
         MobInfo mobInfo = entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
         if (mobInfo == null) {
             mobInfo = MobListeners.createMobInfo(entity);
@@ -115,12 +118,12 @@ public class HealthListeners implements Listener {
             if (health < 0) {
                 health = 0;
             }
-            healthString = "" + ChatColor.YELLOW + health;
+            healthString = "" + ChatColor.YELLOW + (int) Math.round(health);
         } else {
             if (health > maxHealth) {
                 health = (int) maxHealth;
             }
-            healthString = "" + ChatColor.GREEN + health;
+            healthString = "" + ChatColor.GREEN + (int) Math.round(health);
         }
         // Health bar shows name and current Health out of max Health
         String healthBarString = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Lv" + mobInfo.getLevel() + ChatColor.DARK_GRAY + "] " + nameString + " " + healthString + ChatColor.GRAY + "/" + ChatColor.GREEN + Math.round(maxHealth) + ChatColor.RED + "❤";
@@ -155,7 +158,7 @@ public class HealthListeners implements Listener {
      * @param health The health value to display on the health bar
      * @param player The Player to show the health bar to
      */
-    public static void updateHealthBar(Creature entity, int health, Player player) {
+    public static void updateHealthBar(Creature entity, double health, Player player) {
         MobInfo mobInfo = entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
         if (mobInfo == null) {
             mobInfo = MobListeners.createMobInfo(entity);
@@ -168,12 +171,12 @@ public class HealthListeners implements Listener {
             if (health < 0) {
                 health = 0;
             }
-            healthString = "" + ChatColor.YELLOW + health;
+            healthString = "" + ChatColor.YELLOW + (int) Math.round(health);
         } else {
             if (health > maxHealth) {
                 health = (int) maxHealth;
             }
-            healthString = "" + ChatColor.GREEN + health;
+            healthString = "" + ChatColor.GREEN + (int) Math.round(health);
         }
         String healthBarString = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Lv" + mobInfo.getLevel() + ChatColor.DARK_GRAY + "] " + nameString + " " + healthString + ChatColor.GRAY + "/" + ChatColor.GREEN + Math.round(maxHealth) + ChatColor.RED + "❤";
         WrappedDataWatcher dataWatcher = WrappedDataWatcher.getEntityWatcher(entity).deepClone();
@@ -202,7 +205,7 @@ public class HealthListeners implements Listener {
      * @param critical Represents if the damage was a critical hit or not
      */
     public static void showDamage(LivingEntity entity, double damage, boolean critical, ChatColor color) {
-        if(color == null) {
+        if (color == null) {
             color = ChatColor.GRAY;
         }
         String damageString = "" + color + Math.round(damage);
@@ -287,8 +290,8 @@ public class HealthListeners implements Listener {
                 mobInfo = MobListeners.createMobInfo(entity);
                 if (mobInfo == null) return;
             }
-            int health = (int) Math.round(mobInfo.getCurrentHealth() - event.getDamage());
-            if(mobInfo.getMaxHealth() > 2048) {
+            double health = mobInfo.getCurrentHealth() - event.getDamage();
+            if (mobInfo.getMaxHealth() > 2048) {
                 event.setDamage((event.getDamage() / mobInfo.getMaxHealth()) * 2048);
             }
             mobInfo.setCurrentHealth(health);
@@ -312,7 +315,7 @@ public class HealthListeners implements Listener {
                 mobInfo = MobListeners.createMobInfo(entity);
                 if (mobInfo == null) return;
             }
-            int health = (int) Math.round(mobInfo.getCurrentHealth() + event.getAmount());
+            double health = mobInfo.getCurrentHealth() + event.getAmount();
             mobInfo.setCurrentHealth(health);
             entity.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
             updateHealthBar(entity, health);
@@ -326,9 +329,10 @@ public class HealthListeners implements Listener {
      */
     @EventHandler
     public void onDamageEntity(EntityDamageByEntityEvent event) {
-        if (!(event.getEntity() instanceof LivingEntity) || !(event.getDamager() instanceof LivingEntity || event.getDamager() instanceof Arrow)) return;
+        if (!(event.getEntity() instanceof LivingEntity) || !(event.getDamager() instanceof LivingEntity || event.getDamager() instanceof Arrow))
+            return;
         LivingEntity target = (LivingEntity) event.getEntity(), damager = null;
-        if(event.getDamager() instanceof LivingEntity) {
+        if (event.getDamager() instanceof LivingEntity) {
             damager = (LivingEntity) event.getDamager();
         } else if (event.getDamager() instanceof Arrow) {
             if (((Arrow) event.getDamager()).getShooter() instanceof LivingEntity) {
@@ -336,7 +340,8 @@ public class HealthListeners implements Listener {
             }
         }
         // Sets base stat values
-        double weaponDamage = event.getDamage(), strength = 0, critDamage = 50, critChance = 30, defense = 0, actualDamagePercent = 1, ferocity = 0;
+        double weaponDamage =  event.getDamage(), strength = 0, critDamage = 50, critChance = 30, defense = 0, actualDamagePercent = 1, ferocity = 0, enchantAddPercent = 0;
+        EnchantmentsHolder enchantHolder = null;
         BaseEntityStats damagerStats = damager.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
         BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
         if (damager instanceof Player) {
@@ -347,15 +352,21 @@ public class HealthListeners implements Listener {
                     ItemInfo mainHandInfo = mainHandMeta.getPersistentDataContainer().get(ItemEditor.getItemKey(), new ItemInfoDataType());
                     if (mainHandInfo != null) {
                         weaponDamage = mainHandInfo.getWeaponStats().getDamage();
+                        enchantHolder = mainHandInfo.getEnchantmentsHolder();
+                        if(enchantHolder != null) {
+                            for(EnchantmentObject enchant : enchantHolder.getEnchants()) {
+                                enchantAddPercent += enchant.getDamagePercentIncrease(damager, target);
+                            }
+                        }
                     }
                 }
             }
             damagerStats = damager.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
-            if(damagerStats != null) {
+            if (damagerStats != null) {
                 ferocity = ((PlayerStats) damagerStats).getFerocity();
             }
         }
-        if(target instanceof Player) {
+        if (target instanceof Player) {
             targetStats = target.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
         }
         if (damagerStats != null) {
@@ -363,7 +374,7 @@ public class HealthListeners implements Listener {
             critDamage = damagerStats.getCritDamage();
             critChance = damagerStats.getCritChance();
         }
-        if(targetStats != null) {
+        if (targetStats != null) {
             defense = targetStats.getDefense();
         }
         // Determine if the hit should be critical
@@ -373,21 +384,31 @@ public class HealthListeners implements Listener {
             critDamage = 0;
         }
         // Damage calculation
-        double finalDamage = (weaponDamage * (1 + (strength / 100))) * (1 + (critDamage / 100));
+        double finalDamage = ((weaponDamage + 5) * (1 + (strength / 100))) * (1 + (critDamage / 100)) * (1 + (enchantAddPercent / 100));
         actualDamagePercent = 1 - (defense / (defense + 100));
         // Adjust the final damage and set it
         finalDamage *= actualDamagePercent;
-        if(targetStats != null && targetStats.getMaxHealth() > 2048) {
-            finalDamage = finalDamage / targetStats.getMaxHealth() * 2048;
+        double vanillaDamage = finalDamage;
+        if(enchantHolder != null) {
+            for(EnchantmentObject enchant : enchantHolder.getEnchants()) {
+                damager.sendMessage("Enchant Recognized " + enchant.getText());
+                if(enchant instanceof ActionEnchantment) {
+                    damager.sendMessage("Action Enchant Recognized " + enchant.getText());
+                    ((ActionEnchantment) enchant).action(damager, target, vanillaDamage, critical, finalDamage);
+                }
+            }
         }
-        event.setDamage(finalDamage);
+        if (targetStats != null && targetStats.getMaxHealth() > 2048) {
+            vanillaDamage = finalDamage / targetStats.getMaxHealth() * 2048;
+        }
+        event.setDamage(vanillaDamage);
         showDamage(target, finalDamage, critical, null);
         if (targetStats != null) {
             event.getDamager().sendMessage("MobInfo Current Health: " + targetStats.getCurrentHealth());
             event.getDamager().sendMessage("MobInfo Max Health: " + targetStats.getMaxHealth());
             event.getDamager().sendMessage("Mob Current Health: " + target.getHealth());
             event.getDamager().sendMessage("Mob Max Health: " + target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
-            int health = Math.max(0, (int) Math.round(targetStats.getCurrentHealth() - finalDamage));
+            double health = targetStats.getCurrentHealth() - finalDamage;
             targetStats.setCurrentHealth(health);
             if (target instanceof Player) {
                 target.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), (PlayerStats) targetStats);

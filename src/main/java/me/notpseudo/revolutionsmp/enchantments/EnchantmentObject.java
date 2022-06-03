@@ -1,10 +1,16 @@
 package me.notpseudo.revolutionsmp.enchantments;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class EnchantmentObject implements Comparable<EnchantmentObject>{
+import java.io.Serializable;
+
+public class EnchantmentObject implements Serializable, Comparable<EnchantmentObject> {
 
     private final EnchantmentType type;
     private int level;
@@ -34,6 +40,16 @@ public class EnchantmentObject implements Comparable<EnchantmentObject>{
 
     public EnchantmentType getType() {
         return type;
+    }
+
+    public String getText() {
+        if (type.isUltimate()) {
+            return "" + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + type.toString() + " " + level;
+        } else if (level >= type.getMaxLevel()) {
+            return "" + ChatColor.GOLD + type.toString() + " " + level;
+        } else {
+            return "" + ChatColor.BLUE + type.toString() + " " + level;
+        }
     }
 
     public double getAddDamage(EntityDamageByEntityEvent event) {

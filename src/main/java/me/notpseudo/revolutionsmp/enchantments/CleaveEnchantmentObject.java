@@ -23,7 +23,7 @@ public class CleaveEnchantmentObject extends EnchantmentObject implements Action
     }
 
     @Override
-    public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical) {
+    public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
         int level = super.getLevel();
         double damagePercent, range = 3 + (0.3 * level);
         switch (level) {
@@ -46,7 +46,7 @@ public class CleaveEnchantmentObject extends EnchantmentObject implements Action
                 ).toList();
         for (LivingEntity enemy : enemies) {
             enemy.damage(damagePercent * damage);
-            HealthListeners.showDamage(enemy, damagePercent * damage, false, ChatColor.GRAY);
+            HealthListeners.showDamage(enemy, damagePercent * showDamage, false, ChatColor.GRAY);
         }
     }
 }

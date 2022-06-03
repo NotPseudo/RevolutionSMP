@@ -16,28 +16,32 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LethalityEnchantmentObject extends EnchantmentObject implements ActionEnchantment, Listener {
 
-    private ConcurrentHashMap<UUID, Integer> hits;
+    private HashMap<UUID, Integer> hits;
     private static final NamespacedKey mobKey = MobListeners.getMobKey();
     private static final NamespacedKey playerKey = StatsListeners.getPlayerStatsKey();
 
     public LethalityEnchantmentObject() {
         super(EnchantmentType.LETHALITY);
-        hits = new ConcurrentHashMap<>();
+        hits = new HashMap<>();
     }
 
     public LethalityEnchantmentObject(int level) {
         super(EnchantmentType.LETHALITY, level);
-        hits = new ConcurrentHashMap<>();
+        hits = new HashMap<>();
     }
 
     @Override
-    public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical) {
+    public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
         UUID targetUUID = target.getUniqueId();
+        if(!hits.containsKey(targetUUID)) {
+            hits.put(targetUUID, 0);
+        }
         if (hits.get(targetUUID) == 4) {
             return;
         }

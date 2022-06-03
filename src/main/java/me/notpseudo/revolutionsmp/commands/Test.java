@@ -27,6 +27,7 @@ public class Test implements CommandExecutor {
         player.getInventory().addItem(WeaponCreator.astraea);
         player.getInventory().addItem(WeaponCreator.jujuShortbow);
         player.getInventory().addItem(WeaponCreator.terminator);
+        player.getInventory().addItem(WeaponCreator.noDamage);
         player.getInventory().addItem(ArmorCreator.stormChest);
         player.getInventory().addItem(ArmorCreator.stormLeg);
         player.getInventory().addItem(ArmorCreator.stormBoot);
