@@ -35,38 +35,37 @@ public class InfernoEnchantmentObject extends EnchantmentObject implements Actio
     public InfernoEnchantmentObject() {
         super(EnchantmentType.INFERNO);
         hitCount = 0;
-        lastHit = null;
+        lastHit = UUID.randomUUID();
         trapped = new ArrayList<>();
     }
 
     public InfernoEnchantmentObject(int level) {
         super(EnchantmentType.INFERNO, level);
         hitCount = 0;
-        lastHit = null;
+        lastHit = UUID.randomUUID();
         trapped = new ArrayList<>();
     }
 
     @Override
     public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
-        damager.sendMessage("inferno detected");
-        /*if (lastHit == null) {
-            lastHit = target.getUniqueId();
-            damager.sendMessage("last hit was " + lastHit + " , now " + target.getUniqueId());
-        }*/
         UUID targetUUID = target.getUniqueId();
-        if(lastHit == null) {
+        damager.sendMessage("Target UUID equals lastHit UUID? " + targetUUID.equals(lastHit));
+        damager.sendMessage("Target UUID String equals lastHit UUID String? " + targetUUID.toString().equals(lastHit.toString()));
+        if(target.getUniqueId() != lastHit) {
+            damager.sendMessage("Target UUID " + targetUUID + " did not match lastHit UUID " + lastHit);
             lastHit = targetUUID;
         }
-        damager.sendMessage("target UUID equals last Hit? " + targetUUID.equals(lastHit));
         if (target.getUniqueId().toString().equals(lastHit.toString())) {
             hitCount++;
+            damager.sendMessage("lastHit String " + lastHit + " was target UUID String " + target.getUniqueId() + " , hitCount now " + hitCount);
+
         } else {
             hitCount = 0;
             lastHit = target.getUniqueId();
-            damager.sendMessage("last hit " + lastHit + " was not target " + target.getUniqueId() + " , hitCount now 0");
+            damager.sendMessage("lastHit String " + lastHit + " was not target UUID String " + target.getUniqueId() + " , hitCount now " + hitCount);
         }
         if (hitCount >= 10) {
-            damager.sendMessage("hit count above 10");
+            damager.sendMessage("hitCount above 10");
             hitCount = 0;
             BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
             double speed = 100, vanillaMoveSpeed = 1, vanillaFlySpeed = 1;

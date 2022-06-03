@@ -377,23 +377,18 @@ public class HealthListeners implements Listener {
         if (targetStats != null) {
             defense = targetStats.getDefense();
         }
-        // Determine if the hit should be critical
         double randomCrit = Math.random() * 100;
         boolean critical = randomCrit <= critChance;
         if (!critical) {
             critDamage = 0;
         }
-        // Damage calculation
         double finalDamage = ((weaponDamage + 5) * (1 + (strength / 100))) * (1 + (critDamage / 100)) * (1 + (enchantAddPercent / 100));
         actualDamagePercent = 1 - (defense / (defense + 100));
-        // Adjust the final damage and set it
         finalDamage *= actualDamagePercent;
         double vanillaDamage = finalDamage;
         if(enchantHolder != null) {
             for(EnchantmentObject enchant : enchantHolder.getEnchants()) {
-                damager.sendMessage("Enchant Recognized " + enchant.getText());
                 if(enchant instanceof ActionEnchantment) {
-                    damager.sendMessage("Action Enchant Recognized " + enchant.getText());
                     ((ActionEnchantment) enchant).action(damager, target, vanillaDamage, critical, finalDamage);
                 }
             }
@@ -404,10 +399,6 @@ public class HealthListeners implements Listener {
         event.setDamage(vanillaDamage);
         showDamage(target, finalDamage, critical, null);
         if (targetStats != null) {
-            event.getDamager().sendMessage("MobInfo Current Health: " + targetStats.getCurrentHealth());
-            event.getDamager().sendMessage("MobInfo Max Health: " + targetStats.getMaxHealth());
-            event.getDamager().sendMessage("Mob Current Health: " + target.getHealth());
-            event.getDamager().sendMessage("Mob Max Health: " + target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
             double health = targetStats.getCurrentHealth() - finalDamage;
             targetStats.setCurrentHealth(health);
             if (target instanceof Player) {

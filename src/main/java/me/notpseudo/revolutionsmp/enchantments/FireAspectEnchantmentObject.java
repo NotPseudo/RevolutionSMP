@@ -19,7 +19,6 @@ public class FireAspectEnchantmentObject extends EnchantmentObject implements Ac
     @Override
     public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
         int seconds = 4;
-        damager.sendMessage("fire aspect recognized");
         double damagePercent = 0.03 * super.getLevel();
         if (super.getLevel() == 1) {
             seconds = 3;
@@ -31,7 +30,6 @@ public class FireAspectEnchantmentObject extends EnchantmentObject implements Ac
             @Override
             public void run() {
                 if (!target.isDead() && count <= finalSeconds) {
-                    damager.sendMessage("fire aspect seconds left: " + (finalSeconds - count));
                     target.setMaximumNoDamageTicks(0);
                     target.setNoDamageTicks(0);
                     target.damage(damage * damagePercent);
