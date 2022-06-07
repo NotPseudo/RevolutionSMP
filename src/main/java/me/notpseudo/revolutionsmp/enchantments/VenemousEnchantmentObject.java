@@ -42,18 +42,13 @@ public class VenemousEnchantmentObject extends EnchantmentObject implements Acti
 
     @Override
     public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
-        damager.sendMessage("Venemous action Method Called");
-        damager.sendMessage("hitCount: " + hitCount);
         if (hitCount >= 40) {
-            damager.sendMessage("hitCount already reached 40, returning");
             return;
         }
         hitCount++;
-        damager.sendMessage("hitCount was not 40, now updated to " + hitCount);
         UUID targetUUID = target.getUniqueId();
         if (!hitUUIDS.contains(targetUUID)) {
             hitUUIDS.add(targetUUID);
-            damager.sendMessage("hitUUIDS ArrayList did not contain targetUUID " + targetUUID + ". Now set and should be seen next time");
         }
         double damagePercent = super.getLevel() * 0.003;
         BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
@@ -76,7 +71,6 @@ public class VenemousEnchantmentObject extends EnchantmentObject implements Acti
             @Override
             public void run() {
                 if (!hitUUIDS.contains(targetUUID)) {
-                    damager.sendMessage("hitUUIDS ArrayList did not contain targetUUID " + targetUUID + ". Cancelling and returning");
                     this.cancel();
                     return;
                 }

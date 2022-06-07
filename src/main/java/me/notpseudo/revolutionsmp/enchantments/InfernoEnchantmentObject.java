@@ -48,26 +48,20 @@ public class InfernoEnchantmentObject extends EnchantmentObject implements Actio
 
     @Override
     public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
-        damager.sendMessage("Inferno action Method Called");
         UUID targetUUID = target.getUniqueId();
-        damager.sendMessage("Target UUID equals lastHit UUID? " + targetUUID.equals(lastHit));
-        damager.sendMessage("lastHit: " + lastHit);
         if(lastHit == null) {
-            damager.sendMessage("lastHit UUID is null. It should be set to target UUID " + targetUUID + " and be seen next time");
+            lastHit = targetUUID;
         }
         if(!(target.getUniqueId().equals(lastHit))) {
             lastHit = targetUUID;
             hitCount = 0;
             lastHit = target.getUniqueId();
-            damager.sendMessage("Target UUID " + targetUUID + " was not equal to lastHit UUID " + lastHit + ". It should be set and seen next time. hitCount is now " + hitCount);
         }
         if (target.getUniqueId().equals(lastHit)) {
             hitCount++;
-            damager.sendMessage("lastHit UUID " + lastHit + " was equal to target UUID " + target.getUniqueId() + ", hitCount now " + hitCount);
         }
         if (hitCount >= 10) {
             hitCount = 0;
-            damager.sendMessage("hitCount reached 10 and reset to 0");
             BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
             double speed = 100, vanillaMoveSpeed = 1, vanillaFlySpeed = 1;
             if(target instanceof Player) {

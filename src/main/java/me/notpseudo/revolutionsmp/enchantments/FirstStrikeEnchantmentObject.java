@@ -24,12 +24,9 @@ public class FirstStrikeEnchantmentObject extends EnchantmentObject implements L
 
     @Override
     public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target) {
-        damager.sendMessage("First Strike getDamage Method Called");
         if (attacked.contains(target.getUniqueId())) {
-            damager.sendMessage("Attacked ArrayList contains target UUID " + target.getUniqueId());
             return 0;
         }
-        damager.sendMessage("Attacked ArrayList did not contain target UUID " + target.getUniqueId() + ". Target UUID should be added and seen next time");
         attacked.add(target.getUniqueId());
         return super.getLevel() * 25;
     }

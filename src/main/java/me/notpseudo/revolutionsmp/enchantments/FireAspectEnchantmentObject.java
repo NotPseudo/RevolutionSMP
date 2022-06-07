@@ -31,15 +31,9 @@ public class FireAspectEnchantmentObject extends EnchantmentObject implements Ac
 
     @Override
     public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
-        damager.sendMessage("Fire Aspect action Method Called");
-        damager.sendMessage("Burning contains target UUID? " + burning.contains(target.getUniqueId()));
-        this.numRun++;
-        damager.sendMessage("Number of times run: " + this.numRun);
         if(burning.contains(target.getUniqueId())) {
-            damager.sendMessage("Burning already contains target UUID " + target.getUniqueId());
             return;
         }
-        damager.sendMessage("Burning did not contain target UUID " + target.getUniqueId() + ". Target UUID should be added and seen next time");
         burning.add(target.getUniqueId());
         int seconds = 4;
         double damagePercent = 0.03 * super.getLevel();

@@ -24,7 +24,6 @@ public class CleaveEnchantmentObject extends EnchantmentObject implements Action
 
     @Override
     public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
-        damager.sendMessage("Cleave action Method Called");
         int level = super.getLevel();
         double damagePercent, range = 3 + (0.3 * level);
         switch (level) {
