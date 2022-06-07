@@ -53,6 +53,7 @@ public class InfernoEnchantmentObject extends EnchantmentObject implements Actio
         damager.sendMessage("Target UUID equals lastHit UUID? " + targetUUID.equals(lastHit));
         damager.sendMessage("lastHit: " + lastHit);
         if(lastHit == null) {
+            lastHit = targetUUID;
             damager.sendMessage("lastHit UUID is null. It should be set to target UUID " + targetUUID + " and be seen next time");
         }
         if(!(target.getUniqueId().equals(lastHit))) {
