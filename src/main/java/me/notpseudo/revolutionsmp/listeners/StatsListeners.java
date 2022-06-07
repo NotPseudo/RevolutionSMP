@@ -338,17 +338,22 @@ public class StatsListeners implements Listener {
      */
     @EventHandler
     public void onHandItemSwitch(PlayerItemHeldEvent event) {
+        /*
         BukkitRunnable update = new BukkitRunnable() {
             @Override
             public void run() {
                 ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
                 ItemMeta meta = item.getItemMeta();
+                if(meta == null) {
+                    return;
+                }
                 ItemEditor.updateLore(meta);
                 item.setItemMeta(meta);
                 updateStats(event.getPlayer());
             }
         };
         update.runTaskLaterAsynchronously(plugin, 1);
+        */
     }
 
     /**

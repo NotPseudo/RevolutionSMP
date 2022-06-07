@@ -27,6 +27,7 @@ public class SyphonEnchantmentObject extends EnchantmentObject implements Action
 
     @Override
     public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
+        damager.sendMessage("Syphon action Method Called");
         if (!critical) {
             return;
         }

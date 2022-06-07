@@ -21,6 +21,7 @@ public class ManaStealEnchantmentObject extends EnchantmentObject implements Act
 
     @Override
     public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
+        damager.sendMessage("Mana Steal action Method Called");
         if (!(damager instanceof Player)) {
             return;
         }

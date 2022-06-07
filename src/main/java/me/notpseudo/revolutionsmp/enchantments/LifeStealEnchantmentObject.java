@@ -27,6 +27,7 @@ public class LifeStealEnchantmentObject extends EnchantmentObject implements Act
 
     @Override
     public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
+        damager.sendMessage("Life Steal action Method Called");
         BaseEntityStats damagerStats = damager.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
         if (damager instanceof Player) {
             damagerStats = damager.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());

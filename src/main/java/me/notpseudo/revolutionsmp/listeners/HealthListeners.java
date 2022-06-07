@@ -387,9 +387,9 @@ public class HealthListeners implements Listener {
         finalDamage *= actualDamagePercent;
         double vanillaDamage = finalDamage;
         if(enchantHolder != null) {
-            for(EnchantmentObject enchant : enchantHolder.getEnchants()) {
-                if(enchant instanceof ActionEnchantment) {
-                    ((ActionEnchantment) enchant).action(damager, target, vanillaDamage, critical, finalDamage);
+            for(int i = 0; i < enchantHolder.getEnchants().size(); i++) {
+                if(enchantHolder.getEnchants().get(i) instanceof ActionEnchantment) {
+                    ((ActionEnchantment) enchantHolder.getEnchants().get(i)).action(damager, target, vanillaDamage, critical, finalDamage);
                 }
             }
         }

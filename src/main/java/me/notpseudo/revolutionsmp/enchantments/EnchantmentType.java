@@ -94,7 +94,7 @@ public enum EnchantmentType {
 
         @Override
         public ItemType[] getItemTypes() {
-            return new ItemType[0];
+            return new ItemType[]{ItemType.SWORD};
         }
     },
     CUBISM {
@@ -682,6 +682,11 @@ public enum EnchantmentType {
         }
     },
     VICIOUS {
+        @Override
+        public WeaponStats getApplyWeaponStats(int level) {
+            return new WeaponStats(0, 0, 0, 0, 0, level);
+        }
+
         @Override
         public int getMinLevel() {
             return 3;

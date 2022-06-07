@@ -18,7 +18,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class LethalityEnchantmentObject extends EnchantmentObject implements ActionEnchantment, Listener {
 
@@ -38,11 +37,14 @@ public class LethalityEnchantmentObject extends EnchantmentObject implements Act
 
     @Override
     public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
+        damager.sendMessage("Lethality action Method Called");
         UUID targetUUID = target.getUniqueId();
         if(!hits.containsKey(targetUUID)) {
+            damager.sendMessage("hits HashMap did not contain target UUID " + targetUUID + ". It should be set and seen next time");
             hits.put(targetUUID, 0);
         }
-        if (hits.get(targetUUID) == 4) {
+        if (hits.get(targetUUID) >= 4) {
+            damager.sendMessage("The hits on this target " + targetUUID + " already reached 4. This method with return");
             return;
         }
         final MobInfo[] targetStats = {target.getPersistentDataContainer().get(mobKey, new MobInfoDataType())};
@@ -62,7 +64,9 @@ public class LethalityEnchantmentObject extends EnchantmentObject implements Act
         double remainingDefense = 1 - percentDecrease;
         if (hits.containsKey(targetUUID)) {
             hits.put(targetUUID, hits.get(targetUUID) + 1);
+            damager.sendMessage("hits HashMap contains target UUID " + targetUUID + ". The hits on this target are now " + hits.get(targetUUID));
         } else {
+            damager.sendMessage("hits HashMap did not contain target UUID " + targetUUID + ". The hits on this target should now be 1");
             hits.put(targetUUID, 1);
         }
         if (target instanceof Player) {

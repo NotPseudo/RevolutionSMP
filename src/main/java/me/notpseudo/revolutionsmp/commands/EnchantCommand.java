@@ -25,21 +25,30 @@ public class EnchantCommand implements CommandExecutor {
         if (sender instanceof Player player) {
             EnchantmentType type;
             int level;
-            try {
-                type = EnchantmentType.valueOf(args[0].toUpperCase());
-            } catch (IllegalArgumentException exception) {
-                player.sendMessage(Component.text("This enchantment could not be found. Check your spelling", NamedTextColor.RED));
+            if (args.length >= 1) {
+                try {
+                    type = EnchantmentType.valueOf(args[0].toUpperCase());
+                } catch (IllegalArgumentException exception) {
+                    player.sendMessage(Component.text("This enchantment could not be found. Check your spelling", NamedTextColor.RED));
+                    return true;
+                }
+                if (args.length >= 2) {
+                    try {
+                        level = Integer.parseInt(args[1]);
+                    } catch (NumberFormatException exception) {
+                        level = type.getMinLevel();
+                        player.sendMessage(Component.text("Invalid number for level. Level set to lowest level", NamedTextColor.YELLOW));
+                    }
+                } else {
+                    level = type.getMinLevel();
+                    player.sendMessage(Component.text("Invalid number for level. Level set to lowest level", NamedTextColor.YELLOW));
+                }
+                ItemStack item = player.getInventory().getItemInMainHand();
+                ItemEditor.addEnchant(item, type, level);
+                player.sendMessage(Component.text("Applied enchant", NamedTextColor.GREEN));
+            } else {
                 return false;
             }
-            try {
-                level = Integer.parseInt(args[1]);
-            } catch (NumberFormatException exception) {
-                level = type.getMinLevel();
-                player.sendMessage(Component.text("Invalid number for level. Level set to lowest level", NamedTextColor.YELLOW));
-            }
-            ItemStack item = player.getInventory().getItemInMainHand();
-            ItemEditor.addEnchant(item, type, level);
-            player.sendMessage(Component.text("Applied enchant", NamedTextColor.GREEN));
         }
         return true;
     }

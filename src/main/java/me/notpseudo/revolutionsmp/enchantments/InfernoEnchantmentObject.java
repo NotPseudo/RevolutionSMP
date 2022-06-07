@@ -48,25 +48,26 @@ public class InfernoEnchantmentObject extends EnchantmentObject implements Actio
 
     @Override
     public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
+        damager.sendMessage("Inferno action Method Called");
         UUID targetUUID = target.getUniqueId();
         damager.sendMessage("Target UUID equals lastHit UUID? " + targetUUID.equals(lastHit));
-        damager.sendMessage("Target UUID String equals lastHit UUID String? " + targetUUID.toString().equals(lastHit.toString()));
-        if(target.getUniqueId() != lastHit) {
-            damager.sendMessage("Target UUID " + targetUUID + " did not match lastHit UUID " + lastHit);
-            lastHit = targetUUID;
+        damager.sendMessage("lastHit: " + lastHit);
+        if(lastHit == null) {
+            damager.sendMessage("lastHit UUID is null. It should be set to target UUID " + targetUUID + " and be seen next time");
         }
-        if (target.getUniqueId().toString().equals(lastHit.toString())) {
-            hitCount++;
-            damager.sendMessage("lastHit String " + lastHit + " was target UUID String " + target.getUniqueId() + " , hitCount now " + hitCount);
-
-        } else {
+        if(!(target.getUniqueId().equals(lastHit))) {
+            lastHit = targetUUID;
             hitCount = 0;
             lastHit = target.getUniqueId();
-            damager.sendMessage("lastHit String " + lastHit + " was not target UUID String " + target.getUniqueId() + " , hitCount now " + hitCount);
+            damager.sendMessage("Target UUID " + targetUUID + " was not equal to lastHit UUID " + lastHit + ". It should be set and seen next time. hitCount is now " + hitCount);
+        }
+        if (target.getUniqueId().equals(lastHit)) {
+            hitCount++;
+            damager.sendMessage("lastHit UUID " + lastHit + " was equal to target UUID " + target.getUniqueId() + ", hitCount now " + hitCount);
         }
         if (hitCount >= 10) {
-            damager.sendMessage("hitCount above 10");
             hitCount = 0;
+            damager.sendMessage("hitCount reached 10 and reset to 0");
             BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
             double speed = 100, vanillaMoveSpeed = 1, vanillaFlySpeed = 1;
             if(target instanceof Player) {
@@ -111,7 +112,9 @@ public class InfernoEnchantmentObject extends EnchantmentObject implements Actio
                         } else {
                             target.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), (MobInfo) finalTargetStats);
                             if(target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED) != null) {
-                                target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(finalVanillaMoveSpeed);
+                                double defaultSpeed = target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue();
+                                target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(1);
+                                //target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(finalVanillaMoveSpeed);
                             }
                             if(target.getAttribute(Attribute.GENERIC_FLYING_SPEED) != null) {
                                 target.getAttribute(Attribute.GENERIC_FLYING_SPEED).setBaseValue(finalVanillaFlySpeed);
@@ -125,7 +128,7 @@ public class InfernoEnchantmentObject extends EnchantmentObject implements Actio
                     count++;
                 }
             };
-            inferno.runTaskTimerAsynchronously(RevolutionSMP.getPlugin(), 0, 20);
+            inferno.runTaskTimer(RevolutionSMP.getPlugin(), 0, 20);
         }
     }
 

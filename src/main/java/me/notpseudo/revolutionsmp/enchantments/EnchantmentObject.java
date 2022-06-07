@@ -47,6 +47,8 @@ public class EnchantmentObject implements Serializable, Comparable<EnchantmentOb
             return "" + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + type.toString() + " " + level;
         } else if (level >= type.getMaxLevel()) {
             return "" + ChatColor.GOLD + type.toString() + " " + level;
+        } else if (level > type.getEnchTableMax()) {
+            return "" + ChatColor.DARK_PURPLE + type.toString() + " " + level;
         } else {
             return "" + ChatColor.BLUE + type.toString() + " " + level;
         }

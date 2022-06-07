@@ -27,9 +27,11 @@ public class ThunderboltEnchantmentObject extends EnchantmentObject implements A
 
     @Override
     public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
+        damager.sendMessage("Thunderbolt action Method Called");
         count++;
         if (count >= 3) {
             count = 0;
+            damager.sendMessage("Count reached 3, now reset to 0");
             int level = super.getLevel();
             double damagePercent;
             switch (level) {
