@@ -9,9 +9,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 // Development and testing command to obtain custom items
-public class Test implements CommandExecutor {
+public class TestCommand implements CommandExecutor {
 
-  public Test(RevolutionSMP plugin) {
+  public TestCommand(RevolutionSMP plugin) {
     plugin.getCommand("test").setExecutor(this);
   }
 

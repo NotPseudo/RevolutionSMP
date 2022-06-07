@@ -11,9 +11,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 // Command to Recombobulate the current held item
-public class Recombobulate implements CommandExecutor {
+public class RecombCommand implements CommandExecutor {
 
-    public Recombobulate(RevolutionSMP plugin) {
+    public RecombCommand(RevolutionSMP plugin) {
         plugin.getCommand("recombobulate").setExecutor(this);
     }
 

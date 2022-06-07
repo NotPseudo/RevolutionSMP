@@ -13,9 +13,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-public class ViewItemStats implements CommandExecutor {
+public class ViewItemStatsCommand implements CommandExecutor {
 
-    public ViewItemStats(RevolutionSMP plugin) {
+    public ViewItemStatsCommand(RevolutionSMP plugin) {
         plugin.getCommand("itemstats").setExecutor(this);
     }
 
