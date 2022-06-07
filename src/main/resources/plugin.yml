@@ -40,7 +40,7 @@ commands:
       - wipe
     usage: /resetstats
   customenchant:
-    description: Adds an enchantment to the itme the player is holding
+    description: Adds an enchantment to the item the player is holding
     usage: /customenchant <enchantment> <level>
   itemstats:
     description: Testing command to view the item stats on a held item

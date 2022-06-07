@@ -46,7 +46,7 @@ public class StatsListeners implements Listener {
     private final RevolutionSMP plugin;
 
     /**
-     * Instantiates a new StatsListener object to allow the listeners to work<p>Starts a repeating task to update all player stats each second</p>
+     * Creates a new StatsListener object to allow the listeners to work<p>Starts a repeating task to update all player stats each second</p>
      *
      * @param plugin Instance of the plugin
      */
@@ -54,8 +54,8 @@ public class StatsListeners implements Listener {
         this.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, this.plugin);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
-            // Every 20 game ticks, for all players, update player stats. regen health and mana, show action bar with info
-            for (Player player : Bukkit.getOnlinePlayers().stream().filter(p -> !p.isDead()).collect(Collectors.toList())) {
+            // Every 20 game ticks, update player stats, regenerate health and mana, show action bar with info
+            for (Player player : Bukkit.getOnlinePlayers().stream().filter(p -> !p.isDead()).toList()) {
                 updateStats(player);
                 naturalRegen(player);
                 showActionBar(player);
@@ -338,7 +338,6 @@ public class StatsListeners implements Listener {
      */
     @EventHandler
     public void onHandItemSwitch(PlayerItemHeldEvent event) {
-        /*
         BukkitRunnable update = new BukkitRunnable() {
             @Override
             public void run() {
@@ -353,7 +352,7 @@ public class StatsListeners implements Listener {
             }
         };
         update.runTaskLaterAsynchronously(plugin, 1);
-        */
+
     }
 
     /**
