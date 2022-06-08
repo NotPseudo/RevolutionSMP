@@ -10,11 +10,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class ResetStats implements CommandExecutor {
+public class ResetStatsCommand implements CommandExecutor {
 
     private static final NamespacedKey playerKey = StatsListeners.getPlayerStatsKey();
 
-    public ResetStats(RevolutionSMP plugin) {
+    public ResetStatsCommand(RevolutionSMP plugin) {
         plugin.getCommand("resetstats").setExecutor(this);
     }
 

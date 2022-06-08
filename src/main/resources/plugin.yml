@@ -5,7 +5,7 @@ api-version: 1.18
 load: STARTUP
 authors: [ NotPseudo ]
 description: A custom plugin for the RevolutionSMP
-depend: [ProtocolLib]
+depend: [ ProtocolLib ]
 commands:
   potatobook:
     description: Applies a Potato Book to an item
@@ -23,9 +23,11 @@ commands:
     aliases:
       - rf
     usage: /reforge <reforge>
-  test:
-    description: This is a test command!
-    usage: /test
+  giveitem:
+    description: Gives custom items!
+    aliases:
+      - item
+    usage: /giveitem <all | ItemID>
   profile:
     description: Views player stats
     aliases:

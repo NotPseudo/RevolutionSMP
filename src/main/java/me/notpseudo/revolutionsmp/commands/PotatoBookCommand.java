@@ -12,9 +12,9 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 // Command to add a Potato Book to the current held item
-public class PotatoBook implements CommandExecutor {
+public class PotatoBookCommand implements CommandExecutor {
 
-    public PotatoBook(RevolutionSMP plugin) {
+    public PotatoBookCommand(RevolutionSMP plugin) {
         plugin.getCommand("potatobook").setExecutor(this);
     }
 
