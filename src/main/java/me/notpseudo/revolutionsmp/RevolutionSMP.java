@@ -24,7 +24,7 @@ public final class RevolutionSMP extends JavaPlugin {
         new MobListeners(this);
         new HealthListeners(this);
         new ItemUse(this);
-        new TestCommand(this);
+        new GiveCommand(this);
         new RecombCommand(this);
         new ProfileCommand(this);
         new ResetStatsCommand(this);

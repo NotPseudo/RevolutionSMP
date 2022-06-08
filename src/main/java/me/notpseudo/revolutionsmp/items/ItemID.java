@@ -5,6 +5,7 @@ import me.notpseudo.revolutionsmp.extraiteminfo.ExtraItemInfo;
 import me.notpseudo.revolutionsmp.itemstats.AbilityStats;
 import me.notpseudo.revolutionsmp.itemstats.ArmorStats;
 import me.notpseudo.revolutionsmp.itemstats.WeaponStats;
+import org.bukkit.inventory.ItemStack;
 
 // Enum used to identify the exact custom item type an item is
 public enum ItemID {
@@ -25,11 +26,6 @@ public enum ItemID {
         }
 
         @Override
-        public WeaponStats getDefaultWeaponStats() {
-            return new WeaponStats(0, 0, 0, 0, 0, 0);
-        }
-
-        @Override
         public ArmorStats getDefaultArmorStats() {
             return new ArmorStats(260, 120, 0);
         }
@@ -40,14 +36,10 @@ public enum ItemID {
         }
 
         @Override
-        public boolean isUnbreakable() {
-            return true;
+        public ItemStack getItem() {
+            return ArmorCreator.stormChest;
         }
 
-        @Override
-        public ExtraItemInfo getDefaultExtraInfo() {
-            return new ExtraItemInfo(null);
-        }
     },
     STORM_LEGGINGS {
         @Override
@@ -66,11 +58,6 @@ public enum ItemID {
         }
 
         @Override
-        public WeaponStats getDefaultWeaponStats() {
-            return new WeaponStats(0, 0, 0, 0, 0, 0);
-        }
-
-        @Override
         public ArmorStats getDefaultArmorStats() {
             return new ArmorStats(230, 105, 0);
         }
@@ -81,14 +68,10 @@ public enum ItemID {
         }
 
         @Override
-        public boolean isUnbreakable() {
-            return true;
+        public ItemStack getItem() {
+            return ArmorCreator.stormLeg;
         }
 
-        @Override
-        public ExtraItemInfo getDefaultExtraInfo() {
-            return new ExtraItemInfo(null);
-        }
     },
     STORM_BOOTS {
         @Override
@@ -107,11 +90,6 @@ public enum ItemID {
         }
 
         @Override
-        public WeaponStats getDefaultWeaponStats() {
-            return new WeaponStats(0, 0, 0, 0, 0, 0);
-        }
-
-        @Override
         public ArmorStats getDefaultArmorStats() {
             return new ArmorStats(145, 65, 0);
         }
@@ -122,14 +100,10 @@ public enum ItemID {
         }
 
         @Override
-        public boolean isUnbreakable() {
-            return true;
+        public ItemStack getItem() {
+            return ArmorCreator.stormBoot;
         }
 
-        @Override
-        public ExtraItemInfo getDefaultExtraInfo() {
-            return new ExtraItemInfo(null);
-        }
     },
     HYPERION {
         @Override
@@ -153,24 +127,15 @@ public enum ItemID {
         }
 
         @Override
-        public ArmorStats getDefaultArmorStats() {
-            return new ArmorStats(0, 0, 0);
-        }
-
-        @Override
         public AbilityStats getDefaultAbilityStats() {
             return new AbilityStats(0, 350);
         }
 
         @Override
-        public boolean isUnbreakable() {
-            return true;
+        public ItemStack getItem() {
+            return WeaponCreator.hyperion;
         }
 
-        @Override
-        public ExtraItemInfo getDefaultExtraInfo() {
-            return new ExtraItemInfo(null);
-        }
     },
     VALKYRIE {
         @Override
@@ -194,24 +159,15 @@ public enum ItemID {
         }
 
         @Override
-        public ArmorStats getDefaultArmorStats() {
-            return new ArmorStats(0, 0, 0);
-        }
-
-        @Override
         public AbilityStats getDefaultAbilityStats() {
             return new AbilityStats(0, 60);
         }
 
         @Override
-        public boolean isUnbreakable() {
-            return true;
+        public ItemStack getItem() {
+            return WeaponCreator.valkyrie;
         }
 
-        @Override
-        public ExtraItemInfo getDefaultExtraInfo() {
-            return new ExtraItemInfo(null);
-        }
     },
     SCYLLA {
         @Override
@@ -235,24 +191,15 @@ public enum ItemID {
         }
 
         @Override
-        public ArmorStats getDefaultArmorStats() {
-            return new ArmorStats(0, 0, 0);
-        }
-
-        @Override
         public AbilityStats getDefaultAbilityStats() {
             return new AbilityStats(0, 50);
         }
 
         @Override
-        public boolean isUnbreakable() {
-            return true;
+        public ItemStack getItem() {
+            return WeaponCreator.scylla;
         }
 
-        @Override
-        public ExtraItemInfo getDefaultExtraInfo() {
-            return new ExtraItemInfo(null);
-        }
     },
     ASTRAEA {
         @Override
@@ -286,14 +233,10 @@ public enum ItemID {
         }
 
         @Override
-        public boolean isUnbreakable() {
-            return true;
+        public ItemStack getItem() {
+            return WeaponCreator.astraea;
         }
 
-        @Override
-        public ExtraItemInfo getDefaultExtraInfo() {
-            return new ExtraItemInfo(null);
-        }
     },
     ASPECT_OF_THE_END {
         @Override
@@ -317,23 +260,13 @@ public enum ItemID {
         }
 
         @Override
-        public ArmorStats getDefaultArmorStats() {
-            return new ArmorStats(0, 0, 0);
-        }
-
-        @Override
-        public AbilityStats getDefaultAbilityStats() {
-            return new AbilityStats(0, 0);
-        }
-
-        @Override
-        public boolean isUnbreakable() {
-            return true;
-        }
-
-        @Override
         public ExtraItemInfo getDefaultExtraInfo() {
             return new AspectOfTheEndInfo();
+        }
+
+        @Override
+        public ItemStack getItem() {
+            return WeaponCreator.aote;
         }
     },
     JUJU_SHORTBOW {
@@ -358,24 +291,10 @@ public enum ItemID {
         }
 
         @Override
-        public ArmorStats getDefaultArmorStats() {
-            return new ArmorStats(0, 0, 0);
+        public ItemStack getItem() {
+            return WeaponCreator.jujuShortbow;
         }
 
-        @Override
-        public AbilityStats getDefaultAbilityStats() {
-            return new AbilityStats(0, 0);
-        }
-
-        @Override
-        public boolean isUnbreakable() {
-            return true;
-        }
-
-        @Override
-        public ExtraItemInfo getDefaultExtraInfo() {
-            return new ExtraItemInfo(null);
-        }
     },
     TERMINATOR {
         @Override
@@ -399,24 +318,10 @@ public enum ItemID {
         }
 
         @Override
-        public ArmorStats getDefaultArmorStats() {
-            return new ArmorStats(0, 0, 0);
+        public ItemStack getItem() {
+            return WeaponCreator.terminator;
         }
 
-        @Override
-        public AbilityStats getDefaultAbilityStats() {
-            return new AbilityStats(0, 0);
-        }
-
-        @Override
-        public boolean isUnbreakable() {
-            return true;
-        }
-
-        @Override
-        public ExtraItemInfo getDefaultExtraInfo() {
-            return new ExtraItemInfo(null);
-        }
     },
     NODAMAGE {
         @Override
@@ -436,7 +341,12 @@ public enum ItemID {
 
         @Override
         public WeaponStats getDefaultWeaponStats() {
-            return new WeaponStats(0, 10, 30, 5, 20, 5);
+            return new WeaponStats(10, 10, 30, 5, 20, 5);
+        }
+
+        @Override
+        public ItemStack getItem() {
+            return WeaponCreator.noDamage;
         }
     };
 
@@ -468,5 +378,7 @@ public enum ItemID {
     public ExtraItemInfo getDefaultExtraInfo() {
         return null;
     }
+
+    public abstract ItemStack getItem();
 
 }

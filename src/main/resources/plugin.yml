@@ -22,10 +22,12 @@ commands:
     description: Applies a Reforge to an item
     aliases:
       - rf
-    usage: /reforge <reforge>
-  test:
-    description: This is a test command!
-    usage: /test
+    usage: /reforge <Reforge>
+  giveitem:
+    description: Gives custom items!
+    aliases:
+      - item
+    usage: /giveitem <all | ItemID>
   profile:
     description: Views player stats
     aliases:
@@ -41,7 +43,7 @@ commands:
     usage: /resetstats
   customenchant:
     description: Adds an enchantment to the item the player is holding
-    usage: /customenchant <enchantment> <level>
+    usage: /customenchant <Enchantment> <level>
   itemstats:
     description: Testing command to view the item stats on a held item
     aliases:
