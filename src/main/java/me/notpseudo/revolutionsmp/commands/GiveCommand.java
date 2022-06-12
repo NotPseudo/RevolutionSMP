@@ -26,9 +26,11 @@ public class GiveCommand implements CommandExecutor {
                 if (args.length > 0) {
                     if (args[0].equalsIgnoreCase("all")) {
                         for(ItemID id : ItemID.values()) {
-                            player.getInventory().addItem(id.getItem());
-                            return true;
+                            if(player.getInventory().addItem(id.getItem()).size() > 0) {
+                                player.sendMessage(Component.text(id.getDefaultName(), id.getDefaultRarity().getRarityColor()).append(Component.text(" could not be added to the inventory!", NamedTextColor.RED)));
+                            }
                         }
+                        return true;
                     }
                     String id = args[0].toUpperCase();
                     try {
