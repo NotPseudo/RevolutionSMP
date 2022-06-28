@@ -2,9 +2,6 @@ package me.notpseudo.revolutionsmp.itemstats;
 
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentType;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -88,7 +85,7 @@ public class EnchantmentsHolder implements Serializable {
         enchants = ultimate;
     }
 
-    public List<String> getLoreList() {
+    public List<String> getEnchantmentsLore() {
         List<String> loreList = new ArrayList<>();
         for(int i = 0; i < Math.ceil(enchants.size() / 3.0); i++) {
             StringBuilder line = new StringBuilder();

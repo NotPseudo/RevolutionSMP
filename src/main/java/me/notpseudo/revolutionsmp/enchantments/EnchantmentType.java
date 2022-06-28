@@ -24,7 +24,7 @@ public enum EnchantmentType {
     BANE_OF_ARTHROPODS {
         @Override
         public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
-            if (target.getType() != EntityType.SPIDER || target.getType() != EntityType.CAVE_SPIDER || target.getType() != EntityType.SILVERFISH || target.getType() != EntityType.ENDERMITE) {
+            if (!(target.getType() == EntityType.SPIDER || target.getType() == EntityType.CAVE_SPIDER || target.getType() == EntityType.SILVERFISH || target.getType() == EntityType.ENDERMITE)) {
                 return 0;
             }
             switch (level) {
@@ -100,7 +100,7 @@ public enum EnchantmentType {
     CUBISM {
         @Override
         public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
-            if (target.getType() != EntityType.CREEPER || target.getType() != EntityType.SLIME || target.getType() != EntityType.MAGMA_CUBE) {
+            if (!(target.getType() == EntityType.CREEPER || target.getType() == EntityType.SLIME || target.getType() == EntityType.MAGMA_CUBE)) {
                 return 0;
             }
             switch (level) {
@@ -150,7 +150,7 @@ public enum EnchantmentType {
     ENDER_SLAYER {
         @Override
         public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
-            if (target.getType() != EntityType.ENDER_DRAGON || target.getType() != EntityType.ENDERMAN || target.getType() != EntityType.ENDERMITE) {
+            if (!(target.getType() == EntityType.ENDER_DRAGON || target.getType() == EntityType.ENDERMAN || target.getType() == EntityType.ENDERMITE)) {
                 return 0;
             }
             switch (level) {
@@ -305,7 +305,7 @@ public enum EnchantmentType {
     IMPALING {
         @Override
         public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
-            if (target.getType() != EntityType.GUARDIAN || target.getType() != EntityType.SQUID || target.getType() != EntityType.GLOW_SQUID || target.getType() != EntityType.ELDER_GUARDIAN) {
+            if (!(target.getType() == EntityType.GUARDIAN || target.getType() == EntityType.SQUID || target.getType() == EntityType.GLOW_SQUID || target.getType() == EntityType.ELDER_GUARDIAN)) {
                 return 0;
             }
             return level * 25;

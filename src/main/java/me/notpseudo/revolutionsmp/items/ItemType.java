@@ -2,22 +2,42 @@ package me.notpseudo.revolutionsmp.items;
 
 // Enum of ItemTypes a custom item can be
 public enum ItemType {
-  HELMET {
+    HELMET {
 
-  },
-  CHESTPLATE {
+    },
+    CHESTPLATE {
 
-  },
-  LEGGINGS {
+    },
+    LEGGINGS {
 
-  },
-  BOOTS {
+    },
+    BOOTS {
 
-  },
-  SWORD {
+    },
+    SWORD {
 
-  },
-  BOW {
+    },
+    BOW {
 
-  }
-}
+    },
+    ITEM {
+        @Override
+        public boolean allowEnchants() {
+            return false;
+        }
+
+        @Override
+        public boolean allowAbilities() {
+            return false;
+        }
+    };
+
+    public boolean allowEnchants() {
+        return true;
+    }
+
+    public boolean allowAbilities() {
+        return true;
+    }
+
+    }

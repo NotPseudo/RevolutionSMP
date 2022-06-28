@@ -9,6 +9,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class EnchantmentObject implements Serializable, Comparable<EnchantmentObject> {
 
@@ -16,18 +19,27 @@ public class EnchantmentObject implements Serializable, Comparable<EnchantmentOb
     private int level;
     private int enchTableMax;
     private int maxLevel;
+    private HashMap<UUID, Integer> attacked;
+    private UUID lastHit;
+    private int hitCount;
+
 
     public EnchantmentObject(EnchantmentType type) {
         this.type = type;
         level = type.getMinLevel();
         enchTableMax = type.getEnchTableMax();
         maxLevel = type.getMaxLevel();
+        attacked = new HashMap<>();
+        hitCount = 0;
     }
 
     public EnchantmentObject(EnchantmentType type, int level) {
         this.type = type;
         this.level = level;
+        enchTableMax = type.getEnchTableMax();
         maxLevel = type.getMaxLevel();
+        attacked = new HashMap<>();
+        hitCount = 0;
     }
 
     public int getLevel() {
@@ -40,6 +52,30 @@ public class EnchantmentObject implements Serializable, Comparable<EnchantmentOb
 
     public EnchantmentType getType() {
         return type;
+    }
+
+    public HashMap<UUID, Integer> getAttacked() {
+        return attacked;
+    }
+
+    public void setAttacked(HashMap<UUID, Integer> attacked) {
+        this.attacked = attacked;
+    }
+
+    public UUID getLastHit() {
+        return lastHit;
+    }
+
+    public void setLastHit(UUID lastHit) {
+        this.lastHit = lastHit;
+    }
+
+    public int getHitCount() {
+        return hitCount;
+    }
+
+    public void setHitCount(int hitCount) {
+        this.hitCount = hitCount;
     }
 
     public String getText() {

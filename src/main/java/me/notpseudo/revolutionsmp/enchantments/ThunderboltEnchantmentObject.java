@@ -12,24 +12,21 @@ import java.util.Collection;
 
 public class ThunderboltEnchantmentObject extends EnchantmentObject implements ActionEnchantment {
 
-    private int count;
     private static final NamespacedKey mobKey = MobListeners.getMobKey();
 
     public ThunderboltEnchantmentObject() {
         super(EnchantmentType.THUNDERBOLT);
-        count = 0;
     }
 
     public ThunderboltEnchantmentObject(int level) {
         super(EnchantmentType.THUNDERBOLT, level);
-        count = 0;
     }
 
     @Override
     public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
-        count++;
-        if (count >= 3) {
-            count = 0;
+        super.setHitCount(super.getHitCount() + 1);
+        if (super.getHitCount() >= 3) {
+            super.setHitCount(0);
             int level = super.getLevel();
             double damagePercent;
             switch (level) {

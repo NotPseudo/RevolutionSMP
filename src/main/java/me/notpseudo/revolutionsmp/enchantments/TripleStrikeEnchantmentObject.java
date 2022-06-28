@@ -10,34 +10,30 @@ import java.util.UUID;
 
 public class TripleStrikeEnchantmentObject extends EnchantmentObject implements Listener {
 
-    private HashMap<UUID, Integer> hitMobs;
-
     public TripleStrikeEnchantmentObject() {
         super(EnchantmentType.TRIPLE_STRIKE);
-        hitMobs = new HashMap<>();
     }
 
     public TripleStrikeEnchantmentObject(int level) {
         super(EnchantmentType.TRIPLE_STRIKE, level);
-        hitMobs = new HashMap<>();
     }
 
     @Override
     public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target) {
         UUID targetUUID = target.getUniqueId();
-        if (!hitMobs.containsKey(targetUUID)) {
-            hitMobs.put(targetUUID, 0);
+        if (!super.getAttacked().containsKey(targetUUID)) {
+            super.getAttacked().put(targetUUID, 0);
         }
-        if (hitMobs.get(targetUUID) >= 3) {
+        if (super.getAttacked().get(targetUUID) >= 3) {
             return 0;
         }
-        hitMobs.put(targetUUID, hitMobs.get(targetUUID) + 1);
+        super.getAttacked().put(targetUUID, super.getAttacked().get(targetUUID) + 1);
         return super.getLevel() * 10;
     }
 
     @EventHandler
     public void onDeath(EntityDeathEvent event) {
-        hitMobs.remove(event.getEntity().getUniqueId());
+        super.getAttacked().remove(event.getEntity().getUniqueId());
     }
 
 }

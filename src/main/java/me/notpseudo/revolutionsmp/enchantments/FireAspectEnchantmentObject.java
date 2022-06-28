@@ -15,26 +15,23 @@ import java.util.UUID;
 
 public class FireAspectEnchantmentObject extends EnchantmentObject implements ActionEnchantment, Listener {
 
-    private ArrayList<UUID> burning;
-    private int numRun;
 
     public FireAspectEnchantmentObject() {
         super(EnchantmentType.FIRE_ASPECT);
-        burning = new ArrayList<>();
     }
 
     public FireAspectEnchantmentObject(int level) {
         super(EnchantmentType.FIRE_ASPECT, level);
-        burning = new ArrayList<>();
     }
 
 
     @Override
     public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
-        if(burning.contains(target.getUniqueId())) {
+        UUID targetUUID = target.getUniqueId();
+        if(super.getAttacked().containsKey(targetUUID)) {
             return;
         }
-        burning.add(target.getUniqueId());
+        super.getAttacked().put(targetUUID, 0);
         int seconds = 4;
         double damagePercent = 0.03 * super.getLevel();
         if (super.getLevel() == 1) {
@@ -53,7 +50,7 @@ public class FireAspectEnchantmentObject extends EnchantmentObject implements Ac
                     HealthListeners.showDamage(target, damagePercent * showDamage, false, ChatColor.GOLD);
                     count++;
                 } else {
-                    burning.remove(target);
+                    getAttacked().remove(targetUUID);
                     this.cancel();
                 }
             }

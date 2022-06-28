@@ -72,7 +72,7 @@ public class HealthListeners implements Listener {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 for (Entity entity : player.getLocation().getNearbyLivingEntities(15, 10, 15)) {
                     if (entity instanceof Creature) {
-                        updateHealthBar((Creature) entity, (entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getCurrentHealth()), player);
+                        updateHealthBar((Creature) entity, player);
                     }
                 }
             }
@@ -102,9 +102,8 @@ public class HealthListeners implements Listener {
      * Edits the specified LivingEntity's health bar with packets for all players
      *
      * @param entity The LivingEntity to update the health bar for
-     * @param health The health value to display on the health bar
      */
-    public static void updateHealthBar(Creature entity, double health) {
+    public static void updateHealthBar(Creature entity) {
         MobInfo mobInfo = entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
         if (mobInfo == null) {
             mobInfo = MobListeners.createMobInfo(entity);
@@ -113,17 +112,17 @@ public class HealthListeners implements Listener {
         String nameString = "" + mobInfo.getMobBehavior().getBehaviorColor() + mobInfo.getName();
         String healthString;
         // Gets max Health of the LivingEntity
-        double maxHealth = mobInfo.getMaxHealth();
-        if (health < maxHealth / 2) {
-            if (health < 0) {
-                health = 0;
+        double currentHealth = mobInfo.getCurrentHealth(), maxHealth = mobInfo.getMaxHealth();
+        if (currentHealth < maxHealth / 2) {
+            if (currentHealth < 0) {
+                currentHealth = 0;
             }
-            healthString = "" + ChatColor.YELLOW + (int) Math.round(health);
+            healthString = "" + ChatColor.YELLOW + (int) Math.round(currentHealth);
         } else {
-            if (health > maxHealth) {
-                health = (int) maxHealth;
+            if (currentHealth > maxHealth) {
+                currentHealth = (int) maxHealth;
             }
-            healthString = "" + ChatColor.GREEN + (int) Math.round(health);
+            healthString = "" + ChatColor.GREEN + (int) Math.round(currentHealth);
         }
         // Health bar shows name and current Health out of max Health
         String healthBarString = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Lv" + mobInfo.getLevel() + ChatColor.DARK_GRAY + "] " + nameString + " " + healthString + ChatColor.GRAY + "/" + ChatColor.GREEN + Math.round(maxHealth) + ChatColor.RED + "❤";
@@ -155,10 +154,9 @@ public class HealthListeners implements Listener {
      * Edits the specified LivingEntity's health bar with packets for a specific player
      *
      * @param entity The LivingEntity to update the health bar for
-     * @param health The health value to display on the health bar
      * @param player The Player to show the health bar to
      */
-    public static void updateHealthBar(Creature entity, double health, Player player) {
+    public static void updateHealthBar(Creature entity, Player player) {
         MobInfo mobInfo = entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
         if (mobInfo == null) {
             mobInfo = MobListeners.createMobInfo(entity);
@@ -166,17 +164,17 @@ public class HealthListeners implements Listener {
         }
         String nameString = "" + mobInfo.getMobBehavior().getBehaviorColor() + mobInfo.getName();
         String healthString;
-        double maxHealth = mobInfo.getMaxHealth();
-        if (health < maxHealth / 2) {
-            if (health < 0) {
-                health = 0;
+        double currentHealth = mobInfo.getCurrentHealth(), maxHealth = mobInfo.getMaxHealth();
+        if (currentHealth < maxHealth / 2) {
+            if (currentHealth < 0) {
+                currentHealth = 0;
             }
-            healthString = "" + ChatColor.YELLOW + (int) Math.round(health);
+            healthString = "" + ChatColor.YELLOW + (int) Math.round(currentHealth);
         } else {
-            if (health > maxHealth) {
-                health = (int) maxHealth;
+            if (currentHealth > maxHealth) {
+                currentHealth = (int) maxHealth;
             }
-            healthString = "" + ChatColor.GREEN + (int) Math.round(health);
+            healthString = "" + ChatColor.GREEN + (int) Math.round(currentHealth);
         }
         String healthBarString = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Lv" + mobInfo.getLevel() + ChatColor.DARK_GRAY + "] " + nameString + " " + healthString + ChatColor.GRAY + "/" + ChatColor.GREEN + Math.round(maxHealth) + ChatColor.RED + "❤";
         WrappedDataWatcher dataWatcher = WrappedDataWatcher.getEntityWatcher(entity).deepClone();
@@ -296,7 +294,7 @@ public class HealthListeners implements Listener {
             }
             mobInfo.setCurrentHealth(health);
             entity.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
-            updateHealthBar(entity, health);
+            updateHealthBar(entity);
         }
     }
 
@@ -318,7 +316,7 @@ public class HealthListeners implements Listener {
             double health = mobInfo.getCurrentHealth() + event.getAmount();
             mobInfo.setCurrentHealth(health);
             entity.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
-            updateHealthBar(entity, health);
+            updateHealthBar(entity);
         }
     }
 
@@ -387,9 +385,9 @@ public class HealthListeners implements Listener {
         finalDamage *= actualDamagePercent;
         double vanillaDamage = finalDamage;
         if(enchantHolder != null) {
-            for(int i = 0; i < enchantHolder.getEnchants().size(); i++) {
-                if(enchantHolder.getEnchants().get(i) instanceof ActionEnchantment) {
-                    ((ActionEnchantment) enchantHolder.getEnchants().get(i)).action(damager, target, vanillaDamage, critical, finalDamage);
+            for(EnchantmentObject enchant : enchantHolder.getEnchants()) {
+                if(enchant instanceof ActionEnchantment) {
+                    ((ActionEnchantment) enchant).action(damager, target, vanillaDamage, critical, finalDamage);
                 }
             }
         }
@@ -399,13 +397,12 @@ public class HealthListeners implements Listener {
         event.setDamage(vanillaDamage);
         showDamage(target, finalDamage, critical, null);
         if (targetStats != null) {
-            double health = targetStats.getCurrentHealth() - finalDamage;
-            targetStats.setCurrentHealth(health);
+            targetStats.setCurrentHealth(targetStats.getCurrentHealth() - finalDamage);
             if (target instanceof Player) {
                 target.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), (PlayerStats) targetStats);
             } else {
                 target.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), (MobInfo) targetStats);
-                updateHealthBar((Creature) target, health);
+                updateHealthBar((Creature) target);
             }
         }
         if (damager instanceof Player && ferocity > 0) {

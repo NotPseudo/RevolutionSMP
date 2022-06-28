@@ -56,7 +56,7 @@ public class MobListeners implements Listener {
         double speed = mobInfo.getSpeed();
         double defaultSpeed = entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue();
         entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(defaultSpeed * (1 + (speed / 100)));
-        HealthListeners.updateHealthBar(entity, (int) vanillaHealth);
+        HealthListeners.updateHealthBar(entity);
         return mobInfo;
     }
 

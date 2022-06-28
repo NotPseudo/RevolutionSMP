@@ -8,32 +8,28 @@ import java.util.UUID;
 
 public class ThunderlordEnchantmentObject extends EnchantmentObject implements ActionEnchantment {
 
-    private UUID lastHit;
-    private int hitCount;
-
     public ThunderlordEnchantmentObject() {
         super(EnchantmentType.THUNDERLORD);
-        hitCount = 0;
     }
 
     public ThunderlordEnchantmentObject(int level) {
         super(EnchantmentType.THUNDERLORD, level);
-        hitCount = 0;
     }
 
     @Override
     public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
-        if (lastHit == null) {
-            lastHit = target.getUniqueId();
+        UUID targetUUID = target.getUniqueId();
+        if (super.getLastHit() == null) {
+            super.setLastHit(targetUUID);
         }
-        if (!target.getUniqueId().equals(lastHit)) {
-            hitCount = 1;
-            lastHit = target.getUniqueId();
+        if (!super.getLastHit().equals(targetUUID)) {
+            super.setHitCount(0);
+            super.setLastHit(targetUUID);
             return;
         }
-        hitCount++;
-        if (hitCount >= 3) {
-            hitCount = 0;
+        super.setHitCount(super.getHitCount() + 1);
+        if (super.getHitCount() >= 3) {
+            super.setHitCount(0);
             int level = super.getLevel();
             double damagePercent;
             switch (level) {

@@ -21,27 +21,24 @@ import java.util.UUID;
 
 public class LethalityEnchantmentObject extends EnchantmentObject implements ActionEnchantment, Listener {
 
-    private HashMap<UUID, Integer> hits;
     private static final NamespacedKey mobKey = MobListeners.getMobKey();
     private static final NamespacedKey playerKey = StatsListeners.getPlayerStatsKey();
 
     public LethalityEnchantmentObject() {
         super(EnchantmentType.LETHALITY);
-        hits = new HashMap<>();
     }
 
     public LethalityEnchantmentObject(int level) {
         super(EnchantmentType.LETHALITY, level);
-        hits = new HashMap<>();
     }
 
     @Override
     public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
         UUID targetUUID = target.getUniqueId();
-        if(!hits.containsKey(targetUUID)) {
-            hits.put(targetUUID, 0);
+        if(!super.getAttacked().containsKey(targetUUID)) {
+            super.getAttacked().put(targetUUID, 0);
         }
-        if (hits.get(targetUUID) >= 4) {
+        if (super.getAttacked().get(targetUUID) >= 4) {
             return;
         }
         final MobInfo[] targetStats = {target.getPersistentDataContainer().get(mobKey, new MobInfoDataType())};
@@ -59,10 +56,10 @@ public class LethalityEnchantmentObject extends EnchantmentObject implements Act
                 percentDecrease = Math.min(0.99, level * .015);
         }
         double remainingDefense = 1 - percentDecrease;
-        if (hits.containsKey(targetUUID)) {
-            hits.put(targetUUID, hits.get(targetUUID) + 1);
+        if (super.getAttacked().containsKey(targetUUID)) {
+            super.getAttacked().put(targetUUID, super.getAttacked().get(targetUUID) + 1);
         } else {
-            hits.put(targetUUID, 1);
+            super.getAttacked().put(targetUUID, 1);
         }
         if (target instanceof Player) {
             final PlayerStats[] playerStats = {target.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType())};
@@ -74,17 +71,18 @@ public class LethalityEnchantmentObject extends EnchantmentObject implements Act
             BukkitRunnable playerLethality = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (!hits.containsKey(targetUUID)) {
+                    if (!getAttacked().containsKey(targetUUID) || target.isDead()) {
+                        getAttacked().remove(targetUUID);
                         this.cancel();
                         return;
                     }
                     playerStats[0] = target.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
                     playerStats[0].setDefenseMultiplier(playerStats[0].getDefense() / remainingDefense);
                     target.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats[0]);
-                    if (hits.get(targetUUID) - 1 == 0) {
-                        hits.remove(targetUUID);
+                    if (getAttacked().get(targetUUID) - 1 == 0) {
+                        getAttacked().remove(targetUUID);
                     } else {
-                        hits.put(targetUUID, hits.get(targetUUID) - 1);
+                        getAttacked().put(targetUUID, getAttacked().get(targetUUID) - 1);
                     }
                 }
             };
@@ -99,7 +97,7 @@ public class LethalityEnchantmentObject extends EnchantmentObject implements Act
                 @Override
                 public void run() {
                     if (target.isDead()) {
-                        hits.remove(targetUUID);
+                        getAttacked().remove(targetUUID);
                         this.cancel();
                         return;
                     }
@@ -114,7 +112,7 @@ public class LethalityEnchantmentObject extends EnchantmentObject implements Act
 
     @EventHandler
     public void onDeath(EntityDeathEvent event) {
-        hits.remove(event.getEntity().getUniqueId());
+        super.getAttacked().remove(event.getEntity().getUniqueId());
     }
 
 }

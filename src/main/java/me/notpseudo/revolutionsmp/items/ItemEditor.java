@@ -8,7 +8,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -56,6 +55,7 @@ public class ItemEditor {
         ArmorStats armorStats = itemInfo.getArmorStats();
         AbilityStats abilityStats = itemInfo.getAbilityStats();
         EnchantmentsHolder enchantmentsHolder = itemInfo.getEnchantmentsHolder();
+        AbilitiesHolder abilitiesHolder = itemInfo.getAbilitiesHolder();
         List<Component> lore = new ArrayList<>();
         Component name, rarity, damage = null, strength = null, critChance = null, critDamage = null, attackSpeed = null, ferocity = null, health = null, defense = null, speed = null, abilityDamage = null, intelligence = null, hasReforge = null;
         Component potatoDamage = Component.text(""), potatoStrength = Component.text(""), potatoHealth = Component.text(""), potatoDefense = Component.text("");
@@ -196,15 +196,14 @@ public class ItemEditor {
         }
         lore.add(Component.text(""));
         if (enchantmentsHolder != null) {
-            for(String str : enchantmentsHolder.getLoreList()) {
+            for(String str : enchantmentsHolder.getEnchantmentsLore()) {
                 lore.add(Component.text(str).decoration(TextDecoration.ITALIC, false));
             }
             lore.add(Component.text(""));
         }
-        if (itemInfo.getExtraInfo() != null) {
-            if (itemInfo.getExtraInfo().getAbilityLore() != null) {
-                lore.addAll(itemInfo.getExtraInfo().getAbilityLore());
-                lore.add(Component.text(""));
+        if (abilitiesHolder != null) {
+            for(Component component : abilitiesHolder.getAbilitiesLore()) {
+                lore.add(component.decoration(TextDecoration.ITALIC, false));
             }
         }
         if (hasReforge != null) {

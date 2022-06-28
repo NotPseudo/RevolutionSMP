@@ -23,32 +23,26 @@ import java.util.UUID;
 
 public class VenemousEnchantmentObject extends EnchantmentObject implements ActionEnchantment, Listener {
 
-    private int hitCount;
-    private ArrayList<UUID> hitUUIDS;
     private static final NamespacedKey mobKey = MobListeners.getMobKey();
     private static final NamespacedKey playerKey = StatsListeners.getPlayerStatsKey();
 
     public VenemousEnchantmentObject() {
         super(EnchantmentType.VENEMOUS);
-        hitCount = 0;
-        hitUUIDS = new ArrayList<>();
     }
 
     public VenemousEnchantmentObject(int level) {
         super(EnchantmentType.VENEMOUS, level);
-        hitCount = 0;
-        hitUUIDS = new ArrayList<>();
     }
 
     @Override
     public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
-        if (hitCount >= 40) {
+        if (super.getHitCount() >= 40) {
             return;
         }
-        hitCount++;
+        super.setHitCount(super.getHitCount() + 1);
         UUID targetUUID = target.getUniqueId();
-        if (!hitUUIDS.contains(targetUUID)) {
-            hitUUIDS.add(targetUUID);
+        if (!super.getAttacked().containsKey(targetUUID)) {
+            super.getAttacked().put(targetUUID, 0);
         }
         double damagePercent = super.getLevel() * 0.003;
         BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
@@ -70,7 +64,8 @@ public class VenemousEnchantmentObject extends EnchantmentObject implements Acti
 
             @Override
             public void run() {
-                if (!hitUUIDS.contains(targetUUID)) {
+                if (!getAttacked().containsKey(targetUUID) || target.isDead()) {
+                    getAttacked().remove(targetUUID);
                     this.cancel();
                     return;
                 }
@@ -83,7 +78,7 @@ public class VenemousEnchantmentObject extends EnchantmentObject implements Acti
                         target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(originalSpeed / 0.95 * (1 + (speed / 100)));
                     }
                     this.cancel();
-                    hitUUIDS.remove(targetUUID);
+                    getAttacked().remove(targetUUID);
                     return;
                 }
                 target.damage(damagePercent * damagePercent);
@@ -96,7 +91,7 @@ public class VenemousEnchantmentObject extends EnchantmentObject implements Acti
 
     @EventHandler
     public void onDeath(EntityDeathEvent event) {
-        hitUUIDS.remove(event.getEntity().getUniqueId());
+        super.getAttacked().remove(event.getEntity().getUniqueId());
     }
 
 }

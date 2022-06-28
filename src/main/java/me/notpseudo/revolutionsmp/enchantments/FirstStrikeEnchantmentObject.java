@@ -10,30 +10,27 @@ import java.util.UUID;
 
 public class FirstStrikeEnchantmentObject extends EnchantmentObject implements Listener {
 
-    private ArrayList<UUID> attacked;
-
     public FirstStrikeEnchantmentObject() {
         super(EnchantmentType.FIRST_STRIKE);
-        attacked = new ArrayList<>();
     }
 
     public FirstStrikeEnchantmentObject(int level) {
         super(EnchantmentType.FIRST_STRIKE, level);
-        attacked = new ArrayList<>();
     }
 
     @Override
     public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target) {
-        if (attacked.contains(target.getUniqueId())) {
+        UUID targetUUID = target.getUniqueId();
+        if (super.getAttacked().containsKey(targetUUID)) {
             return 0;
         }
-        attacked.add(target.getUniqueId());
+        super.getAttacked().put(targetUUID, 0);
         return super.getLevel() * 25;
     }
 
     @EventHandler
     public void onDeath(EntityDeathEvent event) {
-        attacked.remove(event.getEntity().getUniqueId());
+        super.getAttacked().remove(event.getEntity().getUniqueId());
     }
 
 }

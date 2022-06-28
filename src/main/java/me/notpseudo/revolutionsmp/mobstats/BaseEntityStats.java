@@ -24,6 +24,7 @@ public class BaseEntityStats implements Serializable {
      * The movement speed of the entity
      */
     private double speed;
+    private double addSpeed;
     /**
      * The strength of the entity
      */
@@ -139,11 +140,20 @@ public class BaseEntityStats implements Serializable {
         this.speed = speed;
     }
 
+    public double getAddSpeed() {
+        return addSpeed;
+    }
+
+    public void setAddSpeed(double addSpeed) {
+        this.addSpeed = addSpeed;
+    }
+
     /**
      * Returns the strength of the entity
      *
      * @return The strength of the entity
      */
+
     public double getStrength() {
         return strength;
     }
@@ -204,10 +214,10 @@ public class BaseEntityStats implements Serializable {
         int increase = level - mobBehavior.getLowestLevel();
         maxHealth = customMobType.getHealth() + (increase * customMobType.getHealth() / 10);
         currentHealth = maxHealth;
-        defense = customMobType.getDefense() + (increase * customMobType.getDefense() / 10);
-        speed = customMobType.getSpeed() + (increase * customMobType.getSpeed() / 10);
+        defense = customMobType.getDefense() + (increase * customMobType.getDefense() / (100 / 7.5));
+        speed = customMobType.getSpeed() + (increase * customMobType.getSpeed() / 50);
         strength = customMobType.getStrength() + (increase * customMobType.getStrength() / 10);
-        critChance = customMobType.getCritChance() + (increase * customMobType.getCritChance() / 10);
+        critChance = customMobType.getCritChance() + (increase * customMobType.getCritChance() / 20);
         critDamage = customMobType.getCritDamage() + (increase * customMobType.getCritDamage() / 10);
     }
 }

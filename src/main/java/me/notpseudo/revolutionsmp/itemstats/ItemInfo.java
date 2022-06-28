@@ -1,7 +1,8 @@
 package me.notpseudo.revolutionsmp.itemstats;
 
+import me.notpseudo.revolutionsmp.abilities.AbilityType;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
-import me.notpseudo.revolutionsmp.extraiteminfo.ExtraItemInfo;
+import me.notpseudo.revolutionsmp.specialiteminfo.SpecialItemInfo;
 import me.notpseudo.revolutionsmp.items.*;
 
 import java.io.Serializable;
@@ -20,7 +21,8 @@ public class ItemInfo implements Serializable {
     private ArmorStats armorStats;
     private AbilityStats abilityStats;
     private EnchantmentsHolder enchantmentsHolder;
-    private ExtraItemInfo extraInfo;
+    private AbilitiesHolder abilitiesHolder;
+    private SpecialItemInfo extraInfo;
 
     public ItemInfo(ItemID itemID) {
         this.itemID = itemID;
@@ -33,8 +35,20 @@ public class ItemInfo implements Serializable {
         weaponStats = itemID.getDefaultWeaponStats();
         armorStats = itemID.getDefaultArmorStats();
         abilityStats = itemID.getDefaultAbilityStats();
-        enchantmentsHolder = null;
-        extraInfo = itemID.getDefaultExtraInfo();
+        if (itemID.getItemType().allowEnchants()) {
+            enchantmentsHolder = new EnchantmentsHolder();
+        } else {
+            enchantmentsHolder = null;
+        }
+        if (itemID.getItemType().allowAbilities()) {
+            abilitiesHolder = new AbilitiesHolder(this);
+            for(AbilityType type : itemID.getDefaultAbilities()) {
+                abilitiesHolder.addAbility(type);
+            }
+        } else {
+            abilitiesHolder = null;
+        }
+        extraInfo = itemID.getSpecialItemInfo();
         recalculate();
     }
 
@@ -88,10 +102,8 @@ public class ItemInfo implements Serializable {
     }
 
     public void setPotatoBooks(int potatoBooks) {
-        if (potatoBooks <= 15) {
-            this.potatoBooks = potatoBooks;
-            recalculate();
-        }
+        this.potatoBooks = potatoBooks;
+        recalculate();
     }
 
     public ItemID getItemID() {
@@ -139,11 +151,15 @@ public class ItemInfo implements Serializable {
         recalculate();
     }
 
-    public ExtraItemInfo getExtraInfo() {
+    public AbilitiesHolder getAbilitiesHolder() {
+        return abilitiesHolder;
+    }
+
+    public SpecialItemInfo getExtraInfo() {
         return extraInfo;
     }
 
-    public void setExtraInfo(ExtraItemInfo extraInfo) {
+    public void setExtraInfo(SpecialItemInfo extraInfo) {
         this.extraInfo = extraInfo;
         recalculate();
     }
@@ -152,23 +168,26 @@ public class ItemInfo implements Serializable {
         weaponStats = itemID.getDefaultWeaponStats();
         armorStats = itemID.getDefaultArmorStats();
         abilityStats = itemID.getDefaultAbilityStats();
-        if(reforge != null) {
+        if (reforge != null) {
             weaponStats.combine(reforge.getWeaponStats(rarity));
             armorStats.combine(reforge.getArmorStats(rarity));
             abilityStats.combine(reforge.getAbilityStats(rarity));
         }
-        if(enchantmentsHolder != null) {
-            for(EnchantmentObject enchant : enchantmentsHolder.getEnchants()) {
+        if (enchantmentsHolder != null) {
+            for (EnchantmentObject enchant : enchantmentsHolder.getEnchants()) {
                 weaponStats.combine(enchant.getType().getApplyWeaponStats(enchant.getLevel()));
                 armorStats.combine(enchant.getType().getApplyArmorStats(enchant.getLevel()));
                 abilityStats.combine(enchant.getType().getApplyAbilityStats(enchant.getLevel()));
             }
         }
-        if(ItemEditor.isWeapon(this)) {
+        if (abilitiesHolder != null) {
+            abilitiesHolder.reorganize();
+        }
+        if (ItemEditor.isWeapon(this)) {
             weaponStats.setDamage(weaponStats.getDamage() + potatoBooks * 2);
             weaponStats.setStrength(weaponStats.getStrength() + potatoBooks * 2);
         }
-        if(ItemEditor.isArmor(this)) {
+        if (ItemEditor.isArmor(this)) {
             armorStats.setHealth(armorStats.getHealth() + potatoBooks * 4);
             armorStats.setDefense(armorStats.getDefense() + potatoBooks * 2);
         }

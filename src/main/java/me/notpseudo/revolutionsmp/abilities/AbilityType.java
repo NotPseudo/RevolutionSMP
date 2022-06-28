@@ -3,102 +3,157 @@ package me.notpseudo.revolutionsmp.abilities;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // Enum of abilities that can be placed on items
 public enum AbilityType {
-  INSTANT_TRANSMISSION {
-    @Override
-    public void use(Player player) {
-      Abilities.instantTransmission(player);
-    }
-    @Override
-    public String getAbilityName() {
-      return "Instant Transmission";
-    }
-    @Override
-    public AbilityUseType getAbilityType() {
-      return AbilityUseType.RIGHT_CLICK;
-    }
-    @Override
-    public List<Component> getAbilityInfo() {
-      return null;
-    }
-  },
-  WITHER_IMPACT {
-    @Override
+    INSTANT_TRANSMISSION {
+        @Override
+        public List<Component> getAbilityInfo() {
+            return null;
+        }
+
+        @Override
+        public double getManaCost() {
+            return 100;
+        }
+
+        @Override
+        public AbilityObject createObject() {
+            return new InstantTransmissionObject();
+        }
+    },
+    WITHER_IMPACT {
+        @Override
+        public void use(Player player) {
+
+        }
+
+        @Override
+        public double getManaCost() {
+            return 300;
+        }
+
+        @Override
+        public double getBaseAbilityDamage() {
+            return 10000;
+        }
+
+        @Override
+        public double getAbilityScaling() {
+            return 0.3;
+        }
+
+
+    },
+    IMPLOSION {
+        @Override
+        public void use(Player player) {
+
+        }
+
+        @Override
+        public double getManaCost() {
+            return 300;
+        }
+
+        @Override
+        public double getBaseAbilityDamage() {
+            return 10000;
+        }
+
+        @Override
+        public double getAbilityScaling() {
+            return 0.3;
+        }
+    },
+    WITHER_SHIELD {
+        @Override
+        public void use(Player player) {
+
+        }
+
+        @Override
+        public double getManaCost() {
+            return 300;
+        }
+
+        @Override
+        public double getBaseAbilityDamage() {
+            return 10000;
+        }
+
+        @Override
+        public double getAbilityScaling() {
+            return 0.3;
+        }
+
+    },
+    SHADOW_WARP {
+        @Override
+        public void use(Player player) {
+
+        }
+
+        @Override
+        public double getManaCost() {
+            return 300;
+        }
+
+        @Override
+        public double getBaseAbilityDamage() {
+            return 10000;
+        }
+
+        @Override
+        public double getAbilityScaling() {
+            return 0.3;
+        }
+
+    };
+
     public void use(Player player) {
 
     }
-    @Override
-    public String getAbilityName() {
-      return "Wither Impact";
-    }
-    @Override
-    public AbilityUseType getAbilityType() {
-      return AbilityUseType.RIGHT_CLICK;
-    }
-    @Override
-    public List<Component> getAbilityInfo() {
-      return null;
-    }
-  },
-  IMPLOSION {
-    @Override
-    public void use(Player player) {
 
+    public String toString() {
+        String[] split = super.toString().split("_");
+        StringBuilder name = new StringBuilder();
+        for (int i = 0; i < split.length; i++) {
+            name.append(split[i].charAt(0)).append(split[i].substring(1).toLowerCase());
+            if (i < split.length - 1) {
+                name.append(" ");
+            }
+        }
+        return name.toString();
     }
-    @Override
-    public String getAbilityName() {
-      return "Implosion";
-    }
-    @Override
-    public AbilityUseType getAbilityType() {
-      return AbilityUseType.RIGHT_CLICK;
-    }
-    @Override
-    public List<Component> getAbilityInfo() {
-      return null;
-    }
-  },
-  WITHER_SHIELD {
-    @Override
-    public void use(Player player) {
 
+    public double getManaCost() {
+        return 0;
     }
-    @Override
-    public String getAbilityName() {
-      return "Wither Shield";
-    }
-    @Override
-    public AbilityUseType getAbilityType() {
-      return AbilityUseType.RIGHT_CLICK;
-    }
-    @Override
-    public List<Component> getAbilityInfo() {
-      return null;
-    }
-  },
-  SHADOW_WARP {
-    @Override
-    public void use(Player player) {
 
+    public double getBaseAbilityDamage() {
+        return 0;
     }
-    @Override
-    public String getAbilityName() {
-      return "Shadow Warp";
+
+    public double getAbilityScaling() {
+        return 0;
     }
-    @Override
-    public AbilityUseType getAbilityType() {
-      return AbilityUseType.RIGHT_CLICK;
+
+    public ArrayList<Component> getDescription() {
+        return new ArrayList<>();
     }
-    @Override
+
+    public AbilityUseType getAbilityUseType() {
+        return AbilityUseType.RIGHT_CLICK;
+    }
+
+    public AbilityObject createObject() {
+        return new AbilityObject(valueOf(name()));
+    }
+
     public List<Component> getAbilityInfo() {
-      return null;
+        return new ArrayList<>();
     }
-  };
-  public abstract void use(Player player); // Method to use an ability
-  public abstract String getAbilityName();
-  public abstract AbilityUseType getAbilityType();
-  public abstract List<Component> getAbilityInfo();
 }

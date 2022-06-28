@@ -2,12 +2,14 @@ package me.notpseudo.revolutionsmp.listeners;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.abilities.AbilityType;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStatsDataType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -22,6 +24,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -39,6 +43,9 @@ public class StatsListeners implements Listener {
      * The NamedspacedKey from the ItemEditor class used to access ItemStats stored in Persistent Data
      */
     private final static NamespacedKey itemKey = ItemEditor.getItemKey();
+
+    private static ArrayList<UUID> showAbilities = new ArrayList<UUID>();
+    private static ArrayList<UUID> noMana = new ArrayList<UUID>();
 
     /**
      * Holds an instance of the plugin
@@ -234,7 +241,7 @@ public class StatsListeners implements Listener {
         playerStats.setCurrentHealth(healthPercent * maxHealth);
         playerStats.setMaxHealth(maxHealth);
         playerStats.setDefense(defense * playerStats.getDefenseMultiplier());
-        playerStats.setSpeed(speed * playerStats.getSpeedMultiplier());
+        playerStats.setSpeed((speed + playerStats.getAddSpeed()) * playerStats.getSpeedMultiplier());
         playerStats.setStrength(strength);
         playerStats.setCritChance(critChance);
         playerStats.setCritDamage(critDamage);
@@ -242,7 +249,7 @@ public class StatsListeners implements Listener {
         playerStats.setFerocity(ferocity);
         playerStats.setIntelligence(intelligence);
         playerStats.setAbilityDamage(abilityDamage);
-        player.setWalkSpeed((float) (speed * playerStats.getSpeedMultiplier() / 500));
+        player.setWalkSpeed((float) ((speed + playerStats.getAddSpeed()) * playerStats.getSpeedMultiplier() / 500));
         player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4 * (1 + (attackSpeed / 100)));
         player.getPersistentDataContainer().set(playerStatsKey, new PlayerStatsDataType(), playerStats);
     }
@@ -273,8 +280,8 @@ public class StatsListeners implements Listener {
         if (mana != intelligence) {
             // If current Mana is not already full
             // Amount of Mana to add is 2% of max Mana
-            double addMana = intelligence * 0.02;
-            double finalMana = (Math.min(mana + addMana, intelligence)) * playerStats.getManaRegenRate();
+            double addMana = intelligence * 0.02 * playerStats.getManaRegenRate();
+            double finalMana = (Math.min(mana + addMana, intelligence));
             playerStats.setMana(finalMana);
         }
         player.getPersistentDataContainer().set(playerStatsKey, new PlayerStatsDataType(), playerStats);
@@ -286,6 +293,9 @@ public class StatsListeners implements Listener {
      * @param player The Player to show the stats to
      */
     public static void showActionBar(Player player) {
+        if(showAbilities.contains(player.getUniqueId()) || noMana.contains(player.getUniqueId())) {
+            return;
+        }
         PlayerStats playerStats = player.getPersistentDataContainer().get(playerStatsKey, new PlayerStatsDataType());
         if (playerStats == null) {
             playerStats = new PlayerStats();
@@ -300,6 +310,57 @@ public class StatsListeners implements Listener {
         }
         // Shows player their current Health out of max Health, Defense, and current Mana out of max Mana
         player.sendActionBar(Component.text(Math.round(currentHealth + currentAbsorption) + "/" + Math.round(maxHealth) + "❤     ", healthColor).append(Component.text(Math.round(defense) + "❈ Defense     ", NamedTextColor.GREEN)).append(Component.text(Math.round(mana) + "/" + Math.round(intelligence) + "✎ Mana", NamedTextColor.AQUA)));
+    }
+
+    public static void showAbilityActionBar(Player player, AbilityType type, double cost) {
+        PlayerStats playerStats = player.getPersistentDataContainer().get(playerStatsKey, new PlayerStatsDataType());
+        if (playerStats == null) {
+            playerStats = new PlayerStats();
+        }
+        double currentHealth = playerStats.getCurrentHealth(), maxHealth = playerStats.getMaxHealth(), intelligence = playerStats.getIntelligence(), mana = playerStats.getMana();
+        NamedTextColor healthColor = NamedTextColor.RED;
+        double currentAbsorption = player.getAbsorptionAmount();
+        if (currentAbsorption != 0) {
+            healthColor = NamedTextColor.GOLD;
+        }
+        player.sendActionBar(Component.text(Math.round(currentHealth + currentAbsorption) + "/" + Math.round(maxHealth) + "❤     ", healthColor)
+                .append(Component.text("-" + Math.round(cost) + " Mana (", NamedTextColor.AQUA))
+                .append(Component.text(type.toString(), NamedTextColor.GOLD)).append(Component.text(")     ", NamedTextColor.AQUA)
+                        .append(Component.text(Math.round(mana) + "/" + Math.round(intelligence) + "✎ Mana", NamedTextColor.AQUA))));
+        showAbilities.add(player.getUniqueId());
+        BukkitRunnable remove = new BukkitRunnable() {
+            @Override
+            public void run() {
+                showAbilities.remove(player.getUniqueId());
+            }
+        };
+        remove.runTaskLater(RevolutionSMP.getPlugin(), 30);
+        showActionBar(player);
+    }
+
+    public static void showNoManaActionBar(Player player) {
+        PlayerStats playerStats = player.getPersistentDataContainer().get(playerStatsKey, new PlayerStatsDataType());
+        if (playerStats == null) {
+            playerStats = new PlayerStats();
+        }
+        double currentHealth = playerStats.getCurrentHealth(), maxHealth = playerStats.getMaxHealth(), defense = playerStats.getDefense();
+        NamedTextColor healthColor = NamedTextColor.RED;
+        double currentAbsorption = player.getAbsorptionAmount();
+        if (currentAbsorption != 0) {
+            healthColor = NamedTextColor.GOLD;
+        }
+        player.sendActionBar(Component.text(Math.round(currentHealth + currentAbsorption) + "/" + Math.round(maxHealth) + "❤     ", healthColor)
+                .append(Component.text(Math.round(defense) + "❈ Defense     ", NamedTextColor.GREEN))
+                .append(Component.text("NOT ENOUGH MANA", NamedTextColor.RED, TextDecoration.BOLD)));
+        noMana.add(player.getUniqueId());
+        BukkitRunnable remove = new BukkitRunnable() {
+            @Override
+            public void run() {
+                noMana.remove(player.getUniqueId());
+            }
+        };
+        remove.runTaskLater(RevolutionSMP.getPlugin(), 30);
+        showActionBar(player);
     }
 
     /**

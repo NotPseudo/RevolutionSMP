@@ -1,11 +1,16 @@
 package me.notpseudo.revolutionsmp.items;
 
-import me.notpseudo.revolutionsmp.extraiteminfo.AspectOfTheEndInfo;
-import me.notpseudo.revolutionsmp.extraiteminfo.ExtraItemInfo;
+import me.notpseudo.revolutionsmp.abilities.AbilityObject;
+import me.notpseudo.revolutionsmp.abilities.AbilityType;
+import me.notpseudo.revolutionsmp.specialiteminfo.SpecialItemInfo;
 import me.notpseudo.revolutionsmp.itemstats.AbilityStats;
 import me.notpseudo.revolutionsmp.itemstats.ArmorStats;
 import me.notpseudo.revolutionsmp.itemstats.WeaponStats;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 // Enum used to identify the exact custom item type an item is
 public enum ItemID {
@@ -260,8 +265,8 @@ public enum ItemID {
         }
 
         @Override
-        public ExtraItemInfo getDefaultExtraInfo() {
-            return new AspectOfTheEndInfo();
+        public List<AbilityType> getDefaultAbilities() {
+            return List.of(AbilityType.INSTANT_TRANSMISSION);
         }
 
         @Override
@@ -371,11 +376,15 @@ public enum ItemID {
         return new AbilityStats(0, 0);
     }
 
+    public List<AbilityType> getDefaultAbilities() {
+        return new ArrayList<>();
+    }
+
     public boolean isUnbreakable() {
         return true;
     }
 
-    public ExtraItemInfo getDefaultExtraInfo() {
+    public SpecialItemInfo getSpecialItemInfo() {
         return null;
     }
 
