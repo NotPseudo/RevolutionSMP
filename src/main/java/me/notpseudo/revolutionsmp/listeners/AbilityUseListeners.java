@@ -53,14 +53,8 @@ public class AbilityUseListeners implements Listener {
             PlayerStats playerStats = player.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
             for(AbilityObject ability : abilitiesHolder.getAbilities()) {
                 if(ability.getAbilityType().getAbilityUseType() == useType) {
-                    if(playerStats.getMana() - ability.getManaCost() >= 0) {
+                    if(ability.canUse(player)) {
                         ability.use(player);
-                        playerStats.setMana(playerStats.getMana() - ability.getManaCost());
-                        player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
-                        StatsListeners.showAbilityActionBar(player, ability.getAbilityType(), ability.getManaCost());
-                    } else {
-                        StatsListeners.showNoManaActionBar(player);
-                        player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1F, 0.5F);
                     }
                 }
             }

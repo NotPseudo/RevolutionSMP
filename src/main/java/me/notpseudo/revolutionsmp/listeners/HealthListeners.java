@@ -277,12 +277,23 @@ public class HealthListeners implements Listener {
      */
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Creature) {
+        if (event.getEntity() instanceof Creature entity) {
             if (event instanceof EntityDamageByEntityEvent) {
                 return;
             }
-            Creature entity = (Creature) event.getEntity();
-            if (entity instanceof Player) return;
+            if (entity instanceof Player player) {
+                double damage = calculateDamageAfterAbsorption(event.getDamage(), player);
+                if(damage > 0) {
+                    PlayerStats playerStats = player.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
+                    playerStats.setCurrentHealth(playerStats.getCurrentHealth() - damage);
+                    if(playerStats.getMaxHealth() > 2048) {
+                        damage = damage / playerStats.getMaxHealth() * 2048;
+                    }
+                    event.setDamage(damage);
+                    player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
+                    return;
+                }
+            }
             MobInfo mobInfo = entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
             if (mobInfo == null) {
                 mobInfo = MobListeners.createMobInfo(entity);
@@ -305,9 +316,19 @@ public class HealthListeners implements Listener {
      */
     @EventHandler
     public void onRegen(EntityRegainHealthEvent event) {
-        if (event.getEntity() instanceof Creature) {
-            Creature entity = (Creature) event.getEntity();
-            if (entity instanceof Player) return;
+        if (event.getEntity() instanceof Creature entity) {
+            if (entity instanceof Player player) {
+                PlayerStats playerStats = player.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
+                if(playerStats == null) {
+                    playerStats = new PlayerStats();
+                }
+                double regenAmount = event.getAmount();
+                if(playerStats.getMaxHealth() > 2048) {
+                    regenAmount = regenAmount / 2048 * playerStats.getMaxHealth();
+                    player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
+                }
+                return;
+            }
             MobInfo mobInfo = entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
             if (mobInfo == null) {
                 mobInfo = MobListeners.createMobInfo(entity);
@@ -327,9 +348,9 @@ public class HealthListeners implements Listener {
      */
     @EventHandler
     public void onDamageEntity(EntityDamageByEntityEvent event) {
-        if (!(event.getEntity() instanceof LivingEntity) || !(event.getDamager() instanceof LivingEntity || event.getDamager() instanceof Arrow))
+        if (!(event.getEntity() instanceof LivingEntity target) || !(event.getDamager() instanceof LivingEntity || event.getDamager() instanceof Arrow))
             return;
-        LivingEntity target = (LivingEntity) event.getEntity(), damager = null;
+        LivingEntity damager = null;
         if (event.getDamager() instanceof LivingEntity) {
             damager = (LivingEntity) event.getDamager();
         } else if (event.getDamager() instanceof Arrow) {
@@ -338,12 +359,11 @@ public class HealthListeners implements Listener {
             }
         }
         // Sets base stat values
-        double weaponDamage =  event.getDamage(), strength = 0, critDamage = 50, critChance = 30, defense = 0, actualDamagePercent = 1, ferocity = 0, enchantAddPercent = 0;
+        double weaponDamage =  event.getDamage(), strength = 0, critDamage = 50, critChance = 30, defense = 0, actualDamagePercent = 1, ferocity = 0, enchantAddPercent = 0, damageTakenMultiplier = 1;
         EnchantmentsHolder enchantHolder = null;
         BaseEntityStats damagerStats = damager.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
         BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
-        if (damager instanceof Player) {
-            Player player = (Player) damager;
+        if (damager instanceof Player player) {
             if (player.getInventory().getItemInMainHand().getType() != Material.AIR && player.getInventory().getItemInMainHand().getItemMeta() != null) {
                 ItemMeta mainHandMeta = player.getInventory().getItemInMainHand().getItemMeta();
                 if (mainHandMeta != null) {
@@ -366,6 +386,7 @@ public class HealthListeners implements Listener {
         }
         if (target instanceof Player) {
             targetStats = target.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
+            damageTakenMultiplier = ((PlayerStats) targetStats).getDamageTakenMultiplier();
         }
         if (damagerStats != null) {
             strength = damagerStats.getStrength();
@@ -382,8 +403,9 @@ public class HealthListeners implements Listener {
         }
         double finalDamage = ((weaponDamage + 5) * (1 + (strength / 100))) * (1 + (critDamage / 100)) * (1 + (enchantAddPercent / 100));
         actualDamagePercent = 1 - (defense / (defense + 100));
-        finalDamage *= actualDamagePercent;
+        finalDamage *= actualDamagePercent * damageTakenMultiplier;
         double vanillaDamage = finalDamage;
+        double remainDamage = finalDamage;
         if(enchantHolder != null) {
             for(EnchantmentObject enchant : enchantHolder.getEnchants()) {
                 if(enchant instanceof ActionEnchantment) {
@@ -391,13 +413,17 @@ public class HealthListeners implements Listener {
                 }
             }
         }
+        if(target instanceof Player player) {
+            remainDamage = calculateDamageAfterAbsorption(finalDamage, player);
+            vanillaDamage = remainDamage;
+        }
         if (targetStats != null && targetStats.getMaxHealth() > 2048) {
             vanillaDamage = finalDamage / targetStats.getMaxHealth() * 2048;
         }
         event.setDamage(vanillaDamage);
         showDamage(target, finalDamage, critical, null);
         if (targetStats != null) {
-            targetStats.setCurrentHealth(targetStats.getCurrentHealth() - finalDamage);
+            targetStats.setCurrentHealth(targetStats.getCurrentHealth() - remainDamage);
             if (target instanceof Player) {
                 target.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), (PlayerStats) targetStats);
             } else {
@@ -448,6 +474,29 @@ public class HealthListeners implements Listener {
             }
         };
         feroHit.runTaskTimer(plugin, 2, 1);
+    }
+
+    private static double calculateDamageAfterAbsorption(double damage, Player player) {
+        PlayerStats playerStats = player.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
+        if(playerStats == null) {
+            playerStats = new PlayerStats();
+        }
+        double remainAbsorption = player.getAbsorptionAmount() - damage;
+        if(remainAbsorption - damage <= 0) {
+            playerStats.setAbsorption(0);
+            player.setAbsorptionAmount(0);
+            player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
+            return damage - playerStats.getAbsorption();
+        } else {
+            playerStats.setAbsorption(remainAbsorption);
+            if(remainAbsorption >= 40) {
+                player.setAbsorptionAmount(40);
+            } else {
+                player.setAbsorptionAmount(remainAbsorption);
+            }
+            player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
+            return 0;
+        }
     }
 
 }

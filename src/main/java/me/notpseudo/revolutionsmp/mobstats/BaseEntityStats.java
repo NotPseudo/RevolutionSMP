@@ -24,7 +24,6 @@ public class BaseEntityStats implements Serializable {
      * The movement speed of the entity
      */
     private double speed;
-    private double addSpeed;
     /**
      * The strength of the entity
      */
@@ -138,14 +137,6 @@ public class BaseEntityStats implements Serializable {
      */
     public void setSpeed(double speed) {
         this.speed = speed;
-    }
-
-    public double getAddSpeed() {
-        return addSpeed;
-    }
-
-    public void setAddSpeed(double addSpeed) {
-        this.addSpeed = addSpeed;
     }
 
     /**

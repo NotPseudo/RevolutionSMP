@@ -84,8 +84,8 @@ public class InfernoEnchantmentObject extends EnchantmentObject implements Actio
             double damagePercent = 1 + (super.getLevel() * 0.25);
             BaseEntityStats finalTargetStats = targetStats;
             double finalSpeed = speed, finalVanillaMoveSpeed = vanillaMoveSpeed, finalVanillaFlySpeed = vanillaFlySpeed;
-            Particles.dualSpiralUp(Particle.FLAME, target, 1, target.getHeight(), 5);
-            Particles.dualSpiralUp(Particle.DRIP_LAVA, target, 1, target.getHeight(), 5);
+            Particles.dualSpiralUp(Particle.FLAME, target, 1, target.getHeight(), 5, 0);
+            Particles.dualSpiralUp(Particle.DRIP_LAVA, target, 1, target.getHeight(), 5, 0);
             BukkitRunnable inferno = new BukkitRunnable() {
 
                 int count = 0;

@@ -32,7 +32,10 @@ public final class RevolutionSMP extends JavaPlugin {
         new PotatoBookCommand(this);
         new ReforgeCommand(this);
         new EnchantCommand(this);
+        new AddAbilityCommand(this);
+        new EditAbilityCommand(this);
         new ViewItemStatsCommand(this);
+        new ParticleTestCommand(this);
         WeaponCreator.createWeapons();
         ArmorCreator.createArmors();
         AbilitiesUtil.createPassSet();

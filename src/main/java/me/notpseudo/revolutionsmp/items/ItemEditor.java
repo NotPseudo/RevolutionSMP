@@ -1,6 +1,8 @@
 package me.notpseudo.revolutionsmp.items;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.abilities.AbilityObject;
+import me.notpseudo.revolutionsmp.abilities.AbilityType;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentType;
 import me.notpseudo.revolutionsmp.itemstats.*;
@@ -336,6 +338,50 @@ public class ItemEditor {
         meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), itemInfo);
         updateLore(meta);
         item.setItemMeta(meta);
+    }
+
+    public static void addAbility(ItemStack item, AbilityType type) {
+        ItemMeta meta = item.getItemMeta();
+        ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        if (itemInfo == null) {
+            return;
+        }
+        AbilitiesHolder abilityHolder = itemInfo.getAbilitiesHolder();
+        if (abilityHolder == null) {
+            abilityHolder = new AbilitiesHolder(itemInfo);
+        }
+        abilityHolder.addAbility(type);
+        itemInfo.setAbilitiesHolder(abilityHolder);
+        meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), itemInfo);
+        updateLore(meta);
+        item.setItemMeta(meta);
+    }
+
+    public static void editManaMultiplier(ItemStack item, double multiplier) {
+        ItemMeta meta = item.getItemMeta();
+        ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        if (itemInfo == null) {
+            return;
+        }
+        AbilitiesHolder abilityHolder = itemInfo.getAbilitiesHolder();
+        if (abilityHolder == null) {
+            abilityHolder = new AbilitiesHolder(itemInfo);
+        }
+        abilityHolder.setManaMultiplier(multiplier);
+    }
+
+    public static void editCooldownMultiplier(ItemStack item, double multiplier) {
+        ItemMeta meta = item.getItemMeta();
+        ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        if (itemInfo == null) {
+            return;
+        }
+        AbilitiesHolder abilityHolder = itemInfo.getAbilitiesHolder();
+        if (abilityHolder == null) {
+            abilityHolder = new AbilitiesHolder(itemInfo);
+        }
+        abilityHolder.setCooldownMultiplier(multiplier);
+        abilityHolder.reorganize();
     }
 
     /**

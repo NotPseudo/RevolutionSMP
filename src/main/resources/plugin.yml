@@ -50,3 +50,14 @@ commands:
       - viewitemstats
       - iteminfo
     usage: /itemstats
+  addability:
+    description: Adds ab ability to the item the player is holding
+    usage: /addability <AbilityType>
+    aliases:
+      - ability
+  editability:
+    description: Edits abilities stored on the item the player is holding
+    usage: /editability [mana | cooldown] <number>
+  particletest:
+    description: USed to test particle effects
+    usage: /particletest

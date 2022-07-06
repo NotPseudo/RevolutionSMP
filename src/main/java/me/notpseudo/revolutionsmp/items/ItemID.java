@@ -15,10 +15,6 @@ import java.util.List;
 // Enum used to identify the exact custom item type an item is
 public enum ItemID {
     STORM_CHESTPLATE {
-        @Override
-        public String getDefaultName() {
-            return "Storm's Chestplate";
-        }
 
         @Override
         public ItemType getItemType() {
@@ -47,10 +43,6 @@ public enum ItemID {
 
     },
     STORM_LEGGINGS {
-        @Override
-        public String getDefaultName() {
-            return "Storm's Leggings";
-        }
 
         @Override
         public ItemType getItemType() {
@@ -79,10 +71,6 @@ public enum ItemID {
 
     },
     STORM_BOOTS {
-        @Override
-        public String getDefaultName() {
-            return "Storm's Boots";
-        }
 
         @Override
         public ItemType getItemType() {
@@ -111,10 +99,6 @@ public enum ItemID {
 
     },
     HYPERION {
-        @Override
-        public String getDefaultName() {
-            return "Hyperion";
-        }
 
         @Override
         public ItemType getItemType() {
@@ -143,10 +127,6 @@ public enum ItemID {
 
     },
     VALKYRIE {
-        @Override
-        public String getDefaultName() {
-            return "Valkyrie";
-        }
 
         @Override
         public ItemType getItemType() {
@@ -175,10 +155,6 @@ public enum ItemID {
 
     },
     SCYLLA {
-        @Override
-        public String getDefaultName() {
-            return "Scylla";
-        }
 
         @Override
         public ItemType getItemType() {
@@ -207,10 +183,6 @@ public enum ItemID {
 
     },
     ASTRAEA {
-        @Override
-        public String getDefaultName() {
-            return "Astraea";
-        }
 
         @Override
         public ItemType getItemType() {
@@ -275,10 +247,6 @@ public enum ItemID {
         }
     },
     JUJU_SHORTBOW {
-        @Override
-        public String getDefaultName() {
-            return "Juju Shortbow";
-        }
 
         @Override
         public ItemType getItemType() {
@@ -302,10 +270,6 @@ public enum ItemID {
 
     },
     TERMINATOR {
-        @Override
-        public String getDefaultName() {
-            return "Terminator";
-        }
 
         @Override
         public ItemType getItemType() {
@@ -353,10 +317,41 @@ public enum ItemID {
         public ItemStack getItem() {
             return WeaponCreator.noDamage;
         }
+    },
+    GYROKINETIC_WAND {
+        @Override
+        public ItemType getItemType() {
+            return ItemType.WAND;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.EPIC;
+        }
+
+        @Override
+        public List<AbilityType> getDefaultAbilities() {
+            return List.of(AbilityType.GRAVITY_STORM);
+        }
+
+        @Override
+        public ItemStack getItem() {
+            return WeaponCreator.gyro;
+        }
     };
 
     // Gets default stats for specific item
-    public abstract String getDefaultName();
+    public String getDefaultName() {
+        String[] split = super.toString().split("_");
+        StringBuilder name = new StringBuilder();
+        for (int i = 0; i < split.length; i++) {
+            name.append(split[i].charAt(0)).append(split[i].substring(1).toLowerCase());
+            if (i < split.length - 1) {
+                name.append(" ");
+            }
+        }
+        return name.toString();
+    }
 
     public abstract ItemType getItemType();
 

@@ -21,6 +21,8 @@ public class WeaponCreator {
     public static ItemStack terminator;
     public static ItemStack noDamage;
 
+    public static ItemStack gyro;
+
     public static void createWeapons() {
         hyperion();
         valkyrie();
@@ -30,6 +32,7 @@ public class WeaponCreator {
         jujuShortbow();
         terminator();
         noDamage();
+        gyro();
     }
 
     private static void hyperion() {
@@ -101,6 +104,14 @@ public class WeaponCreator {
         meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), new ItemInfo(ItemID.NODAMAGE));
         ItemEditor.updateLore(meta);
         noDamage.setItemMeta(meta);
+    }
+
+    private static void gyro() {
+        gyro = new ItemStack(Material.BLAZE_ROD, 1);
+        ItemMeta meta = gyro.getItemMeta();
+        meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), new ItemInfo(ItemID.GYROKINETIC_WAND));
+        ItemEditor.updateLore(meta);
+        gyro.setItemMeta(meta);
     }
 
 }

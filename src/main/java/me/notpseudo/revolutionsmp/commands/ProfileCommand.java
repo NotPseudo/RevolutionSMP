@@ -38,8 +38,8 @@ public class ProfileCommand implements CommandExecutor {
             player.sendMessage("Ferocity: " + playerStats.getFerocity());
             player.sendMessage("Intelligence: " + playerStats.getIntelligence());
             player.sendMessage("Ability Damage: " + playerStats.getAbilityDamage());
-
-
+            player.sendMessage("Damage Taken Multiplier: " + playerStats.getDamageTakenMultiplier());
+            player.sendMessage("Absorption: " + playerStats.getAbsorption());
         }
         return true;
     }

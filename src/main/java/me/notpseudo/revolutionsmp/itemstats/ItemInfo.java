@@ -155,6 +155,11 @@ public class ItemInfo implements Serializable {
         return abilitiesHolder;
     }
 
+    public void setAbilitiesHolder(AbilitiesHolder abilitiesHolder) {
+        this.abilitiesHolder = abilitiesHolder;
+        recalculate();
+    }
+
     public SpecialItemInfo getExtraInfo() {
         return extraInfo;
     }

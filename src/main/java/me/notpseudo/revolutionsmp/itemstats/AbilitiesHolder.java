@@ -6,19 +6,25 @@ import me.notpseudo.revolutionsmp.abilities.AbilityUseType;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentType;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AbilitiesHolder implements Serializable {
 
     private ArrayList<AbilityObject> abilities;
     private ItemInfo holder;
+    private double manaMultiplier;
+    private double cooldownMultiplier;
 
     public AbilitiesHolder(ItemInfo holder) {
         abilities = new ArrayList<>();
         this.holder = holder;
+        manaMultiplier = 1;
+        cooldownMultiplier = 1;
     }
 
     public ArrayList<AbilityObject> getAbilities() {
@@ -29,9 +35,34 @@ public class AbilitiesHolder implements Serializable {
         return holder;
     }
 
+
+    public double getManaMultiplier() {
+        return manaMultiplier;
+    }
+
+    public void setManaMultiplier(double manaMultiplier) {
+        this.manaMultiplier = manaMultiplier;
+        reorganize();
+    }
+
+    public double getCooldownMultiplier() {
+        return cooldownMultiplier;
+    }
+
+    public void setCooldownMultiplier(double cooldownMultiplier) {
+        this.cooldownMultiplier = cooldownMultiplier;
+        reorganize();
+    }
+
     public void addAbility(AbilityType type) {
         if(!containsAbility(type)) {
             abilities.add(type.createObject());
+        }
+        int totalWitherScrollAbilityCount = (int) Arrays.stream(AbilityType.values()).filter(AbilityType::isWitherScrollAbility).count() - 1;
+        int heldWitherScrollAbilities = (int) abilities.stream().filter(heldType -> heldType.getAbilityType().isWitherScrollAbility()).count();
+        if(heldWitherScrollAbilities == totalWitherScrollAbilityCount || containsAbility(AbilityType.WITHER_IMPACT)) {
+            abilities.removeIf(remove -> remove.getAbilityType().isWitherScrollAbility());
+            abilities.add(AbilityType.WITHER_IMPACT.createObject());
         }
     }
 
@@ -65,9 +96,21 @@ public class AbilitiesHolder implements Serializable {
 
     public List<Component> getAbilitiesLore() {
         List<Component> lore = new ArrayList<>();
+        ArrayList<AbilityObject> witherScrollAbilities = new ArrayList<>();
         for(AbilityObject abilityObject : abilities) {
-            lore.addAll(abilityObject.getText());
-            lore.add(Component.text(""));
+            if(abilityObject.getAbilityType().isWitherScrollAbility()) {
+                witherScrollAbilities.add(abilityObject);
+            } else {
+                lore.addAll(abilityObject.getText());
+                lore.add(Component.text(""));
+            }
+        }
+        if(witherScrollAbilities.size() > 0) {
+            lore.add(Component.text("Scroll Abilities:", NamedTextColor.GREEN));
+            for(AbilityObject witherScrollAbility : witherScrollAbilities) {
+                lore.addAll(witherScrollAbility.getText());
+                lore.add(Component.text(""));
+            }
         }
         return lore;
     }
@@ -79,7 +122,8 @@ public class AbilitiesHolder implements Serializable {
                 int level = ultimateWise.getLevel();
                 double costPercent = 1 - (0.1 * level);
                 for(AbilityObject ability : abilities) {
-                    ability.setManaCost(ability.getAbilityType().getManaCost() * costPercent);
+                    ability.setManaCost(ability.getAbilityType().getManaCost() * costPercent * manaMultiplier);
+                    ability.setCooldown(ability.getAbilityType().getCooldown() * cooldownMultiplier);
                 }
             }
         }

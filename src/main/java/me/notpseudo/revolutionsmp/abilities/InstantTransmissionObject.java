@@ -34,6 +34,7 @@ public class InstantTransmissionObject extends AbilityObject {
     @Override
     public void use(Player player) {
         AbilitiesUtil.teleportWithSound(player, 8 + tuners * 2);
+        takeMana(player);
         if(speedUsed.contains(player.getUniqueId())) {
             return;
         }

@@ -237,7 +237,8 @@ public class StatsListeners implements Listener {
         // Player will always see 40 hit points or 20 hearts on their screen
         player.setHealthScale(40);
         double healthPercent = playerStats.getCurrentHealth() / playerStats.getMaxHealth();
-        player.setHealth(healthPercent * vanillaMaxHealth);
+        player.setHealth(Math.max(healthPercent * vanillaMaxHealth, 0));
+        player.setAbsorptionAmount(Math.min(playerStats.getAbsorption(), 40));
         playerStats.setCurrentHealth(healthPercent * maxHealth);
         playerStats.setMaxHealth(maxHealth);
         playerStats.setDefense(defense * playerStats.getDefenseMultiplier());
@@ -301,9 +302,8 @@ public class StatsListeners implements Listener {
             playerStats = new PlayerStats();
         }
         // Gets current Health, max Health, Defense, Intelligence or max Mana, and current Mana
-        double currentHealth = playerStats.getCurrentHealth(), maxHealth = playerStats.getMaxHealth(), defense = playerStats.getDefense(), intelligence = playerStats.getIntelligence(), mana = playerStats.getMana();
+        double currentHealth = playerStats.getCurrentHealth(), maxHealth = playerStats.getMaxHealth(), defense = playerStats.getDefense(), intelligence = playerStats.getIntelligence(), mana = playerStats.getMana(), currentAbsorption = playerStats.getAbsorption();;
         NamedTextColor healthColor = NamedTextColor.RED;
-        double currentAbsorption = player.getAbsorptionAmount();
         if (currentAbsorption != 0) {
             // If Player has any absorption, the Health section will be gold instead of red
             healthColor = NamedTextColor.GOLD;
@@ -317,9 +317,8 @@ public class StatsListeners implements Listener {
         if (playerStats == null) {
             playerStats = new PlayerStats();
         }
-        double currentHealth = playerStats.getCurrentHealth(), maxHealth = playerStats.getMaxHealth(), intelligence = playerStats.getIntelligence(), mana = playerStats.getMana();
+        double currentHealth = playerStats.getCurrentHealth(), maxHealth = playerStats.getMaxHealth(), intelligence = playerStats.getIntelligence(), mana = playerStats.getMana(), currentAbsorption = playerStats.getAbsorption();;
         NamedTextColor healthColor = NamedTextColor.RED;
-        double currentAbsorption = player.getAbsorptionAmount();
         if (currentAbsorption != 0) {
             healthColor = NamedTextColor.GOLD;
         }
@@ -343,9 +342,8 @@ public class StatsListeners implements Listener {
         if (playerStats == null) {
             playerStats = new PlayerStats();
         }
-        double currentHealth = playerStats.getCurrentHealth(), maxHealth = playerStats.getMaxHealth(), defense = playerStats.getDefense();
+        double currentHealth = playerStats.getCurrentHealth(), maxHealth = playerStats.getMaxHealth(), defense = playerStats.getDefense(), currentAbsorption = playerStats.getAbsorption();;
         NamedTextColor healthColor = NamedTextColor.RED;
-        double currentAbsorption = player.getAbsorptionAmount();
         if (currentAbsorption != 0) {
             healthColor = NamedTextColor.GOLD;
         }

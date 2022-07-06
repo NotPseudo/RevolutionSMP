@@ -816,7 +816,7 @@ public enum EnchantmentType {
 
         @Override
         public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+            return new ItemType[]{ItemType.SWORD, ItemType.WAND};
         }
 
         @Override

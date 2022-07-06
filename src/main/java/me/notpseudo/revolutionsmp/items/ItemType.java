@@ -30,6 +30,9 @@ public enum ItemType {
         public boolean allowAbilities() {
             return false;
         }
+    },
+    WAND {
+
     };
 
     public boolean allowEnchants() {
