@@ -1,8 +1,6 @@
 package me.notpseudo.revolutionsmp.items;
 
-import me.notpseudo.revolutionsmp.itemstats.AbilityStats;
-import me.notpseudo.revolutionsmp.itemstats.ArmorStats;
-import me.notpseudo.revolutionsmp.itemstats.WeaponStats;
+import me.notpseudo.revolutionsmp.itemstats.*;
 
 import java.util.List;
 
@@ -1524,4 +1522,21 @@ public enum Reforge {
     public AbilityStats getAbilityStats(Rarity rarity) {
         return new AbilityStats(0, 0);
     };
+
+    public FishingStats getFishingStats(Rarity rarity) {
+        return new FishingStats(0, 0);
+    }
+
+    public MiningStats getMiningStats(Rarity rarity) {
+        return new MiningStats(0, 0, 0);
+    }
+
+    public GatheringStats getGatheringStats(Rarity rarity) {
+        return new GatheringStats(0, 0);
+    }
+
+    public LuckStats getLuckStats(Rarity rarity) {
+        return new LuckStats(0, 0);
+    }
+
 }

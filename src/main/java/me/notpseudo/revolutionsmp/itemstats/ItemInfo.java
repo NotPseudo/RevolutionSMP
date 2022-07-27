@@ -20,6 +20,10 @@ public class ItemInfo implements Serializable {
     private WeaponStats weaponStats;
     private ArmorStats armorStats;
     private AbilityStats abilityStats;
+    private FishingStats fishingStats;
+    private MiningStats miningStats;
+    private GatheringStats gatheringStats;
+    private LuckStats luckStats;
     private EnchantmentsHolder enchantmentsHolder;
     private AbilitiesHolder abilitiesHolder;
     private SpecialItemInfo extraInfo;
@@ -35,6 +39,10 @@ public class ItemInfo implements Serializable {
         weaponStats = itemID.getDefaultWeaponStats();
         armorStats = itemID.getDefaultArmorStats();
         abilityStats = itemID.getDefaultAbilityStats();
+        fishingStats = itemID.getDefaultFishingStats();
+        miningStats = itemID.getDafaultMiningStats();
+        gatheringStats = itemID.getDefaultGatheringStats();
+        luckStats = itemID.getDefaultLuckStats();
         if (itemID.getItemType().allowEnchants()) {
             enchantmentsHolder = new EnchantmentsHolder();
         } else {
@@ -142,6 +150,42 @@ public class ItemInfo implements Serializable {
         recalculate();
     }
 
+    public FishingStats getFishingStats() {
+        return fishingStats;
+    }
+
+    public void setFishingStats(FishingStats fishingStats) {
+        this.fishingStats = fishingStats;
+        recalculate();
+    }
+
+    public MiningStats getMiningStats() {
+        return miningStats;
+    }
+
+    public void setMiningStats(MiningStats miningStats) {
+        this.miningStats = miningStats;
+        recalculate();
+    }
+
+    public GatheringStats getGatheringStats() {
+        return gatheringStats;
+    }
+
+    public void setGatheringStats(GatheringStats gatheringStats) {
+        this.gatheringStats = gatheringStats;
+        recalculate();
+    }
+
+    public LuckStats getLuckStats() {
+        return luckStats;
+    }
+
+    public void setLuckStats(LuckStats luckStats) {
+        this.luckStats = luckStats;
+        recalculate();
+    }
+
     public EnchantmentsHolder getEnchantmentsHolder() {
         return enchantmentsHolder;
     }
@@ -173,16 +217,28 @@ public class ItemInfo implements Serializable {
         weaponStats = itemID.getDefaultWeaponStats();
         armorStats = itemID.getDefaultArmorStats();
         abilityStats = itemID.getDefaultAbilityStats();
+        fishingStats = itemID.getDefaultFishingStats();
+        miningStats = itemID.getDafaultMiningStats();
+        gatheringStats = itemID.getDefaultGatheringStats();
+        luckStats = itemID.getDefaultLuckStats();
         if (reforge != null) {
             weaponStats.combine(reforge.getWeaponStats(rarity));
             armorStats.combine(reforge.getArmorStats(rarity));
             abilityStats.combine(reforge.getAbilityStats(rarity));
+            fishingStats.combine(reforge.getFishingStats(rarity));
+            miningStats.combine(reforge.getMiningStats(rarity));
+            gatheringStats.combine(reforge.getGatheringStats(rarity));
+            luckStats.combine(reforge.getLuckStats(rarity));
         }
         if (enchantmentsHolder != null) {
             for (EnchantmentObject enchant : enchantmentsHolder.getEnchants()) {
                 weaponStats.combine(enchant.getType().getApplyWeaponStats(enchant.getLevel()));
                 armorStats.combine(enchant.getType().getApplyArmorStats(enchant.getLevel()));
                 abilityStats.combine(enchant.getType().getApplyAbilityStats(enchant.getLevel()));
+                fishingStats.combine(enchant.getType().getApplyFishingStats(enchant.getLevel()));
+                miningStats.combine(enchant.getType().getApplyMiningStats(enchant.getLevel()));
+                gatheringStats.combine(enchant.getType().getApplyGatheringStats(enchant.getLevel()));
+                luckStats.combine(enchant.getType().getApplyLuckStats(enchant.getLevel()));
             }
         }
         if (abilitiesHolder != null) {

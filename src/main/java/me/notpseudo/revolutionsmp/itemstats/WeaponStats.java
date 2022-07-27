@@ -106,7 +106,9 @@ public class WeaponStats implements Serializable {
   }
 
   public void combine(WeaponStats other) {
-    if(other == null) return;
+    if (other == null) {
+      return;
+    }
     damage += other.damage;
     strength += other.strength;
     critChance += other.critChance;

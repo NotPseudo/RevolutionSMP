@@ -42,7 +42,7 @@ public class MobListeners implements Listener {
         int level = (int) (Math.random() * (customMobType.getMobBehavior().getHighestLevel() - customMobType.getMobBehavior().getLowestLevel() + 1)) + customMobType.getMobBehavior().getLowestLevel();
         MobInfo mobInfo = new MobInfo(customMobType, entity.getType(), level);
         if (entity.customName() != null) {
-            mobInfo.setName(String.valueOf(entity.customName()));
+            mobInfo.setName(entity.customName().toString());
         }
         if (entity instanceof Tameable && (((Tameable) entity).isTamed())) {
             mobInfo.setMobBehavior(MobBehavior.TAMED);

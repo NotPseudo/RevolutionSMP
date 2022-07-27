@@ -26,6 +26,8 @@ public class ShadowWarpObject extends AbilityObject {
         }
         if (!AbilitiesUtil.shadowWarp(player, location)) {
             AbilityType.SHADOW_WARP.addToCooldownList(player.getUniqueId(), getCooldown());
+        } else {
+            takeMana(player);
         }
     }
 

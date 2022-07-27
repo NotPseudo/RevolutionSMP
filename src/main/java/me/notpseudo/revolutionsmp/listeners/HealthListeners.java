@@ -359,11 +359,12 @@ public class HealthListeners implements Listener {
             }
         }
         // Sets base stat values
-        double weaponDamage =  event.getDamage(), strength = 0, critDamage = 50, critChance = 30, defense = 0, actualDamagePercent = 1, ferocity = 0, enchantAddPercent = 0, damageTakenMultiplier = 1;
+        double weaponDamage =  event.getDamage(), strength = 0, critDamage = 50, critChance = 30, defense = 0, actualDamagePercent = 1, ferocity = 0, enchantAddPercent = 0, damageTakenMultiplier = 1, attackCharge = 1;
         EnchantmentsHolder enchantHolder = null;
         BaseEntityStats damagerStats = damager.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
         BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
         if (damager instanceof Player player) {
+            attackCharge = player.getAttackCooldown();
             if (player.getInventory().getItemInMainHand().getType() != Material.AIR && player.getInventory().getItemInMainHand().getItemMeta() != null) {
                 ItemMeta mainHandMeta = player.getInventory().getItemInMainHand().getItemMeta();
                 if (mainHandMeta != null) {
@@ -401,7 +402,7 @@ public class HealthListeners implements Listener {
         if (!critical) {
             critDamage = 0;
         }
-        double finalDamage = ((weaponDamage + 5) * (1 + (strength / 100))) * (1 + (critDamage / 100)) * (1 + (enchantAddPercent / 100));
+        double finalDamage = ((weaponDamage + 5) * (1 + (strength / 100))) * (1 + (critDamage / 100)) * (1 + (enchantAddPercent / 100)) * attackCharge;
         actualDamagePercent = 1 - (defense / (defense + 100));
         finalDamage *= actualDamagePercent * damageTakenMultiplier;
         double vanillaDamage = finalDamage;
@@ -446,19 +447,13 @@ public class HealthListeners implements Listener {
      * @param critical Represents if the damage was a critical hit or not
      */
     private void ferocityAttack(Player damager, LivingEntity target, double damage, double ferocity, boolean critical) {
-        int hits = (int) (ferocity / 100);
-        double random = Math.random();
-        double extraFerocityChance = ((ferocity % 100) / 100);
-        if (random < extraFerocityChance) {
-            hits++;
-        }
+        int hits = HarvestingListeners.getAddedTimes(ferocity);
         final int[] count = {0};
-        int finalHits = hits;
         BukkitRunnable feroHit = new BukkitRunnable() {
             @Override
             public void run() {
                 count[0]++;
-                if (count[0] > finalHits) {
+                if (count[0] > hits) {
                     this.cancel();
                 } else {
                     if (!target.isDead()) {
@@ -468,7 +463,7 @@ public class HealthListeners implements Listener {
                         showDamage(target, damage, critical, null);
                         damager.playSound(damager, Sound.ITEM_FLINTANDSTEEL_USE, 2f, 0.605f);
                     } else {
-                        count[0] = finalHits + 1;
+                        count[0] = hits + 1;
                     }
                 }
             }

@@ -2,12 +2,7 @@ package me.notpseudo.revolutionsmp;
 
 import me.notpseudo.revolutionsmp.abilities.AbilitiesUtil;
 import me.notpseudo.revolutionsmp.commands.*;
-import me.notpseudo.revolutionsmp.items.ArmorCreator;
-import me.notpseudo.revolutionsmp.items.WeaponCreator;
-import me.notpseudo.revolutionsmp.listeners.HealthListeners;
-import me.notpseudo.revolutionsmp.listeners.AbilityUseListeners;
-import me.notpseudo.revolutionsmp.listeners.MobListeners;
-import me.notpseudo.revolutionsmp.listeners.StatsListeners;
+import me.notpseudo.revolutionsmp.listeners.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class RevolutionSMP extends JavaPlugin {
@@ -25,6 +20,7 @@ public final class RevolutionSMP extends JavaPlugin {
         new MobListeners(this);
         new HealthListeners(this);
         new AbilityUseListeners(this);
+        new HarvestingListeners(this);
         new GiveCommand(this);
         new RecombCommand(this);
         new ProfileCommand(this);
@@ -36,8 +32,6 @@ public final class RevolutionSMP extends JavaPlugin {
         new EditAbilityCommand(this);
         new ViewItemStatsCommand(this);
         new ParticleTestCommand(this);
-        WeaponCreator.createWeapons();
-        ArmorCreator.createArmors();
         AbilitiesUtil.createPassSet();
     }
 

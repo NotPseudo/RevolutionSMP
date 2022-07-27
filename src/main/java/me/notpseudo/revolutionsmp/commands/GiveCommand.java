@@ -1,9 +1,7 @@
 package me.notpseudo.revolutionsmp.commands;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
-import me.notpseudo.revolutionsmp.items.ArmorCreator;
 import me.notpseudo.revolutionsmp.items.ItemID;
-import me.notpseudo.revolutionsmp.items.WeaponCreator;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;

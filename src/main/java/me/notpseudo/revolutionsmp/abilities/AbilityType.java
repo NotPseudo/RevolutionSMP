@@ -259,7 +259,7 @@ public enum AbilityType {
 
         @Override
         public double getCooldown() {
-            return 0;
+            return 30;
         }
 
         @Override
@@ -317,7 +317,7 @@ public enum AbilityType {
     }
 
     public void addToCooldownList(UUID playerID, double time) {
-        if (getCooldownList() != null && !getCooldownList().contains(playerID)) {
+        if (getCooldownList() != null && !getCooldownList().contains(playerID) && !AbilitiesUtil.getNoCooldown().contains(playerID)) {
             getCooldownList().add(playerID);
             BukkitRunnable remove = new BukkitRunnable() {
                 @Override
@@ -350,7 +350,7 @@ public enum AbilityType {
     }
 
     public AbilityObject createObject() {
-        return new AbilityObject(valueOf(name()));
+        return new AbilityObject(this);
     }
 
 }

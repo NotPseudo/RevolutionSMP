@@ -81,13 +81,17 @@ public class AbilityObject implements Serializable {
     }
 
     public void takeMana(Player player) {
-        PlayerStats playerStats = player.getPersistentDataContainer().get(StatsListeners.getPlayerStatsKey(), new PlayerStatsDataType());
-        if (playerStats == null) {
-            playerStats = new PlayerStats();
+        double actualCost = 0;
+        if(!AbilitiesUtil.getNoMana().contains(player.getUniqueId())) {
+            PlayerStats playerStats = player.getPersistentDataContainer().get(StatsListeners.getPlayerStatsKey(), new PlayerStatsDataType());
+            if (playerStats == null) {
+                playerStats = new PlayerStats();
+            }
+            playerStats.setMana(playerStats.getMana() - manaCost);
+            player.getPersistentDataContainer().set(StatsListeners.getPlayerStatsKey(), new PlayerStatsDataType(), playerStats);
+            actualCost = manaCost;
         }
-        playerStats.setMana(playerStats.getMana() - manaCost);
-        player.getPersistentDataContainer().set(StatsListeners.getPlayerStatsKey(), new PlayerStatsDataType(), playerStats);
-        StatsListeners.showAbilityActionBar(player, abilityType, manaCost);
+        StatsListeners.showAbilityActionBar(player, abilityType, actualCost);
     }
 
 }

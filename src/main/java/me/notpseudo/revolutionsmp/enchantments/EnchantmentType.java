@@ -1,9 +1,7 @@
 package me.notpseudo.revolutionsmp.enchantments;
 
 import me.notpseudo.revolutionsmp.items.ItemType;
-import me.notpseudo.revolutionsmp.itemstats.AbilityStats;
-import me.notpseudo.revolutionsmp.itemstats.ArmorStats;
-import me.notpseudo.revolutionsmp.itemstats.WeaponStats;
+import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.listeners.MobListeners;
 import me.notpseudo.revolutionsmp.mobstats.BaseEntityStats;
 import me.notpseudo.revolutionsmp.mobstats.MobBehavior;
@@ -839,6 +837,22 @@ public enum EnchantmentType {
     }
 
     public AbilityStats getApplyAbilityStats(int level) {
+        return null;
+    }
+
+    public FishingStats getApplyFishingStats(int level) {
+        return null;
+    }
+
+    public MiningStats getApplyMiningStats(int level) {
+        return null;
+    }
+
+    public GatheringStats getApplyGatheringStats(int level) {
+        return null;
+    }
+
+    public LuckStats getApplyLuckStats(int level) {
         return null;
     }
 

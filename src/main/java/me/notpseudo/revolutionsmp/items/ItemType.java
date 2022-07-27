@@ -20,6 +20,21 @@ public enum ItemType {
     BOW {
 
     },
+    AXE {
+
+    },
+    PICKAXE {
+
+    },
+    HOE {
+
+    },
+    FISHING_ROD {
+
+    },
+    FISHING_WEAPON {
+
+    },
     ITEM {
         @Override
         public boolean allowEnchants() {
@@ -32,6 +47,12 @@ public enum ItemType {
         }
     },
     WAND {
+
+    },
+    DRILL {
+
+    },
+    LONGSWORD {
 
     };
 

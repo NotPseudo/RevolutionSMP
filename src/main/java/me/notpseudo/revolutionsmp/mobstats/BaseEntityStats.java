@@ -1,5 +1,8 @@
 package me.notpseudo.revolutionsmp.mobstats;
 
+import me.notpseudo.revolutionsmp.itemstats.ArmorStats;
+import me.notpseudo.revolutionsmp.itemstats.WeaponStats;
+
 import java.io.Serializable;
 
 /**
@@ -12,31 +15,8 @@ public class BaseEntityStats implements Serializable {
      * The maximum health the entity can have
      */
     private double maxHealth;
-    /**
-     * The current health of the entity
-     */
-    private double currentHealth;
-    /**
-     * The defense of the entity
-     */
-    private double defense;
-    /**
-     * The movement speed of the entity
-     */
-    private double speed;
-    /**
-     * The strength of the entity
-     */
-    private double strength;
-    /**
-     * The critical hit chance percent
-     */
-    private double critChance;
-    /**
-     * The critical hit damage percent to add on
-     */
-    private double critDamage;
-
+    private ArmorStats healthStats;
+    private WeaponStats damageStats;
     /**
      * Creates a new BaseEntityStats object with pre-known values, usually for players
      *
@@ -49,12 +29,8 @@ public class BaseEntityStats implements Serializable {
      */
     public BaseEntityStats(double maxHealth, double defense, double speed, double strength, double critChance, double critDamage) {
         this.maxHealth = maxHealth;
-        currentHealth = maxHealth;
-        this.defense = defense;
-        this.speed = speed;
-        this.strength = strength;
-        this.critChance = critChance;
-        this.critDamage = critDamage;
+        healthStats = new ArmorStats(maxHealth, defense, speed);
+        damageStats = new WeaponStats(0, strength, critChance, critDamage, 0, 0);
     }
 
     /**
@@ -91,7 +67,7 @@ public class BaseEntityStats implements Serializable {
      * @return The current health of the entity
      */
     public double getCurrentHealth() {
-        return currentHealth;
+        return healthStats.getHealth();
     }
 
     /**
@@ -100,7 +76,7 @@ public class BaseEntityStats implements Serializable {
      * @param currentHealth The new current health
      */
     public void setCurrentHealth(double currentHealth) {
-        this.currentHealth = currentHealth;
+        healthStats.setHealth(currentHealth);
     }
 
     /**
@@ -109,7 +85,7 @@ public class BaseEntityStats implements Serializable {
      * @return The defense of the entity
      */
     public double getDefense() {
-        return defense;
+        return healthStats.getDefense();
     }
 
     /**
@@ -118,7 +94,7 @@ public class BaseEntityStats implements Serializable {
      * @param defense The new defense
      */
     public void setDefense(double defense) {
-        this.defense = defense;
+        healthStats.setDefense(defense);
     }
 
     /**
@@ -127,7 +103,7 @@ public class BaseEntityStats implements Serializable {
      * @return The movement speed of the entity
      */
     public double getSpeed() {
-        return speed;
+        return healthStats.getSpeed();
     }
 
     /**
@@ -136,7 +112,7 @@ public class BaseEntityStats implements Serializable {
      * @param speed The new movement speed
      */
     public void setSpeed(double speed) {
-        this.speed = speed;
+        healthStats.setSpeed(speed);
     }
 
     /**
@@ -146,7 +122,7 @@ public class BaseEntityStats implements Serializable {
      */
 
     public double getStrength() {
-        return strength;
+        return damageStats.getStrength();
     }
 
     /**
@@ -155,7 +131,7 @@ public class BaseEntityStats implements Serializable {
      * @param strength The new strength
      */
     public void setStrength(double strength) {
-        this.strength = strength;
+        damageStats.setDamage(strength);
     }
 
     /**
@@ -164,7 +140,7 @@ public class BaseEntityStats implements Serializable {
      * @return The critical hit chance of the entity
      */
     public double getCritChance() {
-        return critChance;
+        return damageStats.getCritChance();
     }
 
     /**
@@ -173,7 +149,7 @@ public class BaseEntityStats implements Serializable {
      * @param critChance The new critical hit chance
      */
     public void setCritChance(double critChance) {
-        this.critChance = critChance;
+        damageStats.setCritChance(critChance);
     }
 
     /**
@@ -182,7 +158,7 @@ public class BaseEntityStats implements Serializable {
      * @return The critical hit damage of the entity
      */
     public double getCritDamage() {
-        return critDamage;
+        return damageStats.getCritDamage();
     }
 
     /**
@@ -191,7 +167,7 @@ public class BaseEntityStats implements Serializable {
      * @param critDamage The new critical hit damage
      */
     public void setCritDamage(double critDamage) {
-        this.critDamage = critDamage;
+        damageStats.setCritDamage(critDamage);
     }
 
     /**
@@ -204,11 +180,12 @@ public class BaseEntityStats implements Serializable {
         MobBehavior mobBehavior = customMobType.getMobBehavior();
         int increase = level - mobBehavior.getLowestLevel();
         maxHealth = customMobType.getHealth() + (increase * customMobType.getHealth() / 10);
-        currentHealth = maxHealth;
-        defense = customMobType.getDefense() + (increase * customMobType.getDefense() / (100 / 7.5));
-        speed = customMobType.getSpeed() + (increase * customMobType.getSpeed() / 50);
-        strength = customMobType.getStrength() + (increase * customMobType.getStrength() / 10);
-        critChance = customMobType.getCritChance() + (increase * customMobType.getCritChance() / 20);
-        critDamage = customMobType.getCritDamage() + (increase * customMobType.getCritDamage() / 10);
+        double defense = customMobType.getDefense() + (increase * customMobType.getDefense() / (100 / 7.5));
+        double speed = customMobType.getSpeed() + (increase * customMobType.getSpeed() / 50);
+        double strength = customMobType.getStrength() + (increase * customMobType.getStrength() / 10);
+        double critChance = customMobType.getCritChance() + (increase * customMobType.getCritChance() / 20);
+        double critDamage = customMobType.getCritDamage() + (increase * customMobType.getCritDamage() / 10);
+        healthStats = new ArmorStats(maxHealth, defense, speed);
+        damageStats = new WeaponStats(0, strength, critChance, critDamage, 0, 0);
     }
 }

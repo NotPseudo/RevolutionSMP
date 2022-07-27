@@ -11,6 +11,8 @@ public class ArmorStats implements Serializable {
   private final double baseDefense;
   private double speed;
   private final double baseSpeed;
+  private double trueDefense;
+  private final double baseTrueDefense;
 
   public ArmorStats(double health, double defense, double speed) {
     this.health = health;
@@ -19,6 +21,19 @@ public class ArmorStats implements Serializable {
     this.baseDefense = defense;
     this.speed = speed;
     this.baseSpeed = speed;
+    trueDefense = 0;
+    baseTrueDefense = 0;
+  }
+
+  public ArmorStats(double health, double defense, double speed, double trueDefense) {
+    this.health = health;
+    this.baseHealth = health;
+    this.defense = defense;
+    this.baseDefense = defense;
+    this.speed = speed;
+    this.baseSpeed = speed;
+    this.trueDefense = trueDefense;
+    this.baseTrueDefense = trueDefense;
   }
 
   public double getHealth() {
@@ -57,11 +72,26 @@ public class ArmorStats implements Serializable {
     return baseSpeed;
   }
 
+  public double getTrueDefense() {
+    return trueDefense;
+  }
+
+  public void setTrueDefense(double trueDefense) {
+    this.trueDefense = trueDefense;
+  }
+
+  public double getBaseTrueDefense() {
+    return baseTrueDefense;
+  }
+
   public void combine(ArmorStats other) {
-    if(other == null) return;
+    if (other == null) {
+      return;
+    }
     health += other.health;
     defense += other.defense;
     speed += other.speed;
+    trueDefense += other.trueDefense;
   }
 
 }

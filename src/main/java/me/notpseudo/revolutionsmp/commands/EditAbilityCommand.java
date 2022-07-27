@@ -33,14 +33,6 @@ public class EditAbilityCommand implements CommandExecutor {
                     }
                 }
                 Particles.gravityStormParticles(player.getLocation(), 8, new Material[]{Material.OBSIDIAN, Material.PURPLE_CONCRETE}, 16, 3);
-
-                ItemStack item = player.getInventory().getItemInMainHand();
-                if(args[0].equalsIgnoreCase("mana")) {
-                    ItemEditor.editManaMultiplier(item, num);
-                } else if(args[0].equalsIgnoreCase("cooldown")) {
-                    ItemEditor.editCooldownMultiplier(item, num);
-                }
-                player.sendMessage(Component.text("Edited abilities", NamedTextColor.GREEN));
             } else {
                 return false;
             }

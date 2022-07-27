@@ -2,10 +2,10 @@ package me.notpseudo.revolutionsmp.items;
 
 import me.notpseudo.revolutionsmp.abilities.AbilityObject;
 import me.notpseudo.revolutionsmp.abilities.AbilityType;
+import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.specialiteminfo.SpecialItemInfo;
-import me.notpseudo.revolutionsmp.itemstats.AbilityStats;
-import me.notpseudo.revolutionsmp.itemstats.ArmorStats;
-import me.notpseudo.revolutionsmp.itemstats.WeaponStats;
+import org.bukkit.Color;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -15,7 +15,6 @@ import java.util.List;
 // Enum used to identify the exact custom item type an item is
 public enum ItemID {
     STORM_CHESTPLATE {
-
         @Override
         public ItemType getItemType() {
             return ItemType.CHESTPLATE;
@@ -37,13 +36,16 @@ public enum ItemID {
         }
 
         @Override
-        public ItemStack getItem() {
-            return ArmorCreator.stormChest;
+        public Material getMaterial() {
+            return Material.LEATHER_CHESTPLATE;
         }
 
+        @Override
+        public Color getColor() {
+            return Color.fromRGB(0x1793C4);
+        }
     },
     STORM_LEGGINGS {
-
         @Override
         public ItemType getItemType() {
             return ItemType.LEGGINGS;
@@ -65,13 +67,16 @@ public enum ItemID {
         }
 
         @Override
-        public ItemStack getItem() {
-            return ArmorCreator.stormLeg;
+        public Material getMaterial() {
+            return Material.LEATHER_LEGGINGS;
         }
 
+        @Override
+        public Color getColor() {
+            return Color.fromRGB(0x17A8C4);
+        }
     },
     STORM_BOOTS {
-
         @Override
         public ItemType getItemType() {
             return ItemType.BOOTS;
@@ -93,13 +98,16 @@ public enum ItemID {
         }
 
         @Override
-        public ItemStack getItem() {
-            return ArmorCreator.stormBoot;
+        public Material getMaterial() {
+            return Material.LEATHER_BOOTS;
         }
 
+        @Override
+        public Color getColor() {
+            return Color.fromRGB(0x1CD4E4);
+        }
     },
     HYPERION {
-
         @Override
         public ItemType getItemType() {
             return ItemType.SWORD;
@@ -121,13 +129,11 @@ public enum ItemID {
         }
 
         @Override
-        public ItemStack getItem() {
-            return WeaponCreator.hyperion;
+        public Material getMaterial() {
+            return Material.IRON_SWORD;
         }
-
     },
     VALKYRIE {
-
         @Override
         public ItemType getItemType() {
             return ItemType.SWORD;
@@ -149,13 +155,11 @@ public enum ItemID {
         }
 
         @Override
-        public ItemStack getItem() {
-            return WeaponCreator.valkyrie;
+        public Material getMaterial() {
+            return Material.IRON_SWORD;
         }
-
     },
     SCYLLA {
-
         @Override
         public ItemType getItemType() {
             return ItemType.SWORD;
@@ -177,13 +181,11 @@ public enum ItemID {
         }
 
         @Override
-        public ItemStack getItem() {
-            return WeaponCreator.scylla;
+        public Material getMaterial() {
+            return Material.IRON_SWORD;
         }
-
     },
     ASTRAEA {
-
         @Override
         public ItemType getItemType() {
             return ItemType.SWORD;
@@ -201,7 +203,7 @@ public enum ItemID {
 
         @Override
         public ArmorStats getDefaultArmorStats() {
-            return new ArmorStats(0, 250, 0);
+            return new ArmorStats(0, 250, 0, 20);
         }
 
         @Override
@@ -210,10 +212,9 @@ public enum ItemID {
         }
 
         @Override
-        public ItemStack getItem() {
-            return WeaponCreator.astraea;
+        public Material getMaterial() {
+            return Material.IRON_SWORD;
         }
-
     },
     ASPECT_OF_THE_END {
         @Override
@@ -242,12 +243,11 @@ public enum ItemID {
         }
 
         @Override
-        public ItemStack getItem() {
-            return WeaponCreator.aote;
+        public Material getMaterial() {
+            return Material.DIAMOND_SWORD;
         }
     },
     JUJU_SHORTBOW {
-
         @Override
         public ItemType getItemType() {
             return ItemType.BOW;
@@ -264,13 +264,11 @@ public enum ItemID {
         }
 
         @Override
-        public ItemStack getItem() {
-            return WeaponCreator.jujuShortbow;
+        public Material getMaterial() {
+            return Material.BOW;
         }
-
     },
     TERMINATOR {
-
         @Override
         public ItemType getItemType() {
             return ItemType.BOW;
@@ -287,10 +285,9 @@ public enum ItemID {
         }
 
         @Override
-        public ItemStack getItem() {
-            return WeaponCreator.terminator;
+        public Material getMaterial() {
+            return Material.BOW;
         }
-
     },
     NODAMAGE {
         @Override
@@ -314,8 +311,64 @@ public enum ItemID {
         }
 
         @Override
-        public ItemStack getItem() {
-            return WeaponCreator.noDamage;
+        public Material getMaterial() {
+            return Material.WOODEN_SWORD;
+        }
+    },
+    EVERYTHING {
+        @Override
+        public String getDefaultName() {
+            return "All Stats Drill";
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.MYTHIC;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(10, 10, 10, 10, 10, 10);
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(10, 10, 10, 10);
+        }
+
+        @Override
+        public AbilityStats getDefaultAbilityStats() {
+            return new AbilityStats(10, 10);
+        }
+
+        @Override
+        public FishingStats getDefaultFishingStats() {
+            return new FishingStats(10, 10);
+        }
+
+        @Override
+        public MiningStats getDafaultMiningStats() {
+            return new MiningStats(10, 10, 10);
+        }
+
+        @Override
+        public GatheringStats getDefaultGatheringStats() {
+            return new GatheringStats(10, 10);
+        }
+
+        @Override
+        public LuckStats getDefaultLuckStats() {
+            return new LuckStats(10, 10);
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.PICKAXE;
+        }
+
+        @Override
+        public Material getMaterial() {
+            return Material.PRISMARINE_SHARD;
         }
     },
     GYROKINETIC_WAND {
@@ -335,8 +388,29 @@ public enum ItemID {
         }
 
         @Override
-        public ItemStack getItem() {
-            return WeaponCreator.gyro;
+        public Material getMaterial() {
+            return Material.BLAZE_ROD;
+        }
+    },
+    JUNGLE_AXE {
+        @Override
+        public ItemType getItemType() {
+            return ItemType.AXE;
+        }
+
+        @Override
+        public Material getMaterial() {
+            return Material.WOODEN_AXE;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public GatheringStats getDefaultGatheringStats() {
+            return new GatheringStats(200, 200);
         }
     };
 
@@ -364,15 +438,37 @@ public enum ItemID {
     }
 
     public ArmorStats getDefaultArmorStats() {
-        return new ArmorStats(0, 0, 0);
+        return new ArmorStats(0, 0, 0, 0);
     }
 
     public AbilityStats getDefaultAbilityStats() {
         return new AbilityStats(0, 0);
     }
 
+    public FishingStats getDefaultFishingStats() {
+        return new FishingStats(0, 0);
+    }
+
+    public MiningStats getDafaultMiningStats() {
+        return new MiningStats(0, 0, 0);
+    }
+
+    public GatheringStats getDefaultGatheringStats() {
+        return new GatheringStats(0, 0);
+    }
+
+    public LuckStats getDefaultLuckStats() {
+        return new LuckStats(0, 0);
+    }
+
     public List<AbilityType> getDefaultAbilities() {
         return new ArrayList<>();
+    }
+
+    public abstract Material getMaterial();
+
+    public Color getColor() {
+        return null;
     }
 
     public boolean isUnbreakable() {
@@ -383,6 +479,8 @@ public enum ItemID {
         return null;
     }
 
-    public abstract ItemStack getItem();
+    public ItemStack getItem() {
+        return ItemEditor.createItem(this);
+    }
 
 }

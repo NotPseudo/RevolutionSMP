@@ -17,14 +17,10 @@ public class AbilitiesHolder implements Serializable {
 
     private ArrayList<AbilityObject> abilities;
     private ItemInfo holder;
-    private double manaMultiplier;
-    private double cooldownMultiplier;
 
     public AbilitiesHolder(ItemInfo holder) {
         abilities = new ArrayList<>();
         this.holder = holder;
-        manaMultiplier = 1;
-        cooldownMultiplier = 1;
     }
 
     public ArrayList<AbilityObject> getAbilities() {
@@ -33,25 +29,6 @@ public class AbilitiesHolder implements Serializable {
 
     public ItemInfo getHolder() {
         return holder;
-    }
-
-
-    public double getManaMultiplier() {
-        return manaMultiplier;
-    }
-
-    public void setManaMultiplier(double manaMultiplier) {
-        this.manaMultiplier = manaMultiplier;
-        reorganize();
-    }
-
-    public double getCooldownMultiplier() {
-        return cooldownMultiplier;
-    }
-
-    public void setCooldownMultiplier(double cooldownMultiplier) {
-        this.cooldownMultiplier = cooldownMultiplier;
-        reorganize();
     }
 
     public void addAbility(AbilityType type) {
@@ -122,8 +99,8 @@ public class AbilitiesHolder implements Serializable {
                 int level = ultimateWise.getLevel();
                 double costPercent = 1 - (0.1 * level);
                 for(AbilityObject ability : abilities) {
-                    ability.setManaCost(ability.getAbilityType().getManaCost() * costPercent * manaMultiplier);
-                    ability.setCooldown(ability.getAbilityType().getCooldown() * cooldownMultiplier);
+                    ability.setManaCost(ability.getAbilityType().getManaCost() * costPercent);
+                    ability.setCooldown(ability.getAbilityType().getCooldown());
                 }
             }
         }

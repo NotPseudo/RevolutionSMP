@@ -1,5 +1,6 @@
 package me.notpseudo.revolutionsmp.playerstats;
 
+import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.mobstats.BaseEntityStats;
 
 import java.io.Serializable;
@@ -8,9 +9,9 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
 
     private double attackSpeed;
     private double ferocity;
-    private double intelligence;
-    private double abilityDamage;
+    private AbilityStats abilityStats;
     private double mana;
+    private double trueDefense;
     private double healthRegenRate;
     private double manaRegenRate;
     private double defenseMultiplier;
@@ -18,13 +19,16 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
     private double addSpeed;
     private double damageTakenMultiplier;
     private double absorption;
+    private FishingStats fishingStats;
+    private MiningStats miningStats;
+    private GatheringStats gatheringStats;
+    private LuckStats luckStats;
 
     public PlayerStats() {
         super(100, 0, 100, 0, 30, 50);
         attackSpeed = 0;
         ferocity = 0;
-        intelligence = 100;
-        abilityDamage = 0;
+        abilityStats = new AbilityStats(0, 100);
         mana = 100;
         healthRegenRate = 1;
         manaRegenRate = 1;
@@ -33,34 +37,10 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
         addSpeed = 0;
         damageTakenMultiplier = 1;
         absorption = 0;
-    }
-
-    public PlayerStats(double maxHealth, double defense, double speed, double strength, double critChance, double critDamage, double attackSpeed, double ferocity, double intelligence, double abilityDamage) {
-        super(maxHealth, defense, speed, strength, critChance, critDamage);
-        this.attackSpeed = attackSpeed;
-        this.ferocity = ferocity;
-        this.intelligence = intelligence;
-        this.abilityDamage = abilityDamage;
-        healthRegenRate = 1;
-        manaRegenRate = 1;
-        defenseMultiplier = 1;
-        speedMultiplier = 1;
-        addSpeed = 0;
-        damageTakenMultiplier = 1;
-        absorption = 0;
-    }
-
-    public PlayerStats(double maxHealth, double defense, double speed, double strength, double critChance, double critDamage, double attackSpeed, double ferocity, double intelligence, double abilityDamage, double healthRegenRate, double manaRegenRate, double defenseMultiplier, double speedMultiplier, double damageTakenMultiplier) {
-        super(maxHealth, defense, speed, strength, critChance, critDamage);
-        this.attackSpeed = attackSpeed;
-        this.ferocity = ferocity;
-        this.intelligence = intelligence;
-        this.abilityDamage = abilityDamage;
-        this.healthRegenRate = healthRegenRate;
-        this.manaRegenRate = manaRegenRate;
-        this.defenseMultiplier = defenseMultiplier;
-        this.speedMultiplier = speedMultiplier;
-        this.damageTakenMultiplier = damageTakenMultiplier;
+        fishingStats = new FishingStats(20, 0);
+        miningStats = new MiningStats(0, 0, 0);
+        gatheringStats = new GatheringStats(0, 0);
+        luckStats = new LuckStats(0, 0);
     }
 
     public double getAttackSpeed() {
@@ -80,19 +60,19 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
     }
 
     public double getIntelligence() {
-        return intelligence;
+        return abilityStats.getIntelligence();
     }
 
     public void setIntelligence(double intelligence) {
-        this.intelligence = intelligence;
+        abilityStats.setIntelligence(intelligence);
     }
 
     public double getAbilityDamage() {
-        return abilityDamage;
+        return abilityStats.getAbilityDamage();
     }
 
     public void setAbilityDamage(double abilityDamage) {
-        this.abilityDamage = abilityDamage;
+        abilityStats.setAbilityDamage(abilityDamage);
     }
 
     public double getMana() {
@@ -101,6 +81,14 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
 
     public void setMana(double mana) {
         this.mana = mana;
+    }
+
+    public double getTrueDefense() {
+        return trueDefense;
+    }
+
+    public void setTrueDefense(double trueDefense) {
+        this.trueDefense = trueDefense;
     }
 
     public double getHealthRegenRate() {
@@ -157,5 +145,89 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
 
     public void setAbsorption(double absorption) {
         this.absorption = absorption;
+    }
+
+    public double getSeaCreatureChance() {
+        return fishingStats.getSeaCreatureChance();
+    }
+
+    public void setSeaCreatureChance(double seaCreatureChance) {
+        fishingStats.setSeaCreatureChance(seaCreatureChance);
+    }
+
+    public double getMiningSpeed() {
+        return miningStats.getMiningSpeed();
+    }
+
+    public void setMiningSpeed(double miningSpeed) {
+        miningStats.setMiningSpeed(miningSpeed);
+    }
+
+    public double getMiningFortune() {
+        return miningStats.getMiningFortune();
+    }
+
+    public void setMiningFortune(double miningFortune) {
+        miningStats.setMiningFortune(miningFortune);
+    }
+
+    public double getPristine() {
+        return miningStats.getPristine();
+    }
+
+    public void setPristine(double pristine) {
+        miningStats.setPristine(pristine);
+    }
+
+    public double getFarmingFortune() {
+        return gatheringStats.getFarmingFortune();
+    }
+
+    public void setFarmingFortune(double farmingFortune) {
+        gatheringStats.setFarmingFortune(farmingFortune);
+    }
+
+    public double getForagingFortune() {
+        return gatheringStats.getForagingFortune();
+    }
+
+    public void setForagingFortune(double foragingFortune) {
+        gatheringStats.setForagingFortune(foragingFortune);
+    }
+
+    public double getMagicFind() {
+        return luckStats.getMagicFind();
+    }
+
+    public void setMagicFind(double magicFind) {
+        luckStats.setMagicFind(magicFind);
+    }
+
+    public double getPetLuck() {
+        return luckStats.getPetLuck();
+    }
+
+    public void setPetLuck(double petLuck) {
+        luckStats.setPetLuck(petLuck);
+    }
+
+    public void setAbilityStats(AbilityStats abilityStats) {
+        this.abilityStats = abilityStats;
+    }
+
+    public void setFishingStats(FishingStats fishingStats) {
+        this.fishingStats = fishingStats;
+    }
+
+    public void setMiningStats(MiningStats miningStats) {
+        this.miningStats = miningStats;
+    }
+
+    public void setGatheringStats(GatheringStats gatheringStats) {
+        this.gatheringStats = gatheringStats;
+    }
+
+    public void setLuckStats(LuckStats luckStats) {
+        this.luckStats = luckStats;
     }
 }

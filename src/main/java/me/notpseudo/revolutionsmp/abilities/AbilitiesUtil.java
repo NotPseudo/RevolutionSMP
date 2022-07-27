@@ -28,6 +28,8 @@ public class AbilitiesUtil {
     private static final NamespacedKey playerKey = StatsListeners.getPlayerStatsKey();
     private static final NamespacedKey mobKey = MobListeners.getMobKey();
     private static HashMap<UUID, Location> shadowWarpActivate = new HashMap<>();
+    private static ArrayList<UUID> noMana = new ArrayList<>();
+    private static ArrayList<UUID> noCooldown = new ArrayList<>();
 
     public static void createPassSet() {
         for (Material material : Material.values()) {
@@ -39,6 +41,14 @@ public class AbilitiesUtil {
 
     public static Set<Material> getPassSet() {
         return passSet;
+    }
+
+    public static ArrayList<UUID> getNoMana() {
+        return noMana;
+    }
+
+    public static ArrayList<UUID> getNoCooldown() {
+        return noCooldown;
     }
 
     // Method that runs when Instant Transmission ability is used
