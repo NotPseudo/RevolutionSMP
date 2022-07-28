@@ -45,13 +45,15 @@ public class ItemEditor {
      * @param meta The ItemMeta to read stats from and generate lore for
      */
     public static void updateLore(ItemMeta meta) {
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-        meta.setUnbreakable(true);
         ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
         if (itemInfo == null) {
             return;
+        }
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        if (itemInfo.getItemID().isUnbreakable()) {
+            meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
         }
         WeaponStats weaponStats = itemInfo.getWeaponStats();
         ArmorStats armorStats = itemInfo.getArmorStats();
