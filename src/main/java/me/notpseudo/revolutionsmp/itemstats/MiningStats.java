@@ -1,50 +1,27 @@
 package me.notpseudo.revolutionsmp.itemstats;
 
 import java.io.Serializable;
+import java.util.List;
 
-public class MiningStats implements Serializable {
-
-    private double miningSpeed;
-    private double miningFortune;
-    private double pristine;
+public class MiningStats extends StatHolder implements Serializable {
 
     public MiningStats(double miningSpeed, double miningFortune, double pristine) {
-        this.miningSpeed = miningSpeed;
-        this.miningFortune = miningFortune;
-        this.pristine = pristine;
+        super(List.of(new StatObject(StatType.MINING_SPEED, miningSpeed),
+                new StatObject(StatType.MINING_FORTUNE, miningFortune),
+                new StatObject(StatType.PRISTINE, pristine)));
     }
 
-    public double getMiningSpeed() {
-        return miningSpeed;
-    }
-
-    public void setMiningSpeed(double miningSpeed) {
-        this.miningSpeed = miningSpeed;
-    }
-
-    public double getMiningFortune() {
-        return miningFortune;
-    }
-
-    public void setMiningFortune(double miningFortune) {
-        this.miningFortune = miningFortune;
-    }
-
-    public double getPristine() {
-        return pristine;
-    }
-
-    public void setPristine(double pristine) {
-        this.pristine = pristine;
-    }
-
-    public void combine(MiningStats other) {
-        if (other == null) {
+    @Override
+    public void addStatObject(StatObject newStat) {
+        if (containsType(newStat.getType())) {
             return;
         }
-        miningSpeed += other.miningSpeed;
-        miningFortune += other.miningFortune;
-        pristine += other.pristine;
+        if (newStat.getType() != StatType.MINING_SPEED ||
+                newStat.getType() != StatType.MINING_FORTUNE ||
+                newStat.getType() != StatType.PRISTINE) {
+            return;
+        }
+        super.getStats().add(newStat);
     }
 
 }

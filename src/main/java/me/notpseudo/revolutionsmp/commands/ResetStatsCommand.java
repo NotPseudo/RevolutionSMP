@@ -20,8 +20,7 @@ public class ResetStatsCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+        if (sender instanceof Player player) {
             player.getPersistentDataContainer().remove(playerKey);
             PlayerStats playerStats = new PlayerStats();
             player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);

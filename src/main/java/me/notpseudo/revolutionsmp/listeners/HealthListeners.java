@@ -9,9 +9,7 @@ import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.enchantments.ActionEnchantment;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
-import me.notpseudo.revolutionsmp.itemstats.EnchantmentsHolder;
-import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
-import me.notpseudo.revolutionsmp.itemstats.ItemInfoDataType;
+import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.mobstats.BaseEntityStats;
 import me.notpseudo.revolutionsmp.mobstats.MobInfo;
@@ -19,7 +17,6 @@ import me.notpseudo.revolutionsmp.mobstats.MobInfoDataType;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStatsDataType;
 import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -359,22 +356,24 @@ public class HealthListeners implements Listener {
             }
         }
         // Sets base stat values
-        double weaponDamage =  event.getDamage(), strength = 0, critDamage = 50, critChance = 30, defense = 0, actualDamagePercent = 1, ferocity = 0, enchantAddPercent = 0, damageTakenMultiplier = 1, attackCharge = 1;
+        double weaponDamage =  event.getDamage(), strength = 0, critDamage = 50, critChance = 30, defense = 0, actualDamagePercent = 1, ferocity = 0, damageTakenMultiplier = 1, attackCharge = 1;
+        StatObject damageAdditivePercent = new StatObject(StatType.DAMAGE, 0);
         EnchantmentsHolder enchantHolder = null;
         BaseEntityStats damagerStats = damager.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
         BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
         if (damager instanceof Player player) {
+            weaponDamage += 5;
             attackCharge = player.getAttackCooldown();
             if (player.getInventory().getItemInMainHand().getType() != Material.AIR && player.getInventory().getItemInMainHand().getItemMeta() != null) {
                 ItemMeta mainHandMeta = player.getInventory().getItemInMainHand().getItemMeta();
                 if (mainHandMeta != null) {
                     ItemInfo mainHandInfo = mainHandMeta.getPersistentDataContainer().get(ItemEditor.getItemKey(), new ItemInfoDataType());
                     if (mainHandInfo != null) {
-                        weaponDamage = mainHandInfo.getWeaponStats().getDamage();
+                        weaponDamage = mainHandInfo.getWeaponStats().getStatValue(StatType.DAMAGE);
                         enchantHolder = mainHandInfo.getEnchantmentsHolder();
                         if(enchantHolder != null) {
                             for(EnchantmentObject enchant : enchantHolder.getEnchants()) {
-                                enchantAddPercent += enchant.getDamagePercentIncrease(damager, target);
+                                damageAdditivePercent.add(enchant.getDamageStatAdditivePercent(damager, target, StatType.DAMAGE));
                             }
                         }
                     }
@@ -402,7 +401,7 @@ public class HealthListeners implements Listener {
         if (!critical) {
             critDamage = 0;
         }
-        double finalDamage = ((weaponDamage + 5) * (1 + (strength / 100))) * (1 + (critDamage / 100)) * (1 + (enchantAddPercent / 100)) * attackCharge;
+        double finalDamage = ((weaponDamage) * (1 + (strength / 100))) * (1 + (critDamage / 100)) * (1 + (damageAdditivePercent.getValue() / 100)) * attackCharge;
         actualDamagePercent = 1 - (defense / (defense + 100));
         finalDamage *= actualDamagePercent * damageTakenMultiplier;
         double vanillaDamage = finalDamage;
@@ -476,19 +475,16 @@ public class HealthListeners implements Listener {
         if(playerStats == null) {
             playerStats = new PlayerStats();
         }
-        double remainAbsorption = player.getAbsorptionAmount() - damage;
-        if(remainAbsorption - damage <= 0) {
+        double damageLeft = damage - playerStats.getAbsorption();
+        double remainAbsorption = playerStats.getAbsorption() - damage;
+        if(remainAbsorption <= 0) {
             playerStats.setAbsorption(0);
             player.setAbsorptionAmount(0);
             player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
-            return damage - playerStats.getAbsorption();
+            return Math.max(0, damageLeft);
         } else {
             playerStats.setAbsorption(remainAbsorption);
-            if(remainAbsorption >= 40) {
-                player.setAbsorptionAmount(40);
-            } else {
-                player.setAbsorptionAmount(remainAbsorption);
-            }
+            player.setAbsorptionAmount(Math.min(40, remainAbsorption));
             player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
             return 0;
         }

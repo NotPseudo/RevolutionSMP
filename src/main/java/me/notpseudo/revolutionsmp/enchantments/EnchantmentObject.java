@@ -1,15 +1,12 @@
 package me.notpseudo.revolutionsmp.enchantments;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
+import me.notpseudo.revolutionsmp.itemstats.StatObject;
+import me.notpseudo.revolutionsmp.itemstats.StatType;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -90,16 +87,16 @@ public class EnchantmentObject implements Serializable, Comparable<EnchantmentOb
         }
     }
 
-    public double getAddDamage(EntityDamageByEntityEvent event) {
-        return type.getAddDamage(event, level);
+    public StatObject getDamageStateAdditiveAmount(LivingEntity damager, LivingEntity target, StatType type) {
+        return this.type.getDamageStatAdditiveAmount(damager, target, level, type);
     }
 
-    public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target) {
-        return type.getDamagePercentIncrease(damager, target, level);
+    public StatObject getDamageStatAdditivePercent(LivingEntity damager, LivingEntity target, StatType type) {
+        return this.type.getDamageStatAdditivePercent(damager, target, level, type);
     }
 
-    public double getMultDamage(EntityDamageByEntityEvent event) {
-        return type.getMultDamage(event, level);
+    public StatObject getDamageStatMultiplicativePercent(LivingEntity damager, LivingEntity target, StatType type) {
+        return this.type.getDamageStatMultiplicativePercent(damager, target, level, type);
     }
 
     @Override

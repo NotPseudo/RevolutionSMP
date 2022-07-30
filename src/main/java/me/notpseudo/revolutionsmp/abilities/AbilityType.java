@@ -1,8 +1,12 @@
 package me.notpseudo.revolutionsmp.abilities;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.itemstats.StatObject;
+import me.notpseudo.revolutionsmp.itemstats.StatType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.block.Block;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -351,6 +355,78 @@ public enum AbilityType {
 
     public AbilityObject createObject() {
         return new AbilityObject(this);
+    }
+
+    public StatObject getDamageStatAdditiveAmount(LivingEntity damager, LivingEntity target, int level, StatType type) {
+        return new StatObject(type, 0);
+    }
+
+    public StatObject getDamageStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+        return new StatObject(type, 0);
+    }
+
+    public StatObject getDamageStatMultiplicativePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+        return new StatObject(type, 1);
+    }
+
+    public StatObject getHealthStatAdditiveAmount(LivingEntity damager, LivingEntity target, int level, StatType type) {
+        return new StatObject(type, 0);
+    }
+
+    public StatObject getHealthStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+        return new StatObject(type, 0);
+    }
+
+    public StatObject getHealthStatMultiplicativePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+        return new StatObject(type, 1);
+    }
+
+    public StatObject getAbilityStatAdditiveAmount(LivingEntity damager, int level, StatType type) {
+        return new StatObject(type, 0);
+    }
+
+    public StatObject getAbilityStatAdditivePercent(LivingEntity damager, int level, StatType type) {
+        return new StatObject(type, 0);
+    }
+
+    public StatObject getAbilityStatMultiplicativePercent(LivingEntity damager, int level, StatType type) {
+        return new StatObject(type, 1);
+    }
+
+    public StatObject getFishingStatAdditiveAmount(LivingEntity damager, int level, StatType type) {
+        return new StatObject(type, 0);
+    }
+
+    public StatObject getFishingStatAdditivePercent(LivingEntity damager, int level, StatType type) {
+        return new StatObject(type, 0);
+    }
+
+    public StatObject getFishingStatMultiplicativePercent(LivingEntity damager, int level, StatType type) {
+        return new StatObject(type, 1);
+    }
+
+    public StatObject geBreakingStatAdditiveAmount(LivingEntity harvester, Block block, int level, StatType type) {
+        return new StatObject(type, 0);
+    }
+
+    public StatObject getBreakingStatAdditivePercent(LivingEntity harvester, Block block, int level, StatType type) {
+        return new StatObject(type, 0);
+    }
+
+    public StatObject getBreakingStatMultiplicativePercent(LivingEntity harvester, Block block, int level, StatType type) {
+        return new StatObject(type, 1);
+    }
+
+    public StatObject getLuckStatAdditiveAmount(LivingEntity damager, LivingEntity target, int level, StatType type) {
+        return new StatObject(type, 0);
+    }
+
+    public StatObject getLuckStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+        return new StatObject(type, 0);
+    }
+
+    public StatObject getLuckStatMultiplicativePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+        return new StatObject(type, 1);
     }
 
 }

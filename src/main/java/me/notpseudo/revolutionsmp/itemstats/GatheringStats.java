@@ -1,39 +1,25 @@
 package me.notpseudo.revolutionsmp.itemstats;
 
 import java.io.Serializable;
+import java.util.List;
 
-public class GatheringStats implements Serializable {
-
-    private double farmingFortune;
-    private double foragingFortune;
+public class GatheringStats extends StatHolder implements Serializable {
 
     public GatheringStats(double farmingFortune, double foragingFortune) {
-        this.farmingFortune = farmingFortune;
-        this.foragingFortune = foragingFortune;
+        super(List.of(new StatObject(StatType.FARMING_FORTUNE, farmingFortune),
+                new StatObject(StatType.FORAGING_FORTUNE, foragingFortune)));
     }
 
-    public double getFarmingFortune() {
-        return farmingFortune;
-    }
-
-    public void setFarmingFortune(double farmingFortune) {
-        this.farmingFortune = farmingFortune;
-    }
-
-    public double getForagingFortune() {
-        return foragingFortune;
-    }
-
-    public void setForagingFortune(double foragingFortune) {
-        this.foragingFortune = foragingFortune;
-    }
-
-    public void combine(GatheringStats other) {
-        if (other == null) {
+    @Override
+    public void addStatObject(StatObject newStat) {
+        if (containsType(newStat.getType())) {
             return;
         }
-        farmingFortune += other.farmingFortune;
-        foragingFortune += other.foragingFortune;
+        if (newStat.getType() != StatType.FARMING_FORTUNE ||
+                newStat.getType() != StatType.FORAGING_FORTUNE) {
+            return;
+        }
+        super.getStats().add(newStat);
     }
 
 }

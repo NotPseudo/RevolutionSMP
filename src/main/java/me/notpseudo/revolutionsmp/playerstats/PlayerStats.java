@@ -60,19 +60,19 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
     }
 
     public double getIntelligence() {
-        return abilityStats.getIntelligence();
+        return abilityStats.getStatValue(StatType.INTELLIGENCE);
     }
 
     public void setIntelligence(double intelligence) {
-        abilityStats.setIntelligence(intelligence);
+        abilityStats.setStatValue(StatType.INTELLIGENCE, intelligence);
     }
 
     public double getAbilityDamage() {
-        return abilityStats.getAbilityDamage();
+        return abilityStats.getStatValue(StatType.ABILITY_DAMAGE);
     }
 
     public void setAbilityDamage(double abilityDamage) {
-        abilityStats.setAbilityDamage(abilityDamage);
+        abilityStats.setStatValue(StatType.ABILITY_DAMAGE, abilityDamage);
     }
 
     public double getMana() {
@@ -148,67 +148,67 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
     }
 
     public double getSeaCreatureChance() {
-        return fishingStats.getSeaCreatureChance();
+        return fishingStats.getStatValue(StatType.SEA_CREATURE_CHANCE);
     }
 
     public void setSeaCreatureChance(double seaCreatureChance) {
-        fishingStats.setSeaCreatureChance(seaCreatureChance);
+        fishingStats.setStatValue(StatType.SEA_CREATURE_CHANCE, seaCreatureChance);
     }
 
     public double getMiningSpeed() {
-        return miningStats.getMiningSpeed();
+        return miningStats.getStatValue(StatType.MINING_SPEED);
     }
 
     public void setMiningSpeed(double miningSpeed) {
-        miningStats.setMiningSpeed(miningSpeed);
+        miningStats.setStatValue(StatType.MINING_SPEED, miningSpeed);
     }
 
     public double getMiningFortune() {
-        return miningStats.getMiningFortune();
+        return miningStats.getStatValue(StatType.MINING_FORTUNE);
     }
 
     public void setMiningFortune(double miningFortune) {
-        miningStats.setMiningFortune(miningFortune);
+        miningStats.setStatValue(StatType.MINING_FORTUNE, miningFortune);
     }
 
     public double getPristine() {
-        return miningStats.getPristine();
+        return miningStats.getStatValue(StatType.PRISTINE);
     }
 
     public void setPristine(double pristine) {
-        miningStats.setPristine(pristine);
+        miningStats.setStatValue(StatType.PRISTINE, pristine);
     }
 
     public double getFarmingFortune() {
-        return gatheringStats.getFarmingFortune();
+        return gatheringStats.getStatValue(StatType.FARMING_FORTUNE);
     }
 
     public void setFarmingFortune(double farmingFortune) {
-        gatheringStats.setFarmingFortune(farmingFortune);
+        gatheringStats.setStatValue(StatType.FARMING_FORTUNE, farmingFortune);
     }
 
     public double getForagingFortune() {
-        return gatheringStats.getForagingFortune();
+        return gatheringStats.getStatValue(StatType.FORAGING_FORTUNE);
     }
 
     public void setForagingFortune(double foragingFortune) {
-        gatheringStats.setForagingFortune(foragingFortune);
+        gatheringStats.setStatValue(StatType.FORAGING_FORTUNE, foragingFortune);
     }
 
     public double getMagicFind() {
-        return luckStats.getMagicFind();
+        return luckStats.getStatValue(StatType.MAGIC_FIND);
     }
 
     public void setMagicFind(double magicFind) {
-        luckStats.setMagicFind(magicFind);
+        luckStats.setStatValue(StatType.MAGIC_FIND, magicFind);
     }
 
     public double getPetLuck() {
-        return luckStats.getPetLuck();
+        return luckStats.getStatValue(StatType.PET_LUCK);
     }
 
     public void setPetLuck(double petLuck) {
-        luckStats.setPetLuck(petLuck);
+        luckStats.setStatValue(StatType.PET_LUCK, petLuck);
     }
 
     public void setAbilityStats(AbilityStats abilityStats) {

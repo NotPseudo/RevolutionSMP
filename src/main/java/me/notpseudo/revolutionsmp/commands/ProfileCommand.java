@@ -20,8 +20,7 @@ public class ProfileCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(sender instanceof Player) {
-            Player player = (Player) sender;
+        if(sender instanceof Player player) {
             PlayerStats playerStats = player.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
             if(playerStats == null) {
                 player.sendMessage("Your Player Stats were null");

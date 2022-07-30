@@ -2,9 +2,7 @@ package me.notpseudo.revolutionsmp.enchantments;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
-import me.notpseudo.revolutionsmp.itemstats.EnchantmentsHolder;
-import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
-import me.notpseudo.revolutionsmp.itemstats.ItemInfoDataType;
+import me.notpseudo.revolutionsmp.itemstats.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
@@ -43,8 +41,8 @@ public class VampirismEnchantmentObject extends EnchantmentObject implements Act
     }
 
     @Override
-    public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target) {
-        return 25 * level;
+    public StatObject getDamageStatAdditivePercent(LivingEntity damager, LivingEntity target, StatType type) {
+        return new StatObject(StatType.DAMAGE, 25 * level);
     }
 
     @EventHandler

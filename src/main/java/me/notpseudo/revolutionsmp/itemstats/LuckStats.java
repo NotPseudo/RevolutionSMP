@@ -1,39 +1,25 @@
 package me.notpseudo.revolutionsmp.itemstats;
 
 import java.io.Serializable;
+import java.util.List;
 
-public class LuckStats implements Serializable {
-
-    private double magicFind;
-    private double petLuck;
+public class LuckStats extends StatHolder implements Serializable {
 
     public LuckStats(double magicFind, double petLuck) {
-        this.magicFind = magicFind;
-        this.petLuck = petLuck;
+        super(List.of(new StatObject(StatType.MAGIC_FIND, magicFind),
+                new StatObject(StatType.PET_LUCK, petLuck)));
     }
 
-    public double getMagicFind() {
-        return magicFind;
-    }
-
-    public void setMagicFind(double magicFind) {
-        this.magicFind = magicFind;
-    }
-
-    public double getPetLuck() {
-        return petLuck;
-    }
-
-    public void setPetLuck(double petLuck) {
-        this.petLuck = petLuck;
-    }
-
-    public void combine(LuckStats other) {
-        if (other == null) {
+    @Override
+    public void addStatObject(StatObject newStat) {
+        if (containsType(newStat.getType())) {
             return;
         }
-        magicFind += other.magicFind;
-        petLuck += other.petLuck;
+        if (newStat.getType() != StatType.MAGIC_FIND ||
+                newStat.getType() != StatType.PET_LUCK) {
+            return;
+        }
+        super.getStats().add(newStat);
     }
 
 }

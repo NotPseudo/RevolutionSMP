@@ -2,52 +2,26 @@ package me.notpseudo.revolutionsmp.itemstats;
 
 
 import java.io.Serializable;
+import java.util.List;
 
 // Ability stats stored in an ItemStack's PersistentDataContainer
-public class AbilityStats implements Serializable {
+public class AbilityStats extends StatHolder implements Serializable {
 
-  private double abilityDamage;
-  private final double baseAbilityDamage;
-  private double intelligence;
-  private final double baseIntelligence;
-
-  public AbilityStats(double abilityDamage, double intelligence) {
-    this.abilityDamage = abilityDamage;
-    this.baseAbilityDamage = abilityDamage;
-    this.intelligence = intelligence;
-    this.baseIntelligence = intelligence;
-  }
-
-  public double getAbilityDamage() {
-    return abilityDamage;
-  }
-
-  public void setAbilityDamage(double abilityDamage) {
-    this.abilityDamage = abilityDamage;
-  }
-
-  public double getBaseAbilityDamage() {
-    return baseAbilityDamage;
-  }
-
-  public double getIntelligence() {
-    return intelligence;
-  }
-
-  public void setIntelligence(double intelligence) {
-    this.intelligence = intelligence;
-  }
-
-  public double getBaseIntelligence() {
-    return baseIntelligence;
-  }
-
-  public void combine(AbilityStats other) {
-    if (other == null) {
-      return;
+    public AbilityStats(double abilityDamage, double intelligence) {
+        super(List.of(new StatObject(StatType.ABILITY_DAMAGE, abilityDamage),
+                new StatObject(StatType.INTELLIGENCE, intelligence)));
     }
-    abilityDamage += other.abilityDamage;
-    intelligence += other.intelligence;
-  }
+
+    @Override
+    public void addStatObject(StatObject newStat) {
+        if (containsType(newStat.getType())) {
+            return;
+        }
+        if (newStat.getType() != StatType.ABILITY_DAMAGE ||
+                newStat.getType() != StatType.INTELLIGENCE) {
+            return;
+        }
+        super.getStats().add(newStat);
+    }
 
 }

@@ -8,11 +8,11 @@ import me.notpseudo.revolutionsmp.mobstats.MobBehavior;
 import me.notpseudo.revolutionsmp.mobstats.MobInfoDataType;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.EntityCategory;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,21 +21,24 @@ public enum EnchantmentType {
 
     BANE_OF_ARTHROPODS {
         @Override
-        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
+        public StatObject getDamageStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+            if (type != StatType.DAMAGE) {
+                return new StatObject(type, 0);
+            }
             if (!(target.getType() == EntityType.SPIDER || target.getType() == EntityType.CAVE_SPIDER || target.getType() == EntityType.SILVERFISH || target.getType() == EntityType.ENDERMITE)) {
-                return 0;
+                return new StatObject(StatType.DAMAGE, 0);
             }
             switch (level) {
                 case 1:
                 case 2:
                 case 3:
                 case 4:
-                    return level * 10;
+                    return new StatObject(StatType.DAMAGE, level * 10);
                 case 5:
                 case 6:
                 case 7:
                 default:
-                    return (level - 2) * 20;
+                    return new StatObject(StatType.DAMAGE, (level - 2) * 20);
             }
         }
 
@@ -97,22 +100,25 @@ public enum EnchantmentType {
     },
     CUBISM {
         @Override
-        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
+        public StatObject getDamageStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+            if (type != StatType.DAMAGE) {
+                return new StatObject(type, 0);
+            }
             if (!(target.getType() == EntityType.CREEPER || target.getType() == EntityType.SLIME || target.getType() == EntityType.MAGMA_CUBE)) {
-                return 0;
+                return new StatObject(StatType.DAMAGE, 0);
             }
             switch (level) {
                 case 1:
                 case 2:
                 case 3:
                 case 4:
-                    return level * 10;
+                    return new StatObject(StatType.DAMAGE, level * 10);
                 case 5:
-                    return 60;
+                    return new StatObject(StatType.DAMAGE, 60);
                 case 6:
-                    return 80;
+                    return new StatObject(StatType.DAMAGE, 80);
                 default:
-                    return level * 15;
+                    return new StatObject(StatType.DAMAGE, level * 15);
             }
         }
 
@@ -128,11 +134,14 @@ public enum EnchantmentType {
     },
     DRAGON_HUNTER {
         @Override
-        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
-            if (target.getType() != EntityType.ENDER_DRAGON) {
-                return 0;
+        public StatObject getDamageStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+            if (type != StatType.DAMAGE) {
+                return new StatObject(type, 0);
             }
-            return level * 8;
+            if (target.getType() != EntityType.ENDER_DRAGON) {
+                return new StatObject(StatType.DAMAGE, 0);
+            }
+            return new StatObject(StatType.DAMAGE, level * 8);
         }
 
         @Override
@@ -147,22 +156,25 @@ public enum EnchantmentType {
     },
     ENDER_SLAYER {
         @Override
-        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
+        public StatObject getDamageStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+            if (type != StatType.DAMAGE) {
+                return new StatObject(type, 0);
+            }
             if (!(target.getType() == EntityType.ENDER_DRAGON || target.getType() == EntityType.ENDERMAN || target.getType() == EntityType.ENDERMITE)) {
-                return 0;
+                return new StatObject(StatType.DAMAGE, 0);
             }
             switch (level) {
                 case 1:
                 case 2:
                 case 3:
                 case 4:
-                    return level * 15;
+                    return new StatObject(StatType.DAMAGE, level * 15);
                 case 5:
                 case 6:
                 default:
-                    return (level - 1) * 20;
+                    return new StatObject(StatType.DAMAGE, (level - 1) * 20);
                 case 7:
-                    return 130;
+                    return new StatObject(StatType.DAMAGE, 130);
             }
         }
 
@@ -178,7 +190,10 @@ public enum EnchantmentType {
     },
     EXECUTE {
         @Override
-        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
+        public StatObject getDamageStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+            if (type != StatType.DAMAGE) {
+                return new StatObject(type, 0);
+            }
             BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
             int percentMissing;
             if (targetStats == null) {
@@ -193,9 +208,9 @@ public enum EnchantmentType {
                 case 4:
                 case 5:
                 default:
-                    return level * 0.2 * percentMissing;
+                    return new StatObject(StatType.DAMAGE, level * 0.2 * percentMissing);
                 case 6:
-                    return 1.25 * percentMissing;
+                    return new StatObject(StatType.DAMAGE, 1.25 * percentMissing);
             }
         }
 
@@ -265,7 +280,10 @@ public enum EnchantmentType {
     },
     GIANT_KILLER {
         @Override
-        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
+        public StatObject getDamageStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+            if (type != StatType.DAMAGE) {
+                return new StatObject(type, 0);
+            }
             BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType()), damagerStats = damager.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
             int morePercent;
             if (targetStats == null || damagerStats == null) {
@@ -278,15 +296,15 @@ public enum EnchantmentType {
                 case 2:
                 case 3:
                 case 4:
-                    return Math.min(level * 5, morePercent) * level * 0.1;
+                    return new StatObject(StatType.DAMAGE, Math.min(level * 5, morePercent) * level * 0.1);
                 case 5:
-                    return Math.min(30, morePercent) * 0.6;
+                    return new StatObject(StatType.DAMAGE, Math.min(30, morePercent) * 0.6);
                 case 6:
-                    return Math.min(45, morePercent) * 0.9;
+                    return new StatObject(StatType.DAMAGE, Math.min(45, morePercent) * 0.9);
                 case 7:
-                    return Math.min(65, morePercent) * 1.2;
+                    return new StatObject(StatType.DAMAGE, Math.min(65, morePercent) * 1.2);
                 default:
-                    return Math.min(level * 9, morePercent) * level * 0.2;
+                    return new StatObject(StatType.DAMAGE, Math.min(level * 9, morePercent) * level * 0.2);
             }
         }
 
@@ -302,11 +320,14 @@ public enum EnchantmentType {
     },
     IMPALING {
         @Override
-        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
-            if (!(target.getType() == EntityType.GUARDIAN || target.getType() == EntityType.SQUID || target.getType() == EntityType.GLOW_SQUID || target.getType() == EntityType.ELDER_GUARDIAN)) {
-                return 0;
+        public StatObject getDamageStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+            if (type != StatType.DAMAGE) {
+                return new StatObject(type, 0);
             }
-            return level * 25;
+            if (!(target.getType() == EntityType.GUARDIAN || target.getType() == EntityType.SQUID || target.getType() == EntityType.GLOW_SQUID || target.getType() == EntityType.ELDER_GUARDIAN)) {
+                return new StatObject(StatType.DAMAGE, 0);
+            }
+            return new StatObject(StatType.DAMAGE, level * 25);
         }
 
         @Override
@@ -417,7 +438,10 @@ public enum EnchantmentType {
     },
     PROSECUTE {
         @Override
-        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
+        public StatObject getDamageStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+            if (type != StatType.DAMAGE) {
+                return new StatObject(type, 0);
+            }
             BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
             int percentHealth;
             if (targetStats == null) {
@@ -430,13 +454,13 @@ public enum EnchantmentType {
                 case 2:
                 case 3:
                 case 4:
-                    return level * 0.1 * percentHealth;
+                    return new StatObject(StatType.DAMAGE, level * 0.1 * percentHealth);
                 case 5:
-                    return 0.7 * percentHealth;
+                    return new StatObject(StatType.DAMAGE, 0.7 * percentHealth);
                 case 6:
-                    return percentHealth;
+                    return new StatObject(StatType.DAMAGE, percentHealth);
                 default:
-                    return level * 1.2 * percentHealth;
+                    return new StatObject(StatType.DAMAGE, level * 1.2 * percentHealth);
             }
         }
 
@@ -463,21 +487,24 @@ public enum EnchantmentType {
     },
     SHARPNESS {
         @Override
-        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
+        public StatObject getDamageStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+            if (type != StatType.DAMAGE) {
+                return new StatObject(type, 0);
+            }
             switch (level) {
                 case 1:
                 case 2:
                 case 3:
                 case 4:
-                    return level * 5;
+                    return new StatObject(StatType.DAMAGE, level * 5);
                 case 5:
-                    return 30;
+                    return new StatObject(StatType.DAMAGE, 30);
                 case 6:
-                    return 45;
+                    return new StatObject(StatType.DAMAGE, 45);
                 case 7:
-                    return 65;
+                    return new StatObject(StatType.DAMAGE, 65);
                 default:
-                    return level * 10;
+                    return new StatObject(StatType.DAMAGE, level * 10);
             }
         }
 
@@ -493,24 +520,27 @@ public enum EnchantmentType {
     },
     SMITE {
         @Override
-        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
+        public StatObject getDamageStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+            if (type != StatType.DAMAGE) {
+                return new StatObject(type, 0);
+            }
             if (target.getCategory() != EntityCategory.UNDEAD) {
-                return 0;
+                return new StatObject(StatType.DAMAGE, 0);
             }
             switch (level) {
                 case 1:
                 case 2:
                 case 3:
                 case 4:
-                    return level * 10;
+                    return new StatObject(StatType.DAMAGE, level * 10);
                 case 5:
-                    return 60;
+                    return new StatObject(StatType.DAMAGE, 60);
                 case 6:
-                    return 80;
+                    return new StatObject(StatType.DAMAGE, 80);
                 case 7:
-                    return 100;
+                    return new StatObject(StatType.DAMAGE, 100);
                 default:
-                    return level * 15;
+                    return new StatObject(StatType.DAMAGE, level * 15);
             }
         }
 
@@ -526,11 +556,14 @@ public enum EnchantmentType {
     },
     SMOLDERING {
         @Override
-        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
-            if (target.getType() != EntityType.BLAZE) {
-                return 0;
+        public StatObject getDamageStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+            if (type != StatType.DAMAGE) {
+                return new StatObject(type, 0);
             }
-            return level * 3;
+            if (target.getType() != EntityType.BLAZE) {
+                return new StatObject(StatType.DAMAGE, 0);
+            }
+            return new StatObject(StatType.DAMAGE, level * 3);
         }
 
         @Override
@@ -593,7 +626,10 @@ public enum EnchantmentType {
     },
     TITAN_KILLER {
         @Override
-        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
+        public StatObject getDamageStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+            if (type != StatType.DAMAGE) {
+                return new StatObject(type, 0);
+            }
             BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
             int defenseCount = 0;
             if (targetStats != null) {
@@ -604,15 +640,15 @@ public enum EnchantmentType {
                 case 2:
                 case 3:
                 case 4:
-                    return Math.min(level * 6, level * 2 * defenseCount);
+                    return new StatObject(StatType.DAMAGE, Math.min(level * 6, level * 2 * defenseCount));
                 case 5:
-                    return Math.min(40, 12 * defenseCount);
+                    return new StatObject(StatType.DAMAGE, Math.min(40, 12 * defenseCount));
                 case 6:
-                    return Math.min(60, 16 * defenseCount);
+                    return new StatObject(StatType.DAMAGE, Math.min(60, 16 * defenseCount));
                 case 7:
-                    return Math.min(80, 20 * defenseCount);
+                    return new StatObject(StatType.DAMAGE, Math.min(80, 20 * defenseCount));
                 default:
-                    return Math.min(level * 15, level * 3 * defenseCount);
+                    return new StatObject(StatType.DAMAGE, Math.min(level * 15, level * 3 * defenseCount));
             }
         }
 
@@ -739,8 +775,11 @@ public enum EnchantmentType {
     },
     ONE_FOR_ALL {
         @Override
-        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
-            return level * 500;
+        public StatObject getDamageStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+            if (type != StatType.DAMAGE) {
+                return new StatObject(type, 0);
+            }
+            return new StatObject(StatType.DAMAGE, level * 500);
         }
 
         @Override
@@ -781,14 +820,17 @@ public enum EnchantmentType {
     },
     SWARM {
         @Override
-        public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
+        public StatObject getDamageStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+            if (type != StatType.DAMAGE) {
+                return new StatObject(type, 0);
+            }
             Collection<LivingEntity> enemies = damager.getLocation().getNearbyLivingEntities(10).stream()
                     .filter(c -> c instanceof Creature && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()) != null
                             && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobBehavior.PASSIVE
                             && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobBehavior.TAMED
                     ).toList();
             int enemyCount = Math.min(16, enemies.size());
-            return level * 1.25 * enemyCount;
+            return new StatObject(StatType.DAMAGE, level * 1.25 * enemyCount);
         }
 
         @Override
@@ -856,16 +898,76 @@ public enum EnchantmentType {
         return null;
     }
 
-    public double getAddDamage(EntityDamageByEntityEvent event, int level) {
-        return 0;
+    public StatObject getDamageStatAdditiveAmount(LivingEntity damager, LivingEntity target, int level, StatType type) {
+        return new StatObject(type, 0);
     }
 
-    public double getDamagePercentIncrease(LivingEntity damager, LivingEntity target, int level) {
-        return 0;
+    public StatObject getDamageStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+        return new StatObject(type, 0);
     }
 
-    public double getMultDamage(EntityDamageByEntityEvent event, int level) {
-        return 1;
+    public StatObject getDamageStatMultiplicativePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+        return new StatObject(type, 1);
+    }
+
+    public StatObject getHealthStatAdditiveAmount(LivingEntity damager, LivingEntity target, int level, StatType type) {
+        return new StatObject(type, 0);
+    }
+
+    public StatObject getHealthStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+        return new StatObject(type, 0);
+    }
+
+    public StatObject getHealthStatMultiplicativePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+        return new StatObject(type, 1);
+    }
+
+    public StatObject getAbilityStatAdditiveAmount(LivingEntity damager, int level, StatType type) {
+        return new StatObject(type, 0);
+    }
+
+    public StatObject getAbilityStatAdditivePercent(LivingEntity damager, int level, StatType type) {
+        return new StatObject(type, 0);
+    }
+
+    public StatObject getAbilityStatMultiplicativePercent(LivingEntity damager, int level, StatType type) {
+        return new StatObject(type, 1);
+    }
+
+    public StatObject getFishingStatAdditiveAmount(LivingEntity damager, int level, StatType type) {
+        return new StatObject(type, 0);
+    }
+
+    public StatObject getFishingStatAdditivePercent(LivingEntity damager, int level, StatType type) {
+        return new StatObject(type, 0);
+    }
+
+    public StatObject getFishingStatMultiplicativePercent(LivingEntity damager, int level, StatType type) {
+        return new StatObject(type, 1);
+    }
+
+    public StatObject geBreakingStatAdditiveAmount(LivingEntity harvester, Block block, int level, StatType type) {
+        return new StatObject(type, 0);
+    }
+
+    public StatObject getBreakingStatAdditivePercent(LivingEntity harvester, Block block, int level, StatType type) {
+        return new StatObject(type, 0);
+    }
+
+    public StatObject getBreakingStatMultiplicativePercent(LivingEntity harvester, Block block, int level, StatType type) {
+        return new StatObject(type, 1);
+    }
+
+    public StatObject getLuckStatAdditiveAmount(LivingEntity damager, LivingEntity target, int level, StatType type) {
+        return new StatObject(type, 0);
+    }
+
+    public StatObject getLuckStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+        return new StatObject(type, 0);
+    }
+
+    public StatObject getLuckStatMultiplicativePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
+        return new StatObject(type, 1);
     }
 
     public int getMinLevel() {

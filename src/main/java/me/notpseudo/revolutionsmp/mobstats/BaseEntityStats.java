@@ -1,6 +1,7 @@
 package me.notpseudo.revolutionsmp.mobstats;
 
 import me.notpseudo.revolutionsmp.itemstats.ArmorStats;
+import me.notpseudo.revolutionsmp.itemstats.StatType;
 import me.notpseudo.revolutionsmp.itemstats.WeaponStats;
 
 import java.io.Serializable;
@@ -67,7 +68,7 @@ public class BaseEntityStats implements Serializable {
      * @return The current health of the entity
      */
     public double getCurrentHealth() {
-        return healthStats.getHealth();
+        return healthStats.getStatValue(StatType.HEALTH);
     }
 
     /**
@@ -76,7 +77,7 @@ public class BaseEntityStats implements Serializable {
      * @param currentHealth The new current health
      */
     public void setCurrentHealth(double currentHealth) {
-        healthStats.setHealth(currentHealth);
+        healthStats.setStatValue(StatType.HEALTH, currentHealth);
     }
 
     /**
@@ -85,7 +86,7 @@ public class BaseEntityStats implements Serializable {
      * @return The defense of the entity
      */
     public double getDefense() {
-        return healthStats.getDefense();
+        return healthStats.getStatValue(StatType.DEFENSE);
     }
 
     /**
@@ -94,7 +95,7 @@ public class BaseEntityStats implements Serializable {
      * @param defense The new defense
      */
     public void setDefense(double defense) {
-        healthStats.setDefense(defense);
+        healthStats.setStatValue(StatType.DEFENSE, defense);
     }
 
     /**
@@ -103,7 +104,7 @@ public class BaseEntityStats implements Serializable {
      * @return The movement speed of the entity
      */
     public double getSpeed() {
-        return healthStats.getSpeed();
+        return healthStats.getStatValue(StatType.SPEED);
     }
 
     /**
@@ -112,7 +113,7 @@ public class BaseEntityStats implements Serializable {
      * @param speed The new movement speed
      */
     public void setSpeed(double speed) {
-        healthStats.setSpeed(speed);
+        healthStats.setStatValue(StatType.SPEED, speed);
     }
 
     /**
@@ -122,7 +123,7 @@ public class BaseEntityStats implements Serializable {
      */
 
     public double getStrength() {
-        return damageStats.getStrength();
+        return damageStats.getStatValue(StatType.STRENGTH);
     }
 
     /**
@@ -131,7 +132,7 @@ public class BaseEntityStats implements Serializable {
      * @param strength The new strength
      */
     public void setStrength(double strength) {
-        damageStats.setDamage(strength);
+        damageStats.setStatValue(StatType.STRENGTH, strength);
     }
 
     /**
@@ -140,7 +141,7 @@ public class BaseEntityStats implements Serializable {
      * @return The critical hit chance of the entity
      */
     public double getCritChance() {
-        return damageStats.getCritChance();
+        return damageStats.getStatValue(StatType.CRIT_CHANCE);
     }
 
     /**
@@ -149,7 +150,7 @@ public class BaseEntityStats implements Serializable {
      * @param critChance The new critical hit chance
      */
     public void setCritChance(double critChance) {
-        damageStats.setCritChance(critChance);
+        damageStats.setStatValue(StatType.CRIT_DAMAGE, critChance);
     }
 
     /**
@@ -158,7 +159,7 @@ public class BaseEntityStats implements Serializable {
      * @return The critical hit damage of the entity
      */
     public double getCritDamage() {
-        return damageStats.getCritDamage();
+        return damageStats.getStatValue(StatType.CRIT_DAMAGE);
     }
 
     /**
@@ -167,7 +168,7 @@ public class BaseEntityStats implements Serializable {
      * @param critDamage The new critical hit damage
      */
     public void setCritDamage(double critDamage) {
-        damageStats.setCritDamage(critDamage);
+        damageStats.setStatValue(StatType.CRIT_DAMAGE, critDamage);
     }
 
     /**

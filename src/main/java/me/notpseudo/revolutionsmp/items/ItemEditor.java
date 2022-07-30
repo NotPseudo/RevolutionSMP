@@ -109,145 +109,145 @@ public class ItemEditor {
             MiningStats reforgeMiningStats = reforge.getMiningStats(itemInfo.getRarity());
             GatheringStats reforgeGatheringStats = reforge.getGatheringStats(itemInfo.getRarity());
             LuckStats reforgeLuckStats = reforge.getLuckStats(itemInfo.getRarity());
-            if (reforgeWeaponStats.getDamage() != 0) {
-                reforgeDamage = getReforgeComponent(getStatString(reforgeWeaponStats.getDamage()));
+            if (reforgeWeaponStats.getStatValue(StatType.DAMAGE) != 0) {
+                reforgeDamage = getReforgeComponent(reforgeWeaponStats.getStatObject(StatType.DAMAGE));
             }
-            if (reforgeWeaponStats.getStrength() != 0) {
-                reforgeStrength = getReforgeComponent(getStatString(reforgeWeaponStats.getStrength()));
+            if (reforgeWeaponStats.getStatValue(StatType.STRENGTH) != 0) {
+                reforgeStrength = getReforgeComponent(reforgeWeaponStats.getStatObject(StatType.STRENGTH));
             }
-            if (reforgeWeaponStats.getCritChance() != 0) {
-                reforgeCritChance = getReforgeComponent(getStatString(reforgeWeaponStats.getCritChance())).append(Component.text("%)", NamedTextColor.BLUE));
+            if (reforgeWeaponStats.getStatValue(StatType.CRIT_CHANCE) != 0) {
+                reforgeCritChance = getReforgeComponent(reforgeWeaponStats.getStatObject(StatType.CRIT_CHANCE));
             }
-            if (reforgeWeaponStats.getCritDamage() != 0) {
-                reforgeCritDamage = getReforgeComponent(getStatString(reforgeWeaponStats.getCritDamage())).append(Component.text("%)", NamedTextColor.BLUE));
+            if (reforgeWeaponStats.getStatValue(StatType.CRIT_DAMAGE) != 0) {
+                reforgeCritDamage = getReforgeComponent(reforgeWeaponStats.getStatObject(StatType.CRIT_DAMAGE));
             }
-            if (reforgeWeaponStats.getAttackSpeed() != 0) {
-                reforgeAttackSpeed = getReforgeComponent(getStatString(reforgeWeaponStats.getAttackSpeed())).append(Component.text("%)", NamedTextColor.BLUE));
+            if (reforgeWeaponStats.getStatValue(StatType.ATTACK_SPEED ) != 0) {
+                reforgeAttackSpeed = getReforgeComponent(reforgeWeaponStats.getStatObject(StatType.ATTACK_SPEED));
             }
-            if (reforgeWeaponStats.getFerocity() != 0) {
-                reforgeFerocity = getReforgeComponent(getStatString(reforgeWeaponStats.getFerocity()));
+            if (reforgeWeaponStats.getStatValue(StatType.FEROCITY) != 0) {
+                reforgeFerocity = getReforgeComponent(reforgeWeaponStats.getStatObject(StatType.FEROCITY));
             }
-            if (reforgeArmorStats.getHealth() != 0) {
-                reforgeHealth = getReforgeComponent(getStatString(reforgeArmorStats.getHealth()));
+            if (reforgeArmorStats.getStatValue(StatType.HEALTH) != 0) {
+                reforgeHealth = getReforgeComponent(reforgeArmorStats.getStatObject(StatType.HEALTH));
             }
-            if (reforgeArmorStats.getDefense() != 0) {
-                reforgeDefense = getReforgeComponent(getStatString(reforgeArmorStats.getDefense()));
+            if (reforgeArmorStats.getStatValue(StatType.DEFENSE) != 0) {
+                reforgeDefense = getReforgeComponent(reforgeArmorStats.getStatObject(StatType.DEFENSE));
             }
-            if (reforgeArmorStats.getSpeed() != 0) {
-                reforgeSpeed = getReforgeComponent(getStatString(reforgeArmorStats.getSpeed()));
+            if (reforgeArmorStats.getStatValue(StatType.SPEED) != 0) {
+                reforgeSpeed = getReforgeComponent(reforgeArmorStats.getStatObject(StatType.SPEED));
             }
-            if (reforgeArmorStats.getTrueDefense() != 0) {
-                reforgeTrueDefense = getReforgeComponent(getStatString(reforgeArmorStats.getTrueDefense()));
+            if (reforgeArmorStats.getStatValue(StatType.TRUE_DEFENSE) != 0) {
+                reforgeTrueDefense = getReforgeComponent(reforgeArmorStats.getStatObject(StatType.TRUE_DEFENSE));
             }
-            if (reforgeAbilityStats.getAbilityDamage() != 0) {
-                reforgeAbilityDamage = getReforgeComponent(getStatString(reforgeAbilityStats.getAbilityDamage()));
+            if (reforgeAbilityStats.getStatValue(StatType.ABILITY_DAMAGE) != 0) {
+                reforgeAbilityDamage = getReforgeComponent(reforgeAbilityStats.getStatObject(StatType.ABILITY_DAMAGE));
             }
-            if (reforgeAbilityStats.getIntelligence() != 0) {
-                reforgeIntelligence = getReforgeComponent(getStatString(reforgeAbilityStats.getIntelligence()));
+            if (reforgeAbilityStats.getStatValue(StatType.INTELLIGENCE) != 0) {
+                reforgeIntelligence = getReforgeComponent(reforgeAbilityStats.getStatObject(StatType.INTELLIGENCE));
             }
-            if (reforgeFishingStats.getSeaCreatureChance() != 0) {
-                reforgeSeaCreatureChance = getReforgeComponent(getStatString(reforgeFishingStats.getSeaCreatureChance()));
+            if (reforgeFishingStats.getStatValue(StatType.SEA_CREATURE_CHANCE) != 0) {
+                reforgeSeaCreatureChance = getReforgeComponent(reforgeFishingStats.getStatObject(StatType.SEA_CREATURE_CHANCE));
             }
-            if (reforgeMiningStats.getMiningSpeed() != 0) {
-                reforgeMiningSpeed = getReforgeComponent(getStatString(reforgeMiningStats.getMiningSpeed()));
+            if (reforgeMiningStats.getStatValue(StatType.MINING_SPEED) != 0) {
+                reforgeMiningSpeed = getReforgeComponent(reforgeMiningStats.getStatObject(StatType.MINING_SPEED));
             }
-            if (reforgeMiningStats.getMiningFortune() != 0) {
-                reforgeMiningFortune = getReforgeComponent(getStatString(reforgeMiningStats.getMiningFortune()));
+            if (reforgeMiningStats.getStatValue(StatType.MINING_FORTUNE) != 0) {
+                reforgeMiningFortune = getReforgeComponent(reforgeMiningStats.getStatObject(StatType.MINING_FORTUNE));
             }
-            if (reforgeMiningStats.getPristine() != 0) {
-                reforgePristine = getReforgeComponent(getStatString(reforgeMiningStats.getPristine()));
+            if (reforgeMiningStats.getStatValue(StatType.PRISTINE) != 0) {
+                reforgePristine = getReforgeComponent(reforgeMiningStats.getStatObject(StatType.PRISTINE));
             }
-            if (reforgeGatheringStats.getFarmingFortune() != 0) {
-                reforgeFarmingFortune = getReforgeComponent(getStatString(reforgeGatheringStats.getFarmingFortune()));
+            if (reforgeGatheringStats.getStatValue(StatType.FARMING_FORTUNE) != 0) {
+                reforgeFarmingFortune = getReforgeComponent(reforgeGatheringStats.getStatObject(StatType.FARMING_FORTUNE));
             }
-            if (reforgeGatheringStats.getForagingFortune() != 0) {
-                reforgeForagingFortune = getReforgeComponent(getStatString(reforgeGatheringStats.getForagingFortune()));
+            if (reforgeGatheringStats.getStatValue(StatType.FORAGING_FORTUNE) != 0) {
+                reforgeForagingFortune = getReforgeComponent(reforgeGatheringStats.getStatObject(StatType.FORAGING_FORTUNE));
             }
-            if (reforgeLuckStats.getMagicFind() != 0) {
-                reforgeMagicFind = getReforgeComponent(getStatString(reforgeLuckStats.getMagicFind()));
+            if (reforgeLuckStats.getStatValue(StatType.MAGIC_FIND) != 0) {
+                reforgeMagicFind = getReforgeComponent(reforgeLuckStats.getStatObject(StatType.MAGIC_FIND));
             }
-            if (reforgeLuckStats.getPetLuck() != 0) {
-                reforgePetLuck = getReforgeComponent(getStatString(reforgeLuckStats.getPetLuck()));
+            if (reforgeLuckStats.getStatValue(StatType.PET_LUCK) != 0) {
+                reforgePetLuck = getReforgeComponent(reforgeLuckStats.getStatObject(StatType.PET_LUCK));
             }
         } else {
             hasReforge = Component.text("This item can be reforged!", NamedTextColor.DARK_GRAY);
         }
         name = Component.text(reforgeName + itemInfo.getName()).color(itemInfo.getRarity().getRarityColor()); // The displayed name of the item is Reforge + Item Name
         if (weaponStats != null) {
-            if (weaponStats.getDamage() != 0) {
-                damage = Component.text("Damage: ", NamedTextColor.GRAY).append(Component.text(getStatString(weaponStats.getDamage()), NamedTextColor.RED)).append(potatoDamage).append(reforgeDamage);
+            if (weaponStats.getStatValue(StatType.DAMAGE) != 0) {
+                damage = Component.text("Damage: ", NamedTextColor.GRAY).append(Component.text(getStatString(weaponStats.getStatValue(StatType.DAMAGE)), NamedTextColor.RED)).append(potatoDamage).append(reforgeDamage);
             }
-            if (weaponStats.getStrength() != 0) {
-                strength = Component.text("Strength: ", NamedTextColor.GRAY).append(Component.text(getStatString(weaponStats.getStrength()), NamedTextColor.RED)).append(potatoStrength).append(reforgeStrength);
+            if (weaponStats.getStatValue(StatType.STRENGTH) != 0) {
+                strength = Component.text("Strength: ", NamedTextColor.GRAY).append(Component.text(getStatString(weaponStats.getStatValue(StatType.STRENGTH)), NamedTextColor.RED)).append(potatoStrength).append(reforgeStrength);
             }
-            if (weaponStats.getCritChance() != 0) {
-                critChance = Component.text("Crit Chance: ", NamedTextColor.GRAY).append(Component.text(getStatString(weaponStats.getCritChance()) + "%", NamedTextColor.RED)).append(reforgeCritChance);
+            if (weaponStats.getStatValue(StatType.CRIT_CHANCE) != 0) {
+                critChance = Component.text("Crit Chance: ", NamedTextColor.GRAY).append(Component.text(getStatString(weaponStats.getStatValue(StatType.CRIT_CHANCE)) + "%", NamedTextColor.RED)).append(reforgeCritChance);
             }
-            if (weaponStats.getCritDamage() != 0) {
-                critDamage = Component.text("Crit Damage: ", NamedTextColor.GRAY).append(Component.text(getStatString(weaponStats.getCritDamage()) + "%", NamedTextColor.RED)).append(reforgeCritDamage);
+            if (weaponStats.getStatValue(StatType.CRIT_DAMAGE) != 0) {
+                critDamage = Component.text("Crit Damage: ", NamedTextColor.GRAY).append(Component.text(getStatString(weaponStats.getStatValue(StatType.CRIT_DAMAGE)) + "%", NamedTextColor.RED)).append(reforgeCritDamage);
             }
-            if (weaponStats.getAttackSpeed() != 0) {
-                attackSpeed = Component.text("Bonus Attack Speed: ", NamedTextColor.GRAY).append(Component.text(getStatString(weaponStats.getAttackSpeed()) + "%", NamedTextColor.RED)).append(reforgeAttackSpeed);
+            if (weaponStats.getStatValue(StatType.ATTACK_SPEED )!= 0) {
+                attackSpeed = Component.text("Bonus Attack Speed: ", NamedTextColor.GRAY).append(Component.text(getStatString(weaponStats.getStatValue(StatType.ATTACK_SPEED)) + "%", NamedTextColor.RED)).append(reforgeAttackSpeed);
             }
-            if (weaponStats.getFerocity() != 0) {
-                ferocity = Component.text("Ferocity: ", NamedTextColor.GRAY).append(Component.text(getStatString(weaponStats.getFerocity()), NamedTextColor.GREEN)).append(reforgeFerocity);
+            if (weaponStats.getStatValue(StatType.FEROCITY) != 0) {
+                ferocity = Component.text("Ferocity: ", NamedTextColor.GRAY).append(Component.text(getStatString(weaponStats.getStatValue(StatType.FEROCITY)), NamedTextColor.GREEN)).append(reforgeFerocity);
             }
         }
         if (armorStats != null) {
-            if (armorStats.getHealth() != 0) {
-                health = Component.text("Health: ", NamedTextColor.GRAY).append(Component.text(getStatString(armorStats.getHealth()), NamedTextColor.GREEN)).append(potatoHealth).append(reforgeHealth);
+            if (armorStats.getStatValue(StatType.HEALTH) != 0) {
+                health = Component.text("Health: ", NamedTextColor.GRAY).append(Component.text(getStatString(armorStats.getStatValue(StatType.HEALTH)), NamedTextColor.GREEN)).append(potatoHealth).append(reforgeHealth);
             }
-            if (armorStats.getDefense() != 0) {
-                defense = Component.text("Defense: ", NamedTextColor.GRAY).append(Component.text(getStatString(armorStats.getDefense()), NamedTextColor.GREEN)).append(potatoDefense).append(reforgeDefense);
+            if (armorStats.getStatValue(StatType.DEFENSE) != 0) {
+                defense = Component.text("Defense: ", NamedTextColor.GRAY).append(Component.text(getStatString(armorStats.getStatValue(StatType.DEFENSE)), NamedTextColor.GREEN)).append(potatoDefense).append(reforgeDefense);
             }
-            if (armorStats.getSpeed() != 0) {
-                speed = Component.text("Speed: ", NamedTextColor.GRAY).append(Component.text(getStatString(armorStats.getSpeed()), NamedTextColor.GREEN)).append(reforgeSpeed);
+            if (armorStats.getStatValue(StatType.SPEED) != 0) {
+                speed = Component.text("Speed: ", NamedTextColor.GRAY).append(Component.text(getStatString(armorStats.getStatValue(StatType.SPEED)), NamedTextColor.GREEN)).append(reforgeSpeed);
             }
-            if (armorStats.getTrueDefense() != 0) {
-                trueDefense = Component.text("True Defense: ", NamedTextColor.GRAY).append(Component.text(getStatString(armorStats.getTrueDefense()), NamedTextColor.GREEN)).append(reforgeTrueDefense);
+            if (armorStats.getStatValue(StatType.TRUE_DEFENSE) != 0) {
+                trueDefense = Component.text("True Defense: ", NamedTextColor.GRAY).append(Component.text(getStatString(armorStats.getStatValue(StatType.TRUE_DEFENSE)), NamedTextColor.GREEN)).append(reforgeTrueDefense);
             }
         }
         if (abilityStats != null) {
-            if (abilityStats.getAbilityDamage() != 0) {
-                abilityDamage = Component.text("Ability Damage: ", NamedTextColor.GRAY).append(Component.text(getStatString(abilityStats.getAbilityDamage()) + "%", NamedTextColor.RED)).append(reforgeAbilityDamage);
+            if (abilityStats.getStatValue(StatType.ABILITY_DAMAGE) != 0) {
+                abilityDamage = Component.text("Ability Damage: ", NamedTextColor.GRAY).append(Component.text(getStatString(abilityStats.getStatValue(StatType.ABILITY_DAMAGE)) + "%", NamedTextColor.RED)).append(reforgeAbilityDamage);
             }
-            if (abilityStats.getIntelligence() != 0) {
-                intelligence = Component.text("Intelligence: ", NamedTextColor.GRAY).append(Component.text(getStatString(abilityStats.getIntelligence()), NamedTextColor.GREEN)).append(reforgeIntelligence);
+            if (abilityStats.getStatValue(StatType.INTELLIGENCE) != 0) {
+                intelligence = Component.text("Intelligence: ", NamedTextColor.GRAY).append(Component.text(getStatString(abilityStats.getStatValue(StatType.INTELLIGENCE)), NamedTextColor.GREEN)).append(reforgeIntelligence);
             }
         }
         if (fishingStats != null) {
-            if (fishingStats.getSeaCreatureChance() != 0) {
-                seaCreatureChance = Component.text("Sea Creature Chance: ", NamedTextColor.GRAY).append(Component.text(getStatString(fishingStats.getSeaCreatureChance()) + "%", NamedTextColor.RED)).append(reforgeSeaCreatureChance);
+            if (fishingStats.getStatValue(StatType.SEA_CREATURE_CHANCE) != 0) {
+                seaCreatureChance = Component.text("Sea Creature Chance: ", NamedTextColor.GRAY).append(Component.text(getStatString(fishingStats.getStatValue(StatType.SEA_CREATURE_CHANCE)) + "%", NamedTextColor.RED)).append(reforgeSeaCreatureChance);
             }
-            if (fishingStats.getFishingTimeDecrease() != 0) {
-                fishingTimeDecrease = Component.text("Increases fishing speed by ", NamedTextColor.GRAY).append(Component.text(fishingStats.getFishingTimeDecrease() + "%", NamedTextColor.BLUE));
+            if (fishingStats.getStatValue(StatType.FISHING_SPEED) != 0) {
+                fishingTimeDecrease = Component.text("Increases fishing speed by ", NamedTextColor.GRAY).append(Component.text(fishingStats.getStatValue(StatType.FISHING_SPEED) + "%", NamedTextColor.BLUE));
             }
         }
         if (miningStats != null) {
-            if (miningStats.getMiningSpeed() != 0) {
-                miningSpeed = Component.text("Mining Speed: ", NamedTextColor.GRAY).append(Component.text(getStatString(miningStats.getMiningSpeed()), NamedTextColor.GREEN)).append(reforgeMiningSpeed);
+            if (miningStats.getStatValue(StatType.MINING_SPEED) != 0) {
+                miningSpeed = Component.text("Mining Speed: ", NamedTextColor.GRAY).append(Component.text(getStatString(miningStats.getStatValue(StatType.MINING_SPEED)), NamedTextColor.GREEN)).append(reforgeMiningSpeed);
             }
-            if (miningStats.getMiningFortune() != 0) {
-                miningFortune = Component.text("Mining Fortune: ", NamedTextColor.GRAY).append(Component.text(getStatString(miningStats.getMiningFortune()), NamedTextColor.GREEN)).append(reforgeMiningFortune);
+            if (miningStats.getStatValue(StatType.MINING_FORTUNE) != 0) {
+                miningFortune = Component.text("Mining Fortune: ", NamedTextColor.GRAY).append(Component.text(getStatString(miningStats.getStatValue(StatType.MINING_FORTUNE)), NamedTextColor.GREEN)).append(reforgeMiningFortune);
             }
-            if (miningStats.getPristine() != 0) {
-                pristine = Component.text("Pristine: ", NamedTextColor.GRAY).append(Component.text(getStatString(miningStats.getPristine()), NamedTextColor.GREEN)).append(reforgePristine);
+            if (miningStats.getStatValue(StatType.PRISTINE) != 0) {
+                pristine = Component.text("Pristine: ", NamedTextColor.GRAY).append(Component.text(getStatString(miningStats.getStatValue(StatType.PRISTINE)), NamedTextColor.GREEN)).append(reforgePristine);
             }
         }
         if (gatheringStats != null) {
-            if (gatheringStats.getFarmingFortune() != 0) {
-                farmingFortune = Component.text("Farming Fortune: ", NamedTextColor.GRAY).append(Component.text(getStatString(gatheringStats.getFarmingFortune()), NamedTextColor.GREEN)).append(reforgeFarmingFortune);
+            if (gatheringStats.getStatValue(StatType.FARMING_FORTUNE) != 0) {
+                farmingFortune = Component.text("Farming Fortune: ", NamedTextColor.GRAY).append(Component.text(getStatString(gatheringStats.getStatValue(StatType.FARMING_FORTUNE)), NamedTextColor.GREEN)).append(reforgeFarmingFortune);
             }
-            if (gatheringStats.getForagingFortune() != 0) {
-                foragingFortune = Component.text("Foraging Fortune: ", NamedTextColor.GRAY).append(Component.text(getStatString(gatheringStats.getForagingFortune()), NamedTextColor.GREEN)).append(reforgeForagingFortune);
+            if (gatheringStats.getStatValue(StatType.FORAGING_FORTUNE) != 0) {
+                foragingFortune = Component.text("Foraging Fortune: ", NamedTextColor.GRAY).append(Component.text(getStatString(gatheringStats.getStatValue(StatType.FORAGING_FORTUNE)), NamedTextColor.GREEN)).append(reforgeForagingFortune);
             }
         }
         if (luckStats != null) {
-            if (luckStats.getMagicFind() != 0) {
-                magicFind = Component.text("Magic Find: ", NamedTextColor.GRAY).append(Component.text(getStatString(luckStats.getMagicFind()), NamedTextColor.GREEN)).append(reforgeMagicFind);
+            if (luckStats.getStatValue(StatType.MAGIC_FIND) != 0) {
+                magicFind = Component.text("Magic Find: ", NamedTextColor.GRAY).append(Component.text(getStatString(luckStats.getStatValue(StatType.MAGIC_FIND)), NamedTextColor.GREEN)).append(reforgeMagicFind);
             }
-            if (luckStats.getPetLuck() != 0) {
-                petLuck = Component.text("Pet Luck: ", NamedTextColor.GRAY).append(Component.text(getStatString(luckStats.getPetLuck()), NamedTextColor.GREEN)).append(reforgePetLuck);
+            if (luckStats.getStatValue(StatType.PET_LUCK) != 0) {
+                petLuck = Component.text("Pet Luck: ", NamedTextColor.GRAY).append(Component.text(getStatString(luckStats.getStatValue(StatType.PET_LUCK)), NamedTextColor.GREEN)).append(reforgePetLuck);
             }
         }
         meta.displayName(name.decoration(TextDecoration.ITALIC, false));
@@ -373,8 +373,11 @@ public class ItemEditor {
         }
     }
 
-    private static Component getReforgeComponent(String statString) {
-        return Component.text(" (" + statString + "/)", NamedTextColor.BLUE);
+    private static Component getReforgeComponent(StatObject stat) {
+        if (stat.getType().isPercentage()) {
+            return Component.text(" (" + getStatString(stat.getValue()) + "%)", NamedTextColor.BLUE);
+        }
+        return Component.text(" (" + getStatString(stat.getValue()) + ")", NamedTextColor.BLUE);
     }
 
     /**

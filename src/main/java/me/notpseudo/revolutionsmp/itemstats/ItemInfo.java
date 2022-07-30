@@ -245,12 +245,12 @@ public class ItemInfo implements Serializable {
             abilitiesHolder.reorganize();
         }
         if (ItemEditor.isWeapon(this)) {
-            weaponStats.setDamage(weaponStats.getDamage() + potatoBooks * 2);
-            weaponStats.setStrength(weaponStats.getStrength() + potatoBooks * 2);
+            weaponStats.setStatValue(StatType.DAMAGE, weaponStats.getStatValue(StatType.DAMAGE) + potatoBooks * 2);
+            weaponStats.setStatValue(StatType.STRENGTH, weaponStats.getStatValue(StatType.STRENGTH) + potatoBooks * 2);
         }
         if (ItemEditor.isArmor(this)) {
-            armorStats.setHealth(armorStats.getHealth() + potatoBooks * 4);
-            armorStats.setDefense(armorStats.getDefense() + potatoBooks * 2);
+            armorStats.setStatValue(StatType.HEALTH, armorStats.getStatValue(StatType.HEALTH) + potatoBooks * 4);
+            armorStats.setStatValue(StatType.DEFENSE, armorStats.getStatValue(StatType.DEFENSE) + potatoBooks * 2);
         }
     }
 

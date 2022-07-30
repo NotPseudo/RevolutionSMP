@@ -1503,6 +1503,12 @@ public enum Reforge {
         public WeaponStats getWeaponStats(Rarity rarity) {
             return new WeaponStats(0, 10, 30, 5, 20, 5);
         }
+    },
+    BLESSED {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.AXE, ItemType.HOE);
+        }
     };
 
     // Gets list of ItemTypes the Reforge can be applied to

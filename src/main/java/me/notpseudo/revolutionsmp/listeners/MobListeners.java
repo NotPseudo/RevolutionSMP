@@ -63,8 +63,7 @@ public class MobListeners implements Listener {
     // When a LivingEntity is added to the world for any reason
     @EventHandler
     public void onSpawn(EntityAddToWorldEvent event) {
-        if (event.getEntity() instanceof Creature) {
-            Creature entity = (Creature) event.getEntity();
+        if (event.getEntity() instanceof Creature entity) {
             createMobInfo(entity);
         }
     }

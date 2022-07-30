@@ -45,8 +45,8 @@ public class StatsListeners implements Listener {
      */
     private final static NamespacedKey itemKey = ItemEditor.getItemKey();
 
-    private static ArrayList<UUID> showAbilities = new ArrayList<UUID>();
-    private static ArrayList<UUID> noMana = new ArrayList<UUID>();
+    private static ArrayList<UUID> showAbilities = new ArrayList<>();
+    private static ArrayList<UUID> noMana = new ArrayList<>();
 
     /**
      * Holds an instance of the plugin
@@ -91,17 +91,15 @@ public class StatsListeners implements Listener {
         }
         // Assigns base values for each stat
         WeaponStats damageStats = new WeaponStats(0, 0, 30, 50, 0, 0);
-        ArmorStats healthStats = new ArmorStats(0, 0, 100, 0);
+        ArmorStats healthStats = new ArmorStats(100, 0, 100, 0);
         AbilityStats abilityStats = new AbilityStats(0, 100);
         FishingStats fishingStats = new FishingStats(20, 0);
         MiningStats miningStats = new MiningStats(0, 0, 0);
         GatheringStats gatheringStats = new GatheringStats(0, 0);
         LuckStats luckStats = new LuckStats(0, 0);
-        double maxHealth = 100;
         // Checks to make sure each item that will affect stats is not null, checks to make sure each item's meta is not null
         // Gets and adds item stat boosts to base amounts
-        List<ItemStack> equippedItems = new ArrayList<>(List.of(player.getInventory().getItemInMainHand()));
-        equippedItems.add(player.getInventory().getItemInOffHand());
+        List<ItemStack> equippedItems = new ArrayList<>();
         Collections.addAll(equippedItems, player.getInventory().getArmorContents());
         for (ItemStack item : equippedItems) {
             if (item != null && item.getItemMeta() != null) {
@@ -118,34 +116,66 @@ public class StatsListeners implements Listener {
                 }
             }
         }
+        ItemStack mainHand = player.getInventory().getItemInMainHand();
+        if (mainHand.getItemMeta() != null) {
+            ItemMeta meta = mainHand.getItemMeta();
+            ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+            if (itemInfo != null) {
+                damageStats.combine(itemInfo.getWeaponStats());
+                if (!ItemEditor.isArmor(itemInfo)) {
+                    healthStats.combine(itemInfo.getArmorStats());
+                }
+                abilityStats.combine(itemInfo.getAbilityStats());
+                fishingStats.combine(itemInfo.getFishingStats());
+                miningStats.combine(itemInfo.getMiningStats());
+                gatheringStats.combine(itemInfo.getGatheringStats());
+                luckStats.combine(itemInfo.getLuckStats());
+            }
+        }
+        ItemStack offHand = player.getInventory().getItemInMainHand();
+        if (offHand.getItemMeta() != null) {
+            ItemMeta meta = offHand.getItemMeta();
+            ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+            if (itemInfo != null) {
+                damageStats.combine(itemInfo.getWeaponStats());
+                if (!ItemEditor.isArmor(itemInfo)) {
+                    healthStats.combine(itemInfo.getArmorStats());
+                }
+                abilityStats.combine(itemInfo.getAbilityStats());
+                fishingStats.combine(itemInfo.getFishingStats());
+                miningStats.combine(itemInfo.getMiningStats());
+                gatheringStats.combine(itemInfo.getGatheringStats());
+                luckStats.combine(itemInfo.getLuckStats());
+            }
+        }
         PlayerStats playerStats = player.getPersistentDataContainer().get(playerStatsKey, new PlayerStatsDataType());
         if (playerStats == null) {
             playerStats = new PlayerStats();
         }
         // Adjusts Player's Health to new max Health by keeping the same percentage
-        double vanillaMaxHealth = Math.min(2048, maxHealth);
+        double vanillaMaxHealth = Math.min(2048, healthStats.getStatValue(StatType.HEALTH));
         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(vanillaMaxHealth);
         // Player will always see 40 hit points or 20 hearts on their screen
         player.setHealthScale(40);
         double healthPercent = playerStats.getCurrentHealth() / playerStats.getMaxHealth();
         player.setHealth(Math.max(healthPercent * vanillaMaxHealth, 0));
         player.setAbsorptionAmount(Math.min(playerStats.getAbsorption(), 40));
-        playerStats.setCurrentHealth(healthPercent * maxHealth);
-        playerStats.setMaxHealth(maxHealth);
-        playerStats.setDefense(healthStats.getDefense() * playerStats.getDefenseMultiplier());
-        playerStats.setSpeed((healthStats.getSpeed() + playerStats.getAddSpeed()) * playerStats.getSpeedMultiplier());
-        playerStats.setStrength(damageStats.getStrength());
-        playerStats.setCritChance(damageStats.getCritChance());
-        playerStats.setCritDamage(damageStats.getCritDamage());
-        playerStats.setAttackSpeed(damageStats.getAttackSpeed());
-        playerStats.setFerocity(damageStats.getFerocity());
+        playerStats.setCurrentHealth(healthPercent * healthStats.getStatValue(StatType.HEALTH));
+        playerStats.setMaxHealth(healthStats.getStatValue(StatType.HEALTH));
+        playerStats.setDefense(healthStats.getStatValue(StatType.DEFENSE) * playerStats.getDefenseMultiplier());
+        playerStats.setSpeed((healthStats.getStatValue(StatType.SPEED) + playerStats.getAddSpeed()) * playerStats.getSpeedMultiplier());
+        playerStats.setStrength(damageStats.getStatValue(StatType.STRENGTH));
+        playerStats.setCritChance(damageStats.getStatValue(StatType.CRIT_CHANCE));
+        playerStats.setCritDamage(damageStats.getStatValue(StatType.CRIT_DAMAGE));
+        playerStats.setAttackSpeed(damageStats.getStatValue(StatType.ATTACK_SPEED));
+        playerStats.setFerocity(damageStats.getStatValue(StatType.FEROCITY));
         playerStats.setAbilityStats(abilityStats);
         playerStats.setFishingStats(fishingStats);
         playerStats.setMiningStats(miningStats);
         playerStats.setGatheringStats(gatheringStats);
         playerStats.setLuckStats(luckStats);
-        player.setWalkSpeed((float) ((healthStats.getSpeed() + playerStats.getAddSpeed()) * playerStats.getSpeedMultiplier() / 500));
-        player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4 * (1 + (damageStats.getAttackSpeed() / 100)));
+        player.setWalkSpeed((float) ((healthStats.getStatValue(StatType.SPEED) + playerStats.getAddSpeed()) * playerStats.getSpeedMultiplier() / 500));
+        player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4 * (1 + (damageStats.getStatValue(StatType.ATTACK_SPEED) / 100)));
         player.getPersistentDataContainer().set(playerStatsKey, new PlayerStatsDataType(), playerStats);
     }
 
