@@ -36,17 +36,12 @@ public enum ItemType {
 
     },
     ITEM {
-        @Override
-        public boolean allowEnchants() {
-            return false;
-        }
 
-        @Override
-        public boolean allowAbilities() {
-            return false;
-        }
     },
     WAND {
+
+    },
+    DEPLOYABLE {
 
     },
     DRILL {
@@ -64,4 +59,4 @@ public enum ItemType {
         return true;
     }
 
-    }
+}

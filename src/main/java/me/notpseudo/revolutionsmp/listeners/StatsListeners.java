@@ -190,7 +190,7 @@ public class StatsListeners implements Listener {
             playerStats = new PlayerStats();
         }
         double currentHealth = playerStats.getCurrentHealth(), maxHealth = playerStats.getMaxHealth(), intelligence = playerStats.getIntelligence(), mana = playerStats.getMana();
-        if (!player.isDead()) {
+        if (!player.isDead() && player.getFoodLevel() >= 17) {
             if (currentHealth != maxHealth) {
                 // If the Player is not dead and their current Health is not already full
                 // Amount of Health to add is (0.75 + 0.5% of max Health) rounded up to the nearest tenth
@@ -327,7 +327,7 @@ public class StatsListeners implements Listener {
                 ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
                 ItemMeta meta = item.getItemMeta();
                 if(meta == null) {
-                    return;
+                    ItemEditor.createMetaFromMat(meta, item.getType());
                 }
                 ItemEditor.updateLore(meta);
                 item.setItemMeta(meta);

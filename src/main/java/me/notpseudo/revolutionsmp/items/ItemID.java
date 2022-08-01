@@ -1,6 +1,5 @@
 package me.notpseudo.revolutionsmp.items;
 
-import me.notpseudo.revolutionsmp.abilities.AbilityObject;
 import me.notpseudo.revolutionsmp.abilities.AbilityType;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.specialiteminfo.SpecialItemInfo;
@@ -9,7 +8,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 // Enum used to identify the exact custom item type an item is
@@ -347,7 +345,7 @@ public enum ItemID {
         }
 
         @Override
-        public MiningStats getDafaultMiningStats() {
+        public MiningStats getDefaultMiningStats() {
             return new MiningStats(10, 10, 10);
         }
 
@@ -412,6 +410,79 @@ public enum ItemID {
         public GatheringStats getDefaultGatheringStats() {
             return new GatheringStats(200, 200);
         }
+    },
+    NECRONS_HANDLE {
+        @Override
+        public String getDefaultName() {
+            return "Necron's Handle";
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.EPIC;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.ITEM;
+        }
+
+        @Override
+        public Material getMaterial() {
+            return Material.STICK;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+    },
+    NECRONS_LADDER {
+        @Override
+        public String getDefaultName() {
+            return "Necron's Ladder";
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.LEGENDARY;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.ITEM;
+        }
+
+        @Override
+        public Material getMaterial() {
+            return Material.LADDER;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+    },
+    JUDGEMENT_CORE {
+        @Override
+        public ItemType getItemType() {
+            return ItemType.ITEM;
+        }
+
+        @Override
+        public Material getMaterial() {
+            return Material.PLAYER_HEAD;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.LEGENDARY;
+        }
+
+        @Override
+        public String getTexture() {
+            return "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmYzZGRkN2Y4MTA4OWM4NWIyNmVkNTk3Njc1NTE5ZjAzYTFkY2Q2ZDE3MTNlMGNmYzY2YWZiODc0M2NiZTAifX19";
+        }
     };
 
     // Gets default stats for specific item
@@ -449,7 +520,7 @@ public enum ItemID {
         return new FishingStats(0, 0);
     }
 
-    public MiningStats getDafaultMiningStats() {
+    public MiningStats getDefaultMiningStats() {
         return new MiningStats(0, 0, 0);
     }
 
@@ -475,12 +546,21 @@ public enum ItemID {
         return true;
     }
 
+    public boolean isEnchantGlint() {
+        return false;
+    }
+
     public SpecialItemInfo getSpecialItemInfo() {
+        return null;
+    }
+
+    public String getTexture() {
         return null;
     }
 
     public ItemStack getItem() {
         return ItemEditor.createItem(this);
     }
+
 
 }

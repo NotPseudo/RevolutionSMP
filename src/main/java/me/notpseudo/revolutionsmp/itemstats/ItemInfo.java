@@ -4,6 +4,7 @@ import me.notpseudo.revolutionsmp.abilities.AbilityType;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
 import me.notpseudo.revolutionsmp.specialiteminfo.SpecialItemInfo;
 import me.notpseudo.revolutionsmp.items.*;
+import org.bukkit.Material;
 
 import java.io.Serializable;
 
@@ -27,6 +28,7 @@ public class ItemInfo implements Serializable {
     private EnchantmentsHolder enchantmentsHolder;
     private AbilitiesHolder abilitiesHolder;
     private SpecialItemInfo extraInfo;
+    private String materialString;
 
     public ItemInfo(ItemID itemID) {
         this.itemID = itemID;
@@ -40,25 +42,69 @@ public class ItemInfo implements Serializable {
         armorStats = itemID.getDefaultArmorStats();
         abilityStats = itemID.getDefaultAbilityStats();
         fishingStats = itemID.getDefaultFishingStats();
-        miningStats = itemID.getDafaultMiningStats();
+        miningStats = itemID.getDefaultMiningStats();
         gatheringStats = itemID.getDefaultGatheringStats();
         luckStats = itemID.getDefaultLuckStats();
-        if (itemID.getItemType().allowEnchants()) {
-            enchantmentsHolder = new EnchantmentsHolder();
-        } else {
-            enchantmentsHolder = null;
+        enchantmentsHolder = new EnchantmentsHolder();
+        abilitiesHolder = new AbilitiesHolder(this);
+        for(AbilityType type : itemID.getDefaultAbilities()) {
+            abilitiesHolder.addAbility(type);
         }
-        if (itemID.getItemType().allowAbilities()) {
+        extraInfo = itemID.getSpecialItemInfo();
+        materialString = itemID.toString();
+        recalculate();
+    }
+
+    public ItemInfo(Material material) {
+        recomb = false;
+        potatoBooks = 0;
+        reforge = null;
+        try {
+            itemID = ItemID.valueOf(material.toString());
+            name = itemID.getDefaultName();
+            rarity = itemID.getDefaultRarity();
+            itemType = itemID.getItemType();
+            weaponStats = itemID.getDefaultWeaponStats();
+            armorStats = itemID.getDefaultArmorStats();
+            abilityStats = itemID.getDefaultAbilityStats();
+            fishingStats = itemID.getDefaultFishingStats();
+            miningStats = itemID.getDefaultMiningStats();
+            gatheringStats = itemID.getDefaultGatheringStats();
+            luckStats = itemID.getDefaultLuckStats();
+            enchantmentsHolder = new EnchantmentsHolder();
             abilitiesHolder = new AbilitiesHolder(this);
             for(AbilityType type : itemID.getDefaultAbilities()) {
                 abilitiesHolder.addAbility(type);
             }
-        } else {
+            extraInfo = itemID.getSpecialItemInfo();
+            materialString = itemID.toString();
+        } catch (IllegalArgumentException exception) {
+            itemID = null;
+            name = ItemEditor.getStringFromEnum(material);
+            try {
+                if (material.isItem()) {
+                    rarity = Rarity.valueOf(material.getItemRarity().toString());
+                } else {
+                    rarity = Rarity.COMMON;
+                }
+            } catch (IllegalArgumentException exception1) {
+                rarity = Rarity.COMMON;
+            }
+            itemType = ItemType.ITEM;
+            weaponStats = new WeaponStats(0, 0, 0, 0, 0, 0);
+            armorStats = new ArmorStats(0, 0, 0);
+            abilityStats = new AbilityStats(0, 0);
+            fishingStats = new FishingStats(0, 0);
+            miningStats = new MiningStats(0, 0, 0);
+            gatheringStats = new GatheringStats(0, 0);
+            luckStats = new LuckStats(0, 0);
+            enchantmentsHolder = null;
             abilitiesHolder = null;
+            extraInfo = null;
+            materialString = material.toString();
         }
-        extraInfo = itemID.getSpecialItemInfo();
-        recalculate();
     }
+
 
     public String getName() {
         return name;
@@ -213,14 +259,20 @@ public class ItemInfo implements Serializable {
         recalculate();
     }
 
+    public String getMaterialString() {
+        return materialString;
+    }
+
     public void recalculate() {
-        weaponStats = itemID.getDefaultWeaponStats();
-        armorStats = itemID.getDefaultArmorStats();
-        abilityStats = itemID.getDefaultAbilityStats();
-        fishingStats = itemID.getDefaultFishingStats();
-        miningStats = itemID.getDafaultMiningStats();
-        gatheringStats = itemID.getDefaultGatheringStats();
-        luckStats = itemID.getDefaultLuckStats();
+        if (itemID != null) {
+            weaponStats = itemID.getDefaultWeaponStats();
+            armorStats = itemID.getDefaultArmorStats();
+            abilityStats = itemID.getDefaultAbilityStats();
+            fishingStats = itemID.getDefaultFishingStats();
+            miningStats = itemID.getDefaultMiningStats();
+            gatheringStats = itemID.getDefaultGatheringStats();
+            luckStats = itemID.getDefaultLuckStats();
+        }
         if (reforge != null) {
             weaponStats.combine(reforge.getWeaponStats(rarity));
             armorStats.combine(reforge.getArmorStats(rarity));
@@ -230,7 +282,7 @@ public class ItemInfo implements Serializable {
             gatheringStats.combine(reforge.getGatheringStats(rarity));
             luckStats.combine(reforge.getLuckStats(rarity));
         }
-        if (enchantmentsHolder != null) {
+        if (enchantmentsHolder != null && itemType != ItemType.ITEM) {
             for (EnchantmentObject enchant : enchantmentsHolder.getEnchants()) {
                 weaponStats.combine(enchant.getType().getApplyWeaponStats(enchant.getLevel()));
                 armorStats.combine(enchant.getType().getApplyArmorStats(enchant.getLevel()));

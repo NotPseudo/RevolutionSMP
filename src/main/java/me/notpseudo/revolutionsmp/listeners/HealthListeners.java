@@ -322,6 +322,7 @@ public class HealthListeners implements Listener {
                 double regenAmount = event.getAmount();
                 if(playerStats.getMaxHealth() > 2048) {
                     regenAmount = regenAmount / 2048 * playerStats.getMaxHealth();
+                    playerStats.setCurrentHealth(playerStats.getCurrentHealth() + regenAmount);
                     player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
                 }
                 return;

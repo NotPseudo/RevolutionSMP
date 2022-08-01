@@ -3,7 +3,7 @@ package me.notpseudo.revolutionsmp.skills;
 public class SkillUtils {
 
     public static double getXpForNextLevel(SkillType type, int nextLevel) {
-        double next = switch ((nextLevel - 1) / 10) {
+        return switch ((nextLevel - 1) / 10) {
             case 0 -> 500 * nextLevel;
             case 1 -> -20000 + 2500 * nextLevel;
             case 2 -> -108000 + 6900 * nextLevel;
@@ -12,7 +12,6 @@ public class SkillUtils {
             case 5 -> -2000000 + 50000 * nextLevel;
             default -> 0;
         };
-        return next;
     }
 
 }

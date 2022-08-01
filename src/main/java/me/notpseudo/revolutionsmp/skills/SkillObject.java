@@ -2,7 +2,7 @@ package me.notpseudo.revolutionsmp.skills;
 
 import java.io.Serializable;
 
-public class SkillExpObject implements Serializable {
+public class SkillObject implements Serializable {
 
     private final SkillType TYPE;
     private double totalXP;
@@ -10,7 +10,7 @@ public class SkillExpObject implements Serializable {
     private double xpForNextLevel;
     private double level;
 
-    public SkillExpObject(SkillType type) {
+    public SkillObject(SkillType type) {
         TYPE = type;
         totalXP = 0;
         currentXP = 0;

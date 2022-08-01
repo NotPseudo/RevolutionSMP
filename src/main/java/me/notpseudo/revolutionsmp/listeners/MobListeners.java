@@ -3,6 +3,7 @@ package me.notpseudo.revolutionsmp.listeners;
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.mobstats.*;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -10,6 +11,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityTameEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.EntityTransformEvent;
@@ -42,7 +44,7 @@ public class MobListeners implements Listener {
         int level = (int) (Math.random() * (customMobType.getMobBehavior().getHighestLevel() - customMobType.getMobBehavior().getLowestLevel() + 1)) + customMobType.getMobBehavior().getLowestLevel();
         MobInfo mobInfo = new MobInfo(customMobType, entity.getType(), level);
         if (entity.customName() != null) {
-            mobInfo.setName(entity.customName().toString());
+            mobInfo.setName(((TextComponent) entity.customName()).content());
         }
         if (entity instanceof Tameable && (((Tameable) entity).isTamed())) {
             mobInfo.setMobBehavior(MobBehavior.TAMED);
@@ -62,8 +64,8 @@ public class MobListeners implements Listener {
 
     // When a LivingEntity is added to the world for any reason
     @EventHandler
-    public void onSpawn(EntityAddToWorldEvent event) {
-        if (event.getEntity() instanceof Creature entity) {
+    public void onSpawn(CreatureSpawnEvent event) {
+        if (event.getEntity() instanceof Creature entity && event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM) {
             createMobInfo(entity);
         }
     }
@@ -71,18 +73,25 @@ public class MobListeners implements Listener {
     // Sets name in Entity's MobInfo when the Entity gets renamed by a Name Tag
     @EventHandler
     public void onRename(PlayerInteractAtEntityEvent event) {
-        if (event.getPlayer().getInventory().getItemInMainHand().getType() != Material.NAME_TAG) return;
+        if (event.getPlayer().getInventory().getItemInMainHand().getType() != Material.NAME_TAG) {
+            return;
+        }
         if (!(event.getRightClicked() instanceof Creature)) return;
         MobInfo mobInfo = event.getRightClicked().getPersistentDataContainer().get(mobKey, new MobInfoDataType());
         if (mobInfo == null) {
             mobInfo = createMobInfo((Creature) event.getRightClicked());
-            if (mobInfo == null) return;
+            if (mobInfo == null) {
+                return;
+            }
+        }
+        if (mobInfo.getMobBehavior() == MobBehavior.BOSS) {
+            return;
         }
         MobInfo finalMobInfo = mobInfo;
         BukkitRunnable rename = new BukkitRunnable() {
             @Override
             public void run() {
-                finalMobInfo.setName(String.valueOf(event.getRightClicked().customName()));
+                finalMobInfo.setName(((TextComponent) event.getRightClicked().customName()).content());
                 event.getRightClicked().getPersistentDataContainer().set(mobKey, new MobInfoDataType(), finalMobInfo);
             }
         };
