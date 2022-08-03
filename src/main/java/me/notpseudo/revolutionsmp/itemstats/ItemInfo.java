@@ -28,7 +28,7 @@ public class ItemInfo implements Serializable {
     private EnchantmentsHolder enchantmentsHolder;
     private AbilitiesHolder abilitiesHolder;
     private SpecialItemInfo extraInfo;
-    private String materialString;
+    private Material vanillaMaterial;
 
     public ItemInfo(ItemID itemID) {
         this.itemID = itemID;
@@ -51,7 +51,7 @@ public class ItemInfo implements Serializable {
             abilitiesHolder.addAbility(type);
         }
         extraInfo = itemID.getSpecialItemInfo();
-        materialString = itemID.toString();
+        vanillaMaterial = itemID.getMaterial();
         recalculate();
     }
 
@@ -77,7 +77,7 @@ public class ItemInfo implements Serializable {
                 abilitiesHolder.addAbility(type);
             }
             extraInfo = itemID.getSpecialItemInfo();
-            materialString = itemID.toString();
+            vanillaMaterial = itemID.getMaterial();
         } catch (IllegalArgumentException exception) {
             itemID = null;
             name = ItemEditor.getStringFromEnum(material);
@@ -101,7 +101,7 @@ public class ItemInfo implements Serializable {
             enchantmentsHolder = null;
             abilitiesHolder = null;
             extraInfo = null;
-            materialString = material.toString();
+            vanillaMaterial = material;
         }
     }
 
@@ -259,8 +259,28 @@ public class ItemInfo implements Serializable {
         recalculate();
     }
 
-    public String getMaterialString() {
-        return materialString;
+    public Material getVanillaMaterial() {
+        return vanillaMaterial;
+    }
+
+    public void setMaterial(Material material) {
+        this.vanillaMaterial = material;
+        recalculate();
+    }
+
+    public void recomb() {
+        if (!recomb) {
+            recomb = true;
+            upgradeRarity();
+        }
+    }
+
+    public void upgradeRarity() {
+        if (rarity == Rarity.SPECIAL) {
+            return;
+        }
+        rarity = rarity.next();
+        recalculate();
     }
 
     public void recalculate() {

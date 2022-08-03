@@ -236,6 +236,12 @@ public class StatsListeners implements Listener {
         player.sendActionBar(Component.text(Math.round(currentHealth + currentAbsorption) + "/" + Math.round(maxHealth) + "❤     ", healthColor).append(Component.text(Math.round(defense) + "❈ Defense     ", NamedTextColor.GREEN)).append(Component.text(Math.round(mana) + "/" + Math.round(intelligence) + "✎ Mana", NamedTextColor.AQUA)));
     }
 
+    /**
+     * Shows the player the Ability they used and its mana cost on their action bar
+     * @param player The Player to update the action bar for
+     * @param type The AbilityType that was used
+     * @param cost How much mana was used
+     */
     public static void showAbilityActionBar(Player player, AbilityType type, double cost) {
         PlayerStats playerStats = player.getPersistentDataContainer().get(playerStatsKey, new PlayerStatsDataType());
         if (playerStats == null) {
@@ -261,6 +267,10 @@ public class StatsListeners implements Listener {
         showActionBar(player);
     }
 
+    /**
+     * Shows an action bar with a not enough mana warning to a Player who failed to use an ability
+     * @param player The player to show the action bar to
+     */
     public static void showNoManaActionBar(Player player) {
         PlayerStats playerStats = player.getPersistentDataContainer().get(playerStatsKey, new PlayerStatsDataType());
         if (playerStats == null) {
@@ -326,16 +336,11 @@ public class StatsListeners implements Listener {
             public void run() {
                 ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
                 ItemMeta meta = item.getItemMeta();
-                if(meta == null) {
-                    ItemEditor.createMetaFromMat(meta, item.getType());
-                }
-                ItemEditor.updateLore(meta);
-                item.setItemMeta(meta);
+                ItemEditor.updateItem(item);
                 updateStats(event.getPlayer());
             }
         };
         update.runTaskLaterAsynchronously(plugin, 1);
-
     }
 
     /**

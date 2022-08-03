@@ -1,33 +1,37 @@
 package me.notpseudo.revolutionsmp.collections;
 
+import me.notpseudo.revolutionsmp.items.ItemID;
+import org.bukkit.Material;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public enum CollectionType {
 
     WHEAT,
     POTATO,
     CARROT,
-    PUMPKIN,
     MELON,
-    CACTUS,
-    NETHER_WART,
-    COCOA,
-    MUSHROOM,
-    SUGARCANE,
-    BEETROOT,
-    SWEET_BERRY,
-    FUNGUS,
-    GLOW_BERRY,
-    DEAD_BUSH,
+    SUGAR_CANE,
+    PUMPKIN,
     FEATHER,
     LEATHER,
     MUTTON,
     CHICKEN,
     PORK,
     RABBIT,
+    CACTUS,
+    MUSHROOM,
+    BEETROOT,
+    SWEET_BERRY,
+    COCOA,
+    NETHER_WART,
+    FUNGUS,
+    GLOW_BERRY,
+    DEAD_BUSH,
     COBBLESTONE,
     GRAVEL,
     SAND,
-    OBSIDIAN,
-    DEEPSLATE,
     ICE,
     COAL,
     DIAMOND,
@@ -37,21 +41,25 @@ public enum CollectionType {
     COPPER,
     LAPIS,
     REDSTONE,
+    NETHERRACK,
     QUARTZ,
     GLOWSTONE,
+    BASALT,
     NETHERITE,
+    OBSIDIAN,
+    DEEPSLATE,
     MITHRIL,
     GEMSTONE,
-    BLAZE_ROD,
-    BONE,
-    ENDER_PEARL,
-    GHAST_TEAR,
-    GUNPOWDER,
-    MAGMA_CREAM,
     ROTTEN_FLESH,
-    SLIMEBALL,
+    BONE,
+    GUNPOWDER,
     SPIDER_EYE,
     STRING,
+    ENDER_PEARL,
+    BLAZE_ROD,
+    MAGMA_CREAM,
+    GHAST_TEAR,
+    SLIMEBALL,
     PHANTOM_MEMBRANE,
     ACACIA_WOOD,
     BITCH_WOOD,
@@ -74,6 +82,14 @@ public enum CollectionType {
 
     public CollectionCategory getCategory() {
         return null;
+    }
+
+    public List<Material> getVanillaMaterials() {
+        return new ArrayList<>();
+    }
+
+    public List<ItemID> getCustomMaterials() {
+        return new ArrayList<>();
     }
 
 }

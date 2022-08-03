@@ -13,6 +13,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -59,6 +60,9 @@ public class ItemEditor {
             if (itemInfo.getItemID().isUnbreakable()) {
                 meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
                 meta.setUnbreakable(true);
+            }
+            if (itemInfo.getItemID() != null && itemInfo.getItemID().isEnchantGlint()) {
+                meta.addEnchant(Enchantment.LUCK, 1, true);
             }
             WeaponStats weaponStats = itemInfo.getWeaponStats();
             ArmorStats armorStats = itemInfo.getArmorStats();
@@ -341,25 +345,51 @@ public class ItemEditor {
                 lore.add(Component.empty());
             }
             if (enchantmentsHolder != null) {
+                int enchantCount = 0;
                 for (String str : enchantmentsHolder.getEnchantmentsLore()) {
                     lore.add(Component.text(str).decoration(TextDecoration.ITALIC, false));
+                    enchantCount++;
                 }
-                lore.add(Component.empty());
+                if (enchantCount > 0) {
+                    lore.add(Component.empty());
+                }
             }
             if (abilitiesHolder != null) {
+                int abilityCount = 0;
                 for (Component component : abilitiesHolder.getAbilitiesLore()) {
                     lore.add(component.decoration(TextDecoration.ITALIC, false));
+                    abilityCount++;
+                }
+                if (abilityCount > 0) {
+                    lore.add(Component.empty());
                 }
             }
             if (fishingTimeDecrease != null) {
                 lore.add(fishingTimeDecrease.decoration(TextDecoration.ITALIC, false));
                 lore.add(Component.empty());
             }
-            if (hasReforge != null) {
+            if (hasReforge != null && itemInfo.getItemType().allowReforge()) {
                 lore.add(hasReforge.decoration(TextDecoration.ITALIC, false));
             }
             lore.add(rarity.decoration(TextDecoration.ITALIC, false));
             meta.lore(lore);
+        }
+    }
+
+    public static void updateItem(ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        if (item.getType() == Material.AIR || meta == null) {
+            return;
+        }
+        ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        if (itemInfo != null) {
+            if (itemInfo.getVanillaMaterial() != item.getType()) {
+                item.setType(itemInfo.getVanillaMaterial());
+            }
+            updateLore(meta);
+            item.setItemMeta(meta);
+        } else {
+            item.setItemMeta(createMetaFromMat(meta, item.getType()));
         }
     }
 
@@ -395,15 +425,10 @@ public class ItemEditor {
         ItemMeta meta = item.getItemMeta();
         ItemInfo info = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
         if (info != null) {
-            Rarity currentRarity = info.getRarity();
-            if (currentRarity != Rarity.SPECIAL && !(info.isRecomb())) {
-                Rarity recombRarity = currentRarity.next();
-                info.setRecomb(true);
-                info.setRarity(recombRarity);
-                meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), info);
-                updateLore(meta);
-                item.setItemMeta(meta);
-            }
+            info.recomb();
+            meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), info);
+            updateLore(meta);
+            item.setItemMeta(meta);
         }
     }
 
@@ -512,6 +537,11 @@ public class ItemEditor {
         item.setItemMeta(meta);
     }
 
+    /**
+     * Creates a new ItemStack and sets meta information based on an ItemID
+     * @param itemID The ItemID to create a new item for
+     * @return The ItemStack that represents the basic form of the ItemID
+     */
     public static ItemStack createItem(ItemID itemID) {
         ItemStack item = new ItemStack(itemID.getMaterial(), 1);
         ItemMeta meta = item.getItemMeta();
@@ -539,12 +569,11 @@ public class ItemEditor {
             profile.setProperty(new ProfileProperty("textures", itemID.getTexture()));
             skullMeta.setPlayerProfile(profile);
         }
-        ItemEditor.updateLore(meta);
+        updateLore(meta);
         return meta;
     }
 
     public static ItemMeta createMetaFromMat(ItemMeta meta, Material material) {
-
         try {
             ItemID itemID = ItemID.valueOf(material.toString());
             return createMetaFromID(meta, itemID);
@@ -556,21 +585,31 @@ public class ItemEditor {
     }
 
     /**
-     * Returns if the item is a helmet, chestplate, leggings, or boots
+     * Returns whether the item is a helmet, chestplate, leggings, or boots
      *
      * @param itemInfo The ItemInfo to check
-     * @return true if the item is can be worn as armor, false otherwise
+     * @return true if the item can be worn as armor, false otherwise
      */
     public static boolean isArmor(ItemInfo itemInfo) {
         ItemType type = itemInfo.getItemType();
         return type == ItemType.HELMET || type == ItemType.CHESTPLATE || type == ItemType.LEGGINGS || type == ItemType.BOOTS;
     }
 
+    /**
+     * Returns whether the item is a weapon
+     * @param itemInfo The ItemInfo to check
+     * @return true if the item is considered a weapon
+     */
     public static boolean isWeapon(ItemInfo itemInfo) {
         ItemType type = itemInfo.getItemType();
-        return type == ItemType.SWORD || type == ItemType.BOW;
+        return type == ItemType.SWORD || type == ItemType.BOW || type == ItemType.FISHING_WEAPON || type == ItemType.LONGSWORD;
     }
 
+    /**
+     * Gets a formatted String from an Enum value
+     * @param value The Enum value to get the String from
+     * @return The formatted String
+     */
     public static String getStringFromEnum(Enum value) {
         String[] split = value.toString().split("_");
         StringBuilder name = new StringBuilder();
@@ -581,6 +620,28 @@ public class ItemEditor {
             }
         }
         return name.toString();
+    }
+
+    public static Component getStringWithSymbol(StatType type) {
+        return Component.text(type.getSymbol() + " " + getStringFromEnum(type) + " ", type.getColor());
+    }
+
+    /**
+     * Method to format large numbers with suffixes
+     * <p>
+     *     Taken from https://stackoverflow.com/a/9769590
+     * </p>
+     * @param number The number to format
+     * @return The formatted String
+     */
+    public static String numberFormatted(double number) {
+        if (number < 1000) {
+            return "" + number;
+        }
+        int exp = (int) (Math.log(number) / Math.log(1000));
+        return String.format("%.1f %c",
+                number / Math.pow(1000, exp),
+                "KMBqQ".charAt(exp-1));
     }
 
 }

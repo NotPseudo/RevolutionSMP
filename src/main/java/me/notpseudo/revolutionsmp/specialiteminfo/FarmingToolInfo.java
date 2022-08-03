@@ -1,7 +1,17 @@
 package me.notpseudo.revolutionsmp.specialiteminfo;
 
+import me.notpseudo.revolutionsmp.collections.*;
+import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
+import me.notpseudo.revolutionsmp.itemstats.StatObject;
+import me.notpseudo.revolutionsmp.itemstats.StatType;
+import me.notpseudo.revolutionsmp.skills.*;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,15 +20,188 @@ import java.util.List;
 public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
 
     private ItemInfo holder;
-    private ArrayList<Material> canBreak;
+    private CollectionType collectionType;
+    private ArrayList<Material> vanillaMaterials;
     private double counter;
-    private int tier;
+    private int craftTier;
+    private int countTier;
+    private int cropsUntilNextCountTier;
+    private boolean count1Reached;
+    private boolean count2Reached;
 
-    public FarmingToolInfo(ItemInfo holder, List<Material> canBreak) {
+    public FarmingToolInfo(ItemInfo holder, CollectionType type) {
         this.holder = holder;
-        this.canBreak = new ArrayList<>(canBreak);
+        this.vanillaMaterials = new ArrayList<>(type.getVanillaMaterials());
         counter = 0;
-        tier = 1;
+        craftTier = 1;
+        countTier = 1;
+        cropsUntilNextCountTier = 10000;
+        count1Reached = false;
+        count2Reached = false;
+    }
+
+    public void upgradeFromCraft() {
+        craftTier++;
+        holder.upgradeRarity();
+        switch (craftTier) {
+            case 1 -> holder.setMaterial(Material.STONE_HOE);
+            case 2 -> holder.setMaterial(Material.IRON_HOE);
+            case 3 -> holder.setMaterial(Material.DIAMOND_HOE);
+            case 4 -> holder.setMaterial(Material.NETHERITE_HOE);
+        }
+    }
+
+    private void upgradeFromCount() {
+        if (countTier == 1) {
+            count1Reached = true;
+            cropsUntilNextCountTier = 1000000;
+        } else if (countTier == 2) {
+            count2Reached = true;
+            cropsUntilNextCountTier = 0;
+        }
+        countTier++;
+        holder.upgradeRarity();
+    }
+
+    public void add(Material material, int count) {
+        if (!hasMaterial(material)) {
+            return;
+        }
+        counter += count;
+        if(!count2Reached && counter >= cropsUntilNextCountTier) {
+            upgradeFromCount();
+        }
+    }
+
+    private int digitsInValue(double value) {
+        if (Math.floor(value) == 0) {
+            return 1;
+        }
+        return (int) (Math.log10(Math.floor(value)) + 1);
+    }
+
+    private int getBaseAddPercent() {
+        return switch (holder.getRarity()) {
+            case COMMON ->  10;
+            case UNCOMMON -> 25;
+            default -> 50;
+        };
+    }
+
+    private int getXpBoost() {
+        return switch (holder.getRarity()) {
+            case COMMON -> 1;
+            case UNCOMMON -> 2;
+            case RARE -> 3;
+            case EPIC -> 5;
+            case LEGENDARY -> 8;
+            default -> 12;
+        };
+    }
+
+    private int logarithmicCounter() {
+        if (craftTier < 2) {
+            return 0;
+        }
+        return 16 * Math.max(digitsInValue(counter) - 3, 0);
+    }
+
+    private int collectionAnalysis(Player player) {
+        if (craftTier < 3) {
+            return 0;
+        }
+        if (player == null) {
+            player = Bukkit.getPlayer(super.getOwner());
+            if (player == null) {
+                return 0;
+            }
+        }
+        CollectionsHolder collectionsHolder = player.getPersistentDataContainer().get(CollectionUtils.getCollectionsKey(), new CollectionsDataType());
+        if (collectionsHolder == null) {
+            return 0;
+        }
+        CollectionObject collection = collectionsHolder.getCollection(collectionType);
+        if (collection == null) {
+            return 0;
+        }
+        return 8 * Math.max(digitsInValue(collection.getTotalCollected()) - 3, 0);
+    }
+
+    private int knowledgeOfTheLand(Player player) {
+        if (craftTier < 4) {
+            return 0;
+        }
+        if (player == null) {
+            player = Bukkit.getPlayer(super.getOwner());
+            if (player == null) {
+                return 0;
+            }
+        }
+        SkillHolder skillHolder = player.getPersistentDataContainer().get(SkillUtils.getSkillKey(), new SkillsDataType());
+        if (skillHolder == null) {
+            return 0;
+        }
+        SkillObject farming = skillHolder.getSkill(SkillType.FARMING);
+        if (farming == null) {
+            return 0;
+        }
+        return 6 * Math.max(digitsInValue(farming.getTotalXP()) - 3, 0);
+    }
+
+    public boolean hasMaterial(Material material) {
+        return vanillaMaterials.contains(material);
+    }
+
+    @Override
+    public StatObject getBreakingStatAdditivePercent(Player harvester, Block block, StatType type) {
+        if (!hasMaterial(block.getType())) {
+            return new StatObject(type, 0);
+        }
+        if (type != StatType.FARMING_FORTUNE) {
+            return new StatObject(type, 0);
+        }
+        int addPercent = getBaseAddPercent() + logarithmicCounter() + collectionAnalysis(harvester) + knowledgeOfTheLand(harvester);
+        return new StatObject(type, addPercent);
+    }
+
+    @Override
+    public ExpDropObject getExpAdditivePercent(SkillType type) {
+        if (type != SkillType.FARMING) {
+            new ExpDropObject(type, 0);
+        }
+        return new ExpDropObject(SkillType.FARMING, getXpBoost());
+    }
+
+    @Override
+    public List<Component> getSpecialLore() {
+        String cropName = ItemEditor.getStringFromEnum(collectionType).toLowerCase();
+        ArrayList<Component> specialLore = new ArrayList<>();
+        specialLore.add(Component.text("Harvest ", NamedTextColor.GRAY).append(Component.text("+" + getBaseAddPercent() + "%" + cropName, NamedTextColor.GREEN)));
+        specialLore.add(Component.text("Gain ", NamedTextColor.GRAY).append(Component.text("+" + getXpBoost() + "% ", NamedTextColor.GREEN)).append(Component.text("Farming Exp", NamedTextColor.GRAY)));
+        specialLore.add(Component.text("Counter: ", NamedTextColor.GRAY).append(Component.text(Math.floor(counter) + " " + ItemEditor.getStringFromEnum(collectionType), NamedTextColor.YELLOW)));
+        specialLore.add(Component.empty());
+        if (craftTier >= 2) {
+            specialLore.add(Component.text("Logarithmic Counter", NamedTextColor.GOLD));
+            specialLore.add(Component.text("Harvest ", NamedTextColor.GRAY).append(Component.text("+16% ", NamedTextColor.GREEN)).append(Component.text(cropName + " per digits on the Counter, minus 3!")));
+            specialLore.add(Component.text("+" + logarithmicCounter() + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.FARMING_FORTUNE)).append(Component.text("for " + cropName)));
+            specialLore.add(Component.empty());
+        }
+        if (craftTier >= 3) {
+            specialLore.add(Component.text("Collection Analysis", NamedTextColor.GOLD));
+            specialLore.add(Component.text("Harvest ", NamedTextColor.GRAY).append(Component.text("+8% ", NamedTextColor.GREEN)).append(Component.text(cropName + " per digits of your collection, minus 3!")));
+            specialLore.add(Component.text("+" + collectionAnalysis(null) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.FARMING_FORTUNE)).append(Component.text("for " + cropName)));
+            specialLore.add(Component.empty());
+        }
+        if (craftTier >= 4) {
+            specialLore.add(Component.text("Knowledge of the Land", NamedTextColor.GOLD));
+            specialLore.add(Component.text("Harvest ", NamedTextColor.GRAY).append(Component.text("+6% ", NamedTextColor.GREEN)).append(Component.text(cropName + " per digits of your total Farming Exp, minus 3!")));
+            specialLore.add(Component.text("+" + knowledgeOfTheLand(null) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.FARMING_FORTUNE)).append(Component.text("for " + cropName)));
+            specialLore.add(Component.empty());
+        }
+        if (!count2Reached) {
+            specialLore.add(Component.text("Reach " + ItemEditor.numberFormatted(cropsUntilNextCountTier) + " on the Counter to upgrade the Rarity!", NamedTextColor.YELLOW));
+        }
+        return specialLore;
     }
 
 }

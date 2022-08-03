@@ -1,6 +1,8 @@
 package me.notpseudo.revolutionsmp.items;
 
 import me.notpseudo.revolutionsmp.abilities.AbilityType;
+import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
+import me.notpseudo.revolutionsmp.enchantments.EnchantmentType;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.specialiteminfo.SpecialItemInfo;
 import org.bukkit.Color;
@@ -422,10 +424,6 @@ public enum ItemID {
             return Rarity.EPIC;
         }
 
-        @Override
-        public ItemType getItemType() {
-            return ItemType.ITEM;
-        }
 
         @Override
         public Material getMaterial() {
@@ -448,10 +446,6 @@ public enum ItemID {
             return Rarity.LEGENDARY;
         }
 
-        @Override
-        public ItemType getItemType() {
-            return ItemType.ITEM;
-        }
 
         @Override
         public Material getMaterial() {
@@ -464,10 +458,6 @@ public enum ItemID {
         }
     },
     JUDGEMENT_CORE {
-        @Override
-        public ItemType getItemType() {
-            return ItemType.ITEM;
-        }
 
         @Override
         public Material getMaterial() {
@@ -487,18 +477,12 @@ public enum ItemID {
 
     // Gets default stats for specific item
     public String getDefaultName() {
-        String[] split = super.toString().split("_");
-        StringBuilder name = new StringBuilder();
-        for (int i = 0; i < split.length; i++) {
-            name.append(split[i].charAt(0)).append(split[i].substring(1).toLowerCase());
-            if (i < split.length - 1) {
-                name.append(" ");
-            }
-        }
-        return name.toString();
+        return ItemEditor.getStringFromEnum(this);
     }
 
-    public abstract ItemType getItemType();
+    public ItemType getItemType() {
+        return ItemType.ITEM;
+    }
 
     public Rarity getDefaultRarity() {
         return Rarity.COMMON;
@@ -532,6 +516,10 @@ public enum ItemID {
         return new LuckStats(0, 0);
     }
 
+    public List<EnchantmentObject> getDefaultEnchantments() {
+        return new ArrayList<>();
+    }
+
     public List<AbilityType> getDefaultAbilities() {
         return new ArrayList<>();
     }
@@ -561,6 +549,5 @@ public enum ItemID {
     public ItemStack getItem() {
         return ItemEditor.createItem(this);
     }
-
 
 }

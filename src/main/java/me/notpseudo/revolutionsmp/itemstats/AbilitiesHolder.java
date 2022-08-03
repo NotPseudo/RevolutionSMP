@@ -79,14 +79,18 @@ public class AbilitiesHolder implements Serializable {
                 witherScrollAbilities.add(abilityObject);
             } else {
                 lore.addAll(abilityObject.getText());
-                lore.add(Component.text(""));
+                if (abilities.indexOf(abilityObject) < abilities.size() - 1) {
+                    lore.add(Component.empty());
+                }
             }
         }
         if(witherScrollAbilities.size() > 0) {
             lore.add(Component.text("Scroll Abilities:", NamedTextColor.GREEN));
             for(AbilityObject witherScrollAbility : witherScrollAbilities) {
                 lore.addAll(witherScrollAbility.getText());
-                lore.add(Component.text(""));
+                if (witherScrollAbilities.indexOf(witherScrollAbility) < witherScrollAbilities.size() - 1) {
+                    lore.add(Component.empty());
+                }
             }
         }
         return lore;

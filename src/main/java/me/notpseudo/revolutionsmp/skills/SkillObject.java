@@ -16,6 +16,7 @@ public class SkillObject implements Serializable {
         currentXP = 0;
         xpForNextLevel = SkillUtils.getXpForNextLevel(TYPE, 1);
         level = 0;
+        recalculate();
     }
 
     public SkillType getType() {
@@ -53,12 +54,19 @@ public class SkillObject implements Serializable {
     }
 
     private void recalculate() {
+        while (currentXP < 0) {
+            level--;
+            xpForNextLevel = SkillUtils.getXpForNextLevel(TYPE, (int) level + 1);
+            currentXP += xpForNextLevel;
+        }
         while (currentXP >= xpForNextLevel) {
             currentXP -= xpForNextLevel;
+            level++;
             xpForNextLevel = SkillUtils.getXpForNextLevel(TYPE, (int) level + 1);
-            level = Math.ceil(level) + currentXP / xpForNextLevel;
+            level = Math.floor(level) + currentXP / xpForNextLevel;
         }
         level = Math.floor(level) + currentXP / xpForNextLevel;
+        xpForNextLevel = SkillUtils.getXpForNextLevel(TYPE, (int) level + 1);
     }
 
 }

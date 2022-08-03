@@ -9,7 +9,10 @@ public enum SkillType {
     FISHING,
     ENCHANTING,
     ALCHEMY,
-    TAMING,
-    ALL;
+    TAMING;
+
+    public int getMaxLevel() {
+        return 50;
+    }
 
 }

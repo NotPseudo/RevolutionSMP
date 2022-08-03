@@ -36,7 +36,10 @@ public enum ItemType {
 
     },
     ITEM {
-
+        @Override
+        public boolean allowReforge() {
+            return false;
+        }
     },
     WAND {
 
@@ -56,6 +59,10 @@ public enum ItemType {
     }
 
     public boolean allowAbilities() {
+        return true;
+    }
+
+    public boolean allowReforge() {
         return true;
     }
 

@@ -1,6 +1,15 @@
 package me.notpseudo.revolutionsmp.skills;
 
+import me.notpseudo.revolutionsmp.RevolutionSMP;
+import org.bukkit.NamespacedKey;
+
 public class SkillUtils {
+
+    private static final NamespacedKey skillKey = new NamespacedKey(RevolutionSMP.getPlugin(RevolutionSMP.class), "skillKey");
+
+    public static NamespacedKey getSkillKey() {
+        return skillKey;
+    }
 
     public static double getXpForNextLevel(SkillType type, int nextLevel) {
         return switch ((nextLevel - 1) / 10) {
@@ -12,6 +21,14 @@ public class SkillUtils {
             case 5 -> -2000000 + 50000 * nextLevel;
             default -> 0;
         };
+    }
+
+    public static double getTotalXpForMaxLevel(SkillType type) {
+        double total = 0;
+        for (int i = 0; i < type.getMaxLevel(); i++) {
+            total += getXpForNextLevel(type, i + 1);
+        }
+        return total;
     }
 
 }
