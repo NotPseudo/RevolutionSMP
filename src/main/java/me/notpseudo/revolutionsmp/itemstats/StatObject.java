@@ -34,4 +34,24 @@ public class StatObject implements Serializable {
         value += other.value;
     }
 
+    public void additivePercent(StatObject other) {
+        if (other == null) {
+            return;
+        }
+        if (other.TYPE != getType()) {
+            return;
+        }
+        value *= 1 + (other.value / 100);
+    }
+
+    public void multiply(StatObject other) {
+        if (other == null) {
+            return;
+        }
+        if (other.TYPE != getType()) {
+            return;
+        }
+        value *= other.value;
+    }
+
 }

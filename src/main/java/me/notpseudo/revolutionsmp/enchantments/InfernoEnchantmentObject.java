@@ -1,6 +1,7 @@
 package me.notpseudo.revolutionsmp.enchantments;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.itemstats.StatType;
 import me.notpseudo.revolutionsmp.listeners.HealthListeners;
 import me.notpseudo.revolutionsmp.listeners.MobListeners;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
@@ -64,12 +65,11 @@ public class InfernoEnchantmentObject extends EnchantmentObject implements Actio
             if(!super.getAttacked().containsKey(targetUUID)) {
                 if(target instanceof Player) {
                     targetStats = target.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
-                    speed = targetStats.getSpeed();
-                    ((PlayerStats) targetStats).setSpeedMultiplier(0);
+                    speed = targetStats.getArmorStatValue(StatType.SPEED);
                     target.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), (PlayerStats) targetStats);
                 } else {
                     if(targetStats != null) {
-                        targetStats.setSpeed(0);
+                        targetStats.setArmorStatValue(StatType.SPEED, 0);
                     }
                     if(target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED) != null) {
                         vanillaMoveSpeed = target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue();
@@ -99,7 +99,7 @@ public class InfernoEnchantmentObject extends EnchantmentObject implements Actio
                     }
                     if(count == 5) {
                         if(finalTargetStats != null) {
-                            finalTargetStats.setSpeed(finalSpeed);
+                            finalTargetStats.setArmorStatValue(StatType.SPEED, finalSpeed);
                         }
                         if(target instanceof Player) {
                             target.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), (PlayerStats) finalTargetStats);

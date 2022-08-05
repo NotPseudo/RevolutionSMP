@@ -3,6 +3,7 @@ package me.notpseudo.revolutionsmp.enchantments;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.itemstats.*;
+import me.notpseudo.revolutionsmp.listeners.IncreaseType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
@@ -41,8 +42,14 @@ public class VampirismEnchantmentObject extends EnchantmentObject implements Act
     }
 
     @Override
-    public StatObject getDamageStatAdditivePercent(LivingEntity damager, LivingEntity target, StatType type) {
-        return new StatObject(StatType.DAMAGE, 25 * level);
+    public WeaponStats getEventWeapon(Player damager, LivingEntity target, IncreaseType inc) {
+        if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return new WeaponStats(1, 1, 1, 1, 1, 1);
+        }
+        if (inc == IncreaseType.ADDITIVE_PERCENT) {
+            return new WeaponStats(25 * level, 0, 0, 0, 0, 0);
+        }
+        return new WeaponStats(0, 0, 0, 0, 0, 0);
     }
 
     @EventHandler

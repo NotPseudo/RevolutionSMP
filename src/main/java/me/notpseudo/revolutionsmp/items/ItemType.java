@@ -41,6 +41,12 @@ public enum ItemType {
             return false;
         }
     },
+    ACCESSORY {
+
+    },
+    VANILLA_ITEM {
+
+    },
     WAND {
 
     },
@@ -48,6 +54,9 @@ public enum ItemType {
 
     },
     DRILL {
+
+    },
+    GAUNTLET {
 
     },
     LONGSWORD {

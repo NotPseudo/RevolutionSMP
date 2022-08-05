@@ -1,5 +1,6 @@
 package me.notpseudo.revolutionsmp.enchantments;
 
+import me.notpseudo.revolutionsmp.itemstats.StatType;
 import me.notpseudo.revolutionsmp.listeners.MobListeners;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
 import me.notpseudo.revolutionsmp.mobstats.BaseEntityStats;
@@ -37,7 +38,7 @@ public class SyphonEnchantmentObject extends EnchantmentObject implements Action
         double percentToHeal = (0.001 + (super.getLevel() * 0.001)) * (int) Math.min(1000, damage) / 100;
         double currentHealth = damager.getHealth(), maxHealth = damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
         if (damagerStats != null) {
-            currentHealth = damagerStats.getCurrentHealth();
+            currentHealth = damagerStats.getArmorStatValue(StatType.HEALTH);
             maxHealth = damagerStats.getMaxHealth();
         }
         if (currentHealth != maxHealth) {
@@ -45,7 +46,7 @@ public class SyphonEnchantmentObject extends EnchantmentObject implements Action
             double finalHealth = Math.min((currentHealth + addHealth), maxHealth);
             damager.setHealth(Math.min(finalHealth, (finalHealth / maxHealth) * 2048));
             if (damagerStats != null) {
-                damagerStats.setCurrentHealth(finalHealth);
+                damagerStats.getArmorStatValue(StatType.HEALTH);
                 if (damager instanceof Player) {
                     damager.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), (PlayerStats) damagerStats);
                 } else {

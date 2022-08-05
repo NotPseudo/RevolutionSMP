@@ -1,9 +1,12 @@
 package me.notpseudo.revolutionsmp.enchantments;
 
-import me.notpseudo.revolutionsmp.itemstats.StatObject;
-import me.notpseudo.revolutionsmp.itemstats.StatType;
+import com.comphenix.protocol.PacketType;
+import me.notpseudo.revolutionsmp.itemstats.*;
+import me.notpseudo.revolutionsmp.listeners.IncreaseType;
 import org.bukkit.ChatColor;
+import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -87,16 +90,60 @@ public class EnchantmentObject implements Serializable, Comparable<EnchantmentOb
         }
     }
 
-    public StatObject getDamageStateAdditiveAmount(LivingEntity damager, LivingEntity target, StatType type) {
-        return this.type.getDamageStatAdditiveAmount(damager, target, level, type);
+    public WeaponStats getBonusWeapon(Player player, IncreaseType inc) {
+        return type.getBonusWeapon(player, level, inc);
     }
 
-    public StatObject getDamageStatAdditivePercent(LivingEntity damager, LivingEntity target, StatType type) {
-        return this.type.getDamageStatAdditivePercent(damager, target, level, type);
+    public ArmorStats getBonusArmor(Player player, IncreaseType inc) {
+        return type.getBonusArmor(player, level, inc);
     }
 
-    public StatObject getDamageStatMultiplicativePercent(LivingEntity damager, LivingEntity target, StatType type) {
-        return this.type.getDamageStatMultiplicativePercent(damager, target, level, type);
+    public AbilityStats getBonusAbility(Player player, IncreaseType inc) {
+        return type.getBonusAbility(player, level, inc);
+    }
+
+    public FishingStats getBonusFishing(Player fisher, IncreaseType inc) {
+        return type.getBonusFishing(fisher, level, inc);
+    }
+
+    public MiningStats getBonusMining(Player miner, IncreaseType inc) {
+        return type.getBonusMining(miner, level, inc);
+    }
+
+    public GatheringStats getBonusGathering(Player harvester, IncreaseType inc) {
+        return type.getBonusGathering(harvester, level, inc);
+    }
+
+    public LuckStats getBonusLuck(Player player, IncreaseType inc) {
+        return type.getBonusLuck(player, level, inc);
+    }
+
+    public WeaponStats getEventWeapon(Player damager, LivingEntity target, IncreaseType inc) {
+        return type.getEventWeapon(damager, target, level, inc);
+    }
+
+    public ArmorStats getEventArmor(LivingEntity damager, Player target, IncreaseType inc) {
+        return type.getEventArmor(damager, target, level, inc);
+    }
+
+    public AbilityStats getEventAbility(Player damager, LivingEntity target, IncreaseType inc) {
+        return type.getEventAbility(damager, target, level, inc);
+    }
+
+    public FishingStats getEventFishing(Player fisher, IncreaseType inc) {
+        return type.getEventFishing(fisher, level, inc);
+    }
+
+    public MiningStats getEventMining(Player miner, Block block, IncreaseType inc) {
+        return type.getEventMining(miner, block, level, inc);
+    }
+
+    public GatheringStats getEventGathering(Player harvester, Block block, IncreaseType inc) {
+        return type.getEventGathering(harvester, block, level, inc);
+    }
+
+    public LuckStats getEventLuck(Player player, LivingEntity target, IncreaseType inc) {
+        return type.getEventLuck(player, target, level, inc);
     }
 
     @Override

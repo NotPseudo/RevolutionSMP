@@ -1,6 +1,7 @@
 package me.notpseudo.revolutionsmp.abilities;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.itemstats.StatType;
 import me.notpseudo.revolutionsmp.listeners.HealthListeners;
 import me.notpseudo.revolutionsmp.listeners.MobListeners;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
@@ -76,45 +77,33 @@ public class AbilitiesUtil {
     }
 
     public static void implosion(Player player, double range) {
-        double damage = calculateAbilityDamage(AbilityType.IMPLOSION, player);
         Collection<LivingEntity> enemies = player.getLocation().getNearbyLivingEntities(range).stream()
                 .filter(c -> c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()) != null
                         && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobBehavior.TAMED
                 ).toList();
-        player.playSound(player.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1F, 1F);
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1F, 1F);
         Particles.explode(player.getLocation());
         for (LivingEntity entity : enemies) {
-            MobInfo targetStats = entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
-            double vanillaDamage = damage;
-            if (targetStats != null && targetStats.getMaxHealth() > 2048) {
-                vanillaDamage = damage / targetStats.getMaxHealth() * 2048;
-            }
-            entity.damage(vanillaDamage);
-            HealthListeners.showDamage(entity, damage, false, ChatColor.GRAY);
+            HealthListeners.magicDamage(player, entity, AbilityType.IMPLOSION);
         }
     }
 
     public static void witherShield(Player player) {
-        final PlayerStats[] playerStats = {player.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType())};
-        if (playerStats[0] == null) {
-            playerStats[0] = new PlayerStats();
-        }
-        double currentAbsorption = playerStats[0].getAbsorption();
-        playerStats[0].setAbsorption(currentAbsorption + playerStats[0].getCritDamage() * 1.5);
+        PlayerStats playerStats = StatsListeners.getPlayerStats(player);
+        double currentAbsorption = playerStats.getAbsorption();
+        playerStats.setAbsorption(currentAbsorption + playerStats.getCombatStatValue(StatType.CRIT_DAMAGE) * 1.5);
         player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 1F, 1F);
-        playerStats[0].setDamageTakenMultiplier(playerStats[0].getDamageTakenMultiplier() - 0.1);
-        player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats[0]);
+        player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
         StatsListeners.updateStats(player);
         BukkitRunnable shieldEnd = new BukkitRunnable() {
             @Override
             public void run() {
-                playerStats[0] = player.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
-                double remainingWitherShield = playerStats[0].getAbsorption() - currentAbsorption;
+                PlayerStats playerStats = StatsListeners.getPlayerStats(player);
+                double remainingWitherShield = playerStats.getAbsorption() - currentAbsorption;
                 if (remainingWitherShield > 0) {
-                    playerStats[0].setAbsorption(playerStats[0].getAbsorption() - remainingWitherShield);
-                    playerStats[0].setDamageTakenMultiplier(playerStats[0].getDamageTakenMultiplier() + 0.1);
-                    playerStats[0].setCurrentHealth(Math.min(playerStats[0].getCurrentHealth() + 0.5 * remainingWitherShield, playerStats[0].getMaxHealth()));
-                    player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats[0]);
+                    playerStats.setAbsorption(playerStats.getAbsorption() - remainingWitherShield);
+                    playerStats.setArmorStatValue(StatType.HEALTH, Math.min(playerStats.getArmorStatValue(StatType.HEALTH) + 0.5 * remainingWitherShield, playerStats.getMaxHealth()));
+                    player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
                     StatsListeners.updateStats(player);
                     player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1F, 2F);
                     Particles.hearts(player.getLocation());
@@ -132,26 +121,15 @@ public class AbilitiesUtil {
                     .filter(c -> c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()) != null
                             && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobBehavior.TAMED
                     ).toList();
-            double damage = calculateAbilityDamage(AbilityType.SHADOW_WARP, player);
-            player.playSound(location, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1F, 1F);
+            player.getWorld().playSound(location, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1F, 1F);
             Particles.explode(location);
             for (LivingEntity entity : enemies) {
-                MobInfo targetStats = entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
-                double vanillaDamage = damage;
-                if (targetStats != null && targetStats.getMaxHealth() > 2048) {
-                    vanillaDamage = damage / targetStats.getMaxHealth() * 2048;
-                }
-                entity.damage(vanillaDamage);
-                HealthListeners.showDamage(entity, damage, false, ChatColor.GRAY);
+                HealthListeners.magicDamage(player, entity, AbilityType.SHADOW_WARP);
             }
             shadowWarpActivate.remove(playerID);
             return false;
         } else {
             shadowWarpActivate.put(playerID, location);
-            Collection<LivingEntity> enemies = location.getNearbyLivingEntities(3).stream()
-                    .filter(c -> c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()) != null
-                            && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobBehavior.TAMED
-                    ).toList();
             Location finalLocation = location;
             Particles.dualSpiralUp(Particle.PORTAL, location, 3, 3, 5, 10);
             BukkitRunnable distortion = new BukkitRunnable() {
@@ -164,7 +142,7 @@ public class AbilitiesUtil {
                         return;
                     }
                     suckEnemies(finalLocation, 3);
-                    player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1F, (float) (Math.random() * 2));
+                    player.getWorld().playSound(finalLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1F, (float) (Math.random() * 2));
                     count += 2;
                     if (count >= 100) {
                         this.cancel();
@@ -210,7 +188,7 @@ public class AbilitiesUtil {
                 count++;
                 suckEnemies(finalLocation, 8);
                 for(int i = 0; i < 7; i++) {
-                    player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1F, 0.5F + 0.025F * count);
+                    player.getWorld().playSound(finalLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1F, 0.5F + 0.025F * count);
                 }
                 if(count >= 60) {
                     this.cancel();
@@ -236,17 +214,6 @@ public class AbilitiesUtil {
                 ).toList()) {
             entity.setVelocity(new Location(location.getWorld(), x, entity.getLocation().getY(), z).toVector().subtract(entity.getLocation().toVector()).multiply(Math.random() * 1.5));
         }
-    }
-
-    public static double calculateAbilityDamage(AbilityType type, Player player) {
-        PlayerStats playerStats = player.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
-        if (playerStats == null) {
-            playerStats = new PlayerStats();
-        }
-        double intelligenceScale = 1 + (playerStats.getIntelligence() / 100) * type.getAbilityScaling();
-        double critScale = 1 + (playerStats.getCritDamage() / 100);
-        double abilityDamageScale = 1 + (playerStats.getAbilityDamage() / 100);
-        return type.getBaseAbilityDamage() * intelligenceScale * critScale * abilityDamageScale;
     }
 
     public static int getNumPassableBlocksAbove(Location location, int limit) {

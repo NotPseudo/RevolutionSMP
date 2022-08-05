@@ -68,4 +68,22 @@ public class StatHolder implements Serializable {
         }
     }
 
+    public void additivePercent(StatHolder other) {
+        if (other == null) {
+            return;
+        }
+        for (StatObject stat : stats) {
+            stat.additivePercent(other.getStatObject(stat.getType()));
+        }
+    }
+
+    public void multiply(StatHolder other) {
+        if (other == null) {
+            return;
+        }
+        for (StatObject stat: stats) {
+            stat.multiply(other.getStatObject(stat.getType()));
+        }
+    }
+
 }

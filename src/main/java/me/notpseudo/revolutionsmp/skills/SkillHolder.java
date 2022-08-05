@@ -1,5 +1,7 @@
 package me.notpseudo.revolutionsmp.skills;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -14,13 +16,16 @@ public class SkillHolder implements Serializable {
         }
     }
 
+    @NotNull
     public SkillObject getSkill(SkillType type) {
         for (SkillObject skill : skills) {
             if (skill.getType() == type) {
                 return skill;
             }
         }
-        return null;
+        SkillObject newSkill = new SkillObject(type);
+        skills.add(newSkill);
+        return newSkill;
     }
 
     public void addSkill(SkillType type) {

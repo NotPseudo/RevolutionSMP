@@ -1,6 +1,9 @@
 package me.notpseudo.revolutionsmp.commands;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.listeners.CustomOreLocation;
+import me.notpseudo.revolutionsmp.listeners.HarvestingListeners;
+import me.notpseudo.revolutionsmp.listeners.PlacedLocationList;
 import me.notpseudo.revolutionsmp.particles.Particles;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -20,14 +23,11 @@ public class ParticleTestCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player player) {
-            int sides = 4;
-            try {
-                sides = Integer.parseInt(args[0]);
-            } catch (NumberFormatException exception) {
-                player.sendMessage(Component.text("Could not read this number", NamedTextColor.RED));
-                return true;
+            PlacedLocationList locationList = HarvestingListeners.getPlacedLocationList(player.getLocation().getBlock());
+            player.sendMessage(locationList.getOreLocations().size() + " custom ore locations");
+            for (CustomOreLocation oreLocation : locationList.getOreLocations()) {
+                player.sendMessage(oreLocation.getType() + " at X: " + oreLocation.getX() + ", Y: " + oreLocation.getY() + ", Z: " + oreLocation.getZ());
             }
-            Particles.polygon(player.getLocation(), sides, 5);
         }
         return true;
     }

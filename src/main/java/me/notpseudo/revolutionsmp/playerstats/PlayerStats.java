@@ -7,17 +7,10 @@ import java.io.Serializable;
 
 public class PlayerStats extends BaseEntityStats implements Serializable {
 
-    private double attackSpeed;
-    private double ferocity;
     private AbilityStats abilityStats;
     private double mana;
-    private double trueDefense;
     private double healthRegenRate;
     private double manaRegenRate;
-    private double defenseMultiplier;
-    private double speedMultiplier;
-    private double addSpeed;
-    private double damageTakenMultiplier;
     private double absorption;
     private FishingStats fishingStats;
     private MiningStats miningStats;
@@ -25,38 +18,16 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
     private LuckStats luckStats;
 
     public PlayerStats() {
-        super(100, 0, 100, 0, 30, 50);
-        attackSpeed = 0;
-        ferocity = 0;
+        super(100, 0, 100, 0, 30, 50, 0, 0);
         abilityStats = new AbilityStats(0, 100);
         mana = 100;
         healthRegenRate = 1;
         manaRegenRate = 1;
-        defenseMultiplier = 1;
-        speedMultiplier = 1;
-        addSpeed = 0;
-        damageTakenMultiplier = 1;
         absorption = 0;
         fishingStats = new FishingStats(20, 0);
         miningStats = new MiningStats(0, 0, 0);
         gatheringStats = new GatheringStats(0, 0);
         luckStats = new LuckStats(0, 0);
-    }
-
-    public double getAttackSpeed() {
-        return attackSpeed;
-    }
-
-    public void setAttackSpeed(double attackSpeed) {
-        this.attackSpeed = attackSpeed;
-    }
-
-    public double getFerocity() {
-        return ferocity;
-    }
-
-    public void setFerocity(double ferocity) {
-        this.ferocity = ferocity;
     }
 
     public double getIntelligence() {
@@ -83,14 +54,6 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
         this.mana = mana;
     }
 
-    public double getTrueDefense() {
-        return trueDefense;
-    }
-
-    public void setTrueDefense(double trueDefense) {
-        this.trueDefense = trueDefense;
-    }
-
     public double getHealthRegenRate() {
         return healthRegenRate;
     }
@@ -105,38 +68,6 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
 
     public void setManaRegenRate(double manaRegenRate) {
         this.manaRegenRate = manaRegenRate;
-    }
-
-    public double getDefenseMultiplier() {
-        return defenseMultiplier;
-    }
-
-    public void setDefenseMultiplier(double defenseMultiplier) {
-        this.defenseMultiplier = defenseMultiplier;
-    }
-
-    public double getSpeedMultiplier() {
-        return speedMultiplier;
-    }
-
-    public void setSpeedMultiplier(double speedMultiplier) {
-        this.speedMultiplier = speedMultiplier;
-    }
-
-    public double getAddSpeed() {
-        return addSpeed;
-    }
-
-    public void setAddSpeed(double addSpeed) {
-        this.addSpeed = addSpeed;
-    }
-
-    public double getDamageTakenMultiplier() {
-        return damageTakenMultiplier;
-    }
-
-    public void setDamageTakenMultiplier(double damageTakenMultiplier) {
-        this.damageTakenMultiplier = damageTakenMultiplier;
     }
 
     public double getAbsorption() {

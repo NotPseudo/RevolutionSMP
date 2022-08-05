@@ -7,6 +7,7 @@ import me.notpseudo.revolutionsmp.items.*;
 import org.bukkit.Material;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 // Item info stored in an ItemStack's PersistentDataContainer
 public class ItemInfo implements Serializable {
@@ -29,6 +30,7 @@ public class ItemInfo implements Serializable {
     private AbilitiesHolder abilitiesHolder;
     private SpecialItemInfo extraInfo;
     private Material vanillaMaterial;
+    private UUID owner;
 
     public ItemInfo(ItemID itemID) {
         this.itemID = itemID;
@@ -50,8 +52,9 @@ public class ItemInfo implements Serializable {
         for(AbilityType type : itemID.getDefaultAbilities()) {
             abilitiesHolder.addAbility(type);
         }
-        extraInfo = itemID.getSpecialItemInfo();
+        extraInfo = itemID.getSpecialItemInfo(this);
         vanillaMaterial = itemID.getMaterial();
+        owner = null;
         recalculate();
     }
 
@@ -76,11 +79,11 @@ public class ItemInfo implements Serializable {
             for(AbilityType type : itemID.getDefaultAbilities()) {
                 abilitiesHolder.addAbility(type);
             }
-            extraInfo = itemID.getSpecialItemInfo();
+            extraInfo = itemID.getSpecialItemInfo(this);
             vanillaMaterial = itemID.getMaterial();
         } catch (IllegalArgumentException exception) {
             itemID = null;
-            name = ItemEditor.getStringFromEnum(material);
+            name = null;
             try {
                 if (material.isItem()) {
                     rarity = Rarity.valueOf(material.getItemRarity().toString());
@@ -90,7 +93,7 @@ public class ItemInfo implements Serializable {
             } catch (IllegalArgumentException exception1) {
                 rarity = Rarity.COMMON;
             }
-            itemType = ItemType.ITEM;
+            itemType = ItemType.VANILLA_ITEM;
             weaponStats = new WeaponStats(0, 0, 0, 0, 0, 0);
             armorStats = new ArmorStats(0, 0, 0);
             abilityStats = new AbilityStats(0, 0);
@@ -102,6 +105,7 @@ public class ItemInfo implements Serializable {
             abilitiesHolder = null;
             extraInfo = null;
             vanillaMaterial = material;
+            owner = null;
         }
     }
 
@@ -268,6 +272,15 @@ public class ItemInfo implements Serializable {
         recalculate();
     }
 
+    public UUID getOwner() {
+        return owner;
+    }
+
+    public void setOwner(UUID owner) {
+        this.owner = owner;
+        recalculate();
+    }
+
     public void recomb() {
         if (!recomb) {
             recomb = true;
@@ -294,13 +307,13 @@ public class ItemInfo implements Serializable {
             luckStats = itemID.getDefaultLuckStats();
         }
         if (reforge != null) {
-            weaponStats.combine(reforge.getWeaponStats(rarity));
-            armorStats.combine(reforge.getArmorStats(rarity));
-            abilityStats.combine(reforge.getAbilityStats(rarity));
-            fishingStats.combine(reforge.getFishingStats(rarity));
-            miningStats.combine(reforge.getMiningStats(rarity));
-            gatheringStats.combine(reforge.getGatheringStats(rarity));
-            luckStats.combine(reforge.getLuckStats(rarity));
+            weaponStats.combine(reforge.getWeaponStats(rarity, owner));
+            armorStats.combine(reforge.getArmorStats(rarity, owner));
+            abilityStats.combine(reforge.getAbilityStats(rarity, owner));
+            fishingStats.combine(reforge.getFishingStats(rarity, owner));
+            miningStats.combine(reforge.getMiningStats(rarity, owner));
+            gatheringStats.combine(reforge.getGatheringStats(rarity, owner));
+            luckStats.combine(reforge.getLuckStats(rarity, owner));
         }
         if (enchantmentsHolder != null && itemType != ItemType.ITEM) {
             for (EnchantmentObject enchant : enchantmentsHolder.getEnchants()) {

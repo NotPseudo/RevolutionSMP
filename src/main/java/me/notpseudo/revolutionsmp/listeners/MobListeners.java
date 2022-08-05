@@ -2,6 +2,7 @@ package me.notpseudo.revolutionsmp.listeners;
 
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.itemstats.StatType;
 import me.notpseudo.revolutionsmp.mobstats.*;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
@@ -17,6 +18,7 @@ import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.EntityTransformEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.Nullable;
 
 public class MobListeners implements Listener {
 
@@ -39,7 +41,9 @@ public class MobListeners implements Listener {
     // Creates MobInfo for the LivingEntity
     public static MobInfo createMobInfo(Creature entity) {
         CustomMobType[] customMobTypes = CustomMobType.getCustomMobTypeList(entity.getType());
-        if (customMobTypes == null) return null;
+        if (customMobTypes == null) {
+            return null;
+        }
         CustomMobType customMobType = customMobTypes[(int) (Math.random() * customMobTypes.length)];
         int level = (int) (Math.random() * (customMobType.getMobBehavior().getHighestLevel() - customMobType.getMobBehavior().getLowestLevel() + 1)) + customMobType.getMobBehavior().getLowestLevel();
         MobInfo mobInfo = new MobInfo(customMobType, entity.getType(), level);
@@ -55,7 +59,7 @@ public class MobListeners implements Listener {
         entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(vanillaHealth);
         entity.setHealth(healthPercent * vanillaHealth);
         // Adjusts an entity's Speed
-        double speed = mobInfo.getSpeed();
+        double speed = mobInfo.getArmorStatValue(StatType.SPEED);
         double defaultSpeed = entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue();
         entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(defaultSpeed * (1 + (speed / 100)));
         HealthListeners.updateHealthBar(entity);
@@ -76,23 +80,24 @@ public class MobListeners implements Listener {
         if (event.getPlayer().getInventory().getItemInMainHand().getType() != Material.NAME_TAG) {
             return;
         }
-        if (!(event.getRightClicked() instanceof Creature)) return;
-        MobInfo mobInfo = event.getRightClicked().getPersistentDataContainer().get(mobKey, new MobInfoDataType());
+        if (!(event.getRightClicked() instanceof Creature creature)) {
+            return;
+        }
+        MobInfo mobInfo = getMobInfo(creature);
         if (mobInfo == null) {
-            mobInfo = createMobInfo((Creature) event.getRightClicked());
-            if (mobInfo == null) {
-                return;
-            }
+            return;
         }
         if (mobInfo.getMobBehavior() == MobBehavior.BOSS) {
             return;
         }
-        MobInfo finalMobInfo = mobInfo;
         BukkitRunnable rename = new BukkitRunnable() {
             @Override
             public void run() {
-                finalMobInfo.setName(((TextComponent) event.getRightClicked().customName()).content());
-                event.getRightClicked().getPersistentDataContainer().set(mobKey, new MobInfoDataType(), finalMobInfo);
+                if (event.getRightClicked().customName() == null) {
+                    return;
+                }
+                mobInfo.setName(((TextComponent) event.getRightClicked().customName()).content());
+                event.getRightClicked().getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
             }
         };
         rename.runTaskLater(plugin, 20);
@@ -102,11 +107,12 @@ public class MobListeners implements Listener {
     @EventHandler
     public void onTransform(EntityTransformEvent event) {
         Entity entity = event.getEntity();
-        if (!(entity instanceof Creature)) return;
-        MobInfo mobInfo = event.getEntity().getPersistentDataContainer().get(mobKey, new MobInfoDataType());
+        if (!(entity instanceof Creature creature)) {
+            return;
+        }
+        MobInfo mobInfo = getMobInfo(creature);
         if (mobInfo == null) {
-            mobInfo = createMobInfo((Creature) entity);
-            if (mobInfo == null) return;
+            return;
         }
         mobInfo.setVanillaMobType(entity.getType());
         mobInfo.updateMobStats();
@@ -116,11 +122,12 @@ public class MobListeners implements Listener {
     // Updates MobInfo when an Entity gets tamed
     @EventHandler
     public void onTame(EntityTameEvent event) {
-        if (!(event.getEntity() instanceof Creature)) return;
-        MobInfo mobInfo = event.getEntity().getPersistentDataContainer().get(mobKey, new MobInfoDataType());
+        if (!(event.getEntity() instanceof Creature)) {
+            return;
+        }
+        MobInfo mobInfo = getMobInfo(event.getEntity());
         if (mobInfo == null) {
-            mobInfo = createMobInfo((Creature) event.getEntity());
-            if (mobInfo == null) return;
+            return;
         }
         mobInfo.setMobBehavior(MobBehavior.TAMED);
         double vanillaMaxHealth = Math.min(2048, mobInfo.getMaxHealth());
@@ -133,12 +140,11 @@ public class MobListeners implements Listener {
     public void onTarget(EntityTargetLivingEntityEvent event) {
         Entity entity = event.getEntity();
         if (!(entity instanceof Creature)) return;
-        MobInfo mobInfo = event.getEntity().getPersistentDataContainer().get(mobKey, new MobInfoDataType());
+        MobInfo mobInfo = getMobInfo((LivingEntity) event.getEntity());
         if (mobInfo == null) {
-            mobInfo = createMobInfo((Creature) event.getEntity());
-            if (mobInfo == null) return;
-        }
-        if (mobInfo.getMobBehavior() != MobBehavior.TAMED && mobInfo.getMobBehavior() != MobBehavior.BOSS) {
+            return;
+
+        }        if (mobInfo.getMobBehavior() != MobBehavior.TAMED && mobInfo.getMobBehavior() != MobBehavior.BOSS) {
             if (event.getTarget() != null) {
                 mobInfo.setMobBehavior(MobBehavior.HOSTILE);
             } else {
@@ -146,6 +152,18 @@ public class MobListeners implements Listener {
             }
             entity.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
         }
+    }
+
+    @Nullable
+    public static MobInfo getMobInfo(LivingEntity entity) {
+        if (!(entity instanceof Creature creature)) {
+            return null;
+        }
+        MobInfo mobInfo = entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
+        if (mobInfo == null) {
+            mobInfo = createMobInfo(creature);
+        }
+        return mobInfo;
     }
 
 }

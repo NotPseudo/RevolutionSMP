@@ -69,6 +69,11 @@ public enum StatType {
         public String getSymbol() {
             return "❤";
         }
+
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.ARMOR;
+        }
     },
     DEFENSE {
         @Override
@@ -78,6 +83,10 @@ public enum StatType {
         @Override
         public NamedTextColor getColor() {
             return NamedTextColor.GREEN;
+        }
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.ARMOR;
         }
     },
     TRUE_DEFENSE {
@@ -89,6 +98,10 @@ public enum StatType {
         public NamedTextColor getColor() {
             return NamedTextColor.WHITE;
         }
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.ARMOR;
+        }
     },
     SPEED {
         @Override
@@ -98,6 +111,10 @@ public enum StatType {
         @Override
         public NamedTextColor getColor() {
             return NamedTextColor.WHITE;
+        }
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.ARMOR;
         }
     },
     INTELLIGENCE {
@@ -109,6 +126,10 @@ public enum StatType {
         public NamedTextColor getColor() {
             return NamedTextColor.AQUA;
         }
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.INTELLIGENCE;
+        }
     },
     MANA {
         @Override
@@ -119,6 +140,10 @@ public enum StatType {
         public NamedTextColor getColor() {
             return NamedTextColor.AQUA;
         }
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.INTELLIGENCE;
+        }
     },
     ABILITY_DAMAGE {
         @Override
@@ -128,6 +153,10 @@ public enum StatType {
         @Override
         public boolean isPercentage() {
             return true;
+        }
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.INTELLIGENCE;
         }
     },
     SEA_CREATURE_CHANCE {
@@ -143,11 +172,19 @@ public enum StatType {
         public boolean isPercentage() {
             return true;
         }
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.FISHING;
+        }
     },
     FISHING_SPEED {
         @Override
         public boolean isPercentage() {
             return true;
+        }
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.FISHING;
         }
     },
     MINING_SPEED {
@@ -159,6 +196,10 @@ public enum StatType {
         public NamedTextColor getColor() {
             return NamedTextColor.GOLD;
         }
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.MINING;
+        }
     },
     MINING_FORTUNE {
         @Override
@@ -168,6 +209,10 @@ public enum StatType {
         @Override
         public NamedTextColor getColor() {
             return NamedTextColor.GOLD;
+        }
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.MINING;
         }
     },
     PRISTINE {
@@ -179,6 +224,15 @@ public enum StatType {
         public NamedTextColor getColor() {
             return NamedTextColor.DARK_PURPLE;
         }
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.MINING;
+        }
+    },
+    BREAKING_POWER {
+        public StatCategory getStatCategory() {
+            return StatCategory.MINING;
+        }
     },
     FARMING_FORTUNE {
         @Override
@@ -188,6 +242,10 @@ public enum StatType {
         @Override
         public NamedTextColor getColor() {
             return NamedTextColor.GOLD;
+        }
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.GATHERING;
         }
     },
     FORAGING_FORTUNE {
@@ -199,6 +257,10 @@ public enum StatType {
         public NamedTextColor getColor() {
             return NamedTextColor.GOLD;
         }
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.GATHERING;
+        }
     },
     MAGIC_FIND {
         @Override
@@ -209,6 +271,10 @@ public enum StatType {
         public NamedTextColor getColor() {
             return NamedTextColor.AQUA;
         }
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.LUCK;
+        }
     },
     PET_LUCK {
         @Override
@@ -218,6 +284,10 @@ public enum StatType {
         @Override
         public NamedTextColor getColor() {
             return NamedTextColor.LIGHT_PURPLE;
+        }
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.LUCK;
         }
     };
 
@@ -231,6 +301,10 @@ public enum StatType {
 
     public NamedTextColor getColor() {
         return NamedTextColor.RED;
+    }
+
+    public StatCategory getStatCategory() {
+        return StatCategory.COMBAT;
     }
 
 }

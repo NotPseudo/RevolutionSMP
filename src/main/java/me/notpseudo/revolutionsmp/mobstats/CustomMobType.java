@@ -1598,6 +1598,10 @@ public enum CustomMobType {
         return 0;
     }
 
+    public double getMagicResistance() {
+        return 0;
+    }
+
     public MobBehavior getMobBehavior() {
         return MobBehavior.PASSIVE;
     }

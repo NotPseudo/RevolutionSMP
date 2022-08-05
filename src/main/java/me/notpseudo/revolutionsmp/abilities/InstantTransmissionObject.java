@@ -1,6 +1,8 @@
 package me.notpseudo.revolutionsmp.abilities;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.itemstats.ArmorStats;
+import me.notpseudo.revolutionsmp.listeners.IncreaseType;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStatsDataType;
@@ -9,6 +11,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -38,23 +41,11 @@ public class InstantTransmissionObject extends AbilityObject {
         if(speedUsed.contains(player.getUniqueId())) {
             return;
         }
-        PlayerStats playerStats = player.getPersistentDataContainer().get(StatsListeners.getPlayerStatsKey(), new PlayerStatsDataType());
-        if(playerStats == null) {
-            playerStats = new PlayerStats();
-        }
-        playerStats.setAddSpeed(playerStats.getAddSpeed() + 50);
-        player.getPersistentDataContainer().set(StatsListeners.getPlayerStatsKey(), new PlayerStatsDataType(), playerStats);
-        StatsListeners.updateStats(player);
         speedUsed.add(player.getUniqueId());
+        StatsListeners.updateStats(player);
         BukkitRunnable speed = new BukkitRunnable() {
             @Override
             public void run() {
-                PlayerStats finalPlayerStats = player.getPersistentDataContainer().get(StatsListeners.getPlayerStatsKey(), new PlayerStatsDataType());
-                if(finalPlayerStats.getAddSpeed() > 0) {
-                    finalPlayerStats.setAddSpeed(finalPlayerStats.getAddSpeed() - 50);
-                }
-                player.getPersistentDataContainer().set(StatsListeners.getPlayerStatsKey(), new PlayerStatsDataType(), finalPlayerStats);
-                StatsListeners.updateStats(player);
                 speedUsed.remove(player.getUniqueId());
             }
         };
@@ -72,4 +63,14 @@ public class InstantTransmissionObject extends AbilityObject {
         return lines;
     }
 
+    @Override
+    public @NotNull ArmorStats getBonusArmor(Player player, IncreaseType inc) {
+        if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return new ArmorStats(1, 1, 1, 1);
+        }
+        if (inc != IncreaseType.INCREASE && speedUsed.contains(player.getUniqueId())) {
+            return new ArmorStats(0, 0, 50);
+        }
+        return new ArmorStats(0, 0, 0);
+    }
 }

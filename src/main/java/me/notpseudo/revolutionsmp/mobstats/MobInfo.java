@@ -11,7 +11,8 @@ public class MobInfo extends BaseEntityStats implements Serializable {
     private CustomMobType customMobType;
     private String name;
     private int level;
-    private double damage;
+
+    private double magicResistance;
 
     public MobInfo(CustomMobType customMobType, EntityType vanillaMobType, int level) {
         super(customMobType, level);
@@ -20,11 +21,15 @@ public class MobInfo extends BaseEntityStats implements Serializable {
         this.customMobType = customMobType;
         name = customMobType.getName();
         this.level = level;
-        damage = customMobType.getDamage();
+        magicResistance = customMobType.getMagicResistance();
     }
 
     public int getLevel() {
         return level;
+    }
+
+    public double getMagicResistance() {
+        return magicResistance;
     }
 
     public String getName() {
@@ -33,14 +38,6 @@ public class MobInfo extends BaseEntityStats implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public double getDamage() {
-        return damage;
-    }
-
-    public void setDamage(double damage) {
-        this.damage = damage;
     }
 
     public MobBehavior getMobBehavior() {
@@ -70,11 +67,6 @@ public class MobInfo extends BaseEntityStats implements Serializable {
 
     public void setCustomMobType(CustomMobType customMobType) {
         this.customMobType = customMobType;
-    }
-
-    public int calculateLevel() {
-        MobBehavior behavior = customMobType.getMobBehavior();
-        return (int) (Math.random() * (behavior.getHighestLevel() - behavior.getLowestLevel() + 1)) + behavior.getLowestLevel();
     }
 
     public int calculateAndSetLevel() {

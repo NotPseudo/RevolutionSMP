@@ -1,6 +1,7 @@
 package me.notpseudo.revolutionsmp.mobstats;
 
 import me.notpseudo.revolutionsmp.itemstats.ArmorStats;
+import me.notpseudo.revolutionsmp.itemstats.StatCategory;
 import me.notpseudo.revolutionsmp.itemstats.StatType;
 import me.notpseudo.revolutionsmp.itemstats.WeaponStats;
 
@@ -28,10 +29,10 @@ public class BaseEntityStats implements Serializable {
      * @param critChance The critical hit chance
      * @param critDamage The critical hit damage
      */
-    public BaseEntityStats(double maxHealth, double defense, double speed, double strength, double critChance, double critDamage) {
+    public BaseEntityStats(double maxHealth, double defense, double speed, double strength, double critChance, double critDamage, double attackSpeed, double ferocity) {
         this.maxHealth = maxHealth;
         healthStats = new ArmorStats(maxHealth, defense, speed);
-        damageStats = new WeaponStats(0, strength, critChance, critDamage, 0, 0);
+        damageStats = new WeaponStats(0, strength, critChance, critDamage, attackSpeed, ferocity);
     }
 
     /**
@@ -62,113 +63,32 @@ public class BaseEntityStats implements Serializable {
         this.maxHealth = maxHealth;
     }
 
-    /**
-     * Returns the current health of the entity
-     *
-     * @return The current health of the entity
-     */
-    public double getCurrentHealth() {
-        return healthStats.getStatValue(StatType.HEALTH);
+    public double getCombatStatValue(StatType type) {
+        if (type.getStatCategory() != StatCategory.COMBAT) {
+            return 0;
+        }
+        return damageStats.getStatValue(type);
     }
 
-    /**
-     * Sets the current health of the entity
-     *
-     * @param currentHealth The new current health
-     */
-    public void setCurrentHealth(double currentHealth) {
-        healthStats.setStatValue(StatType.HEALTH, currentHealth);
+    public double getArmorStatValue(StatType type) {
+        if (type.getStatCategory() != StatCategory.ARMOR) {
+            return 0;
+        }
+        return healthStats.getStatValue(type);
     }
 
-    /**
-     * Returns the defense of the entity
-     *
-     * @return The defense of the entity
-     */
-    public double getDefense() {
-        return healthStats.getStatValue(StatType.DEFENSE);
+    public void setCombatStatValue(StatType type, double value) {
+        if (type.getStatCategory() != StatCategory.COMBAT) {
+            return;
+        }
+        damageStats.setStatValue(type, value);
     }
 
-    /**
-     * Sets the defense of the entity
-     *
-     * @param defense The new defense
-     */
-    public void setDefense(double defense) {
-        healthStats.setStatValue(StatType.DEFENSE, defense);
-    }
-
-    /**
-     * Returns the movement speed of the entity
-     *
-     * @return The movement speed of the entity
-     */
-    public double getSpeed() {
-        return healthStats.getStatValue(StatType.SPEED);
-    }
-
-    /**
-     * Sets the movement speed of the entity
-     *
-     * @param speed The new movement speed
-     */
-    public void setSpeed(double speed) {
-        healthStats.setStatValue(StatType.SPEED, speed);
-    }
-
-    /**
-     * Returns the strength of the entity
-     *
-     * @return The strength of the entity
-     */
-
-    public double getStrength() {
-        return damageStats.getStatValue(StatType.STRENGTH);
-    }
-
-    /**
-     * Sets the strength of the entity
-     *
-     * @param strength The new strength
-     */
-    public void setStrength(double strength) {
-        damageStats.setStatValue(StatType.STRENGTH, strength);
-    }
-
-    /**
-     * Returns the critical hit chance of the entity
-     *
-     * @return The critical hit chance of the entity
-     */
-    public double getCritChance() {
-        return damageStats.getStatValue(StatType.CRIT_CHANCE);
-    }
-
-    /**
-     * Sets the critical hit chance of the entity
-     *
-     * @param critChance The new critical hit chance
-     */
-    public void setCritChance(double critChance) {
-        damageStats.setStatValue(StatType.CRIT_DAMAGE, critChance);
-    }
-
-    /**
-     * Returns the critical hit damage of the entity
-     *
-     * @return The critical hit damage of the entity
-     */
-    public double getCritDamage() {
-        return damageStats.getStatValue(StatType.CRIT_DAMAGE);
-    }
-
-    /**
-     * Sets the critical hit damage of the entity
-     *
-     * @param critDamage The new critical hit damage
-     */
-    public void setCritDamage(double critDamage) {
-        damageStats.setStatValue(StatType.CRIT_DAMAGE, critDamage);
+    public void setArmorStatValue(StatType type, double value) {
+        if (type.getStatCategory() != StatCategory.ARMOR) {
+            return;
+        }
+        healthStats.setStatValue(type, value);
     }
 
     /**

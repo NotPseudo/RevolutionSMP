@@ -1,5 +1,6 @@
 package me.notpseudo.revolutionsmp.items;
 
+import com.destroystokyo.paper.entity.ai.VanillaGoal;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
@@ -14,11 +15,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,9 +58,14 @@ public class ItemEditor {
     public static void updateLore(ItemMeta meta) {
         ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
         if (itemInfo != null) {
+            if (itemInfo.getItemType() == ItemType.VANILLA_ITEM) {
+                ArrayList<Component> lore = new ArrayList<>(List.of(Component.text(itemInfo.getRarity().name(), itemInfo.getRarity().getRarityColor()).decoration(TextDecoration.BOLD, true).decoration(TextDecoration.ITALIC, false)));
+                meta.lore(lore);
+                return;
+            }
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-            if (itemInfo.getItemID().isUnbreakable()) {
+            if (itemInfo.getItemID() != null && itemInfo.getItemID().isUnbreakable()) {
                 meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
                 meta.setUnbreakable(true);
             }
@@ -74,14 +82,15 @@ public class ItemEditor {
             EnchantmentsHolder enchantmentsHolder = itemInfo.getEnchantmentsHolder();
             AbilitiesHolder abilitiesHolder = itemInfo.getAbilitiesHolder();
             List<Component> lore = new ArrayList<>();
+            boolean hasBonus = false;
             Component name, rarity, damage = null, strength = null, critChance = null, critDamage = null, attackSpeed = null, ferocity = null,
                     health = null, defense = null, speed = null, trueDefense = null,
                     abilityDamage = null, intelligence = null,
                     seaCreatureChance = null, fishingTimeDecrease = null,
-                    miningSpeed = null, miningFortune = null, pristine = null,
+                    miningSpeed = null, miningFortune = null, pristine = null, breakingPower = null,
                     farmingFortune = null, foragingFortune = null,
                     magicFind = null, petLuck = null,
-                    hasReforge = null;
+                    canBeReforged = null;
             Component potatoDamage = Component.empty(), potatoStrength = Component.empty(), potatoHealth = Component.empty(), potatoDefense = Component.empty();
             Component reforgeDamage = Component.empty(), reforgeStrength = Component.empty(), reforgeCritChance = Component.empty(), reforgeCritDamage = Component.empty(), reforgeAttackSpeed = Component.empty(), reforgeFerocity = Component.empty(),
                     reforgeHealth = Component.empty(), reforgeDefense = Component.empty(), reforgeSpeed = Component.empty(), reforgeTrueDefense = Component.empty(),
@@ -108,16 +117,16 @@ public class ItemEditor {
                 }
             }
             String reforgeName = "";
-            if (itemInfo.getReforge() != null) {
-                Reforge reforge = itemInfo.getReforge();
+            Reforge reforge = itemInfo.getReforge();
+            if (reforge != null) {
                 reforgeName = reforge.name().charAt(0) + reforge.name().substring(1).toLowerCase() + " ";
-                WeaponStats reforgeWeaponStats = reforge.getWeaponStats(itemInfo.getRarity());
-                ArmorStats reforgeArmorStats = reforge.getArmorStats(itemInfo.getRarity());
-                AbilityStats reforgeAbilityStats = reforge.getAbilityStats(itemInfo.getRarity());
-                FishingStats reforgeFishingStats = reforge.getFishingStats(itemInfo.getRarity());
-                MiningStats reforgeMiningStats = reforge.getMiningStats(itemInfo.getRarity());
-                GatheringStats reforgeGatheringStats = reforge.getGatheringStats(itemInfo.getRarity());
-                LuckStats reforgeLuckStats = reforge.getLuckStats(itemInfo.getRarity());
+                WeaponStats reforgeWeaponStats = reforge.getWeaponStats(itemInfo.getRarity(), itemInfo.getOwner());
+                ArmorStats reforgeArmorStats = reforge.getArmorStats(itemInfo.getRarity(), itemInfo.getOwner());
+                AbilityStats reforgeAbilityStats = reforge.getAbilityStats(itemInfo.getRarity(), itemInfo.getOwner());
+                FishingStats reforgeFishingStats = reforge.getFishingStats(itemInfo.getRarity(), itemInfo.getOwner());
+                MiningStats reforgeMiningStats = reforge.getMiningStats(itemInfo.getRarity(), itemInfo.getOwner());
+                GatheringStats reforgeGatheringStats = reforge.getGatheringStats(itemInfo.getRarity(), itemInfo.getOwner());
+                LuckStats reforgeLuckStats = reforge.getLuckStats(itemInfo.getRarity(), itemInfo.getOwner());
                 if (reforgeWeaponStats.getStatValue(StatType.DAMAGE) != 0) {
                     reforgeDamage = getReforgeComponent(reforgeWeaponStats.getStatObject(StatType.DAMAGE));
                 }
@@ -178,8 +187,9 @@ public class ItemEditor {
                 if (reforgeLuckStats.getStatValue(StatType.PET_LUCK) != 0) {
                     reforgePetLuck = getReforgeComponent(reforgeLuckStats.getStatObject(StatType.PET_LUCK));
                 }
+                hasBonus = reforge.hasBonus();
             } else {
-                hasReforge = Component.text("This item can be reforged!", NamedTextColor.DARK_GRAY);
+                canBeReforged = Component.text("This item can be reforged!", NamedTextColor.DARK_GRAY);
             }
             name = Component.text(reforgeName + itemInfo.getName()).color(itemInfo.getRarity().getRarityColor()); // The displayed name of the item is Reforge + Item Name
             if (weaponStats != null) {
@@ -242,6 +252,9 @@ public class ItemEditor {
                 if (miningStats.getStatValue(StatType.PRISTINE) != 0) {
                     pristine = Component.text("Pristine: ", NamedTextColor.GRAY).append(Component.text(getStatString(miningStats.getStatValue(StatType.PRISTINE)), NamedTextColor.GREEN)).append(reforgePristine);
                 }
+                if (miningStats.getStatValue(StatType.BREAKING_POWER) != 0) {
+                    breakingPower = Component.text("Breaking Power " + (int) miningStats.getStatValue(StatType.BREAKING_POWER), NamedTextColor.DARK_GRAY);
+                }
             }
             if (gatheringStats != null) {
                 if (gatheringStats.getStatValue(StatType.FARMING_FORTUNE) != 0) {
@@ -260,6 +273,10 @@ public class ItemEditor {
                 }
             }
             meta.displayName(name.decoration(TextDecoration.ITALIC, false));
+            if (breakingPower != null) {
+                lore.add(breakingPower.decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.empty());
+            }
             int statLines = 0;
             if (damage != null) {
                 lore.add(damage.decoration(TextDecoration.ITALIC, false));
@@ -368,15 +385,26 @@ public class ItemEditor {
                 lore.add(fishingTimeDecrease.decoration(TextDecoration.ITALIC, false));
                 lore.add(Component.empty());
             }
-            if (hasReforge != null && itemInfo.getItemType().allowReforge()) {
-                lore.add(hasReforge.decoration(TextDecoration.ITALIC, false));
+            if (hasBonus) {
+                lore.add(Component.text(getStringFromEnum(reforge) + " Bonus", NamedTextColor.BLUE).decoration(TextDecoration.ITALIC, false));
+                int lines = 0;
+                for (Component line : reforge.getBonusLore(itemInfo.getRarity())) {
+                    lore.add(line.decoration(TextDecoration.ITALIC, false));
+                    lines++;
+                }
+                if (lines > 0) {
+                    lore.add(Component.empty());
+                }
+            }
+            if (canBeReforged != null && itemInfo.getItemType().allowReforge()) {
+                lore.add(canBeReforged.decoration(TextDecoration.ITALIC, false));
             }
             lore.add(rarity.decoration(TextDecoration.ITALIC, false));
             meta.lore(lore);
         }
     }
 
-    public static void updateItem(ItemStack item) {
+    public static void updateItem(ItemStack item, UUID newOwner) {
         ItemMeta meta = item.getItemMeta();
         if (item.getType() == Material.AIR || meta == null) {
             return;
@@ -385,6 +413,9 @@ public class ItemEditor {
         if (itemInfo != null) {
             if (itemInfo.getVanillaMaterial() != item.getType()) {
                 item.setType(itemInfo.getVanillaMaterial());
+            }
+            if (!newOwner.equals(itemInfo.getOwner())) {
+                itemInfo.setOwner(newOwner);
             }
             updateLore(meta);
             item.setItemMeta(meta);
@@ -603,6 +634,22 @@ public class ItemEditor {
     public static boolean isWeapon(ItemInfo itemInfo) {
         ItemType type = itemInfo.getItemType();
         return type == ItemType.SWORD || type == ItemType.BOW || type == ItemType.FISHING_WEAPON || type == ItemType.LONGSWORD;
+    }
+
+    @Nullable
+    public static ItemInfo getMainHandInfo(Player player) {
+        if (player.getInventory().getItemInMainHand().getType() == Material.AIR) {
+            return null;
+        }
+        return player.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+    }
+
+    @Nullable
+    public static ItemInfo getOffHandInfo(Player player) {
+        if (player.getInventory().getItemInOffHand().getType() == Material.AIR) {
+            return null;
+        }
+        return player.getInventory().getItemInOffHand().getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
     }
 
     /**

@@ -59,5 +59,12 @@ commands:
     description: Edits abilities stored on the item the player is holding
     usage: /editability [mana | cooldown] <number>
   particletest:
-    description: USed to test particle effects
+    description: Used to test particle effects
     usage: /particletest
+  customore:
+    description: Used to spawn custom ore block for testing
+    usage: /customore <CustomOreType>
+    aliases:
+      - createcustomore
+  clearcustomores:
+    description: Admin command to clear custom ore locations in the world

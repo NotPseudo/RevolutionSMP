@@ -7,6 +7,7 @@ import com.comphenix.protocol.reflect.FieldAccessException;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.abilities.AbilityType;
 import me.notpseudo.revolutionsmp.enchantments.ActionEnchantment;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
 import me.notpseudo.revolutionsmp.itemstats.*;
@@ -16,6 +17,7 @@ import me.notpseudo.revolutionsmp.mobstats.MobInfo;
 import me.notpseudo.revolutionsmp.mobstats.MobInfoDataType;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStatsDataType;
+import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -90,7 +92,7 @@ public class HealthListeners implements Listener {
      *
      * @return The available Entity ID
      */
-    private static int getNextIndicatorCount() {
+    public static int getNextIndicatorCount() {
         indicatorCount++;
         return indicatorCount - 1;
     }
@@ -109,7 +111,7 @@ public class HealthListeners implements Listener {
         String nameString = "" + mobInfo.getMobBehavior().getBehaviorColor() + mobInfo.getName();
         String healthString;
         // Gets max Health of the LivingEntity
-        double currentHealth = mobInfo.getCurrentHealth(), maxHealth = mobInfo.getMaxHealth();
+        double currentHealth = mobInfo.getArmorStatValue(StatType.HEALTH), maxHealth = mobInfo.getMaxHealth();
         if (currentHealth < maxHealth / 2) {
             if (currentHealth < 0) {
                 currentHealth = 0;
@@ -161,7 +163,7 @@ public class HealthListeners implements Listener {
         }
         String nameString = "" + mobInfo.getMobBehavior().getBehaviorColor() + mobInfo.getName();
         String healthString;
-        double currentHealth = mobInfo.getCurrentHealth(), maxHealth = mobInfo.getMaxHealth();
+        double currentHealth = mobInfo.getArmorStatValue(StatType.HEALTH), maxHealth = mobInfo.getMaxHealth();
         if (currentHealth < maxHealth / 2) {
             if (currentHealth < 0) {
                 currentHealth = 0;
@@ -274,35 +276,54 @@ public class HealthListeners implements Listener {
      */
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
+        if (event instanceof EntityDamageByEntityEvent) {
+            return;
+        }
+        if (event.getEntity() instanceof Player player) {
+            double trueDefense = 0;
+            ChatColor color = null;
+            if (event.getCause() == EntityDamageEvent.DamageCause.FIRE ||
+                    event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK ||
+                    event.getCause() == EntityDamageEvent.DamageCause.LAVA ||
+                    event.getCause() == EntityDamageEvent.DamageCause.HOT_FLOOR ||
+                    event.getCause() == EntityDamageEvent.DamageCause.SUICIDE) {
+                PlayerStats playerStats = StatsListeners.getPlayerStats(player);
+                trueDefense = playerStats.getArmorStatValue(StatType.TRUE_DEFENSE);
+                color = ChatColor.GOLD;
+            }
+            if (event.getCause() == EntityDamageEvent.DamageCause.MAGIC) {
+                color = ChatColor.DARK_AQUA;
+            }
+            double damageAfterTrueDef = 1 - (trueDefense / (100 + trueDefense));
+            double damage = calculateDamageAfterAbsorption(event.getDamage() * damageAfterTrueDef, player);
+            event.setDamage(getVanillaDamage(player, damage));
+            showDamage(player, damage, false, color);
+            return;
+        }
         if (event.getEntity() instanceof Creature entity) {
-            if (event instanceof EntityDamageByEntityEvent) {
-                return;
-            }
-            if (entity instanceof Player player) {
-                double damage = calculateDamageAfterAbsorption(event.getDamage(), player);
-                if(damage > 0) {
-                    PlayerStats playerStats = player.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
-                    playerStats.setCurrentHealth(playerStats.getCurrentHealth() - damage);
-                    if(playerStats.getMaxHealth() > 2048) {
-                        damage = damage / playerStats.getMaxHealth() * 2048;
-                    }
-                    event.setDamage(damage);
-                    player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
-                    return;
+            double trueDefense = 0, magicResistance = 0;
+            ChatColor color = null;
+            MobInfo mobInfo = MobListeners.getMobInfo(entity);
+            if (event.getCause() == EntityDamageEvent.DamageCause.FIRE ||
+                    event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK ||
+                    event.getCause() == EntityDamageEvent.DamageCause.LAVA ||
+                    event.getCause() == EntityDamageEvent.DamageCause.HOT_FLOOR ||
+                    event.getCause() == EntityDamageEvent.DamageCause.SUICIDE) {
+                if (mobInfo != null) {
+                    trueDefense = mobInfo.getArmorStatValue(StatType.TRUE_DEFENSE);
                 }
+                color = ChatColor.GOLD;
             }
-            MobInfo mobInfo = entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
-            if (mobInfo == null) {
-                mobInfo = MobListeners.createMobInfo(entity);
-                if (mobInfo == null) return;
+            if (event.getCause() == EntityDamageEvent.DamageCause.MAGIC) {
+                if (mobInfo != null) {
+                    magicResistance = mobInfo.getMagicResistance();
+                }
+                color = ChatColor.DARK_AQUA;
             }
-            double health = mobInfo.getCurrentHealth() - event.getDamage();
-            if (mobInfo.getMaxHealth() > 2048) {
-                event.setDamage((event.getDamage() / mobInfo.getMaxHealth()) * 2048);
-            }
-            mobInfo.setCurrentHealth(health);
-            entity.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
-            updateHealthBar(entity);
+            double damageAfterTrueDef = 1 - (trueDefense / (100 + trueDefense)), damageAfterMagicRes = 1 - (magicResistance / 100);
+            double damage = event.getDamage() * damageAfterTrueDef * damageAfterMagicRes;
+            event.setDamage(getVanillaDamage(entity, damage));
+            showDamage(entity, damage, false, color);
         }
     }
 
@@ -313,31 +334,94 @@ public class HealthListeners implements Listener {
      */
     @EventHandler
     public void onRegen(EntityRegainHealthEvent event) {
+        if (event.getEntity() instanceof Player player) {
+            event.setAmount(getVanillaHealing(player, event.getAmount()));
+            return;
+        }
         if (event.getEntity() instanceof Creature entity) {
-            if (entity instanceof Player player) {
-                PlayerStats playerStats = player.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
-                if(playerStats == null) {
-                    playerStats = new PlayerStats();
-                }
-                double regenAmount = event.getAmount();
-                if(playerStats.getMaxHealth() > 2048) {
-                    regenAmount = regenAmount / 2048 * playerStats.getMaxHealth();
-                    playerStats.setCurrentHealth(playerStats.getCurrentHealth() + regenAmount);
-                    player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
-                }
-                return;
-            }
-            MobInfo mobInfo = entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
-            if (mobInfo == null) {
-                mobInfo = MobListeners.createMobInfo(entity);
-                if (mobInfo == null) return;
-            }
-            double health = mobInfo.getCurrentHealth() + event.getAmount();
-            mobInfo.setCurrentHealth(health);
-            entity.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
+            event.setAmount(getVanillaHealing(entity, event.getAmount()));
             updateHealthBar(entity);
         }
     }
+
+    /*
+    @EventHandler
+    public void onDamageByProjectile(EntityDamageByEntityEvent event) {
+        if (!(event.getDamager() instanceof Projectile projectile)) {
+            return;
+        }
+        if (!(event.getEntity() instanceof LivingEntity target)) {
+            return;
+        }
+        if (!(projectile.getShooter() instanceof LivingEntity attacker)) {
+            return;
+        }
+        Bukkit.getServer().broadcast(Component.text("Arrow damage LivingEntity event recognized"));
+        BaseEntityStats attackerStats = MobListeners.getMobInfo(attacker), targetStats = MobListeners.getMobInfo(target);
+        double weaponDamage = event.getDamage(), strength = 0, critDamage = 50, critChance = 30, defense = 0, damageRemainAfterDefense, ferocity = 0;
+        WeaponStats damageInc = new WeaponStats(0, 0, 0, 0, 0, 0), damageAddPercent = new WeaponStats(0, 0, 0, 0, 0, 0), damageMult = new WeaponStats(1, 1, 1, 1, 1, 1);
+        ArmorStats healthInc = new ArmorStats(0, 0, 0), healthAddPercent = new ArmorStats(0, 0, 0), healthMult = new ArmorStats(1, 1, 1);
+        if (attacker instanceof Player player) {
+            if (!(projectile instanceof Arrow) && !(projectile instanceof SpectralArrow) && !(projectile instanceof FishHook)) {
+                player.sendMessage("Not arrow, spectral, or fishing rod. Returned");
+                return;
+            }
+            player.sendMessage("Attacker is player");
+            attackerStats = StatsListeners.getPlayerStats(player);
+            damageInc = StatsListeners.getEventWeaponStats(player, target, IncreaseType.INCREASE);
+            damageAddPercent = StatsListeners.getEventWeaponStats(player, target, IncreaseType.ADDITIVE_PERCENT);
+            damageMult = StatsListeners.getEventWeaponStats(player, target, IncreaseType.MULTIPLICATIVE_PERCENT);
+        } else {
+            Bukkit.getServer().broadcast(Component.text("Attacker was not player"));
+            attackerStats = MobListeners.getMobInfo(attacker);
+        }
+        if (target instanceof Player player) {
+            Bukkit.getServer().broadcast(Component.text("Target is player"));
+            targetStats = StatsListeners.getPlayerStats(player);
+            healthInc = StatsListeners.getEventArmorStats(attacker, player, IncreaseType.INCREASE);
+            healthAddPercent = StatsListeners.getEventArmorStats(attacker, player, IncreaseType.ADDITIVE_PERCENT);
+            healthMult = StatsListeners.getEventArmorStats(attacker, player, IncreaseType.MULTIPLICATIVE_PERCENT);
+        } else {
+            Bukkit.getServer().broadcast(Component.text("Target was not player"));
+            targetStats = MobListeners.getMobInfo(target);
+        }
+        if (targetStats != null) {
+            strength = (targetStats.getCombatStatValue(StatType.STRENGTH) + damageInc.getStatValue(StatType.STRENGTH)) * (1 + (damageAddPercent.getStatValue(StatType.STRENGTH) / 100)) * damageMult.getStatValue(StatType.STRENGTH);
+            critDamage = (targetStats.getCombatStatValue(StatType.CRIT_DAMAGE) + damageInc.getStatValue(StatType.CRIT_DAMAGE)) * (1 + (damageAddPercent.getStatValue(StatType.CRIT_DAMAGE) / 100)) * damageMult.getStatValue(StatType.CRIT_DAMAGE);
+            critChance = (targetStats.getCombatStatValue(StatType.CRIT_CHANCE) + damageInc.getStatValue(StatType.CRIT_CHANCE)) * (1 + (damageAddPercent.getStatValue(StatType.CRIT_CHANCE) / 100)) * damageMult.getStatValue(StatType.CRIT_CHANCE);
+            ferocity = (targetStats.getCombatStatValue(StatType.FEROCITY) + damageInc.getStatValue(StatType.FEROCITY)) * (1 + (damageAddPercent.getStatValue(StatType.FEROCITY) / 100)) * damageMult.getStatValue(StatType.FEROCITY);
+        }
+        if (targetStats != null) {
+            defense = (targetStats.getArmorStatValue(StatType.DEFENSE) + healthInc.getStatValue(StatType.DEFENSE)) * (1 + (healthAddPercent.getStatValue(StatType.DEFENSE) / 100)) * healthMult.getStatValue(StatType.DEFENSE);
+        }
+        boolean critical = Math.random() * 100 < critChance;
+        if (!critical) {
+            critDamage = 0;
+        }
+        double finalDamage = ((5 + weaponDamage) * (1 + (strength / 100))) * (1 + (critDamage / 100)) * (1 + (damageAddPercent.getStatValue(StatType.DAMAGE) / 100)) * damageMult.getStatValue(StatType.DAMAGE);
+        damageRemainAfterDefense = 1 - (defense / (defense + 100));
+        finalDamage *= damageRemainAfterDefense * healthMult.getStatValue(StatType.HEALTH);
+        Bukkit.getServer().broadcast(Component.text("Final damage should be " + finalDamage));
+        double remainDamage = finalDamage;
+        if (attackerStats instanceof Player player) {
+            for (EnchantmentsHolder holder : StatsListeners.getEnchantmentHolders(player)) {
+                for (EnchantmentObject enchant : holder.getEnchants()) {
+                    if (enchant instanceof ActionEnchantment) {
+                        ((ActionEnchantment) enchant).action(attacker, target, finalDamage, critical, finalDamage);
+                    }
+                }
+            }
+        }
+        if (target instanceof Player player) {
+            remainDamage = calculateDamageAfterAbsorption(finalDamage, player);
+        }
+        event.setDamage(getVanillaDamage(target, remainDamage));
+        showDamage(target, finalDamage, critical, null);
+        if (ferocity > 0) {
+            ferocityAttack(attacker, target, finalDamage, ferocity, critical);
+        }
+    }
+     */
 
     /**
      * Handles damage when a LivingEntity is attacked by another Entity
@@ -346,24 +430,32 @@ public class HealthListeners implements Listener {
      */
     @EventHandler
     public void onDamageEntity(EntityDamageByEntityEvent event) {
-        if (!(event.getEntity() instanceof LivingEntity target) || !(event.getDamager() instanceof LivingEntity || event.getDamager() instanceof Arrow))
+        if (!(event.getEntity() instanceof LivingEntity target)) {
             return;
-        LivingEntity damager = null;
-        if (event.getDamager() instanceof LivingEntity) {
-            damager = (LivingEntity) event.getDamager();
-        } else if (event.getDamager() instanceof Arrow) {
-            if (((Arrow) event.getDamager()).getShooter() instanceof LivingEntity) {
-                damager = (LivingEntity) ((Arrow) event.getDamager()).getShooter();
-            }
         }
-        // Sets base stat values
-        double weaponDamage =  event.getDamage(), strength = 0, critDamage = 50, critChance = 30, defense = 0, actualDamagePercent = 1, ferocity = 0, damageTakenMultiplier = 1, attackCharge = 1;
-        StatObject damageAdditivePercent = new StatObject(StatType.DAMAGE, 0);
-        EnchantmentsHolder enchantHolder = null;
-        BaseEntityStats damagerStats = damager.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
-        BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
-        if (damager instanceof Player player) {
-            weaponDamage += 5;
+        LivingEntity attacker;
+        if (!(event.getDamager() instanceof LivingEntity)) {
+            if (!(event.getDamager() instanceof Projectile projectile)) {
+                return;
+            }
+            if (!(projectile.getShooter() instanceof LivingEntity shooter)) {
+                return;
+            }
+            if (shooter instanceof Player) {
+                if (!(projectile instanceof Arrow) && !(projectile instanceof SpectralArrow) && !(projectile instanceof FishHook)) {
+                    return;
+                }
+            }
+            attacker = shooter;
+        } else {
+            attacker = (LivingEntity) event.getDamager();
+        }
+        double weaponDamage = event.getDamage(), strength = 0, critDamage = 50, critChance = 30, defense = 0, damageRemainAfterDefense, ferocity = 0, attackCharge = 1;
+        WeaponStats damageInc = new WeaponStats(0, 0, 0, 0, 0, 0), damageAddPercent = new WeaponStats(0, 0, 0, 0, 0, 0), damageMult = new WeaponStats(1, 1, 1, 1, 1, 1);
+        ArmorStats healthInc = new ArmorStats(0, 0, 0), healthAddPercent = new ArmorStats(0, 0, 0), healthMult = new ArmorStats(1, 1, 1);
+        BaseEntityStats damagerStats, targetStats;
+        if (attacker instanceof Player player) {
+            damagerStats = StatsListeners.getPlayerStats(player);
             attackCharge = player.getAttackCooldown();
             if (player.getInventory().getItemInMainHand().getType() != Material.AIR && player.getInventory().getItemInMainHand().getItemMeta() != null) {
                 ItemMeta mainHandMeta = player.getInventory().getItemInMainHand().getItemMeta();
@@ -371,82 +463,69 @@ public class HealthListeners implements Listener {
                     ItemInfo mainHandInfo = mainHandMeta.getPersistentDataContainer().get(ItemEditor.getItemKey(), new ItemInfoDataType());
                     if (mainHandInfo != null) {
                         weaponDamage = mainHandInfo.getWeaponStats().getStatValue(StatType.DAMAGE);
-                        enchantHolder = mainHandInfo.getEnchantmentsHolder();
-                        if(enchantHolder != null) {
-                            for(EnchantmentObject enchant : enchantHolder.getEnchants()) {
-                                damageAdditivePercent.add(enchant.getDamageStatAdditivePercent(damager, target, StatType.DAMAGE));
-                            }
-                        }
                     }
                 }
             }
-            damagerStats = damager.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
-            if (damagerStats != null) {
-                ferocity = ((PlayerStats) damagerStats).getFerocity();
-            }
+            damageInc = StatsListeners.getEventWeaponStats(player, target, IncreaseType.INCREASE);
+            damageAddPercent = StatsListeners.getEventWeaponStats(player, target, IncreaseType.ADDITIVE_PERCENT);
+            damageMult = StatsListeners.getEventWeaponStats(player, target, IncreaseType.MULTIPLICATIVE_PERCENT);
+        } else {
+            damagerStats = MobListeners.getMobInfo(attacker);
         }
-        if (target instanceof Player) {
-            targetStats = target.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
-            damageTakenMultiplier = ((PlayerStats) targetStats).getDamageTakenMultiplier();
+        if (target instanceof Player player) {
+            targetStats = StatsListeners.getPlayerStats(player);
+            healthInc = StatsListeners.getEventArmorStats(attacker, player, IncreaseType.INCREASE);
+            healthAddPercent = StatsListeners.getEventArmorStats(attacker, player, IncreaseType.ADDITIVE_PERCENT);
+            healthMult = StatsListeners.getEventArmorStats(attacker, player, IncreaseType.MULTIPLICATIVE_PERCENT);
+        } else {
+            targetStats = MobListeners.getMobInfo(target);
         }
         if (damagerStats != null) {
-            strength = damagerStats.getStrength();
-            critDamage = damagerStats.getCritDamage();
-            critChance = damagerStats.getCritChance();
+            strength = (damagerStats.getCombatStatValue(StatType.STRENGTH) + damageInc.getStatValue(StatType.STRENGTH)) * (1 + (damageAddPercent.getStatValue(StatType.STRENGTH) / 100)) * damageMult.getStatValue(StatType.STRENGTH);
+            critDamage = (damagerStats.getCombatStatValue(StatType.CRIT_DAMAGE) + damageInc.getStatValue(StatType.CRIT_DAMAGE)) * (1 + (damageAddPercent.getStatValue(StatType.CRIT_DAMAGE) / 100)) * damageMult.getStatValue(StatType.CRIT_DAMAGE);
+            critChance = (damagerStats.getCombatStatValue(StatType.CRIT_CHANCE) + damageInc.getStatValue(StatType.CRIT_CHANCE)) * (1 + (damageAddPercent.getStatValue(StatType.CRIT_CHANCE) / 100)) * damageMult.getStatValue(StatType.CRIT_CHANCE);
+            ferocity = (damagerStats.getCombatStatValue(StatType.FEROCITY) + damageInc.getStatValue(StatType.FEROCITY)) * (1 + (damageAddPercent.getStatValue(StatType.FEROCITY) / 100)) * damageMult.getStatValue(StatType.FEROCITY);
         }
         if (targetStats != null) {
-            defense = targetStats.getDefense();
+            defense = (targetStats.getArmorStatValue(StatType.DEFENSE) + healthInc.getStatValue(StatType.DEFENSE)) * (1 + (healthAddPercent.getStatValue(StatType.DEFENSE) / 100)) * healthMult.getStatValue(StatType.DEFENSE);
         }
-        double randomCrit = Math.random() * 100;
-        boolean critical = randomCrit <= critChance;
+        boolean critical = Math.random() * 100 < critChance;
         if (!critical) {
             critDamage = 0;
         }
-        double finalDamage = ((weaponDamage) * (1 + (strength / 100))) * (1 + (critDamage / 100)) * (1 + (damageAdditivePercent.getValue() / 100)) * attackCharge;
-        actualDamagePercent = 1 - (defense / (defense + 100));
-        finalDamage *= actualDamagePercent * damageTakenMultiplier;
-        double vanillaDamage = finalDamage;
+        double finalDamage = ((5 + weaponDamage) * (1 + (strength / 100))) * (1 + (critDamage / 100)) * (1 + (damageAddPercent.getStatValue(StatType.DAMAGE) / 100)) * damageMult.getStatValue(StatType.DAMAGE) * attackCharge;
+        damageRemainAfterDefense = 1 - (defense / (defense + 100));
+        finalDamage *= damageRemainAfterDefense * healthMult.getStatValue(StatType.HEALTH);
         double remainDamage = finalDamage;
-        if(enchantHolder != null) {
-            for(EnchantmentObject enchant : enchantHolder.getEnchants()) {
-                if(enchant instanceof ActionEnchantment) {
-                    ((ActionEnchantment) enchant).action(damager, target, vanillaDamage, critical, finalDamage);
+        if (attacker instanceof Player player) {
+            for (EnchantmentsHolder holder : StatsListeners.getEnchantmentHolders(player)) {
+                for (EnchantmentObject enchant : holder.getEnchants()) {
+                    if (enchant instanceof ActionEnchantment) {
+                        ((ActionEnchantment) enchant).action(attacker, target, finalDamage, critical, finalDamage);
+                    }
                 }
             }
         }
-        if(target instanceof Player player) {
+        if (target instanceof Player player) {
             remainDamage = calculateDamageAfterAbsorption(finalDamage, player);
-            vanillaDamage = remainDamage;
         }
-        if (targetStats != null && targetStats.getMaxHealth() > 2048) {
-            vanillaDamage = finalDamage / targetStats.getMaxHealth() * 2048;
-        }
-        event.setDamage(vanillaDamage);
+        event.setDamage(getVanillaDamage(target, remainDamage));
         showDamage(target, finalDamage, critical, null);
-        if (targetStats != null) {
-            targetStats.setCurrentHealth(targetStats.getCurrentHealth() - remainDamage);
-            if (target instanceof Player) {
-                target.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), (PlayerStats) targetStats);
-            } else {
-                target.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), (MobInfo) targetStats);
-                updateHealthBar((Creature) target);
-            }
-        }
-        if (damager instanceof Player && ferocity > 0) {
-            ferocityAttack((Player) damager, target, finalDamage, ferocity, critical);
+        if (ferocity > 0) {
+            ferocityAttack(attacker, target, finalDamage, ferocity, critical);
         }
     }
 
     /**
      * Repeatedly damages the target based on the attacker's ferocity
      *
-     * @param damager  The attacking Player
+     * @param damager  The attacking entity
      * @param target   The LivingEntity to be attacked
      * @param damage   The amount of damage originally dealt
      * @param ferocity The ferocity stat of the attacker
      * @param critical Represents if the damage was a critical hit or not
      */
-    private void ferocityAttack(Player damager, LivingEntity target, double damage, double ferocity, boolean critical) {
+    private void ferocityAttack(LivingEntity damager, LivingEntity target, double damage, double ferocity, boolean critical) {
         int hits = HarvestingListeners.getAddedTimes(ferocity);
         final int[] count = {0};
         BukkitRunnable feroHit = new BukkitRunnable() {
@@ -461,7 +540,9 @@ public class HealthListeners implements Listener {
                         target.setNoDamageTicks(0);
                         target.damage(damage);
                         showDamage(target, damage, critical, null);
-                        damager.playSound(damager, Sound.ITEM_FLINTANDSTEEL_USE, 2f, 0.605f);
+                        if (damager instanceof Player player) {
+                            player.playSound(player, Sound.ITEM_FLINTANDSTEEL_USE, 2f, 0.605f);
+                        }
                     } else {
                         count[0] = hits + 1;
                     }
@@ -472,13 +553,10 @@ public class HealthListeners implements Listener {
     }
 
     private static double calculateDamageAfterAbsorption(double damage, Player player) {
-        PlayerStats playerStats = player.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
-        if(playerStats == null) {
-            playerStats = new PlayerStats();
-        }
+        PlayerStats playerStats = StatsListeners.getPlayerStats(player);
         double damageLeft = damage - playerStats.getAbsorption();
         double remainAbsorption = playerStats.getAbsorption() - damage;
-        if(remainAbsorption <= 0) {
+        if (remainAbsorption <= 0) {
             playerStats.setAbsorption(0);
             player.setAbsorptionAmount(0);
             player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
@@ -489,6 +567,110 @@ public class HealthListeners implements Listener {
             player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
             return 0;
         }
+    }
+
+    private static double getVanillaDamage(LivingEntity target, double amount) {
+        if (target instanceof Player player) {
+            PlayerStats playerStats = StatsListeners.getPlayerStats(player);
+            double currentHealth = playerStats.getArmorStatValue(StatType.HEALTH), healthLeft = Math.max(currentHealth - amount, 0);
+            playerStats.setArmorStatValue(StatType.HEALTH, healthLeft);
+            player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
+            if (currentHealth > 2048) {
+                if (healthLeft < 2048) {
+                    return 2048 - healthLeft;
+                }
+                return 0;
+            }
+            return amount;
+        }
+        if (!(target instanceof Creature creature)) {
+            return amount;
+        }
+        MobInfo mobInfo = MobListeners.getMobInfo(creature);
+        if (mobInfo == null) {
+            return amount;
+        }
+        double currentHealth = mobInfo.getArmorStatValue(StatType.HEALTH), healthLeft = Math.max(currentHealth - amount, 0);
+        mobInfo.setArmorStatValue(StatType.HEALTH, healthLeft);
+        creature.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
+        StatsListeners.updateEntityStats(creature);
+        updateHealthBar(creature);
+        if (currentHealth > 2048) {
+            if (healthLeft < 2048) {
+                return 2048 - healthLeft;
+            }
+            return 0;
+        }
+        return amount;
+    }
+
+    private static double getVanillaHealing(LivingEntity target, double amount) {
+        if (target instanceof Player player) {
+            PlayerStats playerStats = StatsListeners.getPlayerStats(player);
+            double original = playerStats.getArmorStatValue(StatType.HEALTH), updated = Math.min(original + amount, playerStats.getMaxHealth());
+            playerStats.setArmorStatValue(StatType.HEALTH, updated);
+            player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
+            StatsListeners.updateStats(player);
+            if (original >= 2048) {
+                return 0;
+            }
+            if (updated >= 2048) {
+                return 2048 - original;
+            }
+            return amount;
+        }
+        if (!(target instanceof Creature creature)) {
+            return amount;
+        }
+        MobInfo mobInfo = MobListeners.getMobInfo(creature);
+        if (mobInfo == null) {
+            return amount;
+        }
+        double original = mobInfo.getArmorStatValue(StatType.HEALTH), updated = Math.min(original + amount, mobInfo.getMaxHealth());
+        mobInfo.setArmorStatValue(StatType.HEALTH, updated);
+        creature.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
+        StatsListeners.updateEntityStats(creature);
+        updateHealthBar(creature);
+        if (original >= 2048) {
+            return 0;
+        }
+        if (updated >= 2048) {
+            return 2048 - original;
+        }
+        return amount;
+    }
+
+    public static void magicDamage(Player player, LivingEntity target, AbilityType type) {
+        double damage = calculateAbilityDamage(type, player, target);
+        Bukkit.getServer().getPluginManager().callEvent(new EntityDamageEvent(target, EntityDamageEvent.DamageCause.MAGIC, damage));
+    }
+
+    public static void mobMagicAttack(Player target, double amount) {
+        Bukkit.getServer().getPluginManager().callEvent(new EntityDamageEvent(target, EntityDamageEvent.DamageCause.MAGIC, amount));
+    }
+
+    public static void trueDamage(Player attacker, LivingEntity target, double amount) {
+        Bukkit.getServer().getPluginManager().callEvent(new EntityDamageEvent(target, EntityDamageEvent.DamageCause.SUICIDE, amount));
+    }
+
+    public static void mobTrueDamage(LivingEntity attacker, Player target, double amount) {
+        Bukkit.getServer().getPluginManager().callEvent(new EntityDamageEvent(target, EntityDamageEvent.DamageCause.SUICIDE, amount));
+    }
+
+    public static double calculateAbilityDamage(AbilityType type, Player player, LivingEntity target) {
+        PlayerStats playerStats = StatsListeners.getPlayerStats(player);
+        AbilityStats add = StatsListeners.getEventAbilityStats(player, target, IncreaseType.INCREASE),
+                addPercent = StatsListeners.getEventAbilityStats(player, target, IncreaseType.ADDITIVE_PERCENT),
+                mult = StatsListeners.getEventAbilityStats(player, target, IncreaseType.MULTIPLICATIVE_PERCENT);
+        double abilityDamage = (playerStats.getAbilityDamage() + add.getStatValue(StatType.ABILITY_DAMAGE)) * (1 + (addPercent.getStatValue(StatType.ABILITY_DAMAGE) / 100)) * mult.getStatValue(StatType.ABILITY_DAMAGE),
+                intel = (playerStats.getIntelligence() + add.getStatValue(StatType.INTELLIGENCE)) * (1 + (addPercent.getStatValue(StatType.INTELLIGENCE) / 100)) * mult.getStatValue(StatType.INTELLIGENCE);
+        double intelligenceScale = 1 + (intel / 100) * type.getAbilityScaling();
+        double critScale = 1;
+        if (type.allowCrit() && Math.random() < playerStats.getCombatStatValue(StatType.CRIT_CHANCE)) {
+            critScale = 1 + (playerStats.getCombatStatValue(StatType.CRIT_DAMAGE) / 100);
+        }
+        double abilityDamageScale = 1 + (abilityDamage / 100);
+        return type.getBaseAbilityDamage() * intelligenceScale * critScale * abilityDamageScale;
     }
 
 }

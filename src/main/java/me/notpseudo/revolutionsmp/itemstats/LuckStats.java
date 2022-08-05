@@ -15,8 +15,7 @@ public class LuckStats extends StatHolder implements Serializable {
         if (containsType(newStat.getType())) {
             return;
         }
-        if (newStat.getType() != StatType.MAGIC_FIND ||
-                newStat.getType() != StatType.PET_LUCK) {
+        if (newStat.getType().getStatCategory() != StatCategory.LUCK) {
             return;
         }
         super.getStats().add(newStat);

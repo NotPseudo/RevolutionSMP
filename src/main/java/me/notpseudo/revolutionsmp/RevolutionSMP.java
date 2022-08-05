@@ -32,7 +32,10 @@ public final class RevolutionSMP extends JavaPlugin {
         new EditAbilityCommand(this);
         new ViewItemStatsCommand(this);
         new ParticleTestCommand(this);
+        new CreateCustomOreCommand(this);
+        new ClearCustomOreCommand(this);
         AbilitiesUtil.createPassSet();
+        plugin = this;
     }
 
     /**

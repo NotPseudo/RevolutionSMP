@@ -99,6 +99,8 @@ public class Particles {
                     Vector3f particleVec = matrix.transformPosition(new Vector3f((float) dx, 0, (float) dz));
                     Location particleLocation = particleCenter.clone().add(particleVec.x, particleVec.y, particleVec.z);
                     center.getWorld().spawnParticle(Particle.SPELL_WITCH, particleLocation, 0, 0, 0, 0);
+                }
+                for (int i = 0; i < (int) (Math.random() * 7) + 4; i++) {
                     center.getWorld().spawnFallingBlock(center.clone().add(changeRadius * Math.sin(Math.toRadians(Math.random() * 360)), 0.2, changeRadius * Math.cos(Math.toRadians(Math.random() * 360))), materials[(int) (Math.random() * materials.length)].createBlockData()).remove();
                 }
                 changeRadius -= radius / (time * 20);

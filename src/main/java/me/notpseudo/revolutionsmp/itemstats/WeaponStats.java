@@ -20,12 +20,7 @@ public class WeaponStats extends StatHolder implements Serializable {
         if (containsType(newStat.getType())) {
             return;
         }
-        if (newStat.getType() != StatType.DAMAGE ||
-                newStat.getType() != StatType.STRENGTH ||
-                newStat.getType() != StatType.CRIT_CHANCE ||
-                newStat.getType() != StatType.CRIT_DAMAGE ||
-                newStat.getType() != StatType.ATTACK_SPEED||
-                newStat.getType() != StatType.FEROCITY) {
+        if (newStat.getType().getStatCategory() != StatCategory.COMBAT) {
             return;
         }
             super.getStats().add(newStat);

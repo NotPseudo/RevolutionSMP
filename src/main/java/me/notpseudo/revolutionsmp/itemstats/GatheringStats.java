@@ -15,8 +15,7 @@ public class GatheringStats extends StatHolder implements Serializable {
         if (containsType(newStat.getType())) {
             return;
         }
-        if (newStat.getType() != StatType.FARMING_FORTUNE ||
-                newStat.getType() != StatType.FORAGING_FORTUNE) {
+        if (newStat.getType().getStatCategory() != StatCategory.GATHERING) {
             return;
         }
         super.getStats().add(newStat);

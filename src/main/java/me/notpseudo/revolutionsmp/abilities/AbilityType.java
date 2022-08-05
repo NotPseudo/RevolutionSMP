@@ -1,14 +1,15 @@
 package me.notpseudo.revolutionsmp.abilities;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
-import me.notpseudo.revolutionsmp.itemstats.StatObject;
-import me.notpseudo.revolutionsmp.itemstats.StatType;
+import me.notpseudo.revolutionsmp.itemstats.*;
+import me.notpseudo.revolutionsmp.listeners.IncreaseType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -174,6 +175,17 @@ public enum AbilityType {
         @Override
         public ArrayList<UUID> getCooldownList() {
             return witherShieldCooldownList;
+        }
+
+        @Override
+        public @NotNull ArmorStats getEventArmor(LivingEntity damager, Player target, IncreaseType inc) {
+            if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
+                if (witherShieldCooldownList.contains(damager.getUniqueId())) {
+                    return new ArmorStats(0.9, 1, 1, 1);
+                }
+                return new ArmorStats(1, 1, 1, 1);
+            }
+            return new ArmorStats(0, 0, 0);
         }
 
         @Override
@@ -345,6 +357,10 @@ public enum AbilityType {
         return false;
     }
 
+    public boolean allowCrit() {
+        return false;
+    }
+
     public ArrayList<Component> getDescription() {
         return new ArrayList<>();
     }
@@ -357,76 +373,116 @@ public enum AbilityType {
         return new AbilityObject(this);
     }
 
-    public StatObject getDamageStatAdditiveAmount(LivingEntity damager, LivingEntity target, int level, StatType type) {
-        return new StatObject(type, 0);
+    @NotNull
+    public WeaponStats getEventWeapon(Player damager, LivingEntity target, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return new WeaponStats(1, 1, 1, 1, 1, 1);
+        }
+        return new WeaponStats(0, 0, 0, 0, 0, 0);
     }
 
-    public StatObject getDamageStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
-        return new StatObject(type, 0);
+    @NotNull
+    public ArmorStats getEventArmor(LivingEntity damager, Player target, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return new ArmorStats(1, 1, 1, 1);
+        }
+        return new ArmorStats(0, 0, 0);
     }
 
-    public StatObject getDamageStatMultiplicativePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
-        return new StatObject(type, 1);
+    @NotNull
+    public AbilityStats getEventAbility(Player damager, LivingEntity target, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return new AbilityStats(1, 1);
+        }
+        return new AbilityStats(0, 0);
     }
 
-    public StatObject getHealthStatAdditiveAmount(LivingEntity damager, LivingEntity target, int level, StatType type) {
-        return new StatObject(type, 0);
+    @NotNull
+    public FishingStats getEventFishing(Player fisher, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return new FishingStats(1, 1);
+        }
+        return new FishingStats(0, 0);
     }
 
-    public StatObject getHealthStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
-        return new StatObject(type, 0);
+    @NotNull
+    public MiningStats getEventMining(Player miner, Block block, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return new MiningStats(1, 1, 1);
+        }
+        return new MiningStats(0, 0, 0);
     }
 
-    public StatObject getHealthStatMultiplicativePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
-        return new StatObject(type, 1);
+    @NotNull
+    public GatheringStats getEventGathering(Player harvester, Block block, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return new GatheringStats(1, 1);
+        }
+        return new GatheringStats(0, 0);
     }
 
-    public StatObject getAbilityStatAdditiveAmount(LivingEntity damager, int level, StatType type) {
-        return new StatObject(type, 0);
+    @NotNull
+    public LuckStats getEventLuck(Player attacker, LivingEntity target, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return new LuckStats(1, 1);
+        }
+        return new LuckStats(0, 0);
     }
 
-    public StatObject getAbilityStatAdditivePercent(LivingEntity damager, int level, StatType type) {
-        return new StatObject(type, 0);
+    @NotNull
+    public WeaponStats getBonusWeapon(Player player, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return new WeaponStats(1, 1, 1, 1, 1, 1);
+        }
+        return new WeaponStats(0, 0, 0, 0, 0, 0);
     }
 
-    public StatObject getAbilityStatMultiplicativePercent(LivingEntity damager, int level, StatType type) {
-        return new StatObject(type, 1);
+    @NotNull
+    public ArmorStats getBonusArmor(Player player, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return new ArmorStats(1, 1, 1, 1);
+        }
+        return new ArmorStats(0, 0, 0);
     }
 
-    public StatObject getFishingStatAdditiveAmount(LivingEntity damager, int level, StatType type) {
-        return new StatObject(type, 0);
+    @NotNull
+    public AbilityStats getBonusAbility(Player player, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return new AbilityStats(1, 1);
+        }
+        return new AbilityStats(0, 0);
     }
 
-    public StatObject getFishingStatAdditivePercent(LivingEntity damager, int level, StatType type) {
-        return new StatObject(type, 0);
+    @NotNull
+    public FishingStats getBonusFishing(Player fisher, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return new FishingStats(1, 1);
+        }
+        return new FishingStats(0, 0);
     }
 
-    public StatObject getFishingStatMultiplicativePercent(LivingEntity damager, int level, StatType type) {
-        return new StatObject(type, 1);
+    @NotNull
+    public MiningStats getBonusMining(Player miner, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return new MiningStats(1, 1, 1);
+        }
+        return new MiningStats(0, 0, 0);
     }
 
-    public StatObject geBreakingStatAdditiveAmount(LivingEntity harvester, Block block, int level, StatType type) {
-        return new StatObject(type, 0);
+    @NotNull
+    public GatheringStats getBonusGathering(Player harvester, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return new GatheringStats(1, 1);
+        }
+        return new GatheringStats(0, 0);
     }
 
-    public StatObject getBreakingStatAdditivePercent(LivingEntity harvester, Block block, int level, StatType type) {
-        return new StatObject(type, 0);
-    }
-
-    public StatObject getBreakingStatMultiplicativePercent(LivingEntity harvester, Block block, int level, StatType type) {
-        return new StatObject(type, 1);
-    }
-
-    public StatObject getLuckStatAdditiveAmount(LivingEntity damager, LivingEntity target, int level, StatType type) {
-        return new StatObject(type, 0);
-    }
-
-    public StatObject getLuckStatAdditivePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
-        return new StatObject(type, 0);
-    }
-
-    public StatObject getLuckStatMultiplicativePercent(LivingEntity damager, LivingEntity target, int level, StatType type) {
-        return new StatObject(type, 1);
+    @NotNull
+    public LuckStats getBonusLuck(Player attacker, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return new LuckStats(1, 1);
+        }
+        return new LuckStats(0, 0);
     }
 
 }

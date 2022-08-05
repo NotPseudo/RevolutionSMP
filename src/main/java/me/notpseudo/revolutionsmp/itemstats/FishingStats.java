@@ -15,8 +15,7 @@ public class FishingStats extends StatHolder implements Serializable {
         if (containsType(newStat.getType())) {
             return;
         }
-        if (newStat.getType() != StatType.SEA_CREATURE_CHANCE ||
-                newStat.getType() != StatType.FISHING_SPEED) {
+        if (newStat.getType().getStatCategory() != StatCategory.FISHING) {
             return;
         }
         super.getStats().add(newStat);

@@ -2,9 +2,10 @@ package me.notpseudo.revolutionsmp.specialiteminfo;
 
 import me.notpseudo.revolutionsmp.collections.*;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
+import me.notpseudo.revolutionsmp.itemstats.GatheringStats;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
-import me.notpseudo.revolutionsmp.itemstats.StatObject;
 import me.notpseudo.revolutionsmp.itemstats.StatType;
+import me.notpseudo.revolutionsmp.listeners.IncreaseType;
 import me.notpseudo.revolutionsmp.skills.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -12,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,7 +21,6 @@ import java.util.List;
 
 public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
 
-    private ItemInfo holder;
     private CollectionType collectionType;
     private ArrayList<Material> vanillaMaterials;
     private double counter;
@@ -30,7 +31,7 @@ public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
     private boolean count2Reached;
 
     public FarmingToolInfo(ItemInfo holder, CollectionType type) {
-        this.holder = holder;
+        super(holder);
         this.vanillaMaterials = new ArrayList<>(type.getVanillaMaterials());
         counter = 0;
         craftTier = 1;
@@ -42,12 +43,12 @@ public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
 
     public void upgradeFromCraft() {
         craftTier++;
-        holder.upgradeRarity();
+        super.getHolder().upgradeRarity();
         switch (craftTier) {
-            case 1 -> holder.setMaterial(Material.STONE_HOE);
-            case 2 -> holder.setMaterial(Material.IRON_HOE);
-            case 3 -> holder.setMaterial(Material.DIAMOND_HOE);
-            case 4 -> holder.setMaterial(Material.NETHERITE_HOE);
+            case 1 -> super.getHolder().setMaterial(Material.STONE_HOE);
+            case 2 -> super.getHolder().setMaterial(Material.IRON_HOE);
+            case 3 -> super.getHolder().setMaterial(Material.DIAMOND_HOE);
+            case 4 -> super.getHolder().setMaterial(Material.NETHERITE_HOE);
         }
     }
 
@@ -60,7 +61,7 @@ public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
             cropsUntilNextCountTier = 0;
         }
         countTier++;
-        holder.upgradeRarity();
+        super.getHolder().upgradeRarity();
     }
 
     public void add(Material material, int count) {
@@ -81,7 +82,7 @@ public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
     }
 
     private int getBaseAddPercent() {
-        return switch (holder.getRarity()) {
+        return switch (super.getHolder().getRarity()) {
             case COMMON ->  10;
             case UNCOMMON -> 25;
             default -> 50;
@@ -89,7 +90,7 @@ public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
     }
 
     private int getXpBoost() {
-        return switch (holder.getRarity()) {
+        return switch (super.getHolder().getRarity()) {
             case COMMON -> 1;
             case UNCOMMON -> 2;
             case RARE -> 3;
@@ -153,19 +154,25 @@ public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
     }
 
     @Override
-    public StatObject getBreakingStatAdditivePercent(Player harvester, Block block, StatType type) {
+    public @NotNull GatheringStats getEventGathering(Player harvester, Block block, IncreaseType inc) {
+        if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return new GatheringStats(1, 1);
+        }
         if (!hasMaterial(block.getType())) {
-            return new StatObject(type, 0);
+            return new GatheringStats(0, 0);
         }
-        if (type != StatType.FARMING_FORTUNE) {
-            return new StatObject(type, 0);
+        if (inc != IncreaseType.INCREASE) {
+            return new GatheringStats(0, 0);
         }
-        int addPercent = getBaseAddPercent() + logarithmicCounter() + collectionAnalysis(harvester) + knowledgeOfTheLand(harvester);
-        return new StatObject(type, addPercent);
+        int addAmount = getBaseAddPercent() + logarithmicCounter() + collectionAnalysis(harvester) + knowledgeOfTheLand(harvester);
+        return new GatheringStats(addAmount, 0);
     }
 
     @Override
-    public ExpDropObject getExpAdditivePercent(SkillType type) {
+    public ExpDropObject getEventExpBoost(SkillType type, IncreaseType inc) {
+        if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return new ExpDropObject(type, 1);
+        }
         if (type != SkillType.FARMING) {
             new ExpDropObject(type, 0);
         }

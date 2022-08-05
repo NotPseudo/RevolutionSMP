@@ -1,6 +1,7 @@
 package me.notpseudo.revolutionsmp.commands;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.itemstats.StatType;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStatsDataType;
@@ -26,18 +27,17 @@ public class ProfileCommand implements CommandExecutor {
                 player.sendMessage("Your Player Stats were null");
                 return false;
             }
-            player.sendMessage("Current Health: " + playerStats.getCurrentHealth());
+            player.sendMessage("Current Health: " + playerStats.getArmorStatValue(StatType.HEALTH));
             player.sendMessage("Max Health: " + playerStats.getMaxHealth());
-            player.sendMessage("Defense: " + playerStats.getDefense());
-            player.sendMessage("Speed: " + playerStats.getSpeed());
-            player.sendMessage("Strength: " + playerStats.getStrength());
-            player.sendMessage("Crit Chance: " + playerStats.getCritChance());
-            player.sendMessage("Crit Damage: " + playerStats.getCritDamage());
-            player.sendMessage("Attack Speed: " + playerStats.getAttackSpeed());
-            player.sendMessage("Ferocity: " + playerStats.getFerocity());
+            player.sendMessage("Defense: " + playerStats.getArmorStatValue(StatType.DEFENSE));
+            player.sendMessage("Speed: " + playerStats.getArmorStatValue(StatType.SPEED));
+            player.sendMessage("Strength: " + playerStats.getCombatStatValue(StatType.STRENGTH));
+            player.sendMessage("Crit Chance: " + playerStats.getCombatStatValue(StatType.CRIT_CHANCE));
+            player.sendMessage("Crit Damage: " + playerStats.getCombatStatValue(StatType.CRIT_DAMAGE));
+            player.sendMessage("Attack Speed: " + playerStats.getCombatStatValue(StatType.ATTACK_SPEED));
+            player.sendMessage("Ferocity: " + playerStats.getCombatStatValue(StatType.FEROCITY));
             player.sendMessage("Intelligence: " + playerStats.getIntelligence());
             player.sendMessage("Ability Damage: " + playerStats.getAbilityDamage());
-            player.sendMessage("Damage Taken Multiplier: " + playerStats.getDamageTakenMultiplier());
             player.sendMessage("Absorption: " + playerStats.getAbsorption());
         }
         return true;

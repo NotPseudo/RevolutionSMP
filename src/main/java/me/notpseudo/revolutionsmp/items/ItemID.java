@@ -14,6 +14,128 @@ import java.util.List;
 
 // Enum used to identify the exact custom item type an item is
 public enum ItemID {
+    WOODEN_PICKAXE {
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(15, 0, 0, 0, 0, 0);
+        }
+
+        @Override
+        public MiningStats getDefaultMiningStats() {
+            return new MiningStats(50, 0, 0, 1);
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.PICKAXE;
+        }
+
+        @Override
+        public Material getMaterial() {
+            return Material.WOODEN_PICKAXE;
+        }
+    },
+    STONE_PICKAXE {
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(20, 0, 0, 0, 0, 0);
+        }
+
+        @Override
+        public MiningStats getDefaultMiningStats() {
+            return new MiningStats(90, 0, 0, 2);
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.PICKAXE;
+        }
+
+        @Override
+        public Material getMaterial() {
+            return Material.STONE_PICKAXE;
+        }
+    },
+    GOLDEN_PICKAXE {
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(15, 0, 0, 0, 0, 0);
+        }
+
+        @Override
+        public MiningStats getDefaultMiningStats() {
+            return new MiningStats(250, 0, 0, 1);
+        }
+        @Override
+        public ItemType getItemType() {
+            return ItemType.PICKAXE;
+        }
+
+        @Override
+        public Material getMaterial() {
+            return Material.GOLDEN_PICKAXE;
+        }
+    },
+    IRON_PICKAXE {
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(25, 0, 0, 0, 0, 0);
+        }
+
+        @Override
+        public MiningStats getDefaultMiningStats() {
+            return new MiningStats(150, 0, 0, 3);
+        }
+        @Override
+        public ItemType getItemType() {
+            return ItemType.PICKAXE;
+        }
+
+        @Override
+        public Material getMaterial() {
+            return Material.IRON_PICKAXE;
+        }
+    },
+    DIAMOND_PICKAXE {
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(30, 0, 0, 0, 0, 0);
+        }
+
+        @Override
+        public MiningStats getDefaultMiningStats() {
+            return new MiningStats(200, 0, 0, 4);
+        }
+        @Override
+        public ItemType getItemType() {
+            return ItemType.PICKAXE;
+        }
+
+        @Override
+        public Material getMaterial() {
+            return Material.DIAMOND_PICKAXE;
+        }
+    },
+    NETHERITE_PICKAXE {
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(35, 0, 0, 0, 0, 0);
+        }
+
+        @Override
+        public MiningStats getDefaultMiningStats() {
+            return new MiningStats(225, 0, 0, 4);
+        }
+        @Override
+        public ItemType getItemType() {
+            return ItemType.PICKAXE;
+        }
+
+        @Override
+        public Material getMaterial() {
+            return Material.NETHERITE_PICKAXE;
+        }
+    },
     STORM_CHESTPLATE {
         @Override
         public ItemType getItemType() {
@@ -348,7 +470,7 @@ public enum ItemID {
 
         @Override
         public MiningStats getDefaultMiningStats() {
-            return new MiningStats(10, 10, 10);
+            return new MiningStats(10, 10, 10, 5);
         }
 
         @Override
@@ -364,6 +486,28 @@ public enum ItemID {
         @Override
         public ItemType getItemType() {
             return ItemType.PICKAXE;
+        }
+
+        @Override
+        public Material getMaterial() {
+            return Material.PRISMARINE_SHARD;
+        }
+    },
+    TEST_DRILL {
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.MYTHIC;
+        }
+
+        @Override
+        public MiningStats getDefaultMiningStats() {
+            return new MiningStats(500, 10, 10, 5);
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.DRILL;
         }
 
         @Override
@@ -538,7 +682,7 @@ public enum ItemID {
         return false;
     }
 
-    public SpecialItemInfo getSpecialItemInfo() {
+    public SpecialItemInfo getSpecialItemInfo(ItemInfo itemInfo) {
         return null;
     }
 

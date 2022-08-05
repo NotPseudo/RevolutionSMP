@@ -2,7 +2,10 @@ package me.notpseudo.revolutionsmp.enchantments;
 
 import me.notpseudo.revolutionsmp.itemstats.StatObject;
 import me.notpseudo.revolutionsmp.itemstats.StatType;
+import me.notpseudo.revolutionsmp.itemstats.WeaponStats;
+import me.notpseudo.revolutionsmp.listeners.IncreaseType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -20,8 +23,19 @@ public class TripleStrikeEnchantmentObject extends EnchantmentObject implements 
     }
 
     @Override
-    public StatObject getDamageStatAdditivePercent(LivingEntity damager, LivingEntity target, StatType type) {
-        UUID targetUUID = target.getUniqueId();
+    public WeaponStats getEventWeapon(Player damager, LivingEntity target, IncreaseType inc) {
+        if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return new WeaponStats(1, 1, 1, 1, 1, 1);
+        }
+        if (inc == IncreaseType.ADDITIVE_PERCENT) {
+            return new WeaponStats(10 * super.getLevel(), 0, 0, 0, 0, 0);
+        }
+        return new WeaponStats(0, 0, 0, 0, 0, 0);
+    }
+
+    /*
+    @Override
+    public StatObject getDamageStatAddPercent(LivingEntity damager, LivingEntity target, StatType type) {
         if (!super.getAttacked().containsKey(targetUUID)) {
             super.getAttacked().put(targetUUID, 0);
         }
@@ -31,6 +45,7 @@ public class TripleStrikeEnchantmentObject extends EnchantmentObject implements 
         super.getAttacked().put(targetUUID, super.getAttacked().get(targetUUID) + 1);
         return new StatObject(StatType.DAMAGE, super.getLevel() * 10);
     }
+    */
 
     @EventHandler
     public void onDeath(EntityDeathEvent event) {

@@ -17,8 +17,7 @@ public class AbilityStats extends StatHolder implements Serializable {
         if (containsType(newStat.getType())) {
             return;
         }
-        if (newStat.getType() != StatType.ABILITY_DAMAGE ||
-                newStat.getType() != StatType.INTELLIGENCE) {
+        if (newStat.getType().getStatCategory() != StatCategory.INTELLIGENCE) {
             return;
         }
         super.getStats().add(newStat);

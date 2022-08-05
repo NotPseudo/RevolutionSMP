@@ -2,6 +2,8 @@ package me.notpseudo.revolutionsmp.skills;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class SkillUtils {
 
@@ -29,6 +31,16 @@ public class SkillUtils {
             total += getXpForNextLevel(type, i + 1);
         }
         return total;
+    }
+
+    @NotNull
+    public static SkillHolder getHolder(Player player) {
+        SkillHolder holder = player.getPersistentDataContainer().get(skillKey, new SkillsDataType());
+        if (holder == null) {
+            holder = new SkillHolder();
+            player.getPersistentDataContainer().set(skillKey, new SkillsDataType(), holder);
+        }
+        return holder;
     }
 
 }

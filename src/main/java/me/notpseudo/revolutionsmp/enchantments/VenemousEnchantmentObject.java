@@ -1,6 +1,7 @@
 package me.notpseudo.revolutionsmp.enchantments;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.itemstats.StatType;
 import me.notpseudo.revolutionsmp.listeners.HealthListeners;
 import me.notpseudo.revolutionsmp.listeners.MobListeners;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
@@ -51,9 +52,9 @@ public class VenemousEnchantmentObject extends EnchantmentObject implements Acti
             if (targetStats == null) {
                 targetStats = new PlayerStats();
             }
-            ((PlayerStats) targetStats).setSpeedMultiplier(((PlayerStats) targetStats).getSpeedMultiplier() * 0.95);
+            // ((PlayerStats) targetStats).setSpeedMultiplier(((PlayerStats) targetStats).getSpeedMultiplier() * 0.95);
         } else {
-            double speed = targetStats.getSpeed();
+            double speed = targetStats.getArmorStatValue(StatType.SPEED);
             double originalSpeed = target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue();
             target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(originalSpeed * 0.95 * (1 + (speed / 100)));
         }
@@ -71,9 +72,9 @@ public class VenemousEnchantmentObject extends EnchantmentObject implements Acti
                 }
                 if (count == 5) {
                     if (target instanceof Player) {
-                        ((PlayerStats) finalTargetStats).setSpeedMultiplier(((PlayerStats) finalTargetStats).getSpeedMultiplier() / 0.95);
+                        // ((PlayerStats) finalTargetStats).setSpeedMultiplier(((PlayerStats) finalTargetStats).getSpeedMultiplier() / 0.95);
                     } else {
-                        double speed = finalTargetStats.getSpeed();
+                        double speed = finalTargetStats.getArmorStatValue(StatType.SPEED);
                         double originalSpeed = target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue();
                         target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(originalSpeed / 0.95 * (1 + (speed / 100)));
                     }

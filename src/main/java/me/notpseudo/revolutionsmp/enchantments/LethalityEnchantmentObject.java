@@ -1,6 +1,7 @@
 package me.notpseudo.revolutionsmp.enchantments;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.itemstats.StatType;
 import me.notpseudo.revolutionsmp.listeners.MobListeners;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
 import me.notpseudo.revolutionsmp.mobstats.MobInfo;
@@ -66,7 +67,7 @@ public class LethalityEnchantmentObject extends EnchantmentObject implements Act
             if (playerStats[0] == null) {
                 playerStats[0] = new PlayerStats();
             }
-            playerStats[0].setDefenseMultiplier(playerStats[0].getDefenseMultiplier() * remainingDefense);
+            // playerStats[0].setDefenseMultiplier(playerStats[0].getDefenseMultiplier() * remainingDefense);
             target.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats[0]);
             BukkitRunnable playerLethality = new BukkitRunnable() {
                 @Override
@@ -77,7 +78,7 @@ public class LethalityEnchantmentObject extends EnchantmentObject implements Act
                         return;
                     }
                     playerStats[0] = target.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
-                    playerStats[0].setDefenseMultiplier(playerStats[0].getDefense() / remainingDefense);
+                    // playerStats[0].setDefenseMultiplier(playerStats[0].getDefense() / remainingDefense);
                     target.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats[0]);
                     if (getAttacked().get(targetUUID) - 1 == 0) {
                         getAttacked().remove(targetUUID);
@@ -91,7 +92,7 @@ public class LethalityEnchantmentObject extends EnchantmentObject implements Act
             if(targetStats[0] == null) {
                 return;
             }
-            targetStats[0].setDefense(targetStats[0].getDefense() * remainingDefense);
+            targetStats[0].setArmorStatValue(StatType.DEFENSE, targetStats[0].getArmorStatValue(StatType.DEFENSE) * remainingDefense);
             target.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), targetStats[0]);
             BukkitRunnable mobLethality = new BukkitRunnable() {
                 @Override
@@ -102,7 +103,7 @@ public class LethalityEnchantmentObject extends EnchantmentObject implements Act
                         return;
                     }
                     targetStats[0] = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
-                    targetStats[0].setDefense(targetStats[0].getDefense() / remainingDefense);
+                    targetStats[0].setArmorStatValue(StatType.DEFENSE, targetStats[0].getArmorStatValue(StatType.DEFENSE) / remainingDefense);
                     target.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), targetStats[0]);
                 }
             };

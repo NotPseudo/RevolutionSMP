@@ -25,10 +25,7 @@ public class ArmorStats extends StatHolder implements Serializable {
         if (containsType(newStat.getType())) {
             return;
         }
-        if (newStat.getType() != StatType.HEALTH ||
-                newStat.getType() != StatType.DEFENSE ||
-                newStat.getType() != StatType.SPEED ||
-                newStat.getType() != StatType.TRUE_DEFENSE) {
+        if (newStat.getType().getStatCategory() != StatCategory.ARMOR) {
             return;
         }
         super.getStats().add(newStat);

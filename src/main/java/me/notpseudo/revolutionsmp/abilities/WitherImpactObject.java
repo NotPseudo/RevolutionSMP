@@ -1,6 +1,10 @@
 package me.notpseudo.revolutionsmp.abilities;
 
+import me.notpseudo.revolutionsmp.itemstats.ArmorStats;
+import me.notpseudo.revolutionsmp.listeners.IncreaseType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -22,4 +26,10 @@ public class WitherImpactObject extends AbilityObject {
         takeMana(player);
         AbilityType.WITHER_IMPACT.addToCooldownList(playerID, getCooldown());
     }
+
+    @Override
+    public @NotNull ArmorStats getEventArmor(LivingEntity damager, Player target, IncreaseType inc) {
+        return AbilityType.WITHER_SHIELD.getEventArmor(damager, target, inc);
+    }
+
 }
