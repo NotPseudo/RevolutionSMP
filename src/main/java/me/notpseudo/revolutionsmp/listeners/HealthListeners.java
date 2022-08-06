@@ -17,7 +17,6 @@ import me.notpseudo.revolutionsmp.mobstats.MobInfo;
 import me.notpseudo.revolutionsmp.mobstats.MobInfoDataType;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStatsDataType;
-import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;

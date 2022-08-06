@@ -1,4 +1,4 @@
-package me.notpseudo.revolutionsmp.listeners;
+package me.notpseudo.revolutionsmp.mining;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -21,6 +21,10 @@ public class BreakingBlock {
         this.block = block;
         this.damagePerStage = damagePerStage;
         damage = -1;
+    }
+
+    public double getDamagePerStage() {
+        return damagePerStage;
     }
 
     public void damage(Player breaker, double amount) {
@@ -75,8 +79,6 @@ public class BreakingBlock {
 
     public void forceBreak(Player breaker) {
         breaker.breakBlock(block);
-        SoundGroup group = block.getBlockData().getSoundGroup();
-        block.getWorld().playSound(block.getLocation(), group.getBreakSound(), group.getVolume(), group.getPitch());
     }
 
 }

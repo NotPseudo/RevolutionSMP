@@ -29,6 +29,9 @@ public enum ItemType {
     HOE {
 
     },
+    SHOVEL {
+
+    },
     FISHING_ROD {
 
     },

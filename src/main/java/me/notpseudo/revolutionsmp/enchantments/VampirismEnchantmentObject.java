@@ -3,7 +3,7 @@ package me.notpseudo.revolutionsmp.enchantments;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.itemstats.*;
-import me.notpseudo.revolutionsmp.listeners.IncreaseType;
+import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;

@@ -1,4 +1,4 @@
-package me.notpseudo.revolutionsmp.listeners;
+package me.notpseudo.revolutionsmp.itemstats;
 
 public enum IncreaseType {
 

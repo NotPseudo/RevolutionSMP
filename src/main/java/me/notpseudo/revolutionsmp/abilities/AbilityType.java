@@ -2,7 +2,7 @@ package me.notpseudo.revolutionsmp.abilities;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.itemstats.*;
-import me.notpseudo.revolutionsmp.listeners.IncreaseType;
+import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.block.Block;

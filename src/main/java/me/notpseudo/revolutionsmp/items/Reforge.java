@@ -1,7 +1,7 @@
 package me.notpseudo.revolutionsmp.items;
 
 import me.notpseudo.revolutionsmp.itemstats.*;
-import me.notpseudo.revolutionsmp.listeners.IncreaseType;
+import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
 import me.notpseudo.revolutionsmp.skills.SkillHolder;
 import me.notpseudo.revolutionsmp.skills.SkillType;
 import me.notpseudo.revolutionsmp.skills.SkillUtils;

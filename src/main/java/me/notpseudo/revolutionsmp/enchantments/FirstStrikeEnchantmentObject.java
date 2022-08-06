@@ -1,16 +1,12 @@
 package me.notpseudo.revolutionsmp.enchantments;
 
-import me.notpseudo.revolutionsmp.itemstats.StatObject;
-import me.notpseudo.revolutionsmp.itemstats.StatType;
 import me.notpseudo.revolutionsmp.itemstats.WeaponStats;
-import me.notpseudo.revolutionsmp.listeners.IncreaseType;
+import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
-
-import java.util.UUID;
 
 public class FirstStrikeEnchantmentObject extends EnchantmentObject implements Listener {
 

@@ -1,9 +1,13 @@
 package me.notpseudo.revolutionsmp.items;
 
 import me.notpseudo.revolutionsmp.abilities.AbilityType;
+import me.notpseudo.revolutionsmp.collections.CollectionType;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
-import me.notpseudo.revolutionsmp.enchantments.EnchantmentType;
 import me.notpseudo.revolutionsmp.itemstats.*;
+import me.notpseudo.revolutionsmp.mining.GemstoneSlotType;
+import me.notpseudo.revolutionsmp.mining.GemstoneType;
+import me.notpseudo.revolutionsmp.specialiteminfo.FarmingToolInfo;
+import me.notpseudo.revolutionsmp.specialiteminfo.GemstoneObject;
 import me.notpseudo.revolutionsmp.specialiteminfo.SpecialItemInfo;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -166,6 +170,11 @@ public enum ItemID {
         public Color getColor() {
             return Color.fromRGB(0x1793C4);
         }
+
+        @Override
+        public GemstoneSlotType[] getGemstoneSlots() {
+            return new GemstoneSlotType[] {GemstoneSlotType.SAPPHIRE, GemstoneSlotType.COMBAT};
+        }
     },
     STORM_LEGGINGS {
         @Override
@@ -196,6 +205,11 @@ public enum ItemID {
         @Override
         public Color getColor() {
             return Color.fromRGB(0x17A8C4);
+        }
+
+        @Override
+        public GemstoneSlotType[] getGemstoneSlots() {
+            return new GemstoneSlotType[] {GemstoneSlotType.SAPPHIRE, GemstoneSlotType.COMBAT};
         }
     },
     STORM_BOOTS {
@@ -228,6 +242,11 @@ public enum ItemID {
         public Color getColor() {
             return Color.fromRGB(0x1CD4E4);
         }
+
+        @Override
+        public GemstoneSlotType[] getGemstoneSlots() {
+            return new GemstoneSlotType[] {GemstoneSlotType.SAPPHIRE, GemstoneSlotType.COMBAT};
+        }
     },
     HYPERION {
         @Override
@@ -253,6 +272,11 @@ public enum ItemID {
         @Override
         public Material getMaterial() {
             return Material.IRON_SWORD;
+        }
+
+        @Override
+        public GemstoneSlotType[] getGemstoneSlots() {
+            return new GemstoneSlotType[] {GemstoneSlotType.SAPPHIRE, GemstoneSlotType.COMBAT};
         }
     },
     VALKYRIE {
@@ -280,6 +304,11 @@ public enum ItemID {
         public Material getMaterial() {
             return Material.IRON_SWORD;
         }
+
+        @Override
+        public GemstoneSlotType[] getGemstoneSlots() {
+            return new GemstoneSlotType[] {GemstoneSlotType.JASPER, GemstoneSlotType.COMBAT};
+        }
     },
     SCYLLA {
         @Override
@@ -305,6 +334,11 @@ public enum ItemID {
         @Override
         public Material getMaterial() {
             return Material.IRON_SWORD;
+        }
+
+        @Override
+        public GemstoneSlotType[] getGemstoneSlots() {
+            return new GemstoneSlotType[] {GemstoneSlotType.COMBAT, GemstoneSlotType.COMBAT};
         }
     },
     ASTRAEA {
@@ -337,6 +371,11 @@ public enum ItemID {
         public Material getMaterial() {
             return Material.IRON_SWORD;
         }
+
+        @Override
+        public GemstoneSlotType[] getGemstoneSlots() {
+            return new GemstoneSlotType[] {GemstoneSlotType.DEFENSIVE, GemstoneSlotType.COMBAT};
+        }
     },
     ASPECT_OF_THE_END {
         @Override
@@ -367,6 +406,11 @@ public enum ItemID {
         @Override
         public Material getMaterial() {
             return Material.DIAMOND_SWORD;
+        }
+
+        @Override
+        public GemstoneSlotType[] getGemstoneSlots() {
+            return new GemstoneSlotType[] {GemstoneSlotType.SAPPHIRE};
         }
     },
     JUJU_SHORTBOW {
@@ -494,7 +538,6 @@ public enum ItemID {
         }
     },
     TEST_DRILL {
-
         @Override
         public Rarity getDefaultRarity() {
             return Rarity.MYTHIC;
@@ -502,7 +545,7 @@ public enum ItemID {
 
         @Override
         public MiningStats getDefaultMiningStats() {
-            return new MiningStats(500, 10, 10, 5);
+            return new MiningStats(1600, 120, 10, 9);
         }
 
         @Override
@@ -513,6 +556,33 @@ public enum ItemID {
         @Override
         public Material getMaterial() {
             return Material.PRISMARINE_SHARD;
+        }
+
+        @Override
+        public GemstoneSlotType[] getGemstoneSlots() {
+            return new GemstoneSlotType[] {GemstoneSlotType.AMBER, GemstoneSlotType.JADE, GemstoneSlotType.MINING};
+        }
+    },
+    TITANIUM {
+        @Override
+        public Material getMaterial() {
+            return Material.PLAYER_HEAD;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.RARE;
+        }
+
+        @Override
+        public String getTexture() {
+            return "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGM4NjM3YmMwNjI4ZjU3MTBmODViOGQwNjc5Y2MyYzE5YWZlMGUxMDg5YjI0OGI2ZmRiNjdmNjg3YWU4MWRjMiJ9fX0=";
+        }
+    },
+    MITHRIL {
+        @Override
+        public Material getMaterial() {
+            return Material.PRISMARINE_CRYSTALS;
         }
     },
     GYROKINETIC_WAND {
@@ -617,6 +687,33 @@ public enum ItemID {
         public String getTexture() {
             return "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmYzZGRkN2Y4MTA4OWM4NWIyNmVkNTk3Njc1NTE5ZjAzYTFkY2Q2ZDE3MTNlMGNmYzY2YWZiODc0M2NiZTAifX19";
         }
+    },
+    TURING_SUGAR_CANE_HOE {
+        @Override
+        public Material getMaterial() {
+            return Material.STONE_HOE;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.HOE;
+        }
+
+        @Override
+        public SpecialItemInfo getSpecialItemInfo(ItemInfo itemInfo) {
+            return new FarmingToolInfo(itemInfo, CollectionType.SUGAR_CANE);
+        }
+    },
+    GEMSTONE {
+        @Override
+        public Material getMaterial() {
+            return Material.PLAYER_HEAD;
+        }
+
+        @Override
+        public SpecialItemInfo getSpecialItemInfo(ItemInfo itemInfo) {
+            return new GemstoneObject(itemInfo);
+        }
     };
 
     // Gets default stats for specific item
@@ -658,6 +755,10 @@ public enum ItemID {
 
     public LuckStats getDefaultLuckStats() {
         return new LuckStats(0, 0);
+    }
+
+    public GemstoneSlotType[] getGemstoneSlots() {
+        return null;
     }
 
     public List<EnchantmentObject> getDefaultEnchantments() {

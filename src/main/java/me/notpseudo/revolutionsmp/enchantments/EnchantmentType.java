@@ -2,7 +2,7 @@ package me.notpseudo.revolutionsmp.enchantments;
 
 import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.*;
-import me.notpseudo.revolutionsmp.listeners.IncreaseType;
+import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
 import me.notpseudo.revolutionsmp.listeners.MobListeners;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
 import me.notpseudo.revolutionsmp.mobstats.BaseEntityStats;
@@ -843,6 +843,12 @@ public enum EnchantmentType {
         @Override
         public ItemType[] getItemTypes() {
             return new ItemType[]{ItemType.HELMET, ItemType.CHESTPLATE, ItemType.LEGGINGS, ItemType.BOOTS};
+        }
+    },
+    SILK_TOUCH {
+        @Override
+        public ItemType[] getItemTypes() {
+            return new ItemType[] {ItemType.AXE, ItemType.PICKAXE, ItemType.HOE, ItemType.SHOVEL};
         }
     };
 

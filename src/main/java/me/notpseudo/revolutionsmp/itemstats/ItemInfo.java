@@ -2,6 +2,7 @@ package me.notpseudo.revolutionsmp.itemstats;
 
 import me.notpseudo.revolutionsmp.abilities.AbilityType;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
+import me.notpseudo.revolutionsmp.specialiteminfo.GemstoneObject;
 import me.notpseudo.revolutionsmp.specialiteminfo.SpecialItemInfo;
 import me.notpseudo.revolutionsmp.items.*;
 import org.bukkit.Material;
@@ -26,10 +27,12 @@ public class ItemInfo implements Serializable {
     private MiningStats miningStats;
     private GatheringStats gatheringStats;
     private LuckStats luckStats;
+    private GemstonesHolder gemstonesHolder;
     private EnchantmentsHolder enchantmentsHolder;
     private AbilitiesHolder abilitiesHolder;
     private SpecialItemInfo extraInfo;
     private Material vanillaMaterial;
+    private String texture;
     private UUID owner;
 
     public ItemInfo(ItemID itemID) {
@@ -47,13 +50,17 @@ public class ItemInfo implements Serializable {
         miningStats = itemID.getDefaultMiningStats();
         gatheringStats = itemID.getDefaultGatheringStats();
         luckStats = itemID.getDefaultLuckStats();
+        if (itemID.getGemstoneSlots() != null) {
+            gemstonesHolder = new GemstonesHolder(this, itemID.getGemstoneSlots());
+        }
         enchantmentsHolder = new EnchantmentsHolder();
         abilitiesHolder = new AbilitiesHolder(this);
-        for(AbilityType type : itemID.getDefaultAbilities()) {
+        for (AbilityType type : itemID.getDefaultAbilities()) {
             abilitiesHolder.addAbility(type);
         }
         extraInfo = itemID.getSpecialItemInfo(this);
         vanillaMaterial = itemID.getMaterial();
+        texture = itemID.getTexture();
         owner = null;
         recalculate();
     }
@@ -63,7 +70,7 @@ public class ItemInfo implements Serializable {
         potatoBooks = 0;
         reforge = null;
         try {
-            itemID = ItemID.valueOf(material.toString());
+            ItemID itemId = ItemID.valueOf(material.toString());
             name = itemID.getDefaultName();
             rarity = itemID.getDefaultRarity();
             itemType = itemID.getItemType();
@@ -74,13 +81,19 @@ public class ItemInfo implements Serializable {
             miningStats = itemID.getDefaultMiningStats();
             gatheringStats = itemID.getDefaultGatheringStats();
             luckStats = itemID.getDefaultLuckStats();
+            if (itemID.getGemstoneSlots() != null) {
+                gemstonesHolder = new GemstonesHolder(this, itemID.getGemstoneSlots());
+            }
             enchantmentsHolder = new EnchantmentsHolder();
             abilitiesHolder = new AbilitiesHolder(this);
-            for(AbilityType type : itemID.getDefaultAbilities()) {
+            for (AbilityType type : itemID.getDefaultAbilities()) {
                 abilitiesHolder.addAbility(type);
             }
             extraInfo = itemID.getSpecialItemInfo(this);
             vanillaMaterial = itemID.getMaterial();
+            texture = itemID.getTexture();
+            owner = null;
+            recalculate();
         } catch (IllegalArgumentException exception) {
             itemID = null;
             name = null;
@@ -101,6 +114,7 @@ public class ItemInfo implements Serializable {
             miningStats = new MiningStats(0, 0, 0);
             gatheringStats = new GatheringStats(0, 0);
             luckStats = new LuckStats(0, 0);
+            gemstonesHolder = null;
             enchantmentsHolder = null;
             abilitiesHolder = null;
             extraInfo = null;
@@ -236,6 +250,15 @@ public class ItemInfo implements Serializable {
         recalculate();
     }
 
+    public GemstonesHolder getGemstonesHolder() {
+        return gemstonesHolder;
+    }
+
+    public void setGemstonesHolder(GemstonesHolder gemstonesHolder) {
+        this.gemstonesHolder = gemstonesHolder;
+        recalculate();
+    }
+
     public EnchantmentsHolder getEnchantmentsHolder() {
         return enchantmentsHolder;
     }
@@ -270,6 +293,14 @@ public class ItemInfo implements Serializable {
     public void setMaterial(Material material) {
         this.vanillaMaterial = material;
         recalculate();
+    }
+
+    public String getTexture() {
+        return texture;
+    }
+
+    public void setTexture(String texture) {
+        this.texture = texture;
     }
 
     public UUID getOwner() {
@@ -326,6 +357,15 @@ public class ItemInfo implements Serializable {
                 luckStats.combine(enchant.getType().getApplyLuckStats(enchant.getLevel()));
             }
         }
+        if (gemstonesHolder != null) {
+            weaponStats.combine(gemstonesHolder.getGemWeapon(rarity));
+            armorStats.combine(gemstonesHolder.getGemArmor(rarity));
+            abilityStats.combine(gemstonesHolder.getGemAbility(rarity));
+            fishingStats.combine(gemstonesHolder.getGemFishing(rarity));
+            miningStats.combine(gemstonesHolder.getGemMining(rarity));
+            gatheringStats.combine(gemstonesHolder.getGemGathering(rarity));
+            luckStats.combine(gemstonesHolder.getGemLLuck(rarity));
+        }
         if (abilitiesHolder != null) {
             abilitiesHolder.reorganize();
         }
@@ -338,5 +378,6 @@ public class ItemInfo implements Serializable {
             armorStats.setStatValue(StatType.DEFENSE, armorStats.getStatValue(StatType.DEFENSE) + potatoBooks * 2);
         }
     }
+
 
 }

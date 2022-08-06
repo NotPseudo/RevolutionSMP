@@ -1,9 +1,13 @@
-package me.notpseudo.revolutionsmp.listeners;
+package me.notpseudo.revolutionsmp.mining;
 
+import me.notpseudo.revolutionsmp.drops.ItemDropObject;
+import me.notpseudo.revolutionsmp.listeners.PlacedLocation;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomOreLocation extends PlacedLocation implements Serializable {
 
@@ -26,6 +30,10 @@ public class CustomOreLocation extends PlacedLocation implements Serializable {
 
     public double getBlockStrength() {
         return TYPE.getBlockStrength(vanillaMaterial);
+    }
+
+    public List<ItemDropObject> getDrops() {
+        return new ArrayList<>(List.of(new ItemDropObject(TYPE.getItemDrop(vanillaMaterial))));
     }
 
 }

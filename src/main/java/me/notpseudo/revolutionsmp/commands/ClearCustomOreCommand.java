@@ -2,6 +2,7 @@ package me.notpseudo.revolutionsmp.commands;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.listeners.HarvestingListeners;
+import me.notpseudo.revolutionsmp.listeners.PlacedLocationList;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,7 +18,9 @@ public class ClearCustomOreCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player player && player.isOp()) {
-            HarvestingListeners.getPlacedLocationList(player.getLocation().getBlock()).getOreLocations().clear();
+            PlacedLocationList list = HarvestingListeners.getPlacedLocationList(player.getLocation().getBlock());
+            list.getOreLocations().clear();
+            HarvestingListeners.setPlacedLocationList(player.getLocation().getBlock(), list);
         }
         return true;
     }

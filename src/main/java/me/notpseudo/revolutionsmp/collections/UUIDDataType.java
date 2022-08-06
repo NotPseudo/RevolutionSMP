@@ -1,4 +1,4 @@
-package me.notpseudo.revolutionsmp.mobstats;
+package me.notpseudo.revolutionsmp.collections;
 
 import org.apache.commons.lang3.SerializationUtils;
 import org.bukkit.persistence.PersistentDataAdapterContext;
@@ -8,31 +8,30 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.util.UUID;
 
-// Credit: CodedRed's Custom Persistent Data Types Tutorial: https://youtu.be/3OLSfOkgPMw
-// PersistentDataType for MobInfo
-public class MobInfoDataType implements PersistentDataType<byte[], MobInfo> {
+public class UUIDDataType implements PersistentDataType<byte[], UUID> {
     @Override
     public Class<byte[]> getPrimitiveType() {
         return byte[].class;
     }
 
     @Override
-    public Class<MobInfo> getComplexType() {
-        return MobInfo.class;
+    public Class<UUID> getComplexType() {
+        return UUID.class;
     }
 
     @Override
-    public byte [] toPrimitive(MobInfo complex, PersistentDataAdapterContext context) {
+    public byte [] toPrimitive(UUID complex, PersistentDataAdapterContext context) {
         return SerializationUtils.serialize(complex);
     }
 
     @Override
-    public MobInfo fromPrimitive(byte[] primitive, PersistentDataAdapterContext context) {
+    public UUID fromPrimitive(byte[] primitive, PersistentDataAdapterContext context) {
         try {
             InputStream is = new ByteArrayInputStream(primitive);
             ObjectInputStream o = new ObjectInputStream(is);
-            return (MobInfo) o.readObject();
+            return (UUID) o.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

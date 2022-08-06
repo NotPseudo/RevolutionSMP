@@ -5,7 +5,7 @@ import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.itemstats.GatheringStats;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
 import me.notpseudo.revolutionsmp.itemstats.StatType;
-import me.notpseudo.revolutionsmp.listeners.IncreaseType;
+import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
 import me.notpseudo.revolutionsmp.skills.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -27,7 +27,6 @@ public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
     private int craftTier;
     private int countTier;
     private int cropsUntilNextCountTier;
-    private boolean count1Reached;
     private boolean count2Reached;
 
     public FarmingToolInfo(ItemInfo holder, CollectionType type) {
@@ -37,7 +36,6 @@ public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
         craftTier = 1;
         countTier = 1;
         cropsUntilNextCountTier = 10000;
-        count1Reached = false;
         count2Reached = false;
     }
 
@@ -54,7 +52,6 @@ public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
 
     private void upgradeFromCount() {
         if (countTier == 1) {
-            count1Reached = true;
             cropsUntilNextCountTier = 1000000;
         } else if (countTier == 2) {
             count2Reached = true;

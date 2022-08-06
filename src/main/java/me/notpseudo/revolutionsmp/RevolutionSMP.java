@@ -1,6 +1,7 @@
 package me.notpseudo.revolutionsmp;
 
 import me.notpseudo.revolutionsmp.abilities.AbilitiesUtil;
+import me.notpseudo.revolutionsmp.collections.CollectionUtils;
 import me.notpseudo.revolutionsmp.commands.*;
 import me.notpseudo.revolutionsmp.listeners.*;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,6 +35,7 @@ public final class RevolutionSMP extends JavaPlugin {
         new ParticleTestCommand(this);
         new CreateCustomOreCommand(this);
         new ClearCustomOreCommand(this);
+        new CollectionUtils(this);
         AbilitiesUtil.createPassSet();
         plugin = this;
     }

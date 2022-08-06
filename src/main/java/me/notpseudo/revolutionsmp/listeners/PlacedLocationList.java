@@ -1,5 +1,7 @@
 package me.notpseudo.revolutionsmp.listeners;
 
+import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
+import me.notpseudo.revolutionsmp.mining.CustomOreType;
 import org.bukkit.Location;
 
 import java.io.Serializable;
@@ -97,6 +99,7 @@ public class PlacedLocationList implements Serializable {
                 return true;
             }
         }
+        location.getWorld().getPersistentDataContainer().set(HarvestingListeners.getWorldPlacedKey(), new PlacedLocationListDataType(), this);
         return false;
     }
 

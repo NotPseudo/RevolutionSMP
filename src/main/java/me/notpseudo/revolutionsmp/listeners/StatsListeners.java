@@ -98,6 +98,7 @@ public class StatsListeners implements Listener {
         if (player.isDead()) {
             return;
         }
+        ItemEditor.updateItem(player.getInventory().getItemInMainHand(), player.getUniqueId());
         // Assign base values for each stat
         WeaponStats damageStats = new WeaponStats(0, 0, 30, 50, 0, 0);
         ArmorStats healthStats = new ArmorStats(100, 0, 100, 0);

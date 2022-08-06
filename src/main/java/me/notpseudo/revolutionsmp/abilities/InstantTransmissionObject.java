@@ -2,10 +2,8 @@ package me.notpseudo.revolutionsmp.abilities;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.itemstats.ArmorStats;
-import me.notpseudo.revolutionsmp.listeners.IncreaseType;
+import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
-import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
-import me.notpseudo.revolutionsmp.playerstats.PlayerStatsDataType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;

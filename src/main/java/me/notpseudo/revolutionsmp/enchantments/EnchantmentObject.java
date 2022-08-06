@@ -1,8 +1,7 @@
 package me.notpseudo.revolutionsmp.enchantments;
 
-import com.comphenix.protocol.PacketType;
 import me.notpseudo.revolutionsmp.itemstats.*;
-import me.notpseudo.revolutionsmp.listeners.IncreaseType;
+import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
