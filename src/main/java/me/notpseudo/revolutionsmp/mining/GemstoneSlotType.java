@@ -32,6 +32,12 @@ public enum GemstoneSlotType {
             return "❂";
         }
     },
+    PEARL {
+        @Override
+        public String getSymbol() {
+            return "⥉";
+        }
+    },
     SAPPHIRE {
         @Override
         public String getSymbol() {
@@ -86,7 +92,7 @@ public enum GemstoneSlotType {
     MINING {
         @Override
         public GemstoneType[] getAllowedGemstones() {
-            return new GemstoneType[] {GemstoneType.JADE, GemstoneType.AMBER, GemstoneType.TOPAZ};
+            return new GemstoneType[] {GemstoneType.JADE, GemstoneType.AMBER, GemstoneType.TOPAZ, GemstoneType.PEARL};
         }
 
         @Override

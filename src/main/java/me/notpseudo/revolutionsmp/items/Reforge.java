@@ -278,15 +278,15 @@ public enum Reforge {
         @Override
         public @NotNull WeaponStats getEventWeapon(Rarity rarity, Player attacker, LivingEntity target, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                return new WeaponStats(1, 1, 1, 1, 1, 1);
+                return WeaponStats.createMult();
             }
             if (type == IncreaseType.ADDITIVE_PERCENT) {
-                return new WeaponStats(0, 0, 0, 0, 0, 0);
+                return WeaponStats.createZero();
             }
             if (Math.random() < 0.1) {
                 return new WeaponStats(0, 0, 0, 15 - (Math.random() * 15), 0, 0);
             }
-            return new WeaponStats(0, 0, 0, 0, 0, 0);
+            return WeaponStats.createZero();
         }
 
         @Override
@@ -336,10 +336,10 @@ public enum Reforge {
         @Override
         public @NotNull WeaponStats getEventWeapon(Rarity rarity, Player attacker, LivingEntity target, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                return new WeaponStats(1, 1, 1, 1, 1, 1);
+                return WeaponStats.createMult();
             }
             if (type == IncreaseType.ADDITIVE_PERCENT) {
-                return new WeaponStats(0, 0, 0, 0, 0, 0);
+                return WeaponStats.createZero();
             }
             return new WeaponStats(15, 0, 0, 0, 0, 0);
         }
@@ -1024,10 +1024,10 @@ public enum Reforge {
         @Override
         public @NotNull ArmorStats getBonusArmor(Rarity rarity, Player player, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                return new ArmorStats(1, 1, 1, 1);
+                return ArmorStats.createMult();
             }
             if (type == IncreaseType.INCREASE) {
-                return new ArmorStats(0, 0, 0);
+                return ArmorStats.createZero();
             }
             return new ArmorStats(0, 2, 0);
         }
@@ -1110,7 +1110,7 @@ public enum Reforge {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return new WeaponStats(1.01, 1.01, 1.01, 1.01, 1.01, 1.01);
             }
-            return new WeaponStats(0, 0, 0, 0, 0, 0);
+            return WeaponStats.createZero();
         }
 
         @Override
@@ -1118,7 +1118,7 @@ public enum Reforge {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return new ArmorStats(1, 1.01, 1.01, 1.01);
             }
-            return new ArmorStats(0, 0, 0);
+            return ArmorStats.createZero();
         }
 
         @Override
@@ -1126,7 +1126,7 @@ public enum Reforge {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return new AbilityStats(1.01, 1.01);
             }
-            return new AbilityStats(0, 0);
+            return AbilityStats.createZero();
         }
 
         @Override
@@ -1134,7 +1134,7 @@ public enum Reforge {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return new FishingStats(1.01, 1);
             }
-            return new FishingStats(0, 0);
+            return FishingStats.createZero();
         }
 
         @Override
@@ -1142,7 +1142,7 @@ public enum Reforge {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return new MiningStats(1.01, 1.01, 1.01);
             }
-            return new MiningStats(0, 0, 0);
+            return MiningStats.createZero();
         }
 
         @Override
@@ -1150,7 +1150,7 @@ public enum Reforge {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return new GatheringStats(1.01, 1.01);
             }
-            return new GatheringStats(0, 0);
+            return GatheringStats.createZero();
         }
 
         @Override
@@ -1158,7 +1158,7 @@ public enum Reforge {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return new LuckStats(1.01, 1.01);
             }
-            return new LuckStats(0, 0);
+            return LuckStats.createZero();
         }
     },
     SPIKED {
@@ -1315,13 +1315,13 @@ public enum Reforge {
         @Override
         public @NotNull ArmorStats getEventArmor(Rarity rarity, LivingEntity attacker, Player target, IncreaseType type) {
             if (type != IncreaseType.MULTIPLICATIVE_PERCENT) {
-                return new ArmorStats(0, 0, 0);
+                return ArmorStats.createZero();
             }
             EntityType entityType = attacker.getType();
             if (entityType != EntityType.BLAZE || entityType != EntityType.GHAST || entityType != EntityType.HOGLIN ||
                     entityType != EntityType.MAGMA_CUBE || entityType != EntityType.PIGLIN || entityType != EntityType.PIGLIN_BRUTE ||
                     entityType != EntityType.WITHER_SKELETON || entityType != EntityType.ZOMBIFIED_PIGLIN) {
-                return new ArmorStats(1, 1, 1, 1);
+                return ArmorStats.createMult();
             }
             return new ArmorStats(0.98, 1, 1);
         }
@@ -1462,10 +1462,10 @@ public enum Reforge {
         @Override
         public @NotNull ArmorStats getEventArmor(Rarity rarity, LivingEntity attacker, Player target, IncreaseType type) {
             if (type != IncreaseType.MULTIPLICATIVE_PERCENT) {
-                return new ArmorStats(0, 0, 0);
+                return ArmorStats.createZero();
             }
             if (attacker.getCategory() != EntityCategory.UNDEAD) {
-                return new ArmorStats(1, 1, 1);
+                return ArmorStats.createMult();
             }
             return new ArmorStats(0.98, 1, 1);
         }
@@ -1518,7 +1518,7 @@ public enum Reforge {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return new AbilityStats(1.05, 1);
             }
-            return new AbilityStats(0, 0);
+            return AbilityStats.createZero();
         }
     },
     RIDICULOUS {
@@ -1638,151 +1638,151 @@ public enum Reforge {
     // Gets the weapon stats the Reforge boosts
     @NotNull
     public WeaponStats getWeaponStats(Rarity rarity, UUID player) {
-        return new WeaponStats(0, 0, 0, 0, 0, 0);
+        return WeaponStats.createZero();
     }
 
     // Gets the armor stats the Reforge boosts
     @NotNull
     public ArmorStats getArmorStats(Rarity rarity, UUID player) {
-        return new ArmorStats(0, 0, 0);
+        return ArmorStats.createZero();
     }
 
     // Gets the ability statsd the Reforge boosts
     @NotNull
     public AbilityStats getAbilityStats(Rarity rarity, UUID player) {
-        return new AbilityStats(0, 0);
+        return AbilityStats.createZero();
     }
 
     @NotNull
     public FishingStats getFishingStats(Rarity rarity, UUID player) {
-        return new FishingStats(0, 0);
+        return FishingStats.createZero();
     }
 
     @NotNull
     public MiningStats getMiningStats(Rarity rarity, UUID player) {
-        return new MiningStats(0, 0, 0);
+        return MiningStats.createZero();
     }
 
     @NotNull
     public GatheringStats getGatheringStats(Rarity rarity, UUID player) {
-        return new GatheringStats(0, 0);
+        return GatheringStats.createZero();
     }
 
     @NotNull
     public LuckStats getLuckStats(Rarity rarity, UUID player) {
-        return new LuckStats(0, 0);
+        return LuckStats.createZero();
     }
 
     @NotNull
     public WeaponStats getEventWeapon(Rarity rarity, Player attacker, LivingEntity target, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new WeaponStats(1, 1, 1, 1, 1, 1);
+            return WeaponStats.createMult();
         }
-        return new WeaponStats(0, 0, 0, 0, 0, 0);
+        return WeaponStats.createZero();
     }
 
     @NotNull
     public ArmorStats getEventArmor(Rarity rarity, LivingEntity attacker, Player target, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new ArmorStats(1, 1, 1, 1);
+            return ArmorStats.createMult();
         }
-        return new ArmorStats(0, 0, 0);
+        return ArmorStats.createZero();
     }
 
     @NotNull
     public AbilityStats getEventAbility(Rarity rarity, Player attacker, LivingEntity target, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new AbilityStats(1, 1);
+            return AbilityStats.createMult();
         }
-        return new AbilityStats(0, 0);
+        return AbilityStats.createZero();
     }
 
     @NotNull
     public FishingStats getEventFishing(Rarity rarity, Player fisher, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new FishingStats(1, 1);
+            return FishingStats.createMult();
         }
-        return new FishingStats(0, 0);
+        return FishingStats.createZero();
     }
 
     @NotNull
     public MiningStats getEventMining(Rarity rarity, Player miner, Block block, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new MiningStats(1, 1, 1);
+            return MiningStats.createMult();
         }
-        return new MiningStats(0, 0, 0);
+        return MiningStats.createZero();
     }
 
     @NotNull
     public GatheringStats getEventGathering(Rarity rarity, Player harvester, Block block, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new GatheringStats(1, 1);
+            return GatheringStats.createMult();
         }
-        return new GatheringStats(0, 0);
+        return GatheringStats.createZero();
     }
 
     @NotNull
     public LuckStats getEventLuck(Rarity rarity, Player attacker, LivingEntity target, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new LuckStats(1, 1);
+            return LuckStats.createMult();
         }
-        return new LuckStats(0, 0);
+        return LuckStats.createZero();
     }
 
     @NotNull
     public WeaponStats getBonusWeapon(Rarity rarity, Player player, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new WeaponStats(1, 1, 1, 1, 1, 1);
+            return WeaponStats.createMult();
         }
-        return new WeaponStats(0, 0, 0, 0, 0, 0);
+        return WeaponStats.createZero();
     }
 
     @NotNull
     public ArmorStats getBonusArmor(Rarity rarity, Player player, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new ArmorStats(1, 1, 1, 1);
+            return ArmorStats.createMult();
         }
-        return new ArmorStats(0, 0, 0);
+        return ArmorStats.createZero();
     }
 
     @NotNull
     public AbilityStats getBonusAbility(Rarity rarity, Player player, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new AbilityStats(1, 1);
+            return AbilityStats.createMult();
         }
-        return new AbilityStats(0, 0);
+        return AbilityStats.createZero();
     }
 
     @NotNull
     public FishingStats getBonusFishing(Rarity rarity, Player fisher, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new FishingStats(1, 1);
+            return FishingStats.createMult();
         }
-        return new FishingStats(0, 0);
+        return FishingStats.createZero();
     }
 
     @NotNull
     public MiningStats getBonusMining(Rarity rarity, Player miner, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new MiningStats(1, 1, 1);
+            return MiningStats.createMult();
         }
-        return new MiningStats(0, 0, 0);
+        return MiningStats.createZero();
     }
 
     @NotNull
     public GatheringStats getBonusGathering(Rarity rarity, Player harvester, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new GatheringStats(1, 1);
+            return GatheringStats.createMult();
         }
-        return new GatheringStats(0, 0);
+        return GatheringStats.createZero();
     }
 
     @NotNull
     public LuckStats getBonusLuck(Rarity rarity, Player attacker, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new LuckStats(1, 1);
+            return LuckStats.createMult();
         }
-        return new LuckStats(0, 0);
+        return LuckStats.createZero();
     }
 
 }

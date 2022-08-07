@@ -6,7 +6,7 @@ import java.util.List;
 public class FishingStats extends StatHolder implements Serializable {
 
     public FishingStats(double seaCreatureChance, double fishingTimeDecrease) {
-        super(List.of(new StatObject(StatType.SEA_CREATURE_CHANCE, seaCreatureChance),
+        super(StatCategory.FISHING, List.of(new StatObject(StatType.SEA_CREATURE_CHANCE, seaCreatureChance),
                 new StatObject(StatType.FISHING_SPEED, fishingTimeDecrease)));
     }
 
@@ -19,6 +19,14 @@ public class FishingStats extends StatHolder implements Serializable {
             return;
         }
         super.getStats().add(newStat);
+    }
+
+    public static FishingStats createMult() {
+        return (FishingStats) createMult(StatCategory.FISHING);
+    }
+
+    public static FishingStats createZero() {
+        return (FishingStats) createZero(StatCategory.FISHING);
     }
 
 }

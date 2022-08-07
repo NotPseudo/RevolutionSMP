@@ -94,7 +94,7 @@ public class PlacedLocationList implements Serializable {
     public boolean removeCustomOreLocation(Location location) {
         for (CustomOreLocation customOreLocation : customOreLocations) {
             if (customOreLocation.equals(location)) {
-                placedLocations.remove(customOreLocation);
+                customOreLocations.remove(customOreLocation);
                 location.getWorld().getPersistentDataContainer().set(HarvestingListeners.getWorldPlacedKey(), new PlacedLocationListDataType(), this);
                 return true;
             }

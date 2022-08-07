@@ -56,6 +56,17 @@ public enum GemstoneType {
             return ChatColor.WHITE;
         }
     },
+    PEARL {
+        @Override
+        public StatType getStat() {
+            return StatType.PURITY;
+        }
+
+        @Override
+        public ChatColor getColor() {
+            return ChatColor.WHITE;
+        }
+    },
     SAPPHIRE {
         @Override
         public StatType getStat() {

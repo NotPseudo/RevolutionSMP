@@ -229,7 +229,22 @@ public enum StatType {
             return StatCategory.MINING;
         }
     },
+    PURITY {
+        @Override
+        public String getSymbol() {
+            return "⥉";
+        }
+        @Override
+        public NamedTextColor getColor() {
+            return NamedTextColor.WHITE;
+        }
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.MINING;
+        }
+    },
     BREAKING_POWER {
+        @Override
         public StatCategory getStatCategory() {
             return StatCategory.MINING;
         }

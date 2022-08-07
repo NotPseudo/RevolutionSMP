@@ -6,7 +6,7 @@ import java.util.List;
 public class LuckStats extends StatHolder implements Serializable {
 
     public LuckStats(double magicFind, double petLuck) {
-        super(List.of(new StatObject(StatType.MAGIC_FIND, magicFind),
+        super(StatCategory.LUCK, List.of(new StatObject(StatType.MAGIC_FIND, magicFind),
                 new StatObject(StatType.PET_LUCK, petLuck)));
     }
 
@@ -19,6 +19,14 @@ public class LuckStats extends StatHolder implements Serializable {
             return;
         }
         super.getStats().add(newStat);
+    }
+
+    public static LuckStats createMult() {
+        return (LuckStats) createMult(StatCategory.LUCK);
+    }
+
+    public static LuckStats createZero() {
+        return (LuckStats) createZero(StatCategory.LUCK);
     }
 
 }

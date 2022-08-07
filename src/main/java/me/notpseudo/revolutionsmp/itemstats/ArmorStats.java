@@ -7,14 +7,14 @@ import java.util.List;
 public class ArmorStats extends StatHolder implements Serializable {
 
     public ArmorStats(double health, double defense, double speed) {
-        super(List.of(new StatObject(StatType.HEALTH, health),
+        super(StatCategory.ARMOR, List.of(new StatObject(StatType.HEALTH, health),
                 new StatObject(StatType.DEFENSE, defense),
                 new StatObject(StatType.SPEED, speed),
                 new StatObject(StatType.TRUE_DEFENSE, 0)));
     }
 
     public ArmorStats(double health, double defense, double speed, double trueDefense) {
-        super(List.of(new StatObject(StatType.HEALTH, health),
+        super(StatCategory.ARMOR, List.of(new StatObject(StatType.HEALTH, health),
                 new StatObject(StatType.DEFENSE, defense),
                 new StatObject(StatType.SPEED, speed),
                 new StatObject(StatType.TRUE_DEFENSE, trueDefense)));
@@ -29,6 +29,13 @@ public class ArmorStats extends StatHolder implements Serializable {
             return;
         }
         super.getStats().add(newStat);
+    }
+    public static ArmorStats createMult() {
+        return (ArmorStats) createMult(StatCategory.ARMOR);
+    }
+
+    public static ArmorStats createZero() {
+        return (ArmorStats) createZero(StatCategory.ARMOR);
     }
 
 }

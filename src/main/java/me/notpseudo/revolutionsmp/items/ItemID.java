@@ -47,7 +47,7 @@ public enum ItemID {
 
         @Override
         public MiningStats getDefaultMiningStats() {
-            return new MiningStats(90, 0, 0, 2);
+            return new MiningStats(50, 0, 0, 2);
         }
 
         @Override
@@ -128,7 +128,7 @@ public enum ItemID {
 
         @Override
         public MiningStats getDefaultMiningStats() {
-            return new MiningStats(225, 0, 0, 4);
+            return new MiningStats(225, 0, 0, 5);
         }
         @Override
         public ItemType getItemType() {

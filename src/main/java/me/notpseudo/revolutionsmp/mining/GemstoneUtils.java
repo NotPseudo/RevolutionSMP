@@ -144,6 +144,31 @@ public class GemstoneUtils {
         };
     }
 
+    public static double pearlValue(Rarity quality, Rarity rarity) {
+        return switch (quality) {
+            case COMMON -> switch (rarity) {
+                case COMMON, UNCOMMON, RARE, EPIC, LEGENDARY -> 0.2;
+                default -> 0.3;
+            };
+            case UNCOMMON -> switch (rarity) {
+                case COMMON, UNCOMMON, RARE, EPIC, LEGENDARY -> 0.6;
+                default -> 0.7;
+            };
+            case RARE -> switch (rarity) {
+                case COMMON, UNCOMMON, RARE, EPIC, LEGENDARY -> 1;
+                default -> 1.1;
+            };
+            case EPIC -> switch (rarity) {
+                case COMMON, UNCOMMON, RARE, EPIC, LEGENDARY, MYTHIC -> 1.4;
+                default -> 1.5;
+            };
+            default -> switch (rarity) {
+                case COMMON, UNCOMMON, RARE, EPIC, LEGENDARY, MYTHIC -> 1.8;
+                default -> 2;
+            };
+        };
+    }
+
     public static double jadeValue(Rarity quality, Rarity rarity) {
         return switch (quality) {
             case COMMON -> switch (rarity) {

@@ -110,6 +110,14 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
         miningStats.setStatValue(StatType.PRISTINE, pristine);
     }
 
+    public double getPurity() {
+        return miningStats.getStatValue(StatType.PURITY);
+    }
+
+    public void setPurity(double purity) {
+        miningStats.setStatValue(StatType.PURITY, purity);
+    }
+
     public double getFarmingFortune() {
         return gatheringStats.getStatValue(StatType.FARMING_FORTUNE);
     }

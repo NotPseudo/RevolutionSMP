@@ -161,7 +161,7 @@ public class GemstoneObject extends SpecialItemInfo {
         if (gem == GemstoneType.JASPER) {
             return new WeaponStats(0, GemstoneUtils.jasperValue(quality, itemRarity), 0, 0, 0, 0);
         }
-        return new WeaponStats(0, 0, 0, 0, 0, 0);
+        return WeaponStats.createZero();
     }
 
     @NotNull
@@ -172,7 +172,7 @@ public class GemstoneObject extends SpecialItemInfo {
         if (gem == GemstoneType.AMETHYST) {
             return new ArmorStats(0, GemstoneUtils.amethystValue(quality, itemRarity), 0);
         }
-        return new ArmorStats(0, 0, 0);
+        return ArmorStats.createZero();
     }
 
     @NotNull
@@ -180,7 +180,7 @@ public class GemstoneObject extends SpecialItemInfo {
         if (gem == GemstoneType.SAPPHIRE) {
             return new AbilityStats(0, GemstoneUtils.sapphireValue(quality, itemRarity));
         }
-        return new AbilityStats(0, 0);
+        return AbilityStats.createZero();
     }
 
     @NotNull
@@ -199,17 +199,20 @@ public class GemstoneObject extends SpecialItemInfo {
         if (gem == GemstoneType.TOPAZ) {
             return new MiningStats(0, 0, GemstoneUtils.topazValue(quality, itemRarity));
         }
-        return new MiningStats(0, 0, 0);
+        if (gem == GemstoneType.PEARL) {
+            return new MiningStats(0, 0, 0, GemstoneUtils.pearlValue(quality, itemRarity), 0);
+        }
+        return MiningStats.createZero();
     }
 
     @NotNull
     public GatheringStats getBonusGathering(Rarity itemRarity) {
-        return new GatheringStats(0, 0);
+        return GatheringStats.createZero();
     }
 
     @NotNull
     public LuckStats getBonusLuck(Rarity itemRarity) {
-        return new LuckStats(0, 0);
+        return LuckStats.createZero();
     }
 
 }

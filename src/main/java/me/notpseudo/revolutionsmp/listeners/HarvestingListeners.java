@@ -24,6 +24,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.player.PlayerAnimationEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -39,7 +40,10 @@ public class HarvestingListeners implements Listener {
 
     private static final Set<Material> transparent = new HashSet<>(List.of(Material.AIR, Material.CAVE_AIR, Material.VOID_AIR, Material.WATER, Material.LAVA));
 
+    private RevolutionSMP plugin;
+
     public HarvestingListeners(RevolutionSMP plugin) {
+        this.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
         foragingCollectionBlocks.addAll(List.of(Material.CRIMSON_STEM, Material.STRIPPED_CRIMSON_STEM,
                 Material.WARPED_STEM, Material.STRIPPED_WARPED_STEM, Material.WARPED_STEM,
@@ -127,14 +131,11 @@ public class HarvestingListeners implements Listener {
             // event.setCancelled(true);
             event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1F, 0.5F);
             event.getPlayer().sendMessage(Component.text("You need a stronger tool to mine " + material, NamedTextColor.RED));
-            CustomMiningUtils.addSlow(event.getPlayer(), 60);
-            return;
+            // CustomMiningUtils.addSlow(event.getPlayer(), 60);
+            // return;
         }
-        event.getPlayer().sendMessage(Component.text("BlockDamageEvent", NamedTextColor.GREEN));
-        Location location = event.getBlock().getLocation();
-        event.getPlayer().sendMessage(Component.text("BDE Creating a custom breaking block at X:" + location.getX() + ", Y:" + location.getY() + ", Z:" + location.getZ(), NamedTextColor.YELLOW));
-        event.getPlayer().sendMessage(Component.text("BDE Hardness: " + hardness * 3, NamedTextColor.RED));
-        CustomMiningUtils.createBreakingBlock(event.getBlock(), hardness * 3);
+        CustomMiningUtils.addSlow(event.getPlayer(), (int) (hardness * 1.5));
+        CustomMiningUtils.createBreakingBlock(event.getBlock(), hardness * 0.15);
     }
 
     @EventHandler
@@ -152,6 +153,7 @@ public class HarvestingListeners implements Listener {
         Block block = player.getTargetBlock(transparent, 5);
         ItemInfo info = ItemEditor.getMainHandInfo(event.getPlayer());
         double breakingPower = 0, breakingPowerNeeded = getBreakingPower(block.getType());
+        boolean isVanilla = true;
         if (info != null &&
                 (info.getItemType() == ItemType.PICKAXE || info.getItemType() == ItemType.DRILL || info.getItemType() == ItemType.GAUNTLET) &&
                 info.getMiningStats() != null) {
@@ -160,21 +162,19 @@ public class HarvestingListeners implements Listener {
         if (getPlacedLocationList(block).containsCustomOre(block.getLocation())) {
             CustomOreLocation customOreLocation = getPlacedLocationList(block).getCustomOreFromLocation(block.getLocation());
             breakingPowerNeeded = customOreLocation.getType().getBreakingPower();
-            event.getPlayer().sendMessage(Component.text("PlayerAnimationEvent", NamedTextColor.GREEN));
-            event.getPlayer().sendMessage(Component.text("PAE Detected custom ore at X:" + block.getX() + ", Y:" + block.getY() + ", Z:" + block.getZ(), NamedTextColor.YELLOW));
+            isVanilla = false;
         } else {
             if (!affectedByMiningSpeed.contains(block.getType())) {
                 return;
             }
         }
         if (breakingPower < breakingPowerNeeded) {
-            event.setCancelled(true);
-            CustomMiningUtils.addSlow(player, 60);
-            return;
+            // event.setCancelled(true);
+            // CustomMiningUtils.addSlow(player, 60);
+            // return;
         }
         Location blockLoc = block.getLocation();
-        if(!CustomMiningUtils.isBreakingBlock(blockLoc)) {
-            event.getPlayer().sendMessage(Component.text("PAE Not a custom breaking block at X:" + block.getX() + ", Y:" + block.getY() + ", Z:" + block.getZ(), NamedTextColor.YELLOW));
+        if (!CustomMiningUtils.isBreakingBlock(blockLoc)) {
             return;
         }
         if (player.getLocation().distanceSquared(blockLoc) > 49) {
@@ -187,7 +187,12 @@ public class HarvestingListeners implements Listener {
         double miningSpeed = (playerStats.getMiningSpeed() + add.getStatValue(StatType.MINING_SPEED)) * (1 + (addPercent.getStatValue(StatType.MINING_SPEED) / 100)) * mult.getStatValue(StatType.MINING_SPEED);
         BreakingBlock breakBlock = CustomMiningUtils.getBreakingBlock(blockLoc);
         event.getPlayer().sendMessage(Component.text("PAE Custom breaking block at X:" + block.getX() + ", Y:" + block.getY() + ", Z:" + block.getZ() + " has a damage per stage of " + breakBlock.getDamagePerStage(), NamedTextColor.YELLOW));
-        breakBlock.damage(player, Math.max(0.5, miningSpeed / 50));
+        double damage = Math.max(1, miningSpeed) / 20;
+        if (isVanilla) {
+            damage /= 25;
+        }
+        event.getPlayer().sendMessage(Component.text("You should be adding " + damage, NamedTextColor.YELLOW));
+        breakBlock.damage(player, damage);
     }
 
     @EventHandler
@@ -195,6 +200,7 @@ public class HarvestingListeners implements Listener {
         PlacedLocationList locations = getPlacedLocationList(event.getBlock());
         CustomOreLocation customOre = locations.getCustomOreFromLocation(event.getBlock().getLocation());
         boolean isCustom = removeOreLocation(event), playerPlaced = removePlacedLocation(event);
+        CustomMiningUtils.removeBreakingBlock(event.getBlock().getLocation());
         Player player = event.getPlayer();
         Block block = event.getBlock();
         if (player.getGameMode() == GameMode.CREATIVE) {
@@ -216,18 +222,33 @@ public class HarvestingListeners implements Listener {
                 addPercent = StatsListeners.getEventMining(player, block, IncreaseType.ADDITIVE_PERCENT),
                 mult = StatsListeners.getEventMining(player, block, IncreaseType.MULTIPLICATIVE_PERCENT);
         double miningFortune = (playerStats.getMiningFortune() + add.getStatValue(StatType.MINING_FORTUNE)) * (1 + (addPercent.getStatValue(StatType.MINING_FORTUNE) / 100)) * mult.getStatValue(StatType.MINING_FORTUNE),
-        pristine = (playerStats.getPristine() + add.getStatValue(StatType.PRISTINE)) * (1 + (addPercent.getStatValue(StatType.PRISTINE) / 100)) * mult.getStatValue(StatType.PRISTINE);
+                pristine = (playerStats.getPristine() + add.getStatValue(StatType.PRISTINE)) * (1 + (addPercent.getStatValue(StatType.PRISTINE) / 100)) * mult.getStatValue(StatType.PRISTINE),
+                purity = (playerStats.getPristine() + add.getStatValue(StatType.PURITY)) * (1 + (addPercent.getStatValue(StatType.PURITY) / 100)) * mult.getStatValue(StatType.PURITY);
         if (playerPlaced) {
-            miningFortune = -50;
-            pristine = -50;
+            miningFortune = 0;
+            pristine = 0;
+            purity = 0;
         }
         int breakingPowerNeeded = getBreakingPower(block.getType());
+        Material replaceBlock = null;
+        List<CustomOreType> replaceCustomBlock = null;
         if (isCustom) {
-            event.setDropItems(false);breakingPowerNeeded = customOre.getType().getBreakingPower();
+            breakingPowerNeeded = customOre.getType().getBreakingPower();
             drops = customOre.getDrops();
         } else {
             if (!miningCollectionBlocks.contains(event.getBlock().getType())) {
+                drops = getDropsForMaterial(event.getBlock().getType(), 0);
+                for (ItemDropObject drop : drops) {
+                    drop.drop(event.getBlock().getLocation());
+                }
                 return;
+            }
+            if (Math.random() * 100 < purity) {
+                if (Math.random() < 0.5) {
+                    replaceBlock = getReplaceBlock(block.getType());
+                } else {
+                    replaceCustomBlock = getReplaceCustomBlocks(block.getType());
+                }
             }
             drops = getMiningDropsForMaterial(block.getType(), miningFortune);
         }
@@ -235,6 +256,7 @@ public class HarvestingListeners implements Listener {
             event.setDropItems(false);
             return;
         }
+        event.setDropItems(false);
         for (ItemDropObject drop : drops) {
             ItemDropObject pristineDrop = GemstoneUtils.handlePristine(drop, miningFortune, pristine);
             if (pristineDrop != null) {
@@ -247,13 +269,41 @@ public class HarvestingListeners implements Listener {
             }
             drop.drop(block.getLocation());
         }
+        if (replaceBlock != null) {
+            Material finalReplaceBlock = replaceBlock;
+            BukkitRunnable run = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    block.setType(finalReplaceBlock);
+                    event.getPlayer().sendMessage(Component.text("Purified! You have uncovered the true material of this block. A ", NamedTextColor.WHITE)
+                            .append(Component.text(ItemEditor.getStringFromEnum(finalReplaceBlock), NamedTextColor.AQUA))
+                            .append(Component.text(" has spawned", NamedTextColor.WHITE)));
+                }
+            };
+            run.runTaskLater(plugin, 3);
+        }
+        if (replaceCustomBlock != null) {
+            CustomOreType customType = replaceCustomBlock.get((int) (Math.random() * replaceCustomBlock.size()));
+            if (breakingPower >= customType.getBreakingPower()) {
+                BukkitRunnable run = new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        createCustomBlock(customType, block.getLocation());
+                        event.getPlayer().sendMessage(Component.text("Purified! You have uncovered the true material of this block. A ", NamedTextColor.WHITE)
+                                .append(Component.text(ItemEditor.getStringFromEnum(customType), NamedTextColor.AQUA))
+                                .append(Component.text(" has spawned", NamedTextColor.WHITE)));
+                    }
+                };
+                run.runTaskLater(plugin, 3);
+            }
+        }
     }
 
     public static void createCustomBlock(CustomOreType type, Location location) {
         PlacedLocationList placedLocationList = getPlacedLocationList(location.getBlock());
         CustomOreLocation customOreLocation = placedLocationList.addCustomOreLocation(location, type);
         location.getBlock().setType(customOreLocation.getVanillaMaterial());
-        CustomMiningUtils.createBreakingBlock(location.getBlock(), customOreLocation.getBlockStrength() * 3);
+        CustomMiningUtils.createBreakingBlock(location.getBlock(), customOreLocation.getBlockStrength() * 0.15);
         location.getBlock().getWorld().getPersistentDataContainer().set(worldPlacedKey, new PlacedLocationListDataType(), placedLocationList);
     }
 
@@ -437,43 +487,62 @@ public class HarvestingListeners implements Listener {
     public static List<ItemDropObject> getDropsForMaterial(Material material, double fortune) {
         int multiplier = getAddedTimes(fortune);
         return switch (material) {
-            default -> List.of(new ItemDropObject(material, multiplier));
-            case WHEAT -> List.of(new ItemDropObject(Material.WHEAT, multiplier), new ItemDropObject(Material.WHEAT_SEEDS, ((int) (Math.random() * 3)) * multiplier));
-            case POTATOES -> List.of(new ItemDropObject(Material.POTATO, ((int) (Math.random() * 5) + 1) * multiplier), new ItemDropObject(2, Material.POISONOUS_POTATO, multiplier));
+            default -> List.of(new ItemDropObject(material, 1));
+            case WHEAT ->
+                    List.of(new ItemDropObject(Material.WHEAT, multiplier), new ItemDropObject(Material.WHEAT_SEEDS, ((int) (Math.random() * 3)) * multiplier));
+            case POTATOES ->
+                    List.of(new ItemDropObject(Material.POTATO, ((int) (Math.random() * 5) + 1) * multiplier), new ItemDropObject(2, Material.POISONOUS_POTATO, multiplier));
             case CARROTS -> List.of(new ItemDropObject(Material.CARROT, ((int) (Math.random() * 4) + 2) * multiplier));
-            case PUMPKIN_STEM, ATTACHED_PUMPKIN_STEM -> List.of(new ItemDropObject(Material.PUMPKIN_SEEDS, (int) (Math.random() * 4) * multiplier));
-            case MELON -> List.of(new ItemDropObject(Material.MELON_SLICE, ((int) (Math.random() * 5) + 3) * multiplier));
-            case MELON_STEM,  ATTACHED_MELON_STEM -> List.of(new ItemDropObject(Material.MELON_SEEDS, (int) (Math.random() * 4) * multiplier));
-            case NETHER_WART -> List.of(new ItemDropObject(Material.NETHER_WART, ((int) (Math.random() * 3) + 2) * multiplier));
-            case COCOA -> List.of(new ItemDropObject(Material.COCOA_BEANS, ((int) (Math.random() * 2) + 2) * multiplier));
-            case RED_MUSHROOM_BLOCK -> List.of(new ItemDropObject(Material.RED_MUSHROOM, (int) (Math.random() * 3) * multiplier));
-            case BROWN_MUSHROOM_BLOCK -> List.of(new ItemDropObject(Material.BROWN_MUSHROOM, (int) (Math.random() * 3) * multiplier));
-            case MUSHROOM_STEM -> List.of(new ItemDropObject(Math.random() < 0.5 ? Material.RED_MUSHROOM : Material.BROWN_MUSHROOM, (int) (Math.random() * 3) * multiplier));
-            case BEETROOTS -> List.of(new ItemDropObject(Material.BEETROOT, multiplier), new ItemDropObject(Material.BEETROOT_SEEDS, ((int) (Math.random() * 4) + 1) * multiplier));
-            case SWEET_BERRY_BUSH -> List.of(new ItemDropObject(Material.SWEET_BERRIES, ((int) (Math.random() * 2) + 2) * multiplier));
+            case PUMPKIN_STEM, ATTACHED_PUMPKIN_STEM ->
+                    List.of(new ItemDropObject(Material.PUMPKIN_SEEDS, (int) (Math.random() * 4) * multiplier));
+            case MELON ->
+                    List.of(new ItemDropObject(Material.MELON_SLICE, ((int) (Math.random() * 5) + 3) * multiplier));
+            case MELON_STEM, ATTACHED_MELON_STEM ->
+                    List.of(new ItemDropObject(Material.MELON_SEEDS, (int) (Math.random() * 4) * multiplier));
+            case NETHER_WART ->
+                    List.of(new ItemDropObject(Material.NETHER_WART, ((int) (Math.random() * 3) + 2) * multiplier));
+            case COCOA ->
+                    List.of(new ItemDropObject(Material.COCOA_BEANS, ((int) (Math.random() * 2) + 2) * multiplier));
+            case RED_MUSHROOM_BLOCK ->
+                    List.of(new ItemDropObject(Material.RED_MUSHROOM, (int) (Math.random() * 3) * multiplier));
+            case BROWN_MUSHROOM_BLOCK ->
+                    List.of(new ItemDropObject(Material.BROWN_MUSHROOM, (int) (Math.random() * 3) * multiplier));
+            case MUSHROOM_STEM ->
+                    List.of(new ItemDropObject(Math.random() < 0.5 ? Material.RED_MUSHROOM : Material.BROWN_MUSHROOM, (int) (Math.random() * 3) * multiplier));
+            case BEETROOTS ->
+                    List.of(new ItemDropObject(Material.BEETROOT, multiplier), new ItemDropObject(Material.BEETROOT_SEEDS, ((int) (Math.random() * 4) + 1) * multiplier));
+            case SWEET_BERRY_BUSH ->
+                    List.of(new ItemDropObject(Material.SWEET_BERRIES, ((int) (Math.random() * 2) + 2) * multiplier));
             case CAVE_VINES, CAVE_VINES_PLANT -> List.of(new ItemDropObject(Material.GLOW_BERRIES, multiplier));
-            case DEAD_BUSH -> List.of(new ItemDropObject(75, Material.STICK, (int) (Math.random() * 3)), new ItemDropObject(25, Material.DEAD_BUSH, multiplier));
+            case DEAD_BUSH ->
+                    List.of(new ItemDropObject(75, Material.STICK, (int) (Math.random() * 3)), new ItemDropObject(25, Material.DEAD_BUSH, multiplier));
         };
     }
 
     public static List<ItemDropObject> getMiningDropsForMaterial(Material material, double fortune) {
-        int multiplier = getAddedTimes(fortune);
+        int multiplier = 1 + getAddedTimes(fortune), gemDefault = (int) (Math.random() * 3) + 2;
         return switch (material) {
             default -> List.of(new ItemDropObject(material, multiplier));
             case STONE -> List.of(new ItemDropObject(Material.COBBLESTONE, multiplier));
-            case COAL_ORE, DEEPSLATE_COAL_ORE -> List.of(new ItemDropObject(Material.COAL, multiplier));
-            case GLOWSTONE -> List.of(new ItemDropObject(Material.GLOWSTONE_DUST, ((int) (Math.random() * 3) + 2) * multiplier));
-            case COPPER_ORE, DEEPSLATE_COPPER_ORE -> List.of(new ItemDropObject(Material.RAW_COPPER, ((int) (Math.random() * 4) + 2) * multiplier));
-            case LAPIS_ORE, DEEPSLATE_LAPIS_ORE -> List.of(new ItemDropObject(Material.LAPIS_LAZULI, ((int) (Math.random() * 6) + 4) * multiplier));
+            case COAL_ORE, DEEPSLATE_COAL_ORE -> List.of(new ItemDropObject(Material.COAL, multiplier), new ItemDropObject(GemstoneType.PEARL, 4, gemDefault));
+            case GLOWSTONE ->
+                    List.of(new ItemDropObject(Material.GLOWSTONE_DUST, (gemDefault) * multiplier), new ItemDropObject(GemstoneType.TOPAZ, 4, gemDefault), new ItemDropObject(GemstoneType.AMBER, 2, gemDefault));
+            case COPPER_ORE, DEEPSLATE_COPPER_ORE ->
+                    List.of(new ItemDropObject(Material.RAW_COPPER, ((int) (Math.random() * 4) + 2) * multiplier), new ItemDropObject(GemstoneType.AMBER, 4, gemDefault));
+            case LAPIS_ORE, DEEPSLATE_LAPIS_ORE ->
+                    List.of(new ItemDropObject(Material.LAPIS_LAZULI, ((int) (Math.random() * 6) + 4) * multiplier), new ItemDropObject(GemstoneType.SAPPHIRE, 5, gemDefault));
             case IRON_ORE, DEEPSLATE_IRON_ORE -> List.of(new ItemDropObject(Material.RAW_IRON, multiplier));
-            case REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE -> List.of(new ItemDropObject(Material.REDSTONE, ((int) (Math.random() * 2) + 4) * multiplier));
-            case DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE -> List.of(new ItemDropObject(Material.DIAMOND, multiplier));
-            case GOLD_ORE, DEEPSLATE_GOLD_ORE -> List.of(new ItemDropObject(Material.RAW_GOLD, multiplier));
-            case NETHER_GOLD_ORE -> List.of(new ItemDropObject(Material.GOLD_NUGGET, ((int) (Math.random() * 5) + 2) * multiplier));
-            case EMERALD_ORE, DEEPSLATE_EMERALD_ORE -> List.of(new ItemDropObject(Material.EMERALD, multiplier));
-            case NETHER_QUARTZ_ORE -> List.of(new ItemDropObject(Material.QUARTZ, multiplier));
-            case SMALL_AMETHYST_BUD, MEDIUM_AMETHYST_BUD, LARGE_AMETHYST_BUD, AMETHYST_CLUSTER -> List.of(new ItemDropObject(Material.AMETHYST_SHARD, 4 * multiplier));
-            case BUDDING_AMETHYST -> List.of(new ItemDropObject(Material.AMETHYST_BLOCK, multiplier));
+            case REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE ->
+                    List.of(new ItemDropObject(Material.REDSTONE, ((int) (Math.random() * 2) + 4) * multiplier), new ItemDropObject(GemstoneType.RUBY, 4, gemDefault));
+            case DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE -> List.of(new ItemDropObject(Material.DIAMOND, multiplier), new ItemDropObject(GemstoneType.JASPER, 2, gemDefault), new ItemDropObject(GemstoneType.SAPPHIRE, 4, gemDefault));
+            case GOLD_ORE, DEEPSLATE_GOLD_ORE -> List.of(new ItemDropObject(Material.RAW_GOLD, multiplier), new ItemDropObject(GemstoneType.TOPAZ, 2, gemDefault));
+            case NETHER_GOLD_ORE ->
+                    List.of(new ItemDropObject(Material.GOLD_NUGGET, ((int) (Math.random() * 5) + 2) * multiplier), new ItemDropObject(GemstoneType.TOPAZ, 3, gemDefault));
+            case EMERALD_ORE, DEEPSLATE_EMERALD_ORE -> List.of(new ItemDropObject(Material.EMERALD, multiplier), new ItemDropObject(GemstoneType.JASPER, 2, gemDefault));
+            case NETHER_QUARTZ_ORE -> List.of(new ItemDropObject(Material.QUARTZ, multiplier), new ItemDropObject(GemstoneType.OPAL, 4, gemDefault));
+            case SMALL_AMETHYST_BUD, MEDIUM_AMETHYST_BUD, LARGE_AMETHYST_BUD, AMETHYST_CLUSTER ->
+                    List.of(new ItemDropObject(Material.AMETHYST_SHARD, 4 * multiplier), new ItemDropObject(GemstoneType.AMETHYST, 2, gemDefault));
+            case BUDDING_AMETHYST -> List.of(new ItemDropObject(Material.AMETHYST_BLOCK, multiplier), new ItemDropObject(GemstoneType.AMETHYST, 4, gemDefault));
         };
     }
 
@@ -486,8 +555,10 @@ public class HarvestingListeners implements Listener {
         }
         return switch (material) {
             default -> 1;
-            case DEEPSLATE, IRON_ORE, DEEPSLATE_IRON_ORE, IRON_BLOCK, LAPIS_ORE, DEEPSLATE_LAPIS_ORE, LAPIS_BLOCK, COPPER_ORE, DEEPSLATE_COPPER_ORE, LIGHTNING_ROD -> 2;
-            case DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE, DIAMOND_BLOCK, EMERALD_ORE, DEEPSLATE_EMERALD_ORE, EMERALD_BLOCK, GOLD_ORE, DEEPSLATE_GOLD_ORE, GOLD_BLOCK, REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE, REDSTONE_BLOCK -> 3;
+            case DEEPSLATE, IRON_ORE, DEEPSLATE_IRON_ORE, IRON_BLOCK, LAPIS_ORE, DEEPSLATE_LAPIS_ORE, LAPIS_BLOCK, COPPER_ORE, DEEPSLATE_COPPER_ORE, LIGHTNING_ROD ->
+                    2;
+            case DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE, DIAMOND_BLOCK, EMERALD_ORE, DEEPSLATE_EMERALD_ORE, EMERALD_BLOCK, GOLD_ORE, DEEPSLATE_GOLD_ORE, GOLD_BLOCK, REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE, REDSTONE_BLOCK ->
+                    3;
             case OBSIDIAN, CRYING_OBSIDIAN, NETHERITE_BLOCK, RESPAWN_ANCHOR, ANCIENT_DEBRIS -> 4;
         };
     }
@@ -508,6 +579,47 @@ public class HarvestingListeners implements Listener {
             current = current.getRelative(direction);
         }
         return blocks;
+    }
+
+    private static Material getReplaceBlock(Material material) {
+        if (!miningCollectionBlocks.contains(material)) {
+            return null;
+        }
+        return switch (material) {
+            default -> null;
+            case COAL_ORE, DEEPSLATE_COAL_ORE -> Material.COAL_BLOCK;
+            case IRON_ORE, DEEPSLATE_IRON_ORE -> Material.IRON_BLOCK;
+            case LAPIS_ORE, DEEPSLATE_LAPIS_ORE -> Material.LAPIS_BLOCK;
+            case REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE -> Material.REDSTONE_BLOCK;
+            case GOLD_ORE, DEEPSLATE_GOLD_ORE -> Material.GOLD_BLOCK;
+            case DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE -> Material.DIAMOND_BLOCK;
+            case EMERALD_ORE, DEEPSLATE_EMERALD_ORE -> Material.EMERALD_BLOCK;
+            case NETHER_QUARTZ_ORE -> Material.QUARTZ_BLOCK;
+            case ANCIENT_DEBRIS -> Material.NETHERITE_BLOCK;
+        };
+    }
+
+    private static List<CustomOreType> getReplaceCustomBlocks(Material original) {
+        if (!(miningCollectionBlocks.contains(original))) {
+            return null;
+        }
+        return switch (original) {
+            case STONE, COBBLESTONE, DEEPSLATE, ANDESITE, DIORITE, GRANITE, CALCITE, IRON_ORE, DEEPSLATE_IRON_ORE, IRON_BLOCK ->
+                    List.of(CustomOreType.MITHRIL, CustomOreType.TITANIUM);
+            case GLOWSTONE, COPPER_ORE, DEEPSLATE_COPPER_ORE, GOLD_ORE, DEEPSLATE_GOLD_ORE, NETHER_GOLD_ORE, GOLD_BLOCK ->
+                    List.of(CustomOreType.AMBER, CustomOreType.TOPAZ);
+            case COAL_ORE, DEEPSLATE_COAL_ORE, COAL_BLOCK -> List.of(CustomOreType.RUBY, CustomOreType.SAPPHIRE, CustomOreType.PEARL);
+            case LAPIS_ORE, DEEPSLATE_LAPIS_ORE, LAPIS_BLOCK -> List.of(CustomOreType.JADE, CustomOreType.SAPPHIRE, CustomOreType.AMETHYST);
+            case REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE, REDSTONE_BLOCK -> List.of(CustomOreType.RUBY, CustomOreType.JADE);
+            case DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE, DIAMOND_BLOCK -> List.of(CustomOreType.SAPPHIRE, CustomOreType.JASPER);
+            case EMERALD_ORE, DEEPSLATE_EMERALD_ORE, EMERALD_BLOCK -> List.of(CustomOreType.JASPER, CustomOreType.PEARL);
+            case NETHER_QUARTZ_ORE, QUARTZ_BLOCK, NETHERRACK -> List.of(CustomOreType.OPAL, CustomOreType.PEARL);
+            case ANCIENT_DEBRIS, NETHERITE_BLOCK -> List.of(CustomOreType.JASPER, CustomOreType.OPAL);
+            case OBSIDIAN, CRYING_OBSIDIAN, TUFF, MAGMA_BLOCK -> List.of(CustomOreType.TOPAZ, CustomOreType.OPAL);
+            case SMALL_AMETHYST_BUD, MEDIUM_AMETHYST_BUD, LARGE_AMETHYST_BUD, AMETHYST_CLUSTER, BUDDING_AMETHYST ->
+                    List.of(CustomOreType.AMETHYST);
+            default -> null;
+        };
     }
 
     @NotNull

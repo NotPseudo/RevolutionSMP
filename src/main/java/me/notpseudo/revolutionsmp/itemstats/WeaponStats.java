@@ -2,12 +2,13 @@ package me.notpseudo.revolutionsmp.itemstats;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Stream;
 
 // Weapon stats stored in an ItemStack's PersistentDataContainer
 public class WeaponStats extends StatHolder implements Serializable {
 
     public WeaponStats(double damage, double strength, double critChance, double critDamage, double attackSpeed, double ferocity) {
-        super(List.of(new StatObject(StatType.DAMAGE, damage),
+        super(StatCategory.COMBAT, List.of(new StatObject(StatType.DAMAGE, damage),
                 new StatObject(StatType.STRENGTH, strength),
                 new StatObject(StatType.CRIT_CHANCE, critChance),
                 new StatObject(StatType.CRIT_DAMAGE, critDamage),
@@ -24,6 +25,14 @@ public class WeaponStats extends StatHolder implements Serializable {
             return;
         }
             super.getStats().add(newStat);
+    }
+
+    public static WeaponStats createMult() {
+        return (WeaponStats) createMult(StatCategory.COMBAT);
+    }
+
+    public static WeaponStats createZero() {
+        return (WeaponStats) createZero(StatCategory.COMBAT);
     }
 
 }

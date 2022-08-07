@@ -5,6 +5,8 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.FieldAccessException;
 import com.comphenix.protocol.wrappers.BlockPosition;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.SoundGroup;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -20,7 +22,7 @@ public class BreakingBlock {
     public BreakingBlock(Block block, double damagePerStage) {
         this.block = block;
         this.damagePerStage = damagePerStage;
-        damage = -1;
+        damage = 0;
     }
 
     public double getDamagePerStage() {
@@ -32,6 +34,7 @@ public class BreakingBlock {
             return;
         }
         damage += amount;
+        breaker.sendMessage(Component.text("You added " + amount + ". Damage is at " + damage + "/" + damagePerStage * 10, NamedTextColor.GOLD));
         int animation = getAnimation();
         if (animation != previousStage) {
             if (animation < 10) {
@@ -79,6 +82,8 @@ public class BreakingBlock {
 
     public void forceBreak(Player breaker) {
         breaker.breakBlock(block);
+        SoundGroup group = block.getBlockData().getSoundGroup();
+        block.getWorld().playSound(block.getLocation(), group.getBreakSound(), group.getVolume(), group.getPitch());
     }
 
 }

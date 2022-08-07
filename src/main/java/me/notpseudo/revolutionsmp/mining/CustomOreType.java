@@ -204,6 +204,38 @@ public enum CustomOreType {
             return GemstoneUtils.createGemstone(GemstoneType.OPAL, Rarity.COMMON, count);
         }
     },
+    PEARL {
+        @Override
+        public Material[] getVanillaMaterials() {
+            return new Material[] {Material.WHITE_STAINED_GLASS, Material.WHITE_STAINED_GLASS_PANE};
+        }
+        @Override
+        public int getBreakingPower() {
+            return 7;
+        }
+
+        @Override
+        public boolean isGem() {
+            return true;
+        }
+
+        @Override
+        public double getBlockStrength(Material vanillaMat) {
+            return switch(vanillaMat) {
+                case WHITE_STAINED_GLASS -> 4000;
+                default -> 3800;
+            };
+        }
+
+        @Override
+        public ItemStack getItemDrop(Material material) {
+            int count = (int) (Math.random() * 3) + 2;
+            if (material == Material.WHITE_STAINED_GLASS_PANE) {
+                count = (int) (Math.random() * 4) + 3;
+            }
+            return GemstoneUtils.createGemstone(GemstoneType.PEARL, Rarity.COMMON, count);
+        }
+    },
     SAPPHIRE {
         @Override
         public Material[] getVanillaMaterials() {

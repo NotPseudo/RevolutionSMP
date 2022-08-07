@@ -8,7 +8,7 @@ import java.util.List;
 public class AbilityStats extends StatHolder implements Serializable {
 
     public AbilityStats(double abilityDamage, double intelligence) {
-        super(List.of(new StatObject(StatType.ABILITY_DAMAGE, abilityDamage),
+        super(StatCategory.INTELLIGENCE, List.of(new StatObject(StatType.ABILITY_DAMAGE, abilityDamage),
                 new StatObject(StatType.INTELLIGENCE, intelligence)));
     }
 
@@ -21,6 +21,14 @@ public class AbilityStats extends StatHolder implements Serializable {
             return;
         }
         super.getStats().add(newStat);
+    }
+
+    public static AbilityStats createMult() {
+        return (AbilityStats) createMult(StatCategory.INTELLIGENCE);
+    }
+
+    public static AbilityStats createZero() {
+        return (AbilityStats) createZero(StatCategory.INTELLIGENCE);
     }
 
 }

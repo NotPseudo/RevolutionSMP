@@ -183,9 +183,9 @@ public enum AbilityType {
                 if (witherShieldCooldownList.contains(damager.getUniqueId())) {
                     return new ArmorStats(0.9, 1, 1, 1);
                 }
-                return new ArmorStats(1, 1, 1, 1);
+                return ArmorStats.createMult();
             }
-            return new ArmorStats(0, 0, 0);
+            return ArmorStats.createZero();
         }
 
         @Override
@@ -376,113 +376,113 @@ public enum AbilityType {
     @NotNull
     public WeaponStats getEventWeapon(Player damager, LivingEntity target, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new WeaponStats(1, 1, 1, 1, 1, 1);
+            return WeaponStats.createMult();
         }
-        return new WeaponStats(0, 0, 0, 0, 0, 0);
+        return WeaponStats.createZero();
     }
 
     @NotNull
     public ArmorStats getEventArmor(LivingEntity damager, Player target, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new ArmorStats(1, 1, 1, 1);
+            return ArmorStats.createMult();
         }
-        return new ArmorStats(0, 0, 0);
+        return ArmorStats.createZero();
     }
 
     @NotNull
     public AbilityStats getEventAbility(Player damager, LivingEntity target, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new AbilityStats(1, 1);
+            return AbilityStats.createMult();
         }
-        return new AbilityStats(0, 0);
+        return AbilityStats.createZero();
     }
 
     @NotNull
     public FishingStats getEventFishing(Player fisher, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new FishingStats(1, 1);
+            return FishingStats.createMult();
         }
-        return new FishingStats(0, 0);
+        return FishingStats.createZero();
     }
 
     @NotNull
     public MiningStats getEventMining(Player miner, Block block, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new MiningStats(1, 1, 1);
+            return MiningStats.createMult();
         }
-        return new MiningStats(0, 0, 0);
+        return MiningStats.createZero();
     }
 
     @NotNull
     public GatheringStats getEventGathering(Player harvester, Block block, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new GatheringStats(1, 1);
+            return GatheringStats.createMult();
         }
-        return new GatheringStats(0, 0);
+        return GatheringStats.createZero();
     }
 
     @NotNull
     public LuckStats getEventLuck(Player attacker, LivingEntity target, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new LuckStats(1, 1);
+            return LuckStats.createMult();
         }
-        return new LuckStats(0, 0);
+        return LuckStats.createZero();
     }
 
     @NotNull
     public WeaponStats getBonusWeapon(Player player, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new WeaponStats(1, 1, 1, 1, 1, 1);
+            return WeaponStats.createMult();
         }
-        return new WeaponStats(0, 0, 0, 0, 0, 0);
+        return WeaponStats.createZero();
     }
 
     @NotNull
     public ArmorStats getBonusArmor(Player player, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new ArmorStats(1, 1, 1, 1);
+            return ArmorStats.createMult();
         }
-        return new ArmorStats(0, 0, 0);
+        return ArmorStats.createZero();
     }
 
     @NotNull
     public AbilityStats getBonusAbility(Player player, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new AbilityStats(1, 1);
+            return AbilityStats.createMult();
         }
-        return new AbilityStats(0, 0);
+        return AbilityStats.createZero();
     }
 
     @NotNull
     public FishingStats getBonusFishing(Player fisher, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new FishingStats(1, 1);
+            return FishingStats.createMult();
         }
-        return new FishingStats(0, 0);
+        return FishingStats.createZero();
     }
 
     @NotNull
     public MiningStats getBonusMining(Player miner, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new MiningStats(1, 1, 1);
+            return MiningStats.createMult();
         }
-        return new MiningStats(0, 0, 0);
+        return MiningStats.createZero();
     }
 
     @NotNull
     public GatheringStats getBonusGathering(Player harvester, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new GatheringStats(1, 1);
+            return GatheringStats.createMult();
         }
-        return new GatheringStats(0, 0);
+        return GatheringStats.createZero();
     }
 
     @NotNull
     public LuckStats getBonusLuck(Player attacker, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new LuckStats(1, 1);
+            return LuckStats.createMult();
         }
-        return new LuckStats(0, 0);
+        return LuckStats.createZero();
     }
 
 }

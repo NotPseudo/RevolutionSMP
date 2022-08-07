@@ -21,12 +21,12 @@ public class TripleStrikeEnchantmentObject extends EnchantmentObject implements 
     @Override
     public WeaponStats getEventWeapon(Player damager, LivingEntity target, IncreaseType inc) {
         if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new WeaponStats(1, 1, 1, 1, 1, 1);
+            return WeaponStats.createMult();
         }
         if (inc == IncreaseType.ADDITIVE_PERCENT) {
             return new WeaponStats(10 * super.getLevel(), 0, 0, 0, 0, 0);
         }
-        return new WeaponStats(0, 0, 0, 0, 0, 0);
+        return WeaponStats.createZero();
     }
 
     /*

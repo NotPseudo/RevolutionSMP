@@ -64,11 +64,11 @@ public class InstantTransmissionObject extends AbilityObject {
     @Override
     public @NotNull ArmorStats getBonusArmor(Player player, IncreaseType inc) {
         if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new ArmorStats(1, 1, 1, 1);
+            return ArmorStats.createMult();
         }
         if (inc != IncreaseType.INCREASE && speedUsed.contains(player.getUniqueId())) {
             return new ArmorStats(0, 0, 50);
         }
-        return new ArmorStats(0, 0, 0);
+        return ArmorStats.createZero();
     }
 }

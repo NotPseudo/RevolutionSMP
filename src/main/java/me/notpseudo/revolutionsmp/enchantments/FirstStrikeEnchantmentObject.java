@@ -21,15 +21,15 @@ public class FirstStrikeEnchantmentObject extends EnchantmentObject implements L
     @Override
     public WeaponStats getEventWeapon(Player damager, LivingEntity target, IncreaseType inc) {
         if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new WeaponStats(1, 1, 1, 1, 1, 1);
+            return WeaponStats.createMult();
         }
         if (!super.getAttacked().containsKey(target.getUniqueId())) {
-            return new WeaponStats(0, 0, 0, 0, 0, 0);
+            return WeaponStats.createZero();
         }
         if (inc == IncreaseType.ADDITIVE_PERCENT) {
             return new WeaponStats(25 * super.getLevel(), 0, 0, 0, 0, 0);
         }
-        return new WeaponStats(0, 0, 0, 0, 0, 0);
+        return WeaponStats.createZero();
     }
 
     @EventHandler

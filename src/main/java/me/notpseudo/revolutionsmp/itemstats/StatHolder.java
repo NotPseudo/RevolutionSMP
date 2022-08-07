@@ -3,14 +3,26 @@ package me.notpseudo.revolutionsmp.itemstats;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class StatHolder implements Serializable {
 
+    private final StatCategory CATEGORY;
     private ArrayList<StatObject> stats;
 
-    public StatHolder(List<StatObject> stats) {
+    public StatHolder(StatCategory stat, List<StatObject> stats) {
+        CATEGORY = stat;
         this.stats = new ArrayList<>();
         this.stats.addAll(stats);
+    }
+
+    public StatHolder(StatCategory stat) {
+        CATEGORY = stat;
+        this.stats = new ArrayList<>();
+    }
+
+    public StatCategory getStatCategory() {
+        return CATEGORY;
     }
 
     public ArrayList<StatObject> getStats() {
@@ -36,6 +48,9 @@ public class StatHolder implements Serializable {
 
     public void addStatObject(StatObject newStat) {
         if (containsType(newStat.getType())) {
+            return;
+        }
+        if (newStat.getType().getStatCategory() != CATEGORY) {
             return;
         }
         stats.add(newStat);
@@ -84,6 +99,22 @@ public class StatHolder implements Serializable {
         for (StatObject stat: stats) {
             stat.multiply(other.getStatObject(stat.getType()));
         }
+    }
+
+    public static StatHolder createMult(StatCategory category) {
+        StatHolder newHolder = new StatHolder(category);
+        for (StatType type : Stream.of(StatType.values()).filter(t -> t.getStatCategory() == category).toList()) {
+            newHolder.stats.add(new StatObject(type, 1));
+        }
+        return newHolder;
+    }
+
+    public static StatHolder createZero(StatCategory category) {
+        StatHolder newHolder = new StatHolder(category);
+        for (StatType type : Stream.of(StatType.values()).filter(t -> t.getStatCategory() == category).toList()) {
+            newHolder.stats.add(new StatObject(type, 0));
+        }
+        return newHolder;
     }
 
 }

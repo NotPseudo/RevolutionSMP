@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.FieldAccessException;
 import com.comphenix.protocol.wrappers.BlockPosition;
+import me.notpseudo.revolutionsmp.listeners.HarvestingListeners;
 import me.notpseudo.revolutionsmp.mining.BreakingBlock;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -45,6 +46,8 @@ public class CustomMiningUtils {
             breakingBlocks.get(location).destroyBlockObject();
         }
         breakingBlocks.remove(location);
+        HarvestingListeners.getPlacedLocationList(location.getBlock()).removePlacedLocation(location);
+        HarvestingListeners.getPlacedLocationList(location.getBlock()).removeCustomOreLocation(location);
     }
 
     public static BreakingBlock getBreakingBlock(Location location) {

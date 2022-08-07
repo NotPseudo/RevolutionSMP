@@ -6,7 +6,7 @@ import java.util.List;
 public class GatheringStats extends StatHolder implements Serializable {
 
     public GatheringStats(double farmingFortune, double foragingFortune) {
-        super(List.of(new StatObject(StatType.FARMING_FORTUNE, farmingFortune),
+        super(StatCategory.GATHERING, List.of(new StatObject(StatType.FARMING_FORTUNE, farmingFortune),
                 new StatObject(StatType.FORAGING_FORTUNE, foragingFortune)));
     }
 
@@ -19,6 +19,14 @@ public class GatheringStats extends StatHolder implements Serializable {
             return;
         }
         super.getStats().add(newStat);
+    }
+
+    public static GatheringStats createMult() {
+        return (GatheringStats) createMult(StatCategory.GATHERING);
+    }
+
+    public static GatheringStats createZero() {
+        return (GatheringStats) createZero(StatCategory.GATHERING);
     }
 
 }

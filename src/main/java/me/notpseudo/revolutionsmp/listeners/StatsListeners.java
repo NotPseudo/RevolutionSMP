@@ -104,9 +104,9 @@ public class StatsListeners implements Listener {
         ArmorStats healthStats = new ArmorStats(100, 0, 100, 0);
         AbilityStats abilityStats = new AbilityStats(0, 100);
         FishingStats fishingStats = new FishingStats(20, 0);
-        MiningStats miningStats = new MiningStats(0, 0, 0);
-        GatheringStats gatheringStats = new GatheringStats(0, 0);
-        LuckStats luckStats = new LuckStats(0, 0);
+        MiningStats miningStats = MiningStats.createZero();
+        GatheringStats gatheringStats = GatheringStats.createZero();
+        LuckStats luckStats = LuckStats.createZero();
         for (ItemInfo info : getInfos(player)) {
             damageStats.combine(info.getWeaponStats());
             healthStats.combine(info.getArmorStats());
@@ -458,9 +458,9 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static WeaponStats getEventWeaponStats(Player damager, LivingEntity target, IncreaseType type) {
-        WeaponStats eventWeapon = new WeaponStats(0, 0, 0, 0, 0, 0);
+        WeaponStats eventWeapon = WeaponStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            eventWeapon = new WeaponStats(1, 1, 1, 1, 1, 1);
+            eventWeapon = WeaponStats.createMult();
         }
         for (ItemInfo info : getInfos(damager)) {
             if (info.getReforge() != null && info.getRarity() != null) {
@@ -501,9 +501,9 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static ArmorStats getEventArmorStats(LivingEntity damager, Player target, IncreaseType type) {
-        ArmorStats eventArmor = new ArmorStats(0, 0, 0);
+        ArmorStats eventArmor = ArmorStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            eventArmor = new ArmorStats(1, 1, 1, 1);
+            eventArmor = ArmorStats.createMult();
         }
         for (ItemInfo info : getInfos(damager)) {
             if (info.getReforge() != null && info.getRarity() != null) {
@@ -544,9 +544,9 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static AbilityStats getEventAbilityStats(Player damager, LivingEntity target, IncreaseType type) {
-        AbilityStats eventAbility = new AbilityStats(0, 0);
+        AbilityStats eventAbility = AbilityStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            eventAbility = new AbilityStats(1, 1);
+            eventAbility = AbilityStats.createMult();
         }
         for (ItemInfo info : getInfos(damager)) {
             if (info.getReforge() != null && info.getRarity() != null) {
@@ -586,9 +586,9 @@ public class StatsListeners implements Listener {
     }
     @NotNull
     public static FishingStats getEventFishing(Player fisher, IncreaseType type) {
-        FishingStats eventFishing = new FishingStats(0, 0);
+        FishingStats eventFishing = FishingStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            eventFishing = new FishingStats(1, 1);
+            eventFishing = FishingStats.createMult();
         }
         for (ItemInfo info : getInfos(fisher)) {
             if (info.getReforge() != null && info.getRarity() != null) {
@@ -629,7 +629,7 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static MiningStats getEventMining(Player miner, Block block, IncreaseType type) {
-        MiningStats eventMining = new MiningStats(0, 0, 0);
+        MiningStats eventMining = MiningStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
             eventMining = new MiningStats(1, 1, 1);
         }
@@ -672,9 +672,9 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static GatheringStats getEventGathering(Player miner, Block block, IncreaseType type) {
-        GatheringStats eventGathering = new GatheringStats(0, 0);
+        GatheringStats eventGathering = GatheringStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            eventGathering = new GatheringStats(1, 1);
+            eventGathering = GatheringStats.createMult();
         }
         for (ItemInfo info : getInfos(miner)) {
             if (info.getReforge() != null && info.getRarity() != null) {
@@ -714,9 +714,9 @@ public class StatsListeners implements Listener {
     }
     @NotNull
     public static LuckStats getEventLuck(Player player, LivingEntity target, IncreaseType type) {
-        LuckStats eventLuck = new LuckStats(0, 0);
+        LuckStats eventLuck = LuckStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            eventLuck = new LuckStats(1, 1);
+            eventLuck = LuckStats.createMult();
         }
         for (ItemInfo info : getInfos(player)) {
             if (info.getReforge() != null && info.getRarity() != null) {
@@ -757,9 +757,9 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static WeaponStats getBonusWeapon(Player player, IncreaseType type) {
-        WeaponStats bonusWeapon = new WeaponStats(0, 0, 0, 0, 0, 0);
+        WeaponStats bonusWeapon = WeaponStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            bonusWeapon = new WeaponStats(1, 1, 1, 1, 1, 1);
+            bonusWeapon = WeaponStats.createMult();
         }
         for (ItemInfo info : getInfos(player)) {
             if (info.getReforge() != null && info.getRarity() != null) {
@@ -800,9 +800,9 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static ArmorStats getBonusArmor(Player player, IncreaseType type) {
-        ArmorStats bonusArmor = new ArmorStats(0, 0, 0);
+        ArmorStats bonusArmor = ArmorStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            bonusArmor = new ArmorStats(1, 1, 1, 1);
+            bonusArmor = ArmorStats.createMult();
         }
         for (ItemInfo info : getInfos(player)) {
             if (info.getReforge() != null && info.getRarity() != null) {
@@ -843,9 +843,9 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static AbilityStats getBonusAbility(Player player, IncreaseType type) {
-        AbilityStats bonusAbility = new AbilityStats(0, 0);
+        AbilityStats bonusAbility = AbilityStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            bonusAbility = new AbilityStats(1, 1);
+            bonusAbility = AbilityStats.createMult();
         }
         for (ItemInfo info : getInfos(player)) {
             if (info.getReforge() != null && info.getRarity() != null) {
@@ -886,9 +886,9 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static FishingStats getBonusFishing(Player player, IncreaseType type) {
-        FishingStats bonusFishing = new FishingStats(0, 0);
+        FishingStats bonusFishing = FishingStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            bonusFishing = new FishingStats(1, 1);
+            bonusFishing = FishingStats.createMult();
         }
         for (ItemInfo info : getInfos(player)) {
             if (info.getReforge() != null && info.getRarity() != null) {
@@ -929,9 +929,9 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static MiningStats getBonusMining(Player player, IncreaseType type) {
-        MiningStats bonusMining = new MiningStats(0, 0, 0);
+        MiningStats bonusMining = MiningStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            bonusMining = new MiningStats(1, 1,1);
+            bonusMining = MiningStats.createMult();
         }
         for (ItemInfo info : getInfos(player)) {
             if (info.getReforge() != null && info.getRarity() != null) {
@@ -972,9 +972,9 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static GatheringStats getBonusGathering(Player player, IncreaseType type) {
-        GatheringStats bonusGathering = new GatheringStats(0, 0);
+        GatheringStats bonusGathering = GatheringStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            bonusGathering = new GatheringStats(1, 1);
+            bonusGathering = GatheringStats.createMult();
         }
         for (ItemInfo info : getInfos(player)) {
             if (info.getReforge() != null && info.getRarity() != null) {
@@ -1015,9 +1015,9 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static LuckStats getBonusLuck(Player player, IncreaseType type) {
-        LuckStats bonusLuck = new LuckStats(0, 0);
+        LuckStats bonusLuck = LuckStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            bonusLuck = new LuckStats(1, 1);
+            bonusLuck = LuckStats.createMult();
         }
         for (ItemInfo info : getInfos(player)) {
             if (info.getReforge() != null && info.getRarity() != null) {

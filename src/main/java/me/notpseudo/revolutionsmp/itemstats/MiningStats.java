@@ -6,15 +6,23 @@ import java.util.List;
 public class MiningStats extends StatHolder implements Serializable {
 
     public MiningStats(double miningSpeed, double miningFortune, double pristine) {
-        super(List.of(new StatObject(StatType.MINING_SPEED, miningSpeed),
+        super(StatCategory.MINING, List.of(new StatObject(StatType.MINING_SPEED, miningSpeed),
                 new StatObject(StatType.MINING_FORTUNE, miningFortune),
                 new StatObject(StatType.PRISTINE, pristine)));
     }
 
     public MiningStats(double miningSpeed, double miningFortune, double pristine, double breakingPower) {
-        super(List.of(new StatObject(StatType.MINING_SPEED, miningSpeed),
+        super(StatCategory.MINING, List.of(new StatObject(StatType.MINING_SPEED, miningSpeed),
                 new StatObject(StatType.MINING_FORTUNE, miningFortune),
                 new StatObject(StatType.PRISTINE, pristine),
+                new StatObject(StatType.BREAKING_POWER , breakingPower)));
+    }
+
+    public MiningStats(double miningSpeed, double miningFortune, double pristine, double purity, double breakingPower) {
+        super(StatCategory.MINING, List.of(new StatObject(StatType.MINING_SPEED, miningSpeed),
+                new StatObject(StatType.MINING_FORTUNE, miningFortune),
+                new StatObject(StatType.PRISTINE, pristine),
+                new StatObject(StatType.PURITY, purity),
                 new StatObject(StatType.BREAKING_POWER , breakingPower)));
     }
 
@@ -27,6 +35,14 @@ public class MiningStats extends StatHolder implements Serializable {
             return;
         }
         super.getStats().add(newStat);
+    }
+
+    public static MiningStats createMult() {
+        return (MiningStats) createMult(StatCategory.MINING);
+    }
+
+    public static MiningStats createZero() {
+        return (MiningStats) createZero(StatCategory.MINING);
     }
 
 }
