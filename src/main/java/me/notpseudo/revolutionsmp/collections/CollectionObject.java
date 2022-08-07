@@ -1,7 +1,10 @@
 package me.notpseudo.revolutionsmp.collections;
 
 import me.notpseudo.revolutionsmp.items.ItemID;
+import me.notpseudo.revolutionsmp.skills.SkillType;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -9,8 +12,9 @@ import java.util.ArrayList;
 
 public class CollectionObject implements Serializable, Comparable<CollectionObject> {
 
+    private final CollectionsHolder holder;
     private final CollectionType TYPE;
-    private final CollectionCategory CATEGORY;
+    private final SkillType CATEGORY;
     private ArrayList<Material> vanillaMaterials;
     private ArrayList<ItemID> customMaterials;
     private double totalCollected;
@@ -18,7 +22,8 @@ public class CollectionObject implements Serializable, Comparable<CollectionObje
     private int itemsForNextLevel;
     private int level;
 
-    public CollectionObject(CollectionType type) {
+    public CollectionObject(CollectionsHolder holder, CollectionType type) {
+        this.holder = holder;
         TYPE = type;
         CATEGORY = type.getCategory();
         vanillaMaterials = new ArrayList<>(type.getVanillaMaterials());
@@ -34,7 +39,7 @@ public class CollectionObject implements Serializable, Comparable<CollectionObje
         return TYPE;
     }
 
-    public CollectionCategory getCategory() {
+    public SkillType getCategory() {
         return CATEGORY;
     }
 
@@ -62,12 +67,9 @@ public class CollectionObject implements Serializable, Comparable<CollectionObje
         return customMaterials.contains(itemID);
     }
 
-    public void add(Material material, int count) {
-        if (!contains(material)) {
-            return;
-        }
-        totalCollected += CollectionUtils.getCollectionWorth(material) * count;
-        currentCollected += CollectionUtils.getCollectionWorth(material) * count;
+    public void add(int count) {
+        totalCollected += count;
+        currentCollected += count;
         recalculate();
     }
 
@@ -85,6 +87,10 @@ public class CollectionObject implements Serializable, Comparable<CollectionObje
             level--;
             itemsForNextLevel = CollectionUtils.getCountForNextLevel(TYPE, (int) level + 1);
             currentCollected += itemsForNextLevel;
+            Player player = Bukkit.getPlayer(holder.getPlayer());
+            if (player != null) {
+                sendLevelUpMessage(player);
+            }
         }
         while (currentCollected >= itemsForNextLevel) {
             currentCollected -= itemsForNextLevel;
@@ -104,6 +110,10 @@ public class CollectionObject implements Serializable, Comparable<CollectionObje
         if (!contains(material)) {
             customMaterials.add(material);
         }
+    }
+
+    private void sendLevelUpMessage(Player player) {
+
     }
 
     @Override

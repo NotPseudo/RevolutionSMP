@@ -18,4 +18,18 @@ public class ExpDropObject {
         return value;
     }
 
+    public void add(ExpDropObject other) {
+        if (other == null) {
+            return;
+        }
+        value += other.value;
+    }
+
+    public void multiply(ExpDropObject other) {
+        if (other == null) {
+            return;
+        }
+        value *= other.value;
+    }
+
 }

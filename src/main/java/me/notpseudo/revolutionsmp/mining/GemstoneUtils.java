@@ -404,7 +404,7 @@ public class GemstoneUtils {
         gemInfo.setGem(type);
         gemInfo.setQuality(rarity);
         info.setRarity(rarity);
-        PlayerProfile profile = Bukkit.getServer().createProfile(UUID.randomUUID());
+        PlayerProfile profile = Bukkit.getServer().createProfile(ItemEditor.getSkullUUID());
         profile.setProperty(new ProfileProperty("textures", gemInfo.getTexture()));
         ((SkullMeta) meta).setPlayerProfile(profile);
         meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), info);

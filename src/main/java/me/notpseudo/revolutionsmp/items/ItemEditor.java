@@ -7,8 +7,6 @@ import me.notpseudo.revolutionsmp.abilities.AbilityType;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentType;
 import me.notpseudo.revolutionsmp.itemstats.*;
-import me.notpseudo.revolutionsmp.mining.GemstoneType;
-import me.notpseudo.revolutionsmp.specialiteminfo.GemstoneObject;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -41,6 +39,8 @@ public class ItemEditor {
      */
     private final static NamespacedKey itemKey = new NamespacedKey(RevolutionSMP.getPlugin(RevolutionSMP.class), "items");
 
+    private final static UUID skullUUID = UUID.fromString("dbff4122-fa87-4f79-91f5-0986b8e3f9b3");
+
 
     /**
      * Returns the ItemInfo NamespacedKey for other classes to access ItemInfo in persistent data
@@ -49,6 +49,10 @@ public class ItemEditor {
      */
     public static NamespacedKey getItemKey() {
         return itemKey;
+    }
+
+    public static UUID getSkullUUID() {
+        return skullUUID;
     }
 
     /**
@@ -421,6 +425,16 @@ public class ItemEditor {
                 lore.add(fishingTimeDecrease.decoration(TextDecoration.ITALIC, false));
                 lore.add(Component.empty());
             }
+            if (itemInfo.getExtraInfo() != null) {
+                int lines = 0;
+                for (Component line : itemInfo.getExtraInfo().getSpecialLore()) {
+                    lore.add(line.decoration(TextDecoration.ITALIC, false));
+                    lines++;
+                }
+                if (lines > 0) {
+                    lore.add(Component.empty());
+                }
+            }
             if (hasBonus) {
                 lore.add(Component.text(getStringFromEnum(reforge) + " Bonus", NamedTextColor.BLUE).decoration(TextDecoration.ITALIC, false));
                 int lines = 0;
@@ -486,7 +500,7 @@ public class ItemEditor {
         return statString;
     }
 
-    private static String getStatString(double stat) {
+    public static String getStatString(double stat) {
         String statString = "";
         if (stat > 0) {
             statString += "+";
@@ -661,7 +675,7 @@ public class ItemEditor {
             leatherMeta.setColor(itemID.getColor());
         }
         if (meta instanceof SkullMeta skullMeta && itemID.getTexture() != null) {
-            PlayerProfile profile = Bukkit.getServer().createProfile(UUID.randomUUID());
+            PlayerProfile profile = Bukkit.getServer().createProfile(skullUUID);
             profile.setProperty(new ProfileProperty("textures", itemID.getTexture()));
             skullMeta.setPlayerProfile(profile);
         }
@@ -675,7 +689,7 @@ public class ItemEditor {
             return createMetaFromID(meta, itemID);
         } catch (IllegalArgumentException exception) {
             meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), new ItemInfo(material));
-            ItemEditor.updateLore(meta);
+            updateLore(meta);
             return meta;
         }
     }

@@ -1,16 +1,21 @@
 package me.notpseudo.revolutionsmp.skills;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
 import java.io.Serializable;
 
 public class SkillObject implements Serializable {
 
+    private final SkillHolder holder;
     private final SkillType TYPE;
     private double totalXP;
     private double currentXP;
     private double xpForNextLevel;
     private double level;
 
-    public SkillObject(SkillType type) {
+    public SkillObject(SkillHolder holder, SkillType type) {
+        this.holder = holder;
         TYPE = type;
         totalXP = 0;
         currentXP = 0;
@@ -58,6 +63,10 @@ public class SkillObject implements Serializable {
             level--;
             xpForNextLevel = SkillUtils.getXpForNextLevel(TYPE, (int) level + 1);
             currentXP += xpForNextLevel;
+            Player player = Bukkit.getPlayer(holder.getPlayer());
+            if (player != null) {
+                sendLevelUpMessage(player);
+            }
         }
         while (currentXP >= xpForNextLevel) {
             currentXP -= xpForNextLevel;
@@ -67,6 +76,17 @@ public class SkillObject implements Serializable {
         }
         level = Math.floor(level) + currentXP / xpForNextLevel;
         xpForNextLevel = SkillUtils.getXpForNextLevel(TYPE, (int) level + 1);
+    }
+
+    public double getPercent() {
+        if (level >= TYPE.getMaxLevel()) {
+            return 100;
+        }
+        return currentXP / xpForNextLevel;
+    }
+
+    private void sendLevelUpMessage(Player player) {
+
     }
 
 }

@@ -1,5 +1,6 @@
 package me.notpseudo.revolutionsmp.mobstats;
 
+import me.notpseudo.revolutionsmp.items.ItemEditor;
 import org.bukkit.entity.EntityType;
 
 public enum CustomMobType {
@@ -1607,15 +1608,7 @@ public enum CustomMobType {
     }
 
     public String getName() {
-        String[] split = super.toString().split("_");
-        StringBuilder name = new StringBuilder();
-        for (int i = 0; i < split.length; i++) {
-            name.append(split[i].charAt(0)).append(split[i].substring(1).toLowerCase());
-            if (i < split.length - 1) {
-                name.append(" ");
-            }
-        }
-        return name.toString();
+        return ItemEditor.getStringFromEnum(this);
     }
 
     public static CustomMobType[] getCustomMobTypeList(EntityType entityType) {

@@ -10,6 +10,8 @@ import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.mining.*;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
+import me.notpseudo.revolutionsmp.skills.SkillType;
+import me.notpseudo.revolutionsmp.skills.SkillUtils;
 import me.notpseudo.revolutionsmp.specialiteminfo.GemstoneObject;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -34,19 +36,25 @@ public class HarvestingListeners implements Listener {
 
     private static final NamespacedKey worldPlacedKey = new NamespacedKey(RevolutionSMP.getPlugin(RevolutionSMP.class), "chunkPlaced");
     private static final Set<Material> foragingCollectionBlocks = new HashSet<>();
+    private static final Set<Material> flowers = new HashSet<>();
     private static final Set<Material> miningCollectionBlocks = new HashSet<>();
     private static final Set<Material> affectedByMiningSpeed = new HashSet<>();
     private static final Set<Material> farmingCollectionBlocks = new HashSet<>();
 
     private static final Set<Material> transparent = new HashSet<>(List.of(Material.AIR, Material.CAVE_AIR, Material.VOID_AIR, Material.WATER, Material.LAVA));
 
-    private RevolutionSMP plugin;
+    private final RevolutionSMP plugin;
 
     public HarvestingListeners(RevolutionSMP plugin) {
         this.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
+        flowers.addAll(List.of(Material.DANDELION, Material.POPPY, Material.BLUE_ORCHID, Material.ALLIUM, Material.AZURE_BLUET,
+                Material.RED_TULIP, Material.ORANGE_TULIP, Material.WHITE_TULIP, Material.PINK_TULIP,
+                Material.OXEYE_DAISY, Material.CORNFLOWER, Material.LILY_OF_THE_VALLEY, Material.SUNFLOWER, Material.LILAC, Material.ROSE_BUSH, Material.PEONY,
+                Material.AZALEA, Material.FLOWERING_AZALEA, Material.SPORE_BLOSSOM));
+        foragingCollectionBlocks.addAll(flowers);
         foragingCollectionBlocks.addAll(List.of(Material.CRIMSON_STEM, Material.STRIPPED_CRIMSON_STEM,
-                Material.WARPED_STEM, Material.STRIPPED_WARPED_STEM, Material.WARPED_STEM,
+                Material.WARPED_STEM, Material.STRIPPED_WARPED_STEM,
                 Material.OAK_WOOD, Material.OAK_LOG, Material.STRIPPED_OAK_WOOD, Material.STRIPPED_OAK_LOG,
                 Material.DARK_OAK_LOG,
                 Material.BIRCH_LOG,
@@ -54,27 +62,28 @@ public class HarvestingListeners implements Listener {
                 Material.ACACIA_WOOD, Material.ACACIA_LOG, Material.STRIPPED_ACACIA_LOG,
                 Material.SPRUCE_WOOD, Material.SPRUCE_LOG, Material.STRIPPED_SPRUCE_WOOD, Material.STRIPPED_SPRUCE_LOG,
                 Material.MANGROVE_LOG));
-        miningCollectionBlocks.addAll(List.of(Material.COBBLESTONE, Material.STONE, Material.DEEPSLATE, Material.ANDESITE, Material.DIORITE, Material.GRANITE, Material.CALCITE, Material.BONE_BLOCK,
+        miningCollectionBlocks.addAll(List.of(Material.COBBLESTONE, Material.STONE, Material.DEEPSLATE, Material.COBBLED_DEEPSLATE, Material.ANDESITE, Material.DIORITE, Material.GRANITE, Material.CALCITE, Material.BONE_BLOCK,
                 Material.COAL_ORE, Material.DEEPSLATE_COAL_ORE, Material.COAL_BLOCK,
-                Material.GRAVEL, Material.SAND, Material.ICE, Material.PACKED_ICE, Material.BLUE_ICE, Material.FROSTED_ICE,
-                Material.GLOWSTONE, Material.BASALT, Material.BLACKSTONE, Material.OBSIDIAN, Material.CRYING_OBSIDIAN, Material.TUFF, Material.MAGMA_BLOCK, Material.NETHERRACK, Material.CRIMSON_NYLIUM, Material.WARPED_NYLIUM,
-                Material.COPPER_ORE, Material.DEEPSLATE_COPPER_ORE,
+                Material.GRAVEL, Material.SAND, Material.SPONGE, Material.ICE, Material.PACKED_ICE, Material.BLUE_ICE, Material.FROSTED_ICE,
+                Material.GLOWSTONE, Material.BASALT, Material.BLACKSTONE, Material.POLISHED_BASALT, Material.SMOOTH_BASALT, Material.OBSIDIAN, Material.CRYING_OBSIDIAN, Material.TUFF, Material.MAGMA_BLOCK, Material.NETHERRACK, Material.CRIMSON_NYLIUM, Material.WARPED_NYLIUM,
+                Material.COPPER_ORE, Material.DEEPSLATE_COPPER_ORE, Material.RAW_COPPER_BLOCK, Material.COPPER_BLOCK,
                 Material.LAPIS_ORE, Material.DEEPSLATE_LAPIS_ORE, Material.LAPIS_BLOCK,
-                Material.IRON_ORE, Material.DEEPSLATE_IRON_ORE, Material.IRON_BLOCK,
+                Material.IRON_ORE, Material.DEEPSLATE_IRON_ORE, Material.IRON_BLOCK, Material.RAW_IRON_BLOCK,
                 Material.REDSTONE_ORE, Material.DEEPSLATE_REDSTONE_ORE, Material.REDSTONE_BLOCK,
                 Material.DIAMOND_ORE, Material.DEEPSLATE_DIAMOND_ORE, Material.DIAMOND_BLOCK,
-                Material.GOLD_ORE, Material.GOLD_ORE, Material.NETHER_GOLD_ORE, Material.GOLD_BLOCK,
+                Material.GOLD_ORE, Material.RAW_GOLD_BLOCK, Material.NETHER_GOLD_ORE, Material.GOLD_BLOCK,
                 Material.EMERALD_ORE, Material.EMERALD_ORE, Material.EMERALD_BLOCK,
                 Material.NETHER_QUARTZ_ORE, Material.QUARTZ_BLOCK,
                 Material.ANCIENT_DEBRIS, Material.NETHERITE_BLOCK,
                 Material.SMALL_AMETHYST_BUD, Material.MEDIUM_AMETHYST_BUD, Material.LARGE_AMETHYST_BUD, Material.AMETHYST_CLUSTER,
-                Material.BUDDING_AMETHYST, Material.AMETHYST_BLOCK));
+                Material.BUDDING_AMETHYST, Material.AMETHYST_BLOCK,
+                Material.SCULK, Material.SCULK_VEIN, Material.SCULK_SENSOR, Material.SCULK_CATALYST, Material.SCULK_SHRIEKER));
         miningCollectionBlocks.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("PRISMARINE") && !m.isLegacy()).collect(Collectors.toSet()));
         farmingCollectionBlocks.addAll(List.of(Material.WHEAT, Material.POTATOES, Material.CARROTS,
                 Material.PUMPKIN, Material.CARVED_PUMPKIN, Material.PUMPKIN_STEM, Material.ATTACHED_PUMPKIN_STEM,
                 Material.MELON, Material.MELON_STEM, Material.ATTACHED_MELON_STEM,
                 Material.CACTUS,
-                Material.NETHER_WART,
+                Material.NETHER_WART, Material.NETHER_WART_BLOCK, Material.WARPED_WART_BLOCK,
                 Material.COCOA,
                 Material.RED_MUSHROOM, Material.RED_MUSHROOM_BLOCK, Material.BROWN_MUSHROOM, Material.BROWN_MUSHROOM_BLOCK, Material.MUSHROOM_STEM,
                 Material.SUGAR_CANE,
@@ -98,6 +107,7 @@ public class HarvestingListeners implements Listener {
                 Material.IRON_BARS, Material.IRON_DOOR, Material.IRON_TRAPDOOR, Material.SPAWNER,
                 Material.BLAST_FURNACE, Material.DISPENSER, Material.DROPPER, Material.FURNACE, Material.LANTERN, Material.OBSERVER, Material.STONECUTTER, Material.SMOKER, Material.LODESTONE, Material.HOPPER,
                 Material.BEACON, Material.LIGHTNING_ROD, Material.CONDUIT, Material.CAULDRON, Material.SHULKER_BOX, Material.BREWING_STAND, Material.LIGHT_WEIGHTED_PRESSURE_PLATE, Material.HEAVY_WEIGHTED_PRESSURE_PLATE));
+        List.of(Material.SCULK, Material.SCULK_VEIN, Material.SCULK_SENSOR, Material.SCULK_CATALYST, Material.SCULK_SHRIEKER).forEach(affectedByMiningSpeed::remove);
     }
 
     public static NamespacedKey getWorldPlacedKey() {
@@ -128,11 +138,8 @@ public class HarvestingListeners implements Listener {
             }
         }
         if (breakingPower < breakingPowerNeeded) {
-            // event.setCancelled(true);
             event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1F, 0.5F);
             event.getPlayer().sendMessage(Component.text("You need a stronger tool to mine " + material, NamedTextColor.RED));
-            // CustomMiningUtils.addSlow(event.getPlayer(), 60);
-            // return;
         }
         CustomMiningUtils.addSlow(event.getPlayer(), (int) (hardness * 1.5));
         CustomMiningUtils.createBreakingBlock(event.getBlock(), hardness * 0.15);
@@ -151,27 +158,13 @@ public class HarvestingListeners implements Listener {
         }
         Player player = event.getPlayer();
         Block block = player.getTargetBlock(transparent, 5);
-        ItemInfo info = ItemEditor.getMainHandInfo(event.getPlayer());
-        double breakingPower = 0, breakingPowerNeeded = getBreakingPower(block.getType());
         boolean isVanilla = true;
-        if (info != null &&
-                (info.getItemType() == ItemType.PICKAXE || info.getItemType() == ItemType.DRILL || info.getItemType() == ItemType.GAUNTLET) &&
-                info.getMiningStats() != null) {
-            breakingPower = info.getMiningStats().getStatValue(StatType.BREAKING_POWER);
-        }
         if (getPlacedLocationList(block).containsCustomOre(block.getLocation())) {
-            CustomOreLocation customOreLocation = getPlacedLocationList(block).getCustomOreFromLocation(block.getLocation());
-            breakingPowerNeeded = customOreLocation.getType().getBreakingPower();
             isVanilla = false;
         } else {
             if (!affectedByMiningSpeed.contains(block.getType())) {
                 return;
             }
-        }
-        if (breakingPower < breakingPowerNeeded) {
-            // event.setCancelled(true);
-            // CustomMiningUtils.addSlow(player, 60);
-            // return;
         }
         Location blockLoc = block.getLocation();
         if (!CustomMiningUtils.isBreakingBlock(blockLoc)) {
@@ -230,11 +223,13 @@ public class HarvestingListeners implements Listener {
             purity = 0;
         }
         int breakingPowerNeeded = getBreakingPower(block.getType());
-        Material replaceBlock = null;
+        List<Material> replaceBlock = null;
         List<CustomOreType> replaceCustomBlock = null;
+        double exp = 0;
         if (isCustom) {
             breakingPowerNeeded = customOre.getType().getBreakingPower();
             drops = customOre.getDrops();
+            exp = customOre.getType().getXp();
         } else {
             if (!miningCollectionBlocks.contains(event.getBlock().getType())) {
                 drops = getDropsForMaterial(event.getBlock().getType(), 0);
@@ -243,6 +238,7 @@ public class HarvestingListeners implements Listener {
                 }
                 return;
             }
+            exp = getXp(block.getType());
             if (Math.random() * 100 < purity) {
                 if (Math.random() < 0.5) {
                     replaceBlock = getReplaceBlock(block.getType());
@@ -269,18 +265,23 @@ public class HarvestingListeners implements Listener {
             }
             drop.drop(block.getLocation());
         }
+        if (!playerPlaced) {
+            SkillUtils.addBreakingXpToPlayer(player, SkillType.MINING, block, exp);
+        }
         if (replaceBlock != null) {
-            Material finalReplaceBlock = replaceBlock;
-            BukkitRunnable run = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    block.setType(finalReplaceBlock);
-                    event.getPlayer().sendMessage(Component.text("Purified! You have uncovered the true material of this block. A ", NamedTextColor.WHITE)
-                            .append(Component.text(ItemEditor.getStringFromEnum(finalReplaceBlock), NamedTextColor.AQUA))
-                            .append(Component.text(" has spawned", NamedTextColor.WHITE)));
-                }
-            };
-            run.runTaskLater(plugin, 3);
+            Material finalReplaceBlock = replaceBlock.get((int) (Math.random() * replaceBlock.size()));
+            if (breakingPower >= getBreakingPower(finalReplaceBlock)) {
+                BukkitRunnable run = new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        block.setType(finalReplaceBlock);
+                        event.getPlayer().sendMessage(Component.text("Purified! You have uncovered the true material of this block. A ", NamedTextColor.WHITE)
+                                .append(Component.text(ItemEditor.getStringFromEnum(finalReplaceBlock), NamedTextColor.AQUA))
+                                .append(Component.text(" has spawned", NamedTextColor.WHITE)));
+                    }
+                };
+                run.runTaskLater(plugin, 3);
+            }
         }
         if (replaceCustomBlock != null) {
             CustomOreType customType = replaceCustomBlock.get((int) (Math.random() * replaceCustomBlock.size()));
@@ -318,9 +319,6 @@ public class HarvestingListeners implements Listener {
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
             return;
         }
-        if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
-            return;
-        }
         Player player = event.getPlayer();
         PlayerStats playerStats = StatsListeners.getPlayerStats(player);
         GatheringStats add = StatsListeners.getEventGathering(player, event.getBlock(), IncreaseType.INCREASE),
@@ -330,6 +328,7 @@ public class HarvestingListeners implements Listener {
         for (ItemDropObject drop : getDropsForMaterial(event.getBlock().getType(), foragingFortune)) {
             drop.drop(event.getBlock().getLocation());
         }
+        SkillUtils.addBreakingXpToPlayer(player, SkillType.FORAGING, event.getBlock(), getXp(event.getBlock().getType()));
     }
 
     @EventHandler
@@ -346,11 +345,13 @@ public class HarvestingListeners implements Listener {
         removeOreLocation(event);
         Block block = event.getBlock();
         PlacedLocationList placedList = getPlacedLocationList(event.getBlock());
+        double exp = 0;
         if (block.getType() == Material.SUGAR_CANE || block.getType() == Material.CACTUS) {
             List<Block> above = getBlocksInDirectionMatching(block.getLocation(), block.getType(), BlockFace.UP);
             for (Block aboveBlock : above) {
                 if (!placedList.removePlacedLocation(aboveBlock.getLocation())) {
                     drops.addAll(getDropsForMaterial(aboveBlock.getType(), playerStats.getFarmingFortune()));
+                    exp += getXp(aboveBlock.getType());
                 }
             }
         }
@@ -360,12 +361,14 @@ public class HarvestingListeners implements Listener {
             for (Block downBlock : downVines) {
                 if (!placedList.removePlacedLocation(downBlock.getLocation()) && downBlock.getBlockData() instanceof CaveVinesPlant vinesPlant && vinesPlant.isBerries()) {
                     drops.addAll(getDropsForMaterial(downBlock.getType(), playerStats.getFarmingFortune()));
+                    exp += getXp(downBlock.getType());
                 }
             }
         }
         for (ItemDropObject drop : drops) {
             drop.drop(event.getBlock().getLocation());
         }
+        SkillUtils.addBreakingXpToPlayer(event.getPlayer(), SkillType.FARMING, block, exp);
     }
 
     @EventHandler
@@ -394,10 +397,19 @@ public class HarvestingListeners implements Listener {
                     || mat == Material.CAVE_VINES || mat == Material.CAVE_VINES_PLANT
                     || mat == Material.DEAD_BUSH) {
                 return;
+            } else {
+                getPlacedLocationList(event.getBlock()).removeDropLocation(event.getBlock().getLocation());
             }
         }
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
             return;
+        }
+        SkillType expType = SkillType.FARMING;
+        if (mat == Material.SWEET_BERRY_BUSH) {
+            expType = SkillType.FORAGING;
+        }
+        if (mat == Material.NETHER_WART || mat == Material.CRIMSON_FUNGUS || mat == Material.WARPED_FUNGUS) {
+            expType = SkillType.ALCHEMY;
         }
         PlayerStats playerStats = StatsListeners.getPlayerStats(event.getPlayer());
         GatheringStats add = StatsListeners.getEventGathering(event.getPlayer(), event.getBlock(), IncreaseType.INCREASE),
@@ -407,6 +419,7 @@ public class HarvestingListeners implements Listener {
         for (ItemDropObject drop : getDropsForMaterial(event.getBlock().getType(), farmingFortune)) {
             drop.drop(event.getBlock().getLocation());
         }
+        SkillUtils.addBreakingXpToPlayer(event.getPlayer(), expType, event.getBlock(), getXp(mat));
     }
 
     @EventHandler
@@ -546,6 +559,38 @@ public class HarvestingListeners implements Listener {
         };
     }
 
+    public static double getXp(Material material) {
+        if (foragingCollectionBlocks.contains(material)) {
+            if (flowers.contains(material)) {
+                return 3;
+            }
+            if (material == Material.CRIMSON_STEM || material == Material.WARPED_STEM ||
+            material == Material.STRIPPED_CRIMSON_STEM || material == Material.STRIPPED_WARPED_STEM) {
+                return 18;
+            }
+            return 10;
+        }
+        return switch (material) {
+            default -> 0;
+            case NETHERRACK, ICE -> 0.5;
+            case COBBLESTONE, STONE, ANDESITE, DIORITE, GRANITE, CALCITE, GRAVEL -> 1;
+            case SUGAR_CANE, RED_MUSHROOM_BLOCK, BROWN_MUSHROOM_BLOCK, MUSHROOM_STEM, CACTUS, CAVE_VINES, CAVE_VINES_PLANT -> 2;
+            case SAND, SCULK_VEIN -> 3;
+            case WHEAT, MELON, POTATOES, CARROTS, COCOA, BEETROOTS, SWEET_BERRY_BUSH -> 4;
+            case PUMPKIN, CARVED_PUMPKIN -> 4.5;
+            case COAL_ORE, IRON_ORE, NETHER_QUARTZ_ORE, COPPER_ORE, SCULK -> 5;
+            case GOLD_ORE, RED_MUSHROOM, BROWN_MUSHROOM, DEEPSLATE_COAL_ORE, DEEPSLATE_IRON_ORE, DEEPSLATE_COPPER_ORE -> 6;
+            case LAPIS_ORE, REDSTONE_ORE, GLOWSTONE, DEEPSLATE_GOLD_ORE, SCULK_SENSOR, SCULK_CATALYST, SCULK_SHRIEKER -> 7;
+            case NETHER_WART -> 8;
+            case DEEPSLATE_LAPIS_ORE, DEEPSLATE_REDSTONE_ORE, RAW_IRON_BLOCK, RAW_COPPER_BLOCK -> 9;
+            case DIAMOND_ORE, EMERALD_ORE, COAL_BLOCK, IRON_BLOCK, QUARTZ_BLOCK, COPPER_BLOCK, RAW_GOLD_BLOCK -> 10;
+            case DEEPSLATE_DIAMOND_ORE, DEEPSLATE_EMERALD_ORE, GOLD_BLOCK -> 11;
+            case LAPIS_BLOCK, REDSTONE_BLOCK -> 12;
+            case DIAMOND_BLOCK, EMERALD_BLOCK -> 15;
+            case OBSIDIAN, CRYING_OBSIDIAN -> 20;
+        };
+    }
+
     public int getBreakingPower(Material material) {
         if (!affectedByMiningSpeed.contains(material)) {
             return 0;
@@ -581,21 +626,23 @@ public class HarvestingListeners implements Listener {
         return blocks;
     }
 
-    private static Material getReplaceBlock(Material material) {
+    private static List<Material> getReplaceBlock(Material material) {
         if (!miningCollectionBlocks.contains(material)) {
             return null;
         }
         return switch (material) {
             default -> null;
-            case COAL_ORE, DEEPSLATE_COAL_ORE -> Material.COAL_BLOCK;
-            case IRON_ORE, DEEPSLATE_IRON_ORE -> Material.IRON_BLOCK;
-            case LAPIS_ORE, DEEPSLATE_LAPIS_ORE -> Material.LAPIS_BLOCK;
-            case REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE -> Material.REDSTONE_BLOCK;
-            case GOLD_ORE, DEEPSLATE_GOLD_ORE -> Material.GOLD_BLOCK;
-            case DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE -> Material.DIAMOND_BLOCK;
-            case EMERALD_ORE, DEEPSLATE_EMERALD_ORE -> Material.EMERALD_BLOCK;
-            case NETHER_QUARTZ_ORE -> Material.QUARTZ_BLOCK;
-            case ANCIENT_DEBRIS -> Material.NETHERITE_BLOCK;
+            case COAL_ORE -> List.of(Material.COAL_BLOCK, Material.DIAMOND_ORE);
+            case DEEPSLATE_COAL_ORE -> List.of(Material.COAL_BLOCK, Material.DEEPSLATE_DIAMOND_ORE);
+            case COPPER_ORE, DEEPSLATE_COPPER_ORE -> List.of(Material.COPPER_BLOCK, Material.RAW_COPPER_BLOCK);
+            case IRON_ORE, DEEPSLATE_IRON_ORE -> List.of(Material.IRON_BLOCK, Material.RAW_IRON_BLOCK);
+            case LAPIS_ORE, DEEPSLATE_LAPIS_ORE -> List.of(Material.LAPIS_BLOCK);
+            case REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE -> List.of(Material.REDSTONE_BLOCK);
+            case GOLD_ORE, DEEPSLATE_GOLD_ORE -> List.of(Material.GOLD_BLOCK);
+            case DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE -> List.of(Material.DIAMOND_BLOCK);
+            case EMERALD_ORE, DEEPSLATE_EMERALD_ORE -> List.of(Material.EMERALD_BLOCK);
+            case NETHER_QUARTZ_ORE -> List.of(Material.QUARTZ_BLOCK);
+            case ANCIENT_DEBRIS -> List.of(Material.NETHERITE_BLOCK);
         };
     }
 

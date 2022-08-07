@@ -12,12 +12,13 @@ public enum CustomOreType {
     MITHRIL {
         @Override
         public Material[] getVanillaMaterials() {
-            return new Material[] {Material.GRAY_WOOL, Material.CYAN_TERRACOTTA, Material.PRISMARINE, Material.PRISMARINE_BRICKS, Material.DARK_PRISMARINE};
+            return new Material[] {Material.GRAY_WOOL, Material.CYAN_TERRACOTTA, Material.PRISMARINE, Material.PRISMARINE_BRICKS, Material.DARK_PRISMARINE, Material.LIGHT_BLUE_WOOL};
         }
 
         @Override
         public double getBlockStrength(Material vanillaMat) {
             return switch(vanillaMat) {
+                case LIGHT_BLUE_WOOL -> 1500;
                 case PRISMARINE, PRISMARINE_BRICKS, DARK_PRISMARINE -> 800;
                 default -> 500;
             };
@@ -40,6 +41,11 @@ public enum CustomOreType {
                 case POLISHED_DIORITE -> 2000;
                 default -> 1600;
             };
+        }
+
+        @Override
+        public double getXp() {
+            return 100;
         }
     },
     RUBY {
@@ -74,6 +80,11 @@ public enum CustomOreType {
             }
             return GemstoneUtils.createGemstone(GemstoneType.RUBY, Rarity.COMMON, count);
         }
+
+        @Override
+        public double getXp() {
+            return 70;
+        }
     },
     AMBER {
         @Override
@@ -106,6 +117,11 @@ public enum CustomOreType {
             }
             return GemstoneUtils.createGemstone(GemstoneType.AMBER, Rarity.COMMON, count);
         }
+
+        @Override
+        public double getXp() {
+            return 70;
+        }
     },
     AMETHYST {
         @Override
@@ -137,6 +153,11 @@ public enum CustomOreType {
                 count = (int) (Math.random() * 4) + 3;
             }
             return GemstoneUtils.createGemstone(GemstoneType.AMETHYST, Rarity.COMMON, count);
+        }
+
+        @Override
+        public double getXp() {
+            return 70;
         }
     },
     JADE {
@@ -171,6 +192,11 @@ public enum CustomOreType {
             return GemstoneUtils.createGemstone(GemstoneType.JADE, Rarity.COMMON, count);
         }
 
+        @Override
+        public double getXp() {
+            return 70;
+        }
+
     },
     OPAL {
         @Override
@@ -202,6 +228,11 @@ public enum CustomOreType {
                 count = (int) (Math.random() * 4) + 3;
             }
             return GemstoneUtils.createGemstone(GemstoneType.OPAL, Rarity.COMMON, count);
+        }
+
+        @Override
+        public double getXp() {
+            return 70;
         }
     },
     PEARL {
@@ -235,6 +266,11 @@ public enum CustomOreType {
             }
             return GemstoneUtils.createGemstone(GemstoneType.PEARL, Rarity.COMMON, count);
         }
+
+        @Override
+        public double getXp() {
+            return 70;
+        }
     },
     SAPPHIRE {
         @Override
@@ -266,6 +302,11 @@ public enum CustomOreType {
                 count = (int) (Math.random() * 4) + 3;
             }
             return GemstoneUtils.createGemstone(GemstoneType.SAPPHIRE, Rarity.COMMON, count);
+        }
+
+        @Override
+        public double getXp() {
+            return 70;
         }
     },
     TOPAZ {
@@ -299,6 +340,11 @@ public enum CustomOreType {
             }
             return GemstoneUtils.createGemstone(GemstoneType.TOPAZ, Rarity.COMMON, count);
         }
+
+        @Override
+        public double getXp() {
+            return 70;
+        }
     },
     JASPER {
         @Override
@@ -330,6 +376,11 @@ public enum CustomOreType {
                 count = (int) (Math.random() * 4) + 3;
             }
             return GemstoneUtils.createGemstone(GemstoneType.JASPER, Rarity.COMMON, count);
+        }
+
+        @Override
+        public double getXp() {
+            return 70;
         }
     };
 
@@ -364,6 +415,10 @@ public enum CustomOreType {
 
     public ItemStack getItemDrop(Material material) {
         return ItemEditor.createItem(ItemID.valueOf(this.toString()));
+    }
+
+    public double getXp() {
+        return 45;
     }
 
 }

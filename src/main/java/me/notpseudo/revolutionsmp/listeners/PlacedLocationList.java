@@ -1,8 +1,12 @@
 package me.notpseudo.revolutionsmp.listeners;
 
+import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
 import me.notpseudo.revolutionsmp.mining.CustomOreType;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,10 +15,12 @@ public class PlacedLocationList implements Serializable {
 
     private ArrayList<PlacedLocation> placedLocations;
     private ArrayList<CustomOreLocation> customOreLocations;
+    private ArrayList<PlacedLocation> locationsWithDrops;
 
     public PlacedLocationList() {
         placedLocations = new ArrayList<>();
         customOreLocations = new ArrayList();
+        locationsWithDrops = new ArrayList<>();
     }
 
     public ArrayList<PlacedLocation> getPlacedLocations() {
@@ -23,6 +29,10 @@ public class PlacedLocationList implements Serializable {
 
     public ArrayList<CustomOreLocation> getOreLocations() {
         return customOreLocations;
+    }
+
+    public ArrayList<PlacedLocation> getLocationsWithDrops() {
+        return locationsWithDrops;
     }
 
     public boolean containsPlaced(Location location) {
@@ -64,6 +74,7 @@ public class PlacedLocationList implements Serializable {
     public boolean addPlacedLocation(Location location) {
         if (!containsPlaced(location)) {
             placedLocations.add(new PlacedLocation(location));
+            locationsWithDrops.add(new PlacedLocation(location));
             location.getWorld().getPersistentDataContainer().set(HarvestingListeners.getWorldPlacedKey(), new PlacedLocationListDataType(), this);
             return true;
         }
@@ -85,6 +96,15 @@ public class PlacedLocationList implements Serializable {
             if (placedLocation.equals(location)) {
                 placedLocations.remove(placedLocation);
                 location.getWorld().getPersistentDataContainer().set(HarvestingListeners.getWorldPlacedKey(), new PlacedLocationListDataType(), this);
+                BukkitRunnable removeDrop = new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if (location.getBlock().getType() == Material.AIR) {
+                            removeDropLocation(location);
+                        }
+                    }
+                };
+                removeDrop.runTaskLater(RevolutionSMP.getPlugin(), 40);
                 return true;
             }
         }
@@ -100,6 +120,17 @@ public class PlacedLocationList implements Serializable {
             }
         }
         location.getWorld().getPersistentDataContainer().set(HarvestingListeners.getWorldPlacedKey(), new PlacedLocationListDataType(), this);
+        return false;
+    }
+
+    public boolean removeDropLocation(Location location) {
+        for (PlacedLocation placedLocation : placedLocations) {
+            if (placedLocation.equals(location)) {
+                locationsWithDrops.remove(placedLocation);
+                location.getWorld().getPersistentDataContainer().set(HarvestingListeners.getWorldPlacedKey(), new PlacedLocationListDataType(), this);
+                return true;
+            }
+        }
         return false;
     }
 

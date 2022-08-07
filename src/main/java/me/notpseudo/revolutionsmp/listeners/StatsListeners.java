@@ -5,12 +5,15 @@ import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.abilities.AbilityObject;
 import me.notpseudo.revolutionsmp.abilities.AbilityType;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
+import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.mobstats.MobInfo;
 import me.notpseudo.revolutionsmp.mobstats.MobInfoDataType;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStatsDataType;
+import me.notpseudo.revolutionsmp.skills.ExpDropObject;
+import me.notpseudo.revolutionsmp.skills.SkillType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -56,6 +59,8 @@ public class StatsListeners implements Listener {
 
     private static ArrayList<UUID> showAbilities = new ArrayList<>();
     private static ArrayList<UUID> noMana = new ArrayList<>();
+
+    private static ArrayList<UUID> showSkillXP = new ArrayList<>();
 
     /**
      * Holds an instance of the plugin
@@ -237,7 +242,7 @@ public class StatsListeners implements Listener {
      * @param player The Player to show the stats to
      */
     public static void showActionBar(Player player) {
-        if (showAbilities.contains(player.getUniqueId()) || noMana.contains(player.getUniqueId())) {
+        if (showAbilities.contains(player.getUniqueId()) || noMana.contains(player.getUniqueId()) || showSkillXP.contains(player.getUniqueId())) {
             return;
         }
         PlayerStats playerStats = getPlayerStats(player);
@@ -267,7 +272,7 @@ public class StatsListeners implements Listener {
             healthColor = NamedTextColor.GOLD;
         }
         player.sendActionBar(Component.text(Math.round(currentHealth + currentAbsorption) + "/" + Math.round(maxHealth) + "❤     ", healthColor)
-                .append(Component.text("-" + Math.round(cost) + " Mana (", NamedTextColor.AQUA))
+                .append(Component.text(ItemEditor.getStatString(-1 * Math.round(cost)) + " Mana (", NamedTextColor.AQUA))
                 .append(Component.text(type.toString(), NamedTextColor.GOLD)).append(Component.text(")     ", NamedTextColor.AQUA)
                         .append(Component.text(Math.round(mana) + "/" + Math.round(intelligence) + "✎ Mana", NamedTextColor.AQUA))));
         showAbilities.add(player.getUniqueId());
@@ -301,6 +306,27 @@ public class StatsListeners implements Listener {
             @Override
             public void run() {
                 noMana.remove(player.getUniqueId());
+            }
+        };
+        remove.runTaskLater(RevolutionSMP.getPlugin(), 30);
+        showActionBar(player);
+    }
+
+    public static void showExpGainBar(Player player, ExpDropObject expDrop, double percent) {
+        PlayerStats playerStats = getPlayerStats(player);
+        double currentHealth = playerStats.getArmorStatValue(StatType.HEALTH), maxHealth = playerStats.getMaxHealth(), intelligence = playerStats.getIntelligence(), mana = playerStats.getMana(), currentAbsorption = playerStats.getAbsorption();
+        NamedTextColor healthColor = NamedTextColor.RED;
+        if (currentAbsorption != 0) {
+            healthColor = NamedTextColor.GOLD;
+        }
+        player.sendActionBar(Component.text(Math.round(currentHealth + currentAbsorption) + "/" + Math.round(maxHealth) + "❤     ", healthColor)
+                .append(Component.text(ItemEditor.getStatString(expDrop.getValue()) + ItemEditor.getStringFromEnum(expDrop.getType()) + " (" + String.format("%.2f", percent) + "%)", NamedTextColor.DARK_AQUA))
+                .append(Component.text(Math.round(mana) + "/" + Math.round(intelligence) + "✎ Mana", NamedTextColor.AQUA)));
+        showSkillXP.add(player.getUniqueId());
+        BukkitRunnable remove = new BukkitRunnable() {
+            @Override
+            public void run() {
+                showSkillXP.remove(player.getUniqueId());
             }
         };
         remove.runTaskLater(RevolutionSMP.getPlugin(), 30);
@@ -438,7 +464,7 @@ public class StatsListeners implements Listener {
         ArrayList<ItemInfo> infos = new ArrayList<>();
         for (ItemStack item : getAllEquipped(player)) {
             ItemInfo info = item.getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
-            if (info != null) {
+            if (info != null && info.getItemType() != ItemType.VANILLA_ITEM) {
                 infos.add(info);
             }
         }
@@ -584,6 +610,7 @@ public class StatsListeners implements Listener {
         }
         return eventAbility;
     }
+
     @NotNull
     public static FishingStats getEventFishing(Player fisher, IncreaseType type) {
         FishingStats eventFishing = FishingStats.createZero();
@@ -712,6 +739,7 @@ public class StatsListeners implements Listener {
         }
         return eventGathering;
     }
+
     @NotNull
     public static LuckStats getEventLuck(Player player, LivingEntity target, IncreaseType type) {
         LuckStats eventLuck = LuckStats.createZero();
@@ -1054,6 +1082,40 @@ public class StatsListeners implements Listener {
             }
         }
         return bonusLuck;
+    }
+
+    public static ExpDropObject getCombatXpBoost(Player player, SkillType type, LivingEntity target, IncreaseType inc) {
+        ExpDropObject boost = new ExpDropObject(type, 0);
+        if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            boost = new ExpDropObject(type, 1);
+        }
+        for (ItemInfo info : getInfos(player)) {
+            if (info.getExtraInfo() != null) {
+                if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
+                    boost.multiply(info.getExtraInfo().getCombatEventExpBoost(type, IncreaseType.MULTIPLICATIVE_PERCENT, target));
+                } else {
+                    boost.add(info.getExtraInfo().getCombatEventExpBoost(type, inc, target));
+                }
+            }
+        }
+        return boost;
+    }
+
+    public static ExpDropObject getBreakXpBoost(Player player, SkillType type, Block block, IncreaseType inc) {
+        ExpDropObject boost = new ExpDropObject(type, 0);
+        if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            boost = new ExpDropObject(type, 1);
+        }
+        for (ItemInfo info : getInfos(player)) {
+            if (info.getExtraInfo() != null) {
+                if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
+                    boost.multiply(info.getExtraInfo().getBreakEventExpBoost(type, IncreaseType.MULTIPLICATIVE_PERCENT, block));
+                } else {
+                    boost.add(info.getExtraInfo().getBreakEventExpBoost(type, inc, block));
+                }
+            }
+        }
+        return boost;
     }
 
     @NotNull

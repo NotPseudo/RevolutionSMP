@@ -143,7 +143,14 @@ public class SpecialItemInfo implements Serializable {
         return LuckStats.createZero();
     }
 
-    public ExpDropObject getEventExpBoost(SkillType type, IncreaseType inc) {
+    public ExpDropObject getCombatEventExpBoost(SkillType type, IncreaseType inc, LivingEntity target) {
+        if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return new ExpDropObject(type, 1);
+        }
+        return new ExpDropObject(type, 0);
+    }
+
+    public ExpDropObject getBreakEventExpBoost(SkillType type, IncreaseType inc, Block block) {
         if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
             return new ExpDropObject(type, 1);
         }

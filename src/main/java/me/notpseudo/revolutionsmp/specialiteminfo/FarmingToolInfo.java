@@ -31,6 +31,7 @@ public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
 
     public FarmingToolInfo(ItemInfo holder, CollectionType type) {
         super(holder);
+        collectionType = type;
         this.vanillaMaterials = new ArrayList<>(type.getVanillaMaterials());
         counter = 0;
         craftTier = 1;
@@ -166,12 +167,15 @@ public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
     }
 
     @Override
-    public ExpDropObject getEventExpBoost(SkillType type, IncreaseType inc) {
+    public ExpDropObject getBreakEventExpBoost(SkillType type, IncreaseType inc, Block block) {
         if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
             return new ExpDropObject(type, 1);
         }
         if (type != SkillType.FARMING) {
             new ExpDropObject(type, 0);
+        }
+        if (!(vanillaMaterials.contains(block.getType()))) {
+            return new ExpDropObject(type, 0);
         }
         return new ExpDropObject(SkillType.FARMING, getXpBoost());
     }

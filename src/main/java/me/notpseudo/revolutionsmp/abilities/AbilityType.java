@@ -1,6 +1,7 @@
 package me.notpseudo.revolutionsmp.abilities;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
 import net.kyori.adventure.text.Component;
@@ -305,15 +306,7 @@ public enum AbilityType {
     }
 
     public String toString() {
-        String[] split = super.toString().split("_");
-        StringBuilder name = new StringBuilder();
-        for (int i = 0; i < split.length; i++) {
-            name.append(split[i].charAt(0)).append(split[i].substring(1).toLowerCase());
-            if (i < split.length - 1) {
-                name.append(" ");
-            }
-        }
-        return name.toString();
+        return ItemEditor.getStringFromEnum(this);
     }
 
     public double getManaCost() {
