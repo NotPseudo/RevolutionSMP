@@ -22,11 +22,11 @@ public class LuckStats extends StatHolder implements Serializable {
     }
 
     public static LuckStats createMult() {
-        return (LuckStats) createMult(StatCategory.LUCK);
+        return new LuckStats(1, 1);
     }
 
     public static LuckStats createZero() {
-        return (LuckStats) createZero(StatCategory.LUCK);
+        return new LuckStats(0, 0);
     }
 
 }

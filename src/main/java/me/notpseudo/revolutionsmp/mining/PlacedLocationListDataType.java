@@ -1,4 +1,4 @@
-package me.notpseudo.revolutionsmp.listeners;
+package me.notpseudo.revolutionsmp.mining;
 
 import org.apache.commons.lang3.SerializationUtils;
 import org.bukkit.persistence.PersistentDataAdapterContext;

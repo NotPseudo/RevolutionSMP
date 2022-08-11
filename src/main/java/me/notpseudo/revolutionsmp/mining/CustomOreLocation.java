@@ -1,7 +1,6 @@
 package me.notpseudo.revolutionsmp.mining;
 
 import me.notpseudo.revolutionsmp.drops.ItemDropObject;
-import me.notpseudo.revolutionsmp.listeners.PlacedLocation;
 import org.bukkit.Location;
 import org.bukkit.Material;
 

@@ -1,27 +1,45 @@
 package me.notpseudo.revolutionsmp.mobstats;
 
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 
 import java.io.Serializable;
+import java.util.*;
 
 public class MobInfo extends BaseEntityStats implements Serializable {
 
-    private MobBehavior mobBehavior;
-    private EntityType vanillaMobType;
+    private UUID holder;
+    private UUID owningPlayer;
+    private HashMap<UUID, Double> attackers;
+    private MobCategory mobCategory;
     private CustomMobType customMobType;
     private String name;
     private int level;
 
     private double magicResistance;
 
-    public MobInfo(CustomMobType customMobType, EntityType vanillaMobType, int level) {
+    public MobInfo(CustomMobType customMobType, int level, UUID holder) {
         super(customMobType, level);
-        mobBehavior = customMobType.getMobBehavior();
-        this.vanillaMobType = vanillaMobType;
+        mobCategory = customMobType.getMobBehavior();
         this.customMobType = customMobType;
         name = customMobType.getName();
         this.level = level;
         magicResistance = customMobType.getMagicResistance();
+        owningPlayer = null;
+        attackers = new HashMap<>();
+        this.holder = holder;
+    }
+
+    public MobInfo(CustomMobType customMobType, int level, UUID holder, UUID player) {
+        super(customMobType, level);
+        mobCategory = customMobType.getMobBehavior();
+        this.customMobType = customMobType;
+        name = customMobType.getName();
+        this.level = level;
+        magicResistance = customMobType.getMagicResistance();
+        owningPlayer = player;
+        this.holder = holder;
+        attackers = new HashMap<>();
     }
 
     public int getLevel() {
@@ -40,23 +58,40 @@ public class MobInfo extends BaseEntityStats implements Serializable {
         this.name = name;
     }
 
-    public MobBehavior getMobBehavior() {
-        return mobBehavior;
+    public MobCategory getMobBehavior() {
+        return mobCategory;
     }
 
-    public void setMobBehavior(MobBehavior mobBehavior) {
-        this.mobBehavior = mobBehavior;
+    public void setMobBehavior(MobCategory mobCategory) {
+        this.mobCategory = mobCategory;
     }
 
-    public EntityType getVanillaMobType() {
-        return vanillaMobType;
+    public UUID getOwningPlayer() {
+        return owningPlayer;
+    }
+
+    public void setOwningPlayer(UUID owningPlayer) {
+        this.owningPlayer = owningPlayer;
+    }
+
+    public HashMap<UUID, Double> getAttackers() {
+        return attackers;
+    }
+
+    public void addAttacker(Player player, double damage) {
+        if (attackers.containsKey(player.getUniqueId())) {
+            attackers.put(player.getUniqueId(), attackers.get(player.getUniqueId()) + damage);
+        } else {
+            attackers.put(player.getUniqueId(), damage);
+        }
     }
 
     public void setVanillaMobType(EntityType vanillaMobType) {
-        this.vanillaMobType = vanillaMobType;
-        CustomMobType[] customMobTypes = CustomMobType.getCustomMobTypeList(vanillaMobType);
-        if(customMobTypes == null) return;
-        CustomMobType newCustomType = customMobTypes[(int) (Math.random() * customMobTypes.length)];
+        List<CustomMobType> customMobTypes = CustomMobType.getCustomMobTypeList(vanillaMobType);
+        if (customMobTypes == null) {
+            return;
+        }
+        CustomMobType newCustomType = customMobTypes.get((int) (Math.random() * customMobTypes.size()));
         customMobType = newCustomType;
         super.updateStats(newCustomType, calculateAndSetLevel());
     }
@@ -70,8 +105,8 @@ public class MobInfo extends BaseEntityStats implements Serializable {
     }
 
     public int calculateAndSetLevel() {
-        mobBehavior = customMobType.getMobBehavior();
-        level = (int) (Math.random() * (mobBehavior.getHighestLevel() - mobBehavior.getLowestLevel() + 1)) + mobBehavior.getLowestLevel();
+        mobCategory = customMobType.getMobBehavior();
+        level = (int) (Math.random() * (customMobType.getMaxLevel() - customMobType.getMinLevel() + 1)) + customMobType.getMinLevel();
         return level;
     }
 

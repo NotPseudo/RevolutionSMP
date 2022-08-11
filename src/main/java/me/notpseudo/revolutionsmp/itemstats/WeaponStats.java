@@ -28,11 +28,11 @@ public class WeaponStats extends StatHolder implements Serializable {
     }
 
     public static WeaponStats createMult() {
-        return (WeaponStats) createMult(StatCategory.COMBAT);
+        return new WeaponStats(1, 1, 1, 1, 1, 1);
     }
 
     public static WeaponStats createZero() {
-        return (WeaponStats) createZero(StatCategory.COMBAT);
+        return new WeaponStats(0, 0, 0, 0, 0, 0);
     }
 
 }

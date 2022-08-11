@@ -1,18 +1,13 @@
 package me.notpseudo.revolutionsmp.mobstats;
 
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.ChatColor;
 
-public enum MobBehavior {
+public enum MobCategory {
 
     PASSIVE {
         @Override
         public ChatColor getBehaviorColor() {
             return ChatColor.GREEN;
-        }
-        @Override
-        public int getLowestLevel() {
-            return 1;
         }
         @Override
         public int getHighestLevel() {
@@ -39,10 +34,6 @@ public enum MobBehavior {
             return ChatColor.YELLOW;
         }
         @Override
-        public int getLowestLevel() {
-            return 1;
-        }
-        @Override
         public int getHighestLevel() {
             return 40;
         }
@@ -51,10 +42,6 @@ public enum MobBehavior {
         @Override
         public ChatColor getBehaviorColor() {
             return ChatColor.RED;
-        }
-        @Override
-        public int getLowestLevel() {
-            return 1;
         }
         @Override
         public int getHighestLevel() {
@@ -74,10 +61,25 @@ public enum MobBehavior {
         public int getHighestLevel() {
             return 100;
         }
+    },
+    SEA_CREATURE {
+        @Override
+        public ChatColor getBehaviorColor() {
+            return ChatColor.RED;
+        }
+
+        @Override
+        public int getHighestLevel() {
+            return 0;
+        }
     };
 
     public abstract ChatColor getBehaviorColor();
-    public abstract int getLowestLevel();
-    public abstract int getHighestLevel();
+    public int getLowestLevel() {
+        return 1;
+    }
+    public int getHighestLevel() {
+        return 25;
+    }
 
 }

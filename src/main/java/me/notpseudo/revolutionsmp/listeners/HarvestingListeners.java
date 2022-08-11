@@ -12,6 +12,7 @@ import me.notpseudo.revolutionsmp.mining.*;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
 import me.notpseudo.revolutionsmp.skills.SkillType;
 import me.notpseudo.revolutionsmp.skills.SkillUtils;
+import me.notpseudo.revolutionsmp.specialiteminfo.FarmingToolInfo;
 import me.notpseudo.revolutionsmp.specialiteminfo.GemstoneObject;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -26,6 +27,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.player.PlayerAnimationEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -147,7 +149,7 @@ public class HarvestingListeners implements Listener {
 
     @EventHandler
     public void onDamageAbort(BlockDamageAbortEvent event) {
-        CustomMiningUtils.removeBreakingBlock(event.getBlock().getLocation());
+        CustomMiningUtils.abortRemove(event.getBlock().getLocation());
         CustomMiningUtils.removeSlow(event.getPlayer());
     }
 
@@ -179,12 +181,10 @@ public class HarvestingListeners implements Listener {
                 mult = StatsListeners.getEventMining(player, block, IncreaseType.MULTIPLICATIVE_PERCENT);
         double miningSpeed = (playerStats.getMiningSpeed() + add.getStatValue(StatType.MINING_SPEED)) * (1 + (addPercent.getStatValue(StatType.MINING_SPEED) / 100)) * mult.getStatValue(StatType.MINING_SPEED);
         BreakingBlock breakBlock = CustomMiningUtils.getBreakingBlock(blockLoc);
-        event.getPlayer().sendMessage(Component.text("PAE Custom breaking block at X:" + block.getX() + ", Y:" + block.getY() + ", Z:" + block.getZ() + " has a damage per stage of " + breakBlock.getDamagePerStage(), NamedTextColor.YELLOW));
         double damage = Math.max(1, miningSpeed) / 20;
         if (isVanilla) {
             damage /= 25;
         }
-        event.getPlayer().sendMessage(Component.text("You should be adding " + damage, NamedTextColor.YELLOW));
         breakBlock.damage(player, damage);
     }
 
@@ -232,9 +232,10 @@ public class HarvestingListeners implements Listener {
             exp = customOre.getType().getXp();
         } else {
             if (!miningCollectionBlocks.contains(event.getBlock().getType())) {
-                drops = getDropsForMaterial(event.getBlock().getType(), 0);
-                for (ItemDropObject drop : drops) {
-                    drop.drop(event.getBlock().getLocation());
+                if (affectedByMiningSpeed.contains(event.getBlock().getType()) && !foragingCollectionBlocks.contains(event.getBlock().getType()) && !farmingCollectionBlocks.contains(event.getBlock().getType())) {
+                    for (ItemDropObject drop : getDropsForMaterial(event.getBlock().getType(), 0)) {
+                        drop.drop(event.getBlock().getLocation());
+                    }
                 }
                 return;
             }
@@ -319,6 +320,7 @@ public class HarvestingListeners implements Listener {
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
             return;
         }
+        event.setDropItems(false);
         Player player = event.getPlayer();
         PlayerStats playerStats = StatsListeners.getPlayerStats(player);
         GatheringStats add = StatsListeners.getEventGathering(player, event.getBlock(), IncreaseType.INCREASE),
@@ -333,40 +335,54 @@ public class HarvestingListeners implements Listener {
 
     @EventHandler
     public void onGravityCropBreak(BlockBreakEvent event) {
-        if (event.getBlock().getType() != Material.SUGAR_CANE || event.getBlock().getType() != Material.CACTUS
-                || event.getBlock().getType() != Material.CAVE_VINES || event.getBlock().getType() != Material.CAVE_VINES_PLANT) {
+        if (event.getBlock().getType() != Material.SUGAR_CANE && event.getBlock().getType() != Material.CACTUS
+                && event.getBlock().getType() != Material.CAVE_VINES && event.getBlock().getType() != Material.CAVE_VINES_PLANT) {
             return;
         }
-        PlayerStats playerStats = StatsListeners.getPlayerStats(event.getPlayer());
-        List<ItemDropObject> drops = new ArrayList<>();
+        int notPlaced = 0;
+        double exp = 0;
         if (!removePlacedLocation(event)) {
-            drops.addAll(getDropsForMaterial(event.getBlock().getType(), playerStats.getFarmingFortune()));
+            notPlaced++;
+            exp += getXp(event.getBlock().getType());
         }
         removeOreLocation(event);
         Block block = event.getBlock();
+        Material material = event.getBlock().getType();
         PlacedLocationList placedList = getPlacedLocationList(event.getBlock());
-        double exp = 0;
+        PlayerStats playerStats = StatsListeners.getPlayerStats(event.getPlayer());
+        GatheringStats add = StatsListeners.getEventGathering(event.getPlayer(), event.getBlock(), IncreaseType.INCREASE),
+                addPercent = StatsListeners.getEventGathering(event.getPlayer(), event.getBlock(), IncreaseType.ADDITIVE_PERCENT),
+                mult = StatsListeners.getEventGathering(event.getPlayer(), event.getBlock(), IncreaseType.MULTIPLICATIVE_PERCENT);
+        double farming = (playerStats.getFarmingFortune() + add.getStatValue(StatType.FARMING_FORTUNE)) * (1 + (addPercent.getStatValue(StatType.FARMING_FORTUNE) / 100)) * mult.getStatValue(StatType.FARMING_FORTUNE);
         if (block.getType() == Material.SUGAR_CANE || block.getType() == Material.CACTUS) {
             List<Block> above = getBlocksInDirectionMatching(block.getLocation(), block.getType(), BlockFace.UP);
             for (Block aboveBlock : above) {
                 if (!placedList.removePlacedLocation(aboveBlock.getLocation())) {
-                    drops.addAll(getDropsForMaterial(aboveBlock.getType(), playerStats.getFarmingFortune()));
                     exp += getXp(aboveBlock.getType());
+                    notPlaced++;
                 }
             }
         }
         if (block.getType() == Material.CAVE_VINES || block.getType() == Material.CAVE_VINES_PLANT) {
+            material = Material.GLOW_BERRIES;
             List<Block> downVines = getBlocksInDirectionMatching(block.getLocation(), Material.CAVE_VINES, BlockFace.DOWN);
             downVines.addAll(getBlocksInDirectionMatching(block.getLocation(), Material.CAVE_VINES_PLANT, BlockFace.DOWN));
             for (Block downBlock : downVines) {
                 if (!placedList.removePlacedLocation(downBlock.getLocation()) && downBlock.getBlockData() instanceof CaveVinesPlant vinesPlant && vinesPlant.isBerries()) {
-                    drops.addAll(getDropsForMaterial(downBlock.getType(), playerStats.getFarmingFortune()));
                     exp += getXp(downBlock.getType());
+                    notPlaced++;
                 }
             }
         }
-        for (ItemDropObject drop : drops) {
-            drop.drop(event.getBlock().getLocation());
+        block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(material, notPlaced * getAddedTimes(farming)));
+        ItemStack mainHand = event.getPlayer().getInventory().getItemInMainHand();
+        if (mainHand.getType() == Material.AIR) {
+            ItemInfo info = mainHand.getItemMeta().getPersistentDataContainer().get(ItemEditor.getItemKey(), new ItemInfoDataType());
+            if (info != null && info.getExtraInfo() != null && info.getExtraInfo() instanceof FarmingToolInfo farmTool) {
+                farmTool.add(block.getType(), notPlaced);
+                info.setExtraInfo(farmTool);
+                mainHand.getItemMeta().getPersistentDataContainer().set(ItemEditor.getItemKey(), new ItemInfoDataType(), info);
+            }
         }
         SkillUtils.addBreakingXpToPlayer(event.getPlayer(), SkillType.FARMING, block, exp);
     }
@@ -404,6 +420,7 @@ public class HarvestingListeners implements Listener {
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
             return;
         }
+        event.setDropItems(false);
         SkillType expType = SkillType.FARMING;
         if (mat == Material.SWEET_BERRY_BUSH) {
             expType = SkillType.FORAGING;
@@ -573,7 +590,7 @@ public class HarvestingListeners implements Listener {
         return switch (material) {
             default -> 0;
             case NETHERRACK, ICE -> 0.5;
-            case COBBLESTONE, STONE, ANDESITE, DIORITE, GRANITE, CALCITE, GRAVEL -> 1;
+            case COBBLESTONE, STONE, ANDESITE, DIORITE, GRANITE, CALCITE, GRAVEL, DEEPSLATE -> 1;
             case SUGAR_CANE, RED_MUSHROOM_BLOCK, BROWN_MUSHROOM_BLOCK, MUSHROOM_STEM, CACTUS, CAVE_VINES, CAVE_VINES_PLANT -> 2;
             case SAND, SCULK_VEIN -> 3;
             case WHEAT, MELON, POTATOES, CARROTS, COCOA, BEETROOTS, SWEET_BERRY_BUSH -> 4;

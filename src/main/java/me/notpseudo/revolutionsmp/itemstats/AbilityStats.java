@@ -24,11 +24,11 @@ public class AbilityStats extends StatHolder implements Serializable {
     }
 
     public static AbilityStats createMult() {
-        return (AbilityStats) createMult(StatCategory.INTELLIGENCE);
+        return new AbilityStats(1, 1);
     }
 
     public static AbilityStats createZero() {
-        return (AbilityStats) createZero(StatCategory.INTELLIGENCE);
+        return new AbilityStats(0, 0);
     }
 
 }

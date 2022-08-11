@@ -38,11 +38,11 @@ public class MiningStats extends StatHolder implements Serializable {
     }
 
     public static MiningStats createMult() {
-        return (MiningStats) createMult(StatCategory.MINING);
+        return new MiningStats(1, 1, 1, 1, 1);
     }
 
     public static MiningStats createZero() {
-        return (MiningStats) createZero(StatCategory.MINING);
+        return new MiningStats(0, 0, 0, 0, 0);
     }
 
 }

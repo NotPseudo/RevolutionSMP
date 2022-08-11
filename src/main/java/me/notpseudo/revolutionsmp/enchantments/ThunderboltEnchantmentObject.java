@@ -2,7 +2,7 @@ package me.notpseudo.revolutionsmp.enchantments;
 
 import me.notpseudo.revolutionsmp.listeners.HealthListeners;
 import me.notpseudo.revolutionsmp.listeners.MobListeners;
-import me.notpseudo.revolutionsmp.mobstats.MobBehavior;
+import me.notpseudo.revolutionsmp.mobstats.MobCategory;
 import me.notpseudo.revolutionsmp.mobstats.MobInfoDataType;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -42,7 +42,7 @@ public class ThunderboltEnchantmentObject extends EnchantmentObject implements A
             }
             Collection<LivingEntity> enemies = damager.getLocation().getNearbyLivingEntities(2).stream()
                     .filter(c -> c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()) != null
-                            && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobBehavior.TAMED
+                            && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobCategory.TAMED
                     ).toList();
             for (LivingEntity entity : enemies) {
                 entity.getWorld().strikeLightningEffect(entity.getLocation());

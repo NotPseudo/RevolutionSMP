@@ -98,15 +98,19 @@ public class BaseEntityStats implements Serializable {
      * @param level         The level of the mob used to correctly set stats
      */
     public void updateStats(CustomMobType customMobType, int level) {
-        MobBehavior mobBehavior = customMobType.getMobBehavior();
-        int increase = level - mobBehavior.getLowestLevel();
+        MobCategory mobCategory = customMobType.getMobBehavior();
+        int increase = 0;
+        if (customMobType.getMobBehavior() != MobCategory.SEA_CREATURE) {
+            increase = level - mobCategory.getLowestLevel();
+        }
         maxHealth = customMobType.getHealth() + (increase * customMobType.getHealth() / 10);
+        double damage = customMobType.getDamage() + (increase * customMobType.getDamage() / 10);
         double defense = customMobType.getDefense() + (increase * customMobType.getDefense() / (100 / 7.5));
         double speed = customMobType.getSpeed() + (increase * customMobType.getSpeed() / 50);
         double strength = customMobType.getStrength() + (increase * customMobType.getStrength() / 10);
         double critChance = customMobType.getCritChance() + (increase * customMobType.getCritChance() / 20);
         double critDamage = customMobType.getCritDamage() + (increase * customMobType.getCritDamage() / 10);
         healthStats = new ArmorStats(maxHealth, defense, speed);
-        damageStats = new WeaponStats(0, strength, critChance, critDamage, 0, 0);
+        damageStats = new WeaponStats(damage, strength, critChance, critDamage, 0, 0);
     }
 }

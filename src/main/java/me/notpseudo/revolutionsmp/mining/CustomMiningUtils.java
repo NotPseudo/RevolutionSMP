@@ -41,6 +41,13 @@ public class CustomMiningUtils {
         breakingBlocks.put(block.getLocation(), breakingBlock);
     }
 
+    public static void abortRemove(Location location) {
+        if(breakingBlocks.get(location) != null) {
+            breakingBlocks.get(location).destroyBlockObject();
+        }
+        breakingBlocks.remove(location);
+    }
+
     public static void removeBreakingBlock(Location location) {
         if(breakingBlocks.get(location) != null) {
             breakingBlocks.get(location).destroyBlockObject();

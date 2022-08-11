@@ -320,7 +320,7 @@ public class StatsListeners implements Listener {
             healthColor = NamedTextColor.GOLD;
         }
         player.sendActionBar(Component.text(Math.round(currentHealth + currentAbsorption) + "/" + Math.round(maxHealth) + "❤     ", healthColor)
-                .append(Component.text(ItemEditor.getStatString(expDrop.getValue()) + ItemEditor.getStringFromEnum(expDrop.getType()) + " (" + String.format("%.2f", percent) + "%)", NamedTextColor.DARK_AQUA))
+                .append(Component.text(ItemEditor.getStatString(expDrop.getValue()) + " " + ItemEditor.getStringFromEnum(expDrop.getType()) + " (" + String.format("%.2f", percent) + "%)     ", NamedTextColor.DARK_AQUA))
                 .append(Component.text(Math.round(mana) + "/" + Math.round(intelligence) + "✎ Mana", NamedTextColor.AQUA)));
         showSkillXP.add(player.getUniqueId());
         BukkitRunnable remove = new BukkitRunnable() {

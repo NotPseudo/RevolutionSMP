@@ -87,15 +87,15 @@ public class CollectionObject implements Serializable, Comparable<CollectionObje
             level--;
             itemsForNextLevel = CollectionUtils.getCountForNextLevel(TYPE, (int) level + 1);
             currentCollected += itemsForNextLevel;
+        }
+        while (currentCollected >= itemsForNextLevel && level <= TYPE.getMaxLevel()) {
+            currentCollected -= itemsForNextLevel;
+            level++;
+            itemsForNextLevel = CollectionUtils.getCountForNextLevel(TYPE, (int) level + 1);
             Player player = Bukkit.getPlayer(holder.getPlayer());
             if (player != null) {
                 sendLevelUpMessage(player);
             }
-        }
-        while (currentCollected >= itemsForNextLevel) {
-            currentCollected -= itemsForNextLevel;
-            level++;
-            itemsForNextLevel = CollectionUtils.getCountForNextLevel(TYPE, (int) level + 1);
         }
         itemsForNextLevel = CollectionUtils.getCountForNextLevel(TYPE, (int) level + 1);
     }

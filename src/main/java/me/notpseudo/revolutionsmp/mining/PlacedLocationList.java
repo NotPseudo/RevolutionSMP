@@ -1,9 +1,7 @@
-package me.notpseudo.revolutionsmp.listeners;
+package me.notpseudo.revolutionsmp.mining;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
-import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
-import me.notpseudo.revolutionsmp.mining.CustomOreType;
-import org.bukkit.Bukkit;
+import me.notpseudo.revolutionsmp.listeners.HarvestingListeners;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitRunnable;

@@ -14,6 +14,14 @@ public enum AbilityUseType {
 
     };
     public String toString() {
-        return ItemEditor.getStringFromEnum(this);
+        String[] split = super.toString().split("_");
+        StringBuilder name = new StringBuilder();
+        for (int i = 0; i < split.length; i++) {
+            name.append(split[i].charAt(0)).append(split[i].substring(1).toLowerCase());
+            if (i < split.length - 1) {
+                name.append(" ");
+            }
+        }
+        return name.toString();
     }
 }

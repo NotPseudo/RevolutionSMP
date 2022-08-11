@@ -34,7 +34,6 @@ public class BreakingBlock {
             return;
         }
         damage += amount;
-        breaker.sendMessage(Component.text("You added " + amount + ". Damage is at " + damage + "/" + damagePerStage * 10, NamedTextColor.GOLD));
         int animation = getAnimation();
         if (animation != previousStage) {
             if (animation < 10) {

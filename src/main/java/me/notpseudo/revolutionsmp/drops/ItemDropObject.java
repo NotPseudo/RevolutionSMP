@@ -89,9 +89,7 @@ public class ItemDropObject {
     }
 
     public void drop(Location location) {
-        if (Math.random() * 100 < chance) {
-            location.getWorld().dropItemNaturally(location, item);
-        }
+        location.getWorld().dropItemNaturally(location, item);
     }
 
     public void drop(Location location, double percent) {

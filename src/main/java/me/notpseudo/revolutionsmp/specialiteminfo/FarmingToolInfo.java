@@ -182,11 +182,11 @@ public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
 
     @Override
     public List<Component> getSpecialLore() {
-        String cropName = ItemEditor.getStringFromEnum(collectionType).toLowerCase();
+        String cropName = ItemEditor.getStringFromEnum(collectionType);
         ArrayList<Component> specialLore = new ArrayList<>();
-        specialLore.add(Component.text("Harvest ", NamedTextColor.GRAY).append(Component.text("+" + getBaseAddPercent() + "%" + cropName, NamedTextColor.GREEN)));
+        specialLore.add(Component.text("Harvest ", NamedTextColor.GRAY).append(Component.text("+" + getBaseAddPercent() + "% " + cropName, NamedTextColor.GREEN)));
         specialLore.add(Component.text("Gain ", NamedTextColor.GRAY).append(Component.text("+" + getXpBoost() + "% ", NamedTextColor.GREEN)).append(Component.text("Farming Exp", NamedTextColor.GRAY)));
-        specialLore.add(Component.text("Counter: ", NamedTextColor.GRAY).append(Component.text(Math.floor(counter) + " " + ItemEditor.getStringFromEnum(collectionType), NamedTextColor.YELLOW)));
+        specialLore.add(Component.text("Counter: ", NamedTextColor.GRAY).append(Component.text((int) (counter) + " " + cropName, NamedTextColor.YELLOW)));
         specialLore.add(Component.empty());
         if (craftTier >= 2) {
             specialLore.add(Component.text("Logarithmic Counter", NamedTextColor.GOLD));

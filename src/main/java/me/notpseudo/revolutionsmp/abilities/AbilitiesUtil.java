@@ -5,8 +5,7 @@ import me.notpseudo.revolutionsmp.itemstats.StatType;
 import me.notpseudo.revolutionsmp.listeners.HealthListeners;
 import me.notpseudo.revolutionsmp.listeners.MobListeners;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
-import me.notpseudo.revolutionsmp.mobstats.MobBehavior;
-import me.notpseudo.revolutionsmp.mobstats.MobInfo;
+import me.notpseudo.revolutionsmp.mobstats.MobCategory;
 import me.notpseudo.revolutionsmp.mobstats.MobInfoDataType;
 import me.notpseudo.revolutionsmp.particles.Particles;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
@@ -79,12 +78,12 @@ public class AbilitiesUtil {
     public static void implosion(Player player, double range) {
         Collection<LivingEntity> enemies = player.getLocation().getNearbyLivingEntities(range).stream()
                 .filter(c -> c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()) != null
-                        && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobBehavior.TAMED
+                        && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobCategory.TAMED
                 ).toList();
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1F, 1F);
         Particles.explode(player.getLocation());
         for (LivingEntity entity : enemies) {
-            HealthListeners.magicDamage(player, entity, AbilityType.IMPLOSION);
+            HealthListeners.playerMagicDamageEntity(player, entity, AbilityType.IMPLOSION);
         }
     }
 
@@ -119,12 +118,12 @@ public class AbilitiesUtil {
             location = shadowWarpActivate.get(playerID);
             Collection<LivingEntity> enemies = location.getNearbyLivingEntities(3).stream()
                     .filter(c -> c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()) != null
-                            && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobBehavior.TAMED
+                            && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobCategory.TAMED
                     ).toList();
             player.getWorld().playSound(location, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1F, 1F);
             Particles.explode(location);
             for (LivingEntity entity : enemies) {
-                HealthListeners.magicDamage(player, entity, AbilityType.SHADOW_WARP);
+                HealthListeners.playerMagicDamageEntity(player, entity, AbilityType.SHADOW_WARP);
             }
             shadowWarpActivate.remove(playerID);
             return false;
@@ -210,7 +209,7 @@ public class AbilitiesUtil {
         double x  = location.getX(), z = location.getZ();
         for (LivingEntity entity : location.getNearbyLivingEntities(range).stream()
                 .filter(c -> c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()) != null
-                        && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobBehavior.TAMED
+                        && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobCategory.TAMED
                 ).toList()) {
             entity.setVelocity(new Location(location.getWorld(), x, entity.getLocation().getY(), z).toVector().subtract(entity.getLocation().toVector()).multiply(Math.random() * 1.5));
         }

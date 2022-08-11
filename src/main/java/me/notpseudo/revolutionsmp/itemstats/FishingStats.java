@@ -22,11 +22,11 @@ public class FishingStats extends StatHolder implements Serializable {
     }
 
     public static FishingStats createMult() {
-        return (FishingStats) createMult(StatCategory.FISHING);
+        return new FishingStats(1, 1);
     }
 
     public static FishingStats createZero() {
-        return (FishingStats) createZero(StatCategory.FISHING);
+        return new FishingStats(0, 0);
     }
 
 }

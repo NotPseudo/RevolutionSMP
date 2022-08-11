@@ -68,3 +68,6 @@ commands:
       - createcustomore
   clearcustomores:
     description: Admin command to clear custom ore locations in the world
+  spawncustom:
+    description: Admin command to test spawning custom mobs
+    usage: /spawncustom <CustomMobType>

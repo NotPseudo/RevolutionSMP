@@ -3,7 +3,7 @@ package me.notpseudo.revolutionsmp.commands;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
 import me.notpseudo.revolutionsmp.listeners.HarvestingListeners;
-import me.notpseudo.revolutionsmp.listeners.PlacedLocationList;
+import me.notpseudo.revolutionsmp.mining.PlacedLocationList;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

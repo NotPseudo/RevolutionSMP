@@ -1,13 +1,12 @@
 package me.notpseudo.revolutionsmp.enchantments;
 
-import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
 import me.notpseudo.revolutionsmp.listeners.MobListeners;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
 import me.notpseudo.revolutionsmp.mobstats.BaseEntityStats;
-import me.notpseudo.revolutionsmp.mobstats.MobBehavior;
+import me.notpseudo.revolutionsmp.mobstats.MobCategory;
 import me.notpseudo.revolutionsmp.mobstats.MobInfoDataType;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
@@ -802,8 +801,8 @@ public enum EnchantmentType {
             }
             Collection<LivingEntity> enemies = damager.getLocation().getNearbyLivingEntities(10).stream()
                     .filter(c -> c instanceof Creature && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()) != null
-                            && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobBehavior.PASSIVE
-                            && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobBehavior.TAMED
+                            && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobCategory.PASSIVE
+                            && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobCategory.TAMED
                     ).toList();
             int enemyCount = Math.min(16, enemies.size());
             return new WeaponStats(level * 1.25 * enemyCount, 0, 0, 0, 0, 0);
@@ -846,10 +845,38 @@ public enum EnchantmentType {
             return new ItemType[]{ItemType.HELMET, ItemType.CHESTPLATE, ItemType.LEGGINGS, ItemType.BOOTS};
         }
     },
+    GROWTH {
+        @Override
+        public ItemType[] getItemTypes() {
+            return new ItemType[]{ItemType.HELMET, ItemType.CHESTPLATE, ItemType.LEGGINGS, ItemType.BOOTS};
+        }
+
+        @Override
+        public ArmorStats getApplyArmorStats(int level) {
+            return new ArmorStats(level * 15, 0, 0);
+        }
+    },
+    PROTECTION {
+        @Override
+        public ItemType[] getItemTypes() {
+            return new ItemType[]{ItemType.HELMET, ItemType.CHESTPLATE, ItemType.LEGGINGS, ItemType.BOOTS};
+        }
+
+        @Override
+        public ArmorStats getApplyArmorStats(int level) {
+            return new ArmorStats(0, level * 3, 0);
+        }
+    },
     SILK_TOUCH {
         @Override
         public ItemType[] getItemTypes() {
             return new ItemType[] {ItemType.AXE, ItemType.PICKAXE, ItemType.HOE, ItemType.SHOVEL};
+        }
+    },
+    LURE {
+        @Override
+        public ItemType[] getItemTypes() {
+            return new ItemType[] {ItemType.FISHING_ROD, ItemType.FISHING_WEAPON};
         }
     };
 
@@ -1021,7 +1048,15 @@ public enum EnchantmentType {
     }
 
     public String toString() {
-        return ItemEditor.getStringFromEnum(this);
+        String[] split = super.toString().split("_");
+        StringBuilder name = new StringBuilder();
+        for (int i = 0; i < split.length; i++) {
+            name.append(split[i].charAt(0)).append(split[i].substring(1).toLowerCase());
+            if (i < split.length - 1) {
+                name.append(" ");
+            }
+        }
+        return name.toString();
     }
 
     public boolean isUltimate() {

@@ -59,6 +59,8 @@ public class CollectionUtils implements Listener {
         addPlayerDrop.runTaskLater(RevolutionSMP.getPlugin(), 20);
     }
 
+
+
     @EventHandler
     public void onBlockDrop(BlockDropItemEvent event) {
         if (HarvestingListeners.getPlacedLocationList(event.getBlock()).removeDropLocation(event.getBlock().getLocation())) {
@@ -145,7 +147,22 @@ public class CollectionUtils implements Listener {
     }
 
     public static int getCountForNextLevel(CollectionType type, int nextLevel) {
-        return 0;
+        return switch (nextLevel) {
+            case 1 -> 25;
+            case 2 -> 50;
+            case 3 -> 100;
+            case 4 -> 250;
+            case 5 -> 500;
+            case 6 -> 1000;
+            case 7 -> 2500;
+            case 8 -> 5000;
+            case 9 -> 10000;
+            case 10 -> 25000;
+            case 11 -> 50000;
+            case 12 -> 75000;
+            case 13 -> 100000;
+            default -> 0;
+        };
     }
 
     public static int getCollectionWorth(Material material) {

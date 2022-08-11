@@ -753,4 +753,8 @@ public enum CollectionType {
         return new ArrayList<>();
     }
 
+    public int getMaxLevel() {
+        return 10;
+    }
+
 }

@@ -31,11 +31,11 @@ public class ArmorStats extends StatHolder implements Serializable {
         super.getStats().add(newStat);
     }
     public static ArmorStats createMult() {
-        return (ArmorStats) createMult(StatCategory.ARMOR);
+        return new ArmorStats(1, 1, 1, 1);
     }
 
     public static ArmorStats createZero() {
-        return (ArmorStats) createZero(StatCategory.ARMOR);
+        return new ArmorStats(0, 0, 0, 0);
     }
 
 }

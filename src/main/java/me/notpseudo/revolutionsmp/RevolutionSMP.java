@@ -3,7 +3,9 @@ package me.notpseudo.revolutionsmp;
 import me.notpseudo.revolutionsmp.abilities.AbilitiesUtil;
 import me.notpseudo.revolutionsmp.collections.CollectionUtils;
 import me.notpseudo.revolutionsmp.commands.*;
+import me.notpseudo.revolutionsmp.economy.EcoUtils;
 import me.notpseudo.revolutionsmp.listeners.*;
+import me.notpseudo.revolutionsmp.skills.SkillUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class RevolutionSMP extends JavaPlugin {
@@ -36,6 +38,10 @@ public final class RevolutionSMP extends JavaPlugin {
         new CreateCustomOreCommand(this);
         new ClearCustomOreCommand(this);
         new CollectionUtils(this);
+        new FishingListeners(this);
+        new SpawnCustomCommand(this);
+        new SkillUtils(this);
+        new EcoUtils(this);
         AbilitiesUtil.createPassSet();
         plugin = this;
     }

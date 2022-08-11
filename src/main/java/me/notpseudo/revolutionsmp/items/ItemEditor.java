@@ -765,7 +765,7 @@ public class ItemEditor {
             return "" + number;
         }
         int exp = (int) (Math.log(number) / Math.log(1000));
-        return String.format("%.1f %c",
+        return String.format("%.1f%c",
                 number / Math.pow(1000, exp),
                 "KMBqQ".charAt(exp-1));
     }

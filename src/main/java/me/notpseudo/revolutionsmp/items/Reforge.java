@@ -297,7 +297,7 @@ public enum Reforge {
         @Override
         public List<Component> getBonusLore(Rarity rarity) {
             ArrayList<Component> lore = new ArrayList<>();
-            lore.add(Component.text("Critical hits have a chance to deal up to"));
+            lore.add(Component.text("Critical hits have a chance to deal up to", NamedTextColor.GRAY));
             lore.add(Component.text("15% ", NamedTextColor.GREEN).append(Component.text("extra damage", NamedTextColor.GRAY)));
             return lore;
         }

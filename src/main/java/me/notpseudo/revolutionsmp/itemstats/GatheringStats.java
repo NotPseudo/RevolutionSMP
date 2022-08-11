@@ -22,11 +22,11 @@ public class GatheringStats extends StatHolder implements Serializable {
     }
 
     public static GatheringStats createMult() {
-        return (GatheringStats) createMult(StatCategory.GATHERING);
+        return new GatheringStats(1, 1);
     }
 
     public static GatheringStats createZero() {
-        return (GatheringStats) createZero(StatCategory.GATHERING);
+        return new GatheringStats(0, 0);
     }
 
 }

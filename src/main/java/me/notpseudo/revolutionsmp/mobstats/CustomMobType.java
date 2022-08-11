@@ -1,7 +1,13 @@
 package me.notpseudo.revolutionsmp.mobstats;
 
 import me.notpseudo.revolutionsmp.items.ItemEditor;
+import me.notpseudo.revolutionsmp.skills.ExpDropObject;
+import me.notpseudo.revolutionsmp.skills.SkillType;
 import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
+import java.util.stream.Stream;
 
 public enum CustomMobType {
 
@@ -19,34 +25,29 @@ public enum CustomMobType {
 
         @Override
         public double getDamage() {
-            return 10;
+            return 15;
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.NEUTRAL;
+        public MobCategory getMobBehavior() {
+            return MobCategory.NEUTRAL;
         }
 
     },
     BLAZE {
         @Override
         public double getHealth() {
-            return 100;
-        }
-
-        @Override
-        public double getDefense() {
-            return 15;
+            return 300;
         }
 
         @Override
         public double getDamage() {
-            return 30;
+            return 50;
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
     },
@@ -56,22 +57,17 @@ public enum CustomMobType {
     CAVE_SPIDER {
         @Override
         public double getHealth() {
-            return 50;
-        }
-
-        @Override
-        public double getDefense() {
-            return 10;
+            return 110;
         }
 
         @Override
         public double getDamage() {
-            return 10;
+            return 40;
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.NEUTRAL;
+        public MobCategory getMobBehavior() {
+            return MobCategory.NEUTRAL;
         }
 
     },
@@ -87,54 +83,35 @@ public enum CustomMobType {
     CREEPER {
         @Override
         public double getHealth() {
-            return 100;
-        }
-
-        @Override
-        public double getDefense() {
-            return 10;
+            return 80;
         }
 
         @Override
         public double getDamage() {
-            return 100;
+            return 20;
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
     },
     DOLPHIN {
-        @Override
-        public double getDefense() {
-            return 15;
-        }
 
         @Override
         public double getDamage() {
-            return 15;
+            return 20;
         }
 
         @Override
         public double getStrength() {
-            return 10;
+            return 15;
         }
 
         @Override
-        public double getCritChance() {
-            return 30;
-        }
-
-        @Override
-        public double getCritDamage() {
-            return 50;
-        }
-
-        @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.NEUTRAL;
+        public MobCategory getMobBehavior() {
+            return MobCategory.NEUTRAL;
         }
 
     },
@@ -148,7 +125,7 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getDefense() {
+        public double getSpeed() {
             return 20;
         }
 
@@ -158,23 +135,8 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getStrength() {
-            return 10;
-        }
-
-        @Override
-        public double getCritChance() {
-            return 30;
-        }
-
-        @Override
-        public double getCritDamage() {
-            return 50;
-        }
-
-        @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
     },
@@ -195,8 +157,8 @@ public enum CustomMobType {
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
     },
     ENDER_DRAGON {
@@ -226,39 +188,24 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getCritChance() {
-            return 30;
-        }
-
-        @Override
         public double getCritDamage() {
             return 75;
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.BOSS;
+        public MobCategory getMobBehavior() {
+            return MobCategory.BOSS;
         }
     },
     ENDERMAN {
         @Override
         public double getHealth() {
-            return 200;
-        }
-
-        @Override
-        public double getDefense() {
-            return 20;
-        }
-
-        @Override
-        public double getSpeed() {
-            return 5;
+            return 250;
         }
 
         @Override
         public double getDamage() {
-            return 35;
+            return 50;
         }
 
         @Override
@@ -267,18 +214,8 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getCritChance() {
-            return 50;
-        }
-
-        @Override
-        public double getCritDamage() {
-            return 75;
-        }
-
-        @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.NEUTRAL;
+        public MobCategory getMobBehavior() {
+            return MobCategory.NEUTRAL;
         }
     },
     ENDERMITE {
@@ -293,8 +230,8 @@ public enum CustomMobType {
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
 
@@ -306,18 +243,13 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getDefense() {
-            return 10;
-        }
-
-        @Override
         public double getDamage() {
             return 30;
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
     },
@@ -327,12 +259,7 @@ public enum CustomMobType {
     GHAST {
         @Override
         public double getHealth() {
-            return 100;
-        }
-
-        @Override
-        public double getDefense() {
-            return 5;
+            return 150;
         }
 
         @Override
@@ -341,8 +268,8 @@ public enum CustomMobType {
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
     },
@@ -368,22 +295,18 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getCritChance() {
-            return 30;
-        }
-
-        @Override
         public double getCritDamage() {
             return 50;
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
     },
     GLOW_SQUID {
+
     },
     GOAT {
         @Override
@@ -402,8 +325,8 @@ public enum CustomMobType {
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.NEUTRAL;
+        public MobCategory getMobBehavior() {
+            return MobCategory.NEUTRAL;
         }
 
     },
@@ -424,25 +347,25 @@ public enum CustomMobType {
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
     },
     HOGLIN {
         @Override
         public double getHealth() {
-            return 200;
+            return 150;
         }
 
         @Override
         public double getDefense() {
-            return 5;
+            return 20;
         }
 
         @Override
         public double getDamage() {
-            return 30;
+            return 20;
         }
 
         @Override
@@ -451,18 +374,8 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getCritChance() {
-            return 30;
-        }
-
-        @Override
-        public double getCritDamage() {
-            return 50;
-        }
-
-        @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.NEUTRAL;
         }
 
 
@@ -473,37 +386,22 @@ public enum CustomMobType {
     HUSK {
         @Override
         public double getHealth() {
-            return 100;
+            return 120;
         }
 
         @Override
-        public double getDefense() {
-            return 20;
-        }
-
-        @Override
-        public double getDamage() {
-            return 20;
-        }
-
-        @Override
-        public double getStrength() {
+        public double getSpeed() {
             return 10;
         }
 
         @Override
-        public double getCritChance() {
-            return 30;
+        public double getDamage() {
+            return 25;
         }
 
         @Override
-        public double getCritDamage() {
-            return 50;
-        }
-
-        @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
     },
@@ -524,8 +422,8 @@ public enum CustomMobType {
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
     },
@@ -537,32 +435,22 @@ public enum CustomMobType {
 
         @Override
         public double getDefense() {
-            return 200;
+            return 100;
         }
 
         @Override
         public double getDamage() {
-            return 75;
+            return 60;
         }
 
         @Override
         public double getStrength() {
-            return 40;
+            return 70;
         }
 
         @Override
-        public double getCritChance() {
-            return 30;
-        }
-
-        @Override
-        public double getCritDamage() {
-            return 75;
-        }
-
-        @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.NEUTRAL;
+        public MobCategory getMobBehavior() {
+            return MobCategory.NEUTRAL;
         }
 
 
@@ -584,8 +472,8 @@ public enum CustomMobType {
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.NEUTRAL;
+        public MobCategory getMobBehavior() {
+            return MobCategory.NEUTRAL;
         }
 
 
@@ -597,23 +485,13 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getDefense() {
-            return 10;
-        }
-
-        @Override
         public double getDamage() {
             return 30;
         }
 
         @Override
-        public double getStrength() {
-            return 5;
-        }
-
-        @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
 
@@ -622,7 +500,6 @@ public enum CustomMobType {
 
     },
     MUSHROOM_COW {
-
 
     },
     OCELOT {
@@ -645,23 +522,8 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getStrength() {
-            return 10;
-        }
-
-        @Override
-        public double getCritChance() {
-            return 30;
-        }
-
-        @Override
-        public double getCritDamage() {
-            return 50;
-        }
-
-        @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.NEUTRAL;
+        public MobCategory getMobBehavior() {
+            return MobCategory.NEUTRAL;
         }
     },
     PARROT {
@@ -670,12 +532,7 @@ public enum CustomMobType {
     PHANTOM {
         @Override
         public double getHealth() {
-            return 80;
-        }
-
-        @Override
-        public double getDefense() {
-            return 5;
+            return 120;
         }
 
         @Override
@@ -684,18 +541,8 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getCritChance() {
-            return 30;
-        }
-
-        @Override
-        public double getCritDamage() {
-            return 50;
-        }
-
-        @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
     },
@@ -706,12 +553,7 @@ public enum CustomMobType {
     PIGLIN {
         @Override
         public double getHealth() {
-            return 80;
-        }
-
-        @Override
-        public double getDefense() {
-            return 10;
+            return 100;
         }
 
         @Override
@@ -720,23 +562,8 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getStrength() {
-            return 10;
-        }
-
-        @Override
-        public double getCritChance() {
-            return 30;
-        }
-
-        @Override
-        public double getCritDamage() {
-            return 40;
-        }
-
-        @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.NEUTRAL;
+        public MobCategory getMobBehavior() {
+            return MobCategory.NEUTRAL;
         }
     },
     PIGLIN_BRUTE {
@@ -776,8 +603,8 @@ public enum CustomMobType {
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
     },
@@ -788,33 +615,13 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getDefense() {
-            return 10;
-        }
-
-        @Override
-        public double getSpeed() {
-            return 5;
-        }
-
-        @Override
         public double getDamage() {
             return 20;
         }
 
         @Override
-        public double getCritChance() {
-            return 40;
-        }
-
-        @Override
-        public double getCritDamage() {
-            return 60;
-        }
-
-        @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
 
@@ -841,18 +648,13 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getCritChance() {
-            return 30;
-        }
-
-        @Override
         public double getCritDamage() {
             return 50;
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.NEUTRAL;
+        public MobCategory getMobBehavior() {
+            return MobCategory.NEUTRAL;
         }
 
     },
@@ -866,12 +668,12 @@ public enum CustomMobType {
     RAVAGER {
         @Override
         public double getHealth() {
-            return 500;
+            return 400;
         }
 
         @Override
         public double getDefense() {
-            return 150;
+            return 100;
         }
 
         @Override
@@ -881,12 +683,12 @@ public enum CustomMobType {
 
         @Override
         public double getStrength() {
-            return 25;
+            return 40;
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
 
@@ -915,15 +717,15 @@ public enum CustomMobType {
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
     },
     SILVERFISH {
         @Override
-        public double getDefense() {
-            return 5;
+        public double getHealth() {
+            return 50;
         }
 
         @Override
@@ -933,22 +735,12 @@ public enum CustomMobType {
 
         @Override
         public double getDamage() {
-            return 5;
+            return 40;
         }
 
         @Override
-        public double getCritChance() {
-            return 30;
-        }
-
-        @Override
-        public double getCritDamage() {
-            return 50;
-        }
-
-        @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
     },
@@ -959,38 +751,18 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getDefense() {
-            return 20;
-        }
-
-        @Override
         public double getSpeed() {
             return 10;
         }
 
         @Override
         public double getDamage() {
-            return 20;
+            return 15;
         }
 
         @Override
-        public double getStrength() {
-            return 10;
-        }
-
-        @Override
-        public double getCritChance() {
-            return 50;
-        }
-
-        @Override
-        public double getCritDamage() {
-            return 70;
-        }
-
-        @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
 
@@ -1005,23 +777,13 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getDefense() {
-            return 5;
-        }
-
-        @Override
         public double getDamage() {
-            return 20;
+            return 15;
         }
 
         @Override
-        public double getStrength() {
-            return 5;
-        }
-
-        @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
     },
@@ -1037,30 +799,15 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getCritChance() {
-            return 50;
-        }
-
-        @Override
-        public double getCritDamage() {
-            return 75;
-        }
-
-        @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.NEUTRAL;
+        public MobCategory getMobBehavior() {
+            return MobCategory.NEUTRAL;
         }
 
     },
     SPIDER {
         @Override
         public double getHealth() {
-            return 100;
-        }
-
-        @Override
-        public double getDefense() {
-            return 20;
+            return 120;
         }
 
         @Override
@@ -1070,27 +817,12 @@ public enum CustomMobType {
 
         @Override
         public double getDamage() {
-            return 10;
+            return 40;
         }
 
         @Override
-        public double getStrength() {
-            return 5;
-        }
-
-        @Override
-        public double getCritChance() {
-            return 75;
-        }
-
-        @Override
-        public double getCritDamage() {
-            return 75;
-        }
-
-        @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.NEUTRAL;
+        public MobCategory getMobBehavior() {
+            return MobCategory.NEUTRAL;
         }
 
     },
@@ -1098,15 +830,39 @@ public enum CustomMobType {
 
 
     },
-    STRAY {
+    OCTOPUS {
         @Override
         public double getHealth() {
-            return 100;
+            return 200;
         }
 
         @Override
-        public double getDefense() {
-            return 20;
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.SQUID;
+        }
+
+    },
+    NIGHT_SQUID {
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.GLOW_SQUID;
+        }
+
+    },
+    STRAY {
+        @Override
+        public double getHealth() {
+            return 120;
         }
 
         @Override
@@ -1120,23 +876,8 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getStrength() {
-            return 15;
-        }
-
-        @Override
-        public double getCritChance() {
-            return 40;
-        }
-
-        @Override
-        public double getCritDamage() {
-            return 50;
-        }
-
-        @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
     },
@@ -1160,8 +901,8 @@ public enum CustomMobType {
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.NEUTRAL;
+        public MobCategory getMobBehavior() {
+            return MobCategory.NEUTRAL;
         }
 
     },
@@ -1179,23 +920,8 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getSpeed() {
-            return 5;
-        }
-
-        @Override
         public double getDamage() {
             return 45;
-        }
-
-        @Override
-        public double getStrength() {
-            return 15;
-        }
-
-        @Override
-        public double getCritChance() {
-            return 30;
         }
 
         @Override
@@ -1204,8 +930,8 @@ public enum CustomMobType {
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
     },
@@ -1216,11 +942,6 @@ public enum CustomMobType {
         @Override
         public double getHealth() {
             return 120;
-        }
-
-        @Override
-        public double getDefense() {
-            return 20;
         }
 
         @Override
@@ -1239,23 +960,49 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getCritChance() {
-            return 40;
-        }
-
-        @Override
         public double getCritDamage() {
             return 80;
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
     },
     WANDERING_TRADER {
 
+    },
+    WARDEN {
+        @Override
+        public double getHealth() {
+            return 1300;
+        }
+
+        @Override
+        public double getDefense() {
+            return 300;
+        }
+
+        @Override
+        public double getSpeed() {
+            return 20;
+        }
+
+        @Override
+        public double getDamage() {
+            return 80;
+        }
+
+        @Override
+        public double getStrength() {
+            return 100;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.BOSS;
+        }
     },
     WITCH {
         @Override
@@ -1274,8 +1021,8 @@ public enum CustomMobType {
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
     },
@@ -1291,23 +1038,13 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getSpeed() {
-            return 20;
-        }
-
-        @Override
         public double getDamage() {
             return 40;
         }
 
         @Override
         public double getStrength() {
-            return 120;
-        }
-
-        @Override
-        public double getCritChance() {
-            return 50;
+            return 70;
         }
 
         @Override
@@ -1316,40 +1053,20 @@ public enum CustomMobType {
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.BOSS;
+        public MobCategory getMobBehavior() {
+            return MobCategory.BOSS;
         }
 
     },
     WITHER_SKELETON {
         @Override
         public double getHealth() {
-            return 120;
-        }
-
-        @Override
-        public double getDefense() {
-            return 30;
-        }
-
-        @Override
-        public double getSpeed() {
-            return 15;
+            return 300;
         }
 
         @Override
         public double getDamage() {
-            return 40;
-        }
-
-        @Override
-        public double getStrength() {
-            return 60;
-        }
-
-        @Override
-        public double getCritChance() {
-            return 70;
+            return 50;
         }
 
         @Override
@@ -1358,8 +1075,8 @@ public enum CustomMobType {
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
     },
@@ -1370,18 +1087,13 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getDefense() {
-            return 50;
-        }
-
-        @Override
         public double getSpeed() {
             return 20;
         }
 
         @Override
         public double getDamage() {
-            return 20;
+            return 50;
         }
 
         @Override
@@ -1390,35 +1102,20 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getCritChance() {
-            return 70;
-        }
-
-        @Override
-        public double getCritDamage() {
-            return 80;
-        }
-
-        @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.NEUTRAL;
+        public MobCategory getMobBehavior() {
+            return MobCategory.NEUTRAL;
         }
 
     },
     ZOGLIN {
         @Override
         public double getHealth() {
-            return 200;
+            return 250;
         }
 
         @Override
         public double getDefense() {
-            return 25;
-        }
-
-        @Override
-        public double getSpeed() {
-            return 5;
+            return 50;
         }
 
         @Override
@@ -1428,22 +1125,12 @@ public enum CustomMobType {
 
         @Override
         public double getStrength() {
-            return 40;
-        }
-
-        @Override
-        public double getCritChance() {
             return 30;
         }
 
         @Override
-        public double getCritDamage() {
-            return 80;
-        }
-
-        @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
     },
@@ -1454,11 +1141,6 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getDefense() {
-            return 20;
-        }
-
-        @Override
         public double getSpeed() {
             return 20;
         }
@@ -1469,23 +1151,8 @@ public enum CustomMobType {
         }
 
         @Override
-        public double getStrength() {
-            return 10;
-        }
-
-        @Override
-        public double getCritChance() {
-            return 30;
-        }
-
-        @Override
-        public double getCritDamage() {
-            return 50;
-        }
-
-        @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
     },
@@ -1495,49 +1162,25 @@ public enum CustomMobType {
     ZOMBIE_VILLAGER {
         @Override
         public double getHealth() {
-            return 100;
+            return 120;
         }
 
-        @Override
-        public double getDefense() {
-            return 20;
-        }
 
         @Override
         public double getDamage() {
-            return 20;
+            return 24;
         }
 
         @Override
-        public double getStrength() {
-            return 10;
-        }
-
-        @Override
-        public double getCritChance() {
-            return 30;
-        }
-
-        @Override
-        public double getCritDamage() {
-            return 50;
-        }
-
-        @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.HOSTILE;
+        public MobCategory getMobBehavior() {
+            return MobCategory.HOSTILE;
         }
 
     },
     ZOMBIFIED_PIGLIN {
         @Override
         public double getHealth() {
-            return 100;
-        }
-
-        @Override
-        public double getDefense() {
-            return 20;
+            return 200;
         }
 
         @Override
@@ -1547,27 +1190,552 @@ public enum CustomMobType {
 
         @Override
         public double getDamage() {
-            return 40;
+            return 80;
         }
 
         @Override
-        public double getStrength() {
-            return 20;
+        public MobCategory getMobBehavior() {
+            return MobCategory.NEUTRAL;
+        }
+    },
+    SEA_WALKER {
+        public double getHealth() {
+            return 300;
         }
 
-        @Override
-        public double getCritChance() {
+        public double getDamage() {
             return 30;
         }
 
         @Override
-        public double getCritDamage() {
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.ZOMBIE;
+        }
+
+    },
+    SEA_GUARDIAN {
+        @Override
+        public double getHealth() {
+            return 500;
+        }
+
+        @Override
+        public double getDamage() {
+            return 30;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.GUARDIAN;
+        }
+
+    },
+    SEA_WITCH {
+        @Override
+        public double getHealth() {
+            return 600;
+        }
+
+        @Override
+        public double getDamage() {
             return 60;
         }
 
         @Override
-        public MobBehavior getMobBehavior() {
-            return MobBehavior.NEUTRAL;
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.WITCH;
+        }
+
+    },
+    SEA_ARCHER {
+        @Override
+        public double getHealth() {
+            return 700;
+        }
+
+        @Override
+        public double getDamage() {
+            return 70;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.SKELETON;
+        }
+
+    },
+    RIDER_OF_THE_DEEP {
+        @Override
+        public double getHealth() {
+            return 2000;
+        }
+
+        @Override
+        public double getDamage() {
+            return 150;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.ZOMBIE;
+        }
+
+    },
+    CATFISH {
+        @Override
+        public double getHealth() {
+            return 2600;
+        }
+
+        @Override
+        public double getDamage() {
+            return 200;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.GUARDIAN;
+        }
+
+    },
+    SEA_LEECH {
+        @Override
+        public double getHealth() {
+            return 6000;
+        }
+
+        @Override
+        public double getDamage() {
+            return 200;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.SILVERFISH;
+        }
+
+    },
+    GUARDIAN_DEFENDER {
+        @Override
+        public double getHealth() {
+            return 7600;
+        }
+
+        @Override
+        public double getDamage() {
+            return 250;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.GUARDIAN;
+        }
+
+    },
+    DEEP_SEA_PROTECTOR {
+        @Override
+        public double getHealth() {
+            return 15000;
+        }
+
+        @Override
+        public double getDamage() {
+            return 300;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.IRON_GOLEM;
+        }
+
+    },
+    WATER_HYDRA {
+        @Override
+        public double getHealth() {
+            return 50000;
+        }
+
+        @Override
+        public double getDamage() {
+            return 400;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.ZOMBIE;
+        }
+
+    },
+    SEA_EMPEROR {
+        @Override
+        public double getHealth() {
+            return 75000;
+        }
+
+        @Override
+        public double getDamage() {
+            return 300;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.SKELETON;
+        }
+
+    },
+    WATER_WORM {
+        @Override
+        public double getHealth() {
+            return 5000;
+        }
+
+        @Override
+        public double getDamage() {
+            return 300;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.SILVERFISH;
+        }
+
+    },
+    POISONED_WATER_WORM {
+        @Override
+        public double getHealth() {
+            return 7500;
+        }
+
+        @Override
+        public double getDamage() {
+            return 400;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.ENDERMITE;
+        }
+
+    },
+    ZOMBIE_MINER {
+        @Override
+        public double getHealth() {
+            return 200000;
+        }
+
+        @Override
+        public double getDamage() {
+            return 600;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.ZOMBIE;
+        }
+
+    },
+    FLAMING_WORM {
+        @Override
+        public double getHealth() {
+            return 10000;
+        }
+
+        @Override
+        public double getDamage() {
+            return 500;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.SILVERFISH;
+        }
+
+    },
+    LAVA_BLAZE {
+        @Override
+        public double getHealth() {
+            return 40000;
+        }
+
+        @Override
+        public double getDamage() {
+            return 600;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.BLAZE;
+        }
+
+    },
+    LAVA_PIGLIN {
+        @Override
+        public double getHealth() {
+            return 45000;
+        }
+
+        @Override
+        public double getDamage() {
+            return 700;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.ZOMBIFIED_PIGLIN;
+        }
+
+    },
+    MAGMA_SLUG {
+        @Override
+        public double getHealth() {
+            return 100000;
+        }
+
+        @Override
+        public double getDamage() {
+            return 8000;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.MAGMA_CUBE;
+        }
+    },
+    LAVA_LEECH {
+        @Override
+        public double getHealth() {
+            return 300000;
+        }
+
+        @Override
+        public double getDamage() {
+            return 10000;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.ENDERMITE;
+        }
+    },
+    PYROCLASTIC_WORM {
+        @Override
+        public double getHealth() {
+            return 250000;
+        }
+
+        @Override
+        public double getDamage() {
+            return 9000;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.MAGMA_CUBE;
+        }
+    },
+    LAVA_FLAME {
+        @Override
+        public double getHealth() {
+            return 300000;
+        }
+
+        @Override
+        public double getDamage() {
+            return 11000;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.BLAZE;
+        }
+    },
+    FIRE_EEL {
+        @Override
+        public double getHealth() {
+            return 400000;
+        }
+
+        @Override
+        public double getDamage() {
+            return 12000;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.SILVERFISH;
+        }
+    },
+    TAURUS {
+        @Override
+        public double getHealth() {
+            return 500000;
+        }
+
+        @Override
+        public double getDamage() {
+            return 13000;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.HOGLIN;
+        }
+    },
+    THUNDER {
+        @Override
+        public double getHealth() {
+            return 3500000;
+        }
+
+        @Override
+        public double getDamage() {
+            return 10000;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.ELDER_GUARDIAN;
+        }
+    },
+    LORD_JAWBUS {
+        @Override
+        public double getHealth() {
+            return 10000000;
+        }
+
+        @Override
+        public double getDamage() {
+            return 15000;
+        }
+
+        @Override
+        public MobCategory getMobBehavior() {
+            return MobCategory.SEA_CREATURE;
+        }
+
+        @Override
+        public EntityType getVanillaVersion() {
+            return EntityType.IRON_GOLEM;
         }
     };
 
@@ -1592,33 +1760,58 @@ public enum CustomMobType {
     }
 
     public double getCritChance() {
-        return 0;
+        return 30;
     }
 
     public double getCritDamage() {
-        return 0;
+        return 50;
     }
 
     public double getMagicResistance() {
         return 0;
     }
 
-    public MobBehavior getMobBehavior() {
-        return MobBehavior.PASSIVE;
+    public int getMinLevel() {
+        return getMobBehavior().getLowestLevel();
+    }
+
+    public int getMaxLevel() {
+        return getMobBehavior().getHighestLevel();
+    }
+
+    public ItemStack[] getEquipment() {
+        return null;
+    }
+
+    public MobCategory getMobBehavior() {
+        return MobCategory.PASSIVE;
+    }
+
+    public EntityType getVanillaVersion() {
+        try {
+            return EntityType.valueOf(this.toString());
+        } catch (IllegalArgumentException exception) {
+            return null;
+        }
+    }
+
+    public ExpDropObject getExp(int level) {
+        return switch (getMobBehavior()) {
+            case PASSIVE, TAMED -> new ExpDropObject(SkillType.COMBAT, level);
+            case NEUTRAL, HOSTILE -> new ExpDropObject(SkillType.COMBAT, 5 * level);
+            case BOSS -> new ExpDropObject(SkillType.COMBAT, 100 * level);
+            case SEA_CREATURE -> new ExpDropObject(SkillType.FISHING, SeaCreature.valueOf(this.toString()).getFishXP());
+        };
     }
 
     public String getName() {
         return ItemEditor.getStringFromEnum(this);
     }
 
-    public static CustomMobType[] getCustomMobTypeList(EntityType entityType) {
-        CustomMobType[] customType = null;
-        try {
-            customType = new CustomMobType[]{CustomMobType.valueOf(entityType.toString())};
-            return customType;
-        } catch (IllegalArgumentException exception) {
-            return null;
-        }
+    public static List<CustomMobType> getCustomMobTypeList(EntityType entityType) {
+        return Stream.of(CustomMobType.values()).filter(c -> c.getVanillaVersion() == entityType &&
+                (c.getMobBehavior() != MobCategory.SEA_CREATURE))
+                .toList();
     }
 
 }

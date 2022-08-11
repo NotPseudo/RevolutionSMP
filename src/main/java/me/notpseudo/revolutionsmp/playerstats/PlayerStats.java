@@ -146,6 +146,18 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
         return luckStats.getStatValue(StatType.PET_LUCK);
     }
 
+    public double getStat(StatType type) {
+        return switch (type.getStatCategory()) {
+            case COMBAT -> super.getCombatStatValue(type);
+            case ARMOR -> super.getArmorStatValue(type);
+            case INTELLIGENCE -> abilityStats.getStatValue(type);
+            case FISHING -> fishingStats.getStatValue(type);
+            case MINING -> miningStats.getStatValue(type);
+            case GATHERING -> gatheringStats.getStatValue(type);
+            case LUCK -> luckStats.getStatValue(type);
+        };
+    }
+
     public void setPetLuck(double petLuck) {
         luckStats.setStatValue(StatType.PET_LUCK, petLuck);
     }

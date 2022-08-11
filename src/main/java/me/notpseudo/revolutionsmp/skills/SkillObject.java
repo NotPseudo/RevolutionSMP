@@ -63,18 +63,20 @@ public class SkillObject implements Serializable {
             level--;
             xpForNextLevel = SkillUtils.getXpForNextLevel(TYPE, (int) level + 1);
             currentXP += xpForNextLevel;
+        }
+        while (currentXP >= xpForNextLevel && level < TYPE.getMaxLevel()) {
+            currentXP -= xpForNextLevel;
+            level++;
+            xpForNextLevel = SkillUtils.getXpForNextLevel(TYPE, (int) level + 1);
+            level = Math.floor(level) + currentXP / xpForNextLevel;
             Player player = Bukkit.getPlayer(holder.getPlayer());
             if (player != null) {
                 sendLevelUpMessage(player);
             }
         }
-        while (currentXP >= xpForNextLevel) {
-            currentXP -= xpForNextLevel;
-            level++;
-            xpForNextLevel = SkillUtils.getXpForNextLevel(TYPE, (int) level + 1);
+        if (xpForNextLevel != 0) {
             level = Math.floor(level) + currentXP / xpForNextLevel;
         }
-        level = Math.floor(level) + currentXP / xpForNextLevel;
         xpForNextLevel = SkillUtils.getXpForNextLevel(TYPE, (int) level + 1);
     }
 
