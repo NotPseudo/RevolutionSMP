@@ -6,6 +6,7 @@ import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.mining.GemstoneSlotType;
 import me.notpseudo.revolutionsmp.mining.GemstoneType;
+import me.notpseudo.revolutionsmp.mining.GemstoneUtils;
 import me.notpseudo.revolutionsmp.specialiteminfo.FarmingToolInfo;
 import me.notpseudo.revolutionsmp.specialiteminfo.GemstoneObject;
 import me.notpseudo.revolutionsmp.specialiteminfo.SpecialItemInfo;
@@ -713,6 +714,11 @@ public enum ItemID {
         @Override
         public SpecialItemInfo getSpecialItemInfo(ItemInfo itemInfo) {
             return new GemstoneObject(itemInfo);
+        }
+
+        @Override
+        public ItemStack getItem() {
+            return GemstoneUtils.createGemstone(GemstoneType.RUBY, Rarity.COMMON);
         }
     };
 

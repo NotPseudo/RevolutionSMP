@@ -42,6 +42,7 @@ public final class RevolutionSMP extends JavaPlugin {
         new SpawnCustomCommand(this);
         new SkillUtils(this);
         new EcoUtils(this);
+        new MenuListeners(this);
         AbilitiesUtil.createPassSet();
         plugin = this;
     }

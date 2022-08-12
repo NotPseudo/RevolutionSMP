@@ -1,5 +1,6 @@
 package me.notpseudo.revolutionsmp.menus;
 
+import me.notpseudo.revolutionsmp.collections.CollectionUtils;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.itemstats.StatType;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
@@ -75,7 +76,7 @@ public class MainMenu extends Menu {
         ItemStack collections = new ItemStack(Material.PAINTING, 1);
         ItemMeta collectionsMeta = collections.getItemMeta();
         collectionsMeta.displayName(Component.text("Collections", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
-        collectionsMeta.lore(List.of(Component.text("View your Collections progression. Collect more of a material to unlock rewards", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)));
+        collectionsMeta.lore(getTotalCollectionProgress(CollectionUtils.getCollectionHolder(player), null));
         inventory.setItem(20, makeMenuItem(collections, MenuType.COLLECTIONS));
 
         ItemStack money = new ItemStack(Material.GOLD_BLOCK, 1);
@@ -93,8 +94,4 @@ public class MainMenu extends Menu {
 
     }
 
-    @Override
-    public void handleClick(InventoryClickEvent event) {
-
-    }
 }

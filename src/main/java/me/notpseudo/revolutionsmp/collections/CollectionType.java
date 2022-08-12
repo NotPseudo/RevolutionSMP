@@ -746,11 +746,11 @@ public enum CollectionType {
     }
 
     public List<Material> getVanillaMaterials() {
-        return new ArrayList<>();
+        return new ArrayList<>(0);
     }
 
     public List<ItemID> getCustomMaterials() {
-        return new ArrayList<>();
+        return new ArrayList<>(0);
     }
 
     public int getMaxLevel() {

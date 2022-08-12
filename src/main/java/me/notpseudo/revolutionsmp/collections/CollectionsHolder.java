@@ -4,6 +4,7 @@ import me.notpseudo.revolutionsmp.skills.SkillType;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -76,6 +77,58 @@ public class CollectionsHolder implements Serializable {
 
     public void addCollectionAmount(CollectionType type, int amount) {
         getCollection(type).add(amount);
+    }
+
+    public int getCollectionsUnlocked(@Nullable SkillType category) {
+        ArrayList<CollectionObject> countCollections;
+        int count = 0;
+        if (category == null) {
+            countCollections = collections;
+        } else {
+            countCollections = getCollectionsFromCategory(category);
+        }
+        for (CollectionObject collection : countCollections) {
+            if (collection.getTotalCollected() > 0) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public double getPercentUnlocked(@Nullable SkillType category) {
+        double total;
+        if (category == null) {
+            total = CollectionType.values().length;
+        } else {
+            total = getCollectionsFromCategory(category).size();
+        }
+        return getCollectionsUnlocked(category) / total;
+    }
+
+    public int getCollectionsMaxed(@Nullable SkillType category) {
+        ArrayList<CollectionObject> countCollections;
+        int count = 0;
+        if (category == null) {
+            countCollections = collections;
+        } else {
+            countCollections = getCollectionsFromCategory(category);
+        }
+        for (CollectionObject collection : countCollections) {
+            if (collection.getLevel() >= collection.getType().getMaxLevel()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public double getPercentMaxed(@Nullable SkillType category) {
+        double total;
+        if (category == null) {
+            total = CollectionType.values().length;
+        } else {
+            total = getCollectionsFromCategory(category).size();
+        }
+        return getCollectionsMaxed(category) / total;
     }
 
 }

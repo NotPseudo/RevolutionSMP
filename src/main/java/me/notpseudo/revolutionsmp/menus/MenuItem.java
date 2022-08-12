@@ -4,18 +4,18 @@ import java.io.Serializable;
 
 public class MenuItem implements Serializable {
 
-    private final MenuType next;
+    private final MenuType TYPE;
 
     public MenuItem() {
-        next = null;
+        TYPE = null;
     }
 
-    public MenuItem(MenuType next) {
-        this.next = next;
+    public MenuItem(MenuType type) {
+        this.TYPE = type;
     }
 
-    public MenuType getNext() {
-        return next;
+    public MenuType getType() {
+        return TYPE;
     }
 
 }

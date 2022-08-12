@@ -1,10 +1,14 @@
 package me.notpseudo.revolutionsmp.skills;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
-import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
+import me.notpseudo.revolutionsmp.items.ItemEditor;
+import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.listeners.MobListeners;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
 import me.notpseudo.revolutionsmp.mobstats.MobInfo;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
@@ -17,6 +21,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class SkillUtils implements Listener {
@@ -99,6 +105,210 @@ public class SkillUtils implements Listener {
             player.getPersistentDataContainer().set(skillKey, new SkillsDataType(), holder);
         }
         return holder;
+    }
+
+    public static List<Component> getSkillRewards(SkillObject skill) {
+        ArrayList<Component> lore = new ArrayList<>();
+        lore.add(Component.text("Level " + (int) skill.getLevel() + " Rewards: ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+        lore.add(Component.text("Level " + (int) skill.getLevel() + " Rewards: ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+        GatheringStats gather = SkillUtils.getBonusGathering(skill, IncreaseType.INCREASE);
+        ArmorStats armor = SkillUtils.getBonusArmor(skill, IncreaseType.INCREASE);
+        MiningStats mining = SkillUtils.getBonusMining(skill, IncreaseType.INCREASE);
+        WeaponStats weapon = SkillUtils.getBonusWeapon(skill, IncreaseType.INCREASE);
+        AbilityStats ability = SkillUtils.getBonusAbility(skill, IncreaseType.INCREASE);
+        switch (skill.getType()) {
+            case FARMING:
+                lore.add(Component.text(ItemEditor.getStatString(gather.getStatValue(StatType.FARMING_FORTUNE)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.FARMING_FORTUNE)).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text(ItemEditor.getStatString(armor.getStatValue(StatType.HEALTH)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.HEALTH)).decoration(TextDecoration.ITALIC, false));
+                break;
+            case MINING:
+                lore.add(Component.text(ItemEditor.getStatString(mining.getStatValue(StatType.MINING_FORTUNE)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.MINING_FORTUNE)).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text(ItemEditor.getStatString(armor.getStatValue(StatType.DEFENSE)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.DEFENSE)).decoration(TextDecoration.ITALIC, false));
+                break;
+            case COMBAT:
+                WeaponStats incDamage = SkillUtils.getEventWeapon(skill, IncreaseType.MULTIPLICATIVE_PERCENT);
+                lore.add(Component.text(ItemEditor.getStatString(incDamage.getStatValue(StatType.DAMAGE)) + "% ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.DAMAGE)).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text(ItemEditor.getStatString(weapon.getStatValue(StatType.CRIT_CHANCE)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.CRIT_CHANCE)).decoration(TextDecoration.ITALIC, false));
+                break;
+            case FORAGING:
+                lore.add(Component.text(ItemEditor.getStatString(gather.getStatValue(StatType.FORAGING_FORTUNE)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.FORAGING_FORTUNE)).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text(ItemEditor.getStatString(weapon.getStatValue(StatType.STRENGTH)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.STRENGTH)).decoration(TextDecoration.ITALIC, false));
+                break;
+            case FISHING:
+                lore.add(Component.text("Increases the quality of treasure fished up each level").decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text(ItemEditor.getStatString(armor.getStatValue(StatType.HEALTH)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.HEALTH)).decoration(TextDecoration.ITALIC, false));
+                break;
+            case ENCHANTING:
+                lore.add(Component.text("Gain ", NamedTextColor.WHITE).append(Component.text(4 * (int) skill.getLevel() + "% ", NamedTextColor.GREEN)).append(Component.text("more experience orbs from all sources", NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text(ItemEditor.getStatString(ability.getStatValue(StatType.ABILITY_DAMAGE)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.ABILITY_DAMAGE)).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text(ItemEditor.getStatString(ability.getStatValue(StatType.INTELLIGENCE)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.INTELLIGENCE)).decoration(TextDecoration.ITALIC, false));
+                break;
+            case ALCHEMY:
+                lore.add(Component.text(ItemEditor.getStatString(ability.getStatValue(StatType.ABILITY_DAMAGE)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.ABILITY_DAMAGE)).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text(ItemEditor.getStatString(ability.getStatValue(StatType.INTELLIGENCE)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.INTELLIGENCE)).decoration(TextDecoration.ITALIC, false));
+                break;
+        }
+        return lore;
+    }
+
+    @NotNull
+    public static WeaponStats getBonusWeapon(SkillObject skill, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return WeaponStats.createMult();
+        }
+        if (type == IncreaseType.ADDITIVE_PERCENT) {
+            return WeaponStats.createZero();
+        }
+        return switch (skill.getType()) {
+            case COMBAT -> new WeaponStats(0, 0, 0.5 * (int) skill.getLevel(), 0, 0, 0);
+            case FORAGING -> new WeaponStats(0, (int) skill.getLevel(), 0, 0, 0, 0);
+            default -> WeaponStats.createZero();
+        };
+    }
+    @NotNull
+    public static ArmorStats getBonusArmor(SkillObject skill, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return ArmorStats.createMult();
+        }
+        if (type == IncreaseType.ADDITIVE_PERCENT) {
+            return ArmorStats.createZero();
+        }
+        return switch (skill.getType()) {
+            case FARMING, FISHING -> new ArmorStats(2 * (int) skill.getLevel(), 0, 0, 0);
+            case MINING -> new ArmorStats(0, (int) skill.getLevel(), 0, 0);
+            default -> ArmorStats.createZero();
+        };
+    }
+
+    @NotNull
+    public static AbilityStats getBonusAbility(SkillObject skill, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return AbilityStats.createMult();
+        }
+        if (type == IncreaseType.ADDITIVE_PERCENT) {
+            return AbilityStats.createZero();
+        }
+        return switch (skill.getType()) {
+            case ENCHANTING, ALCHEMY -> new AbilityStats(0.5 * (int) skill.getLevel(), (int) skill.getLevel());
+            default -> AbilityStats.createZero();
+        };
+    }
+
+    @NotNull
+    public static FishingStats getBonusFishing(SkillObject skill, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return FishingStats.createMult();
+        }
+        if (type == IncreaseType.ADDITIVE_PERCENT) {
+            return FishingStats.createZero();
+        }
+        return switch (skill.getType()) {
+            default -> FishingStats.createZero();
+        };
+    }
+
+    @NotNull
+    public static MiningStats getBonusMining(SkillObject skill, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return MiningStats.createMult();
+        }
+        if (type == IncreaseType.ADDITIVE_PERCENT) {
+            return MiningStats.createZero();
+        }
+        return switch (skill.getType()) {
+            case MINING -> new MiningStats(0, 4 * (int) skill.getLevel(), 0, 0, 0);
+            default -> MiningStats.createZero();
+        };
+    }
+
+    @NotNull
+    public static GatheringStats getBonusGathering(SkillObject skill, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return GatheringStats.createMult();
+        }
+        if (type == IncreaseType.ADDITIVE_PERCENT) {
+            return GatheringStats.createZero();
+        }
+        return switch (skill.getType()) {
+            case FARMING -> new GatheringStats(4 * (int) skill.getLevel(), 0);
+            case FORAGING -> new GatheringStats(0, 4 * (int) skill.getLevel());
+            default -> GatheringStats.createZero();
+        };
+    }
+
+    @NotNull
+    public static LuckStats getBonusLuck(SkillObject skill, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return LuckStats.createMult();
+        }
+        if (type == IncreaseType.ADDITIVE_PERCENT) {
+            return LuckStats.createZero();
+        }
+        return switch (skill.getType()) {
+            default -> LuckStats.createZero();
+        };
+    }
+
+    @NotNull
+    public static WeaponStats getEventWeapon(SkillObject skill, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return WeaponStats.createMult();
+        }
+        if (type == IncreaseType.INCREASE) {
+            return WeaponStats.createZero();
+        }
+        return switch (skill.getType()) {
+            case COMBAT -> new WeaponStats(4 * (int) skill.getLevel(), 0, 0, 0, 0, 0);
+            default -> WeaponStats.createZero();
+        };
+    }
+
+    @NotNull
+    public static ArmorStats getEventArmor(SkillObject skillObject, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return ArmorStats.createMult();
+        }
+        return ArmorStats.createZero();
+    }
+
+    @NotNull
+    public static AbilityStats getEventAbility(SkillObject skillObject, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return AbilityStats.createMult();
+        }
+        return AbilityStats.createZero();
+    }
+
+    @NotNull
+    public static FishingStats getEventFishing(SkillObject skillObject, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return FishingStats.createMult();
+        }
+        return FishingStats.createZero();
+    }
+
+    @NotNull
+    public static MiningStats getEventMining(SkillObject skillObject, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return MiningStats.createMult();
+        }
+        return MiningStats.createZero();
+    }
+
+    @NotNull
+    public static GatheringStats getEventGathering(SkillObject skillObject, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return GatheringStats.createMult();
+        }
+        return GatheringStats.createZero();
+    }
+
+    @NotNull
+    public static LuckStats getEventLuck(SkillObject skillObject, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return LuckStats.createMult();
+        }
+        return LuckStats.createZero();
     }
 
 }

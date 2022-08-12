@@ -120,4 +120,9 @@ public class CollectionObject implements Serializable, Comparable<CollectionObje
     public int compareTo(@NotNull CollectionObject o) {
         return TYPE.toString().compareTo(o.TYPE.toString());
     }
+
+    public double getPercent() {
+        return (double) currentCollected / itemsForNextLevel;
+    }
+
 }

@@ -248,6 +248,11 @@ public enum StatType {
         public StatCategory getStatCategory() {
             return StatCategory.MINING;
         }
+
+        @Override
+        public String getSymbol() {
+            return "Ⓟ";
+        }
     },
     FARMING_FORTUNE {
         @Override
