@@ -27,17 +27,17 @@ public class ProfileCommand implements CommandExecutor {
                 player.sendMessage("Your Player Stats were null");
                 return false;
             }
-            player.sendMessage("Current Health: " + playerStats.getArmorStatValue(StatType.HEALTH));
+            player.sendMessage("Current Health: " + playerStats.getStatValue(StatType.HEALTH));
             player.sendMessage("Max Health: " + playerStats.getMaxHealth());
-            player.sendMessage("Defense: " + playerStats.getArmorStatValue(StatType.DEFENSE));
-            player.sendMessage("Speed: " + playerStats.getArmorStatValue(StatType.SPEED));
-            player.sendMessage("Strength: " + playerStats.getCombatStatValue(StatType.STRENGTH));
-            player.sendMessage("Crit Chance: " + playerStats.getCombatStatValue(StatType.CRIT_CHANCE));
-            player.sendMessage("Crit Damage: " + playerStats.getCombatStatValue(StatType.CRIT_DAMAGE));
-            player.sendMessage("Attack Speed: " + playerStats.getCombatStatValue(StatType.ATTACK_SPEED));
-            player.sendMessage("Ferocity: " + playerStats.getCombatStatValue(StatType.FEROCITY));
-            player.sendMessage("Intelligence: " + playerStats.getIntelligence());
-            player.sendMessage("Ability Damage: " + playerStats.getAbilityDamage());
+            player.sendMessage("Defense: " + playerStats.getStatValue(StatType.DEFENSE));
+            player.sendMessage("Speed: " + playerStats.getStatValue(StatType.SPEED));
+            player.sendMessage("Strength: " + playerStats.getStatValue(StatType.STRENGTH));
+            player.sendMessage("Crit Chance: " + playerStats.getStatValue(StatType.CRIT_CHANCE));
+            player.sendMessage("Crit Damage: " + playerStats.getStatValue(StatType.CRIT_DAMAGE));
+            player.sendMessage("Attack Speed: " + playerStats.getStatValue(StatType.ATTACK_SPEED));
+            player.sendMessage("Ferocity: " + playerStats.getStatValue(StatType.FEROCITY));
+            player.sendMessage("Intelligence: " + playerStats.getStatValue(StatType.INTELLIGENCE));
+            player.sendMessage("Ability Damage: " + playerStats.getStatValue(StatType.ABILITY_DAMAGE));
             player.sendMessage("Absorption: " + playerStats.getAbsorption());
         }
         return true;

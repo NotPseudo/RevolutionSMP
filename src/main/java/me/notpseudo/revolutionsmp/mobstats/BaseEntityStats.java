@@ -19,6 +19,11 @@ public class BaseEntityStats implements Serializable {
     private double maxHealth;
     private ArmorStats healthStats;
     private WeaponStats damageStats;
+
+    private ArmorStats healthStatsMult;
+
+    private WeaponStats damageStatsMult;
+
     /**
      * Creates a new BaseEntityStats object with pre-known values, usually for players
      *
@@ -33,6 +38,8 @@ public class BaseEntityStats implements Serializable {
         this.maxHealth = maxHealth;
         healthStats = new ArmorStats(maxHealth, defense, speed);
         damageStats = new WeaponStats(0, strength, critChance, critDamage, attackSpeed, ferocity);
+        healthStatsMult = ArmorStats.createMult();
+        damageStatsMult = WeaponStats.createMult();
     }
 
     /**
@@ -63,32 +70,34 @@ public class BaseEntityStats implements Serializable {
         this.maxHealth = maxHealth;
     }
 
-    public double getCombatStatValue(StatType type) {
-        if (type.getStatCategory() != StatCategory.COMBAT) {
-            return 0;
-        }
-        return damageStats.getStatValue(type);
+    public double getStatValue(StatType type) {
+        return switch (type.getStatCategory()) {
+            case COMBAT -> damageStats.getStatValue(type);
+            case ARMOR -> healthStats.getStatValue(type);
+            default -> 0;
+        };
     }
 
-    public double getArmorStatValue(StatType type) {
-        if (type.getStatCategory() != StatCategory.ARMOR) {
-            return 0;
+    public void setStatValue(StatType type, double value) {
+        switch (type.getStatCategory()) {
+            case COMBAT -> damageStats.setStatValue(type, value);
+            case ARMOR -> healthStats.setStatValue(type, value);
         }
-        return healthStats.getStatValue(type);
     }
 
-    public void setCombatStatValue(StatType type, double value) {
-        if (type.getStatCategory() != StatCategory.COMBAT) {
-            return;
-        }
-        damageStats.setStatValue(type, value);
+    public double getStatMultValue(StatType type) {
+        return switch (type.getStatCategory()) {
+            case COMBAT -> damageStatsMult.getStatValue(type);
+            case ARMOR -> healthStatsMult.getStatValue(type);
+            default -> 1;
+        };
     }
 
-    public void setArmorStatValue(StatType type, double value) {
-        if (type.getStatCategory() != StatCategory.ARMOR) {
-            return;
+    public void setStatMultValue(StatType type, double value) {
+        switch (type.getStatCategory()) {
+            case COMBAT -> damageStatsMult.setStatValue(type, value);
+            case ARMOR -> healthStatsMult.setStatValue(type, value);
         }
-        healthStats.setStatValue(type, value);
     }
 
     /**
@@ -112,5 +121,7 @@ public class BaseEntityStats implements Serializable {
         double critDamage = customMobType.getCritDamage() + (increase * customMobType.getCritDamage() / 10);
         healthStats = new ArmorStats(maxHealth, defense, speed);
         damageStats = new WeaponStats(damage, strength, critChance, critDamage, 0, 0);
+        healthStatsMult = ArmorStats.createMult();
+        damageStatsMult = WeaponStats.createMult();
     }
 }

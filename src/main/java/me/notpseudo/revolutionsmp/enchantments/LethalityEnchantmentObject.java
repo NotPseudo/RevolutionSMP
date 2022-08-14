@@ -92,7 +92,7 @@ public class LethalityEnchantmentObject extends EnchantmentObject implements Act
             if(targetStats[0] == null) {
                 return;
             }
-            targetStats[0].setArmorStatValue(StatType.DEFENSE, targetStats[0].getArmorStatValue(StatType.DEFENSE) * remainingDefense);
+            targetStats[0].setStatValue(StatType.DEFENSE, targetStats[0].getStatValue(StatType.DEFENSE) * remainingDefense);
             target.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), targetStats[0]);
             BukkitRunnable mobLethality = new BukkitRunnable() {
                 @Override
@@ -103,7 +103,7 @@ public class LethalityEnchantmentObject extends EnchantmentObject implements Act
                         return;
                     }
                     targetStats[0] = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
-                    targetStats[0].setArmorStatValue(StatType.DEFENSE, targetStats[0].getArmorStatValue(StatType.DEFENSE) / remainingDefense);
+                    targetStats[0].setStatValue(StatType.DEFENSE, targetStats[0].getStatValue(StatType.DEFENSE) / remainingDefense);
                     target.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), targetStats[0]);
                 }
             };

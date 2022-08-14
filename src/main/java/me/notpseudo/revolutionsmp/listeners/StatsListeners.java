@@ -148,19 +148,19 @@ public class StatsListeners implements Listener {
         double vanillaMaxHealth = Math.min(2048, healthStats.getStatValue(StatType.HEALTH));
         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(vanillaMaxHealth);
         // Player will always see 40 hit points or 20 hearts on their screen
-        double healthPercent = playerStats.getArmorStatValue(StatType.HEALTH) / playerStats.getMaxHealth();
+        double healthPercent = playerStats.getStatValue(StatType.HEALTH) / playerStats.getMaxHealth();
         playerStats.setMaxHealth(healthStats.getStatValue(StatType.HEALTH));
         player.setAbsorptionAmount(Math.min(playerStats.getAbsorption(), 40));
-        playerStats.setArmorStatValue(StatType.HEALTH, healthPercent * healthStats.getStatValue(StatType.HEALTH));
-        player.setHealth(Math.min(2048, playerStats.getArmorStatValue(StatType.HEALTH)));
-        playerStats.setArmorStatValue(StatType.DEFENSE, healthStats.getStatValue(StatType.DEFENSE));
-        playerStats.setArmorStatValue(StatType.TRUE_DEFENSE, healthStats.getStatValue(StatType.TRUE_DEFENSE));
-        playerStats.setArmorStatValue(StatType.SPEED, healthStats.getStatValue(StatType.SPEED));
-        playerStats.setCombatStatValue(StatType.STRENGTH, damageStats.getStatValue(StatType.STRENGTH));
-        playerStats.setCombatStatValue(StatType.CRIT_CHANCE, damageStats.getStatValue(StatType.CRIT_CHANCE));
-        playerStats.setCombatStatValue(StatType.CRIT_DAMAGE, damageStats.getStatValue(StatType.CRIT_DAMAGE));
-        playerStats.setCombatStatValue(StatType.ATTACK_SPEED, damageStats.getStatValue(StatType.ATTACK_SPEED));
-        playerStats.setCombatStatValue(StatType.FEROCITY, damageStats.getStatValue(StatType.FEROCITY));
+        playerStats.setStatValue(StatType.HEALTH, healthPercent * healthStats.getStatValue(StatType.HEALTH));
+        player.setHealth(Math.min(2048, playerStats.getStatValue(StatType.HEALTH)));
+        playerStats.setStatValue(StatType.DEFENSE, healthStats.getStatValue(StatType.DEFENSE));
+        playerStats.setStatValue(StatType.TRUE_DEFENSE, healthStats.getStatValue(StatType.TRUE_DEFENSE));
+        playerStats.setStatValue(StatType.SPEED, healthStats.getStatValue(StatType.SPEED));
+        playerStats.setStatValue(StatType.STRENGTH, damageStats.getStatValue(StatType.STRENGTH));
+        playerStats.setStatValue(StatType.CRIT_CHANCE, damageStats.getStatValue(StatType.CRIT_CHANCE));
+        playerStats.setStatValue(StatType.CRIT_DAMAGE, damageStats.getStatValue(StatType.CRIT_DAMAGE));
+        playerStats.setStatValue(StatType.ATTACK_SPEED, damageStats.getStatValue(StatType.ATTACK_SPEED));
+        playerStats.setStatValue(StatType.FEROCITY, damageStats.getStatValue(StatType.FEROCITY));
         playerStats.setAbilityStats(abilityStats);
         playerStats.setFishingStats(fishingStats);
         playerStats.setMiningStats(miningStats);
@@ -183,26 +183,26 @@ public class StatsListeners implements Listener {
         if (mobInfo == null) {
             return;
         }
-        WeaponStats damageStats = new WeaponStats(mobInfo.getCombatStatValue(StatType.DAMAGE), mobInfo.getCombatStatValue(StatType.STRENGTH), mobInfo.getCombatStatValue(StatType.CRIT_CHANCE), mobInfo.getCombatStatValue(StatType.CRIT_DAMAGE), mobInfo.getCombatStatValue(StatType.ATTACK_SPEED), mobInfo.getCombatStatValue(StatType.FEROCITY));
-        ArmorStats healthStats = new ArmorStats(mobInfo.getMaxHealth(), mobInfo.getArmorStatValue(StatType.DEFENSE), mobInfo.getArmorStatValue(StatType.SPEED), mobInfo.getArmorStatValue(StatType.TRUE_DEFENSE));
+        WeaponStats damageStats = new WeaponStats(mobInfo.getStatValue(StatType.DAMAGE), mobInfo.getStatValue(StatType.STRENGTH), mobInfo.getStatValue(StatType.CRIT_CHANCE), mobInfo.getStatValue(StatType.CRIT_DAMAGE), mobInfo.getStatValue(StatType.ATTACK_SPEED), mobInfo.getStatValue(StatType.FEROCITY));
+        ArmorStats healthStats = new ArmorStats(mobInfo.getMaxHealth(), mobInfo.getStatValue(StatType.DEFENSE), mobInfo.getStatValue(StatType.SPEED), mobInfo.getStatValue(StatType.TRUE_DEFENSE));
         for (ItemInfo info : getInfos(entity)) {
             damageStats.combine(info.getWeaponStats());
             healthStats.combine(info.getArmorStats());
         }
         double vanillaMaxHealth = Math.min(2048, healthStats.getStatValue(StatType.HEALTH));
         entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(vanillaMaxHealth);
-        double healthPercent = mobInfo.getArmorStatValue(StatType.HEALTH) / mobInfo.getMaxHealth();
+        double healthPercent = mobInfo.getStatValue(StatType.HEALTH) / mobInfo.getMaxHealth();
         mobInfo.setMaxHealth(healthStats.getStatValue(StatType.HEALTH));
-        mobInfo.setArmorStatValue(StatType.HEALTH, healthPercent * healthStats.getStatValue(StatType.HEALTH));
-        entity.setHealth(Math.min(2048, mobInfo.getArmorStatValue(StatType.HEALTH)));
-        mobInfo.setArmorStatValue(StatType.DEFENSE, healthStats.getStatValue(StatType.DEFENSE));
-        mobInfo.setArmorStatValue(StatType.TRUE_DEFENSE, healthStats.getStatValue(StatType.TRUE_DEFENSE));
-        mobInfo.setArmorStatValue(StatType.SPEED, (healthStats.getStatValue(StatType.SPEED)));
-        mobInfo.setCombatStatValue(StatType.STRENGTH, damageStats.getStatValue(StatType.STRENGTH));
-        mobInfo.setCombatStatValue(StatType.CRIT_CHANCE, damageStats.getStatValue(StatType.CRIT_CHANCE));
-        mobInfo.setCombatStatValue(StatType.CRIT_DAMAGE, damageStats.getStatValue(StatType.CRIT_DAMAGE));
-        mobInfo.setCombatStatValue(StatType.ATTACK_SPEED, damageStats.getStatValue(StatType.ATTACK_SPEED));
-        mobInfo.setCombatStatValue(StatType.FEROCITY, damageStats.getStatValue(StatType.FEROCITY));
+        mobInfo.setStatValue(StatType.HEALTH, healthPercent * healthStats.getStatValue(StatType.HEALTH));
+        entity.setHealth(Math.min(2048, mobInfo.getStatValue(StatType.HEALTH)));
+        mobInfo.setStatValue(StatType.DEFENSE, healthStats.getStatValue(StatType.DEFENSE));
+        mobInfo.setStatValue(StatType.TRUE_DEFENSE, healthStats.getStatValue(StatType.TRUE_DEFENSE));
+        mobInfo.setStatValue(StatType.SPEED, (healthStats.getStatValue(StatType.SPEED)));
+        mobInfo.setStatValue(StatType.STRENGTH, damageStats.getStatValue(StatType.STRENGTH));
+        mobInfo.setStatValue(StatType.CRIT_CHANCE, damageStats.getStatValue(StatType.CRIT_CHANCE));
+        mobInfo.setStatValue(StatType.CRIT_DAMAGE, damageStats.getStatValue(StatType.CRIT_DAMAGE));
+        mobInfo.setStatValue(StatType.ATTACK_SPEED, damageStats.getStatValue(StatType.ATTACK_SPEED));
+        mobInfo.setStatValue(StatType.FEROCITY, damageStats.getStatValue(StatType.FEROCITY));
         entity.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
     }
 
@@ -213,7 +213,7 @@ public class StatsListeners implements Listener {
      */
     public static void naturalRegen(Player player) {
         PlayerStats playerStats = getPlayerStats(player);
-        double currentHealth = playerStats.getArmorStatValue(StatType.HEALTH), maxHealth = playerStats.getMaxHealth(), intelligence = playerStats.getIntelligence(), mana = playerStats.getMana();
+        double currentHealth = playerStats.getStatValue(StatType.HEALTH), maxHealth = playerStats.getMaxHealth(), intelligence = playerStats.getStatValue(StatType.INTELLIGENCE), mana = playerStats.getMana();
         if (!player.isDead() && player.getFoodLevel() >= 17) {
             if (currentHealth != maxHealth) {
                 // If the Player is not dead and their current Health is not already full
@@ -222,7 +222,7 @@ public class StatsListeners implements Listener {
                 // If adding the amount to add will exceed the max Health, it will just regenerate up to the max Health
                 // Adds the amount to add to the Player's current Health
                 double finalHealth = Math.min((currentHealth + addHealth), maxHealth);
-                playerStats.setArmorStatValue(StatType.HEALTH, finalHealth);
+                playerStats.setStatValue(StatType.HEALTH, finalHealth);
                 player.setHealth(Math.min(finalHealth, (finalHealth / maxHealth) * 2048));
             }
         }
@@ -247,7 +247,7 @@ public class StatsListeners implements Listener {
         }
         PlayerStats playerStats = getPlayerStats(player);
         // Gets current Health, max Health, Defense, Intelligence or max Mana, and current Mana
-        double currentHealth = playerStats.getArmorStatValue(StatType.HEALTH), maxHealth = playerStats.getMaxHealth(), defense = playerStats.getArmorStatValue(StatType.DEFENSE), intelligence = playerStats.getIntelligence(), mana = playerStats.getMana(), currentAbsorption = playerStats.getAbsorption();
+        double currentHealth = playerStats.getStatValue(StatType.HEALTH), maxHealth = playerStats.getMaxHealth(), defense = playerStats.getStatValue(StatType.DEFENSE), intelligence = playerStats.getStatValue(StatType.INTELLIGENCE), mana = playerStats.getMana(), currentAbsorption = playerStats.getAbsorption();
         NamedTextColor healthColor = NamedTextColor.RED;
         if (currentAbsorption != 0) {
             // If Player has any absorption, the Health section will be gold instead of red
@@ -266,7 +266,7 @@ public class StatsListeners implements Listener {
      */
     public static void showAbilityActionBar(Player player, AbilityType type, double cost) {
         PlayerStats playerStats = getPlayerStats(player);
-        double currentHealth = playerStats.getArmorStatValue(StatType.HEALTH), maxHealth = playerStats.getMaxHealth(), intelligence = playerStats.getIntelligence(), mana = playerStats.getMana(), currentAbsorption = playerStats.getAbsorption();
+        double currentHealth = playerStats.getStatValue(StatType.HEALTH), maxHealth = playerStats.getMaxHealth(), intelligence = playerStats.getStatValue(StatType.INTELLIGENCE), mana = playerStats.getMana(), currentAbsorption = playerStats.getAbsorption();
         NamedTextColor healthColor = NamedTextColor.RED;
         if (currentAbsorption != 0) {
             healthColor = NamedTextColor.GOLD;
@@ -293,7 +293,7 @@ public class StatsListeners implements Listener {
      */
     public static void showNoManaActionBar(Player player) {
         PlayerStats playerStats = getPlayerStats(player);
-        double currentHealth = playerStats.getArmorStatValue(StatType.HEALTH), maxHealth = playerStats.getMaxHealth(), defense = playerStats.getArmorStatValue(StatType.DEFENSE), currentAbsorption = playerStats.getAbsorption();
+        double currentHealth = playerStats.getStatValue(StatType.HEALTH), maxHealth = playerStats.getMaxHealth(), defense = playerStats.getStatValue(StatType.DEFENSE), currentAbsorption = playerStats.getAbsorption();
         NamedTextColor healthColor = NamedTextColor.RED;
         if (currentAbsorption != 0) {
             healthColor = NamedTextColor.GOLD;
@@ -314,7 +314,7 @@ public class StatsListeners implements Listener {
 
     public static void showExpGainBar(Player player, ExpDropObject expDrop, double percent) {
         PlayerStats playerStats = getPlayerStats(player);
-        double currentHealth = playerStats.getArmorStatValue(StatType.HEALTH), maxHealth = playerStats.getMaxHealth(), intelligence = playerStats.getIntelligence(), mana = playerStats.getMana(), currentAbsorption = playerStats.getAbsorption();
+        double currentHealth = playerStats.getStatValue(StatType.HEALTH), maxHealth = playerStats.getMaxHealth(), intelligence = playerStats.getStatValue(StatType.INTELLIGENCE), mana = playerStats.getMana(), currentAbsorption = playerStats.getAbsorption();
         NamedTextColor healthColor = NamedTextColor.RED;
         if (currentAbsorption != 0) {
             healthColor = NamedTextColor.GOLD;
@@ -344,7 +344,7 @@ public class StatsListeners implements Listener {
         Player player = event.getPlayer();
         updateStats(player);
         PlayerStats playerStats = getPlayerStats(player);
-        playerStats.setMana(playerStats.getIntelligence());
+        playerStats.setMana(playerStats.getStatValue(StatType.INTELLIGENCE));
         player.getPersistentDataContainer().set(playerStatsKey, new PlayerStatsDataType(), playerStats);
         showActionBar(player);
     }
@@ -386,8 +386,8 @@ public class StatsListeners implements Listener {
     public void onRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
         PlayerStats playerStats = getPlayerStats(player);
-        playerStats.setArmorStatValue(StatType.HEALTH, playerStats.getMaxHealth());
-        playerStats.setMana(playerStats.getIntelligence() / 2);
+        playerStats.setStatValue(StatType.HEALTH, playerStats.getMaxHealth());
+        playerStats.setMana(playerStats.getStatValue(StatType.INTELLIGENCE) / 2);
         player.getPersistentDataContainer().set(playerStatsKey, new PlayerStatsDataType(), playerStats);
     }
 

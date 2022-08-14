@@ -34,7 +34,7 @@ public class FishingListeners implements Listener {
                 mult = StatsListeners.getEventFishing(player, IncreaseType.MULTIPLICATIVE_PERCENT);
 
         if (event.getState() == PlayerFishEvent.State.FISHING) {
-            double fishingSpeed = (playerStats.getStat(StatType.FISHING_SPEED) + add.getStatValue(StatType.FISHING_SPEED)) *
+            double fishingSpeed = (playerStats.getStatValue(StatType.FISHING_SPEED) + add.getStatValue(StatType.FISHING_SPEED)) *
                     (1 + (addPercent.getStatValue(StatType.FISHING_SPEED) / 100)) *
                     mult.getStatValue(StatType.FISHING_SPEED);
             double ticks = (int) (Math.random() * 201) + 200;
@@ -42,7 +42,7 @@ public class FishingListeners implements Listener {
             event.getHook().setMaxWaitTime((int) ticks);
             return;
         }
-        double seaCreatureChance = (playerStats.getStat(StatType.SEA_CREATURE_CHANCE) + add.getStatValue(StatType.SEA_CREATURE_CHANCE)) *
+        double seaCreatureChance = (playerStats.getStatValue(StatType.SEA_CREATURE_CHANCE) + add.getStatValue(StatType.SEA_CREATURE_CHANCE)) *
                 (1 + (addPercent.getStatValue(StatType.SEA_CREATURE_CHANCE) / 100) *
                         mult.getStatValue(StatType.SEA_CREATURE_CHANCE));
         if (Math.random() * 100 >= seaCreatureChance) {

@@ -90,7 +90,7 @@ public class AbilitiesUtil {
     public static void witherShield(Player player) {
         PlayerStats playerStats = StatsListeners.getPlayerStats(player);
         double currentAbsorption = playerStats.getAbsorption();
-        playerStats.setAbsorption(currentAbsorption + playerStats.getCombatStatValue(StatType.CRIT_DAMAGE) * 1.5);
+        playerStats.setAbsorption(currentAbsorption + playerStats.getStatValue(StatType.CRIT_DAMAGE) * 1.5);
         player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 1F, 1F);
         player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
         StatsListeners.updateStats(player);
@@ -101,7 +101,7 @@ public class AbilitiesUtil {
                 double remainingWitherShield = playerStats.getAbsorption() - currentAbsorption;
                 if (remainingWitherShield > 0) {
                     playerStats.setAbsorption(playerStats.getAbsorption() - remainingWitherShield);
-                    playerStats.setArmorStatValue(StatType.HEALTH, Math.min(playerStats.getArmorStatValue(StatType.HEALTH) + 0.5 * remainingWitherShield, playerStats.getMaxHealth()));
+                    playerStats.setStatValue(StatType.HEALTH, Math.min(playerStats.getStatValue(StatType.HEALTH) + 0.5 * remainingWitherShield, playerStats.getMaxHealth()));
                     player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
                     StatsListeners.updateStats(player);
                     player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1F, 2F);

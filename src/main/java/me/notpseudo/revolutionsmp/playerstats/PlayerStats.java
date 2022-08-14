@@ -7,15 +7,20 @@ import java.io.Serializable;
 
 public class PlayerStats extends BaseEntityStats implements Serializable {
 
-    private AbilityStats abilityStats;
     private double mana;
     private double healthRegenRate;
     private double manaRegenRate;
     private double absorption;
+    private AbilityStats abilityStats;
     private FishingStats fishingStats;
     private MiningStats miningStats;
     private GatheringStats gatheringStats;
     private LuckStats luckStats;
+    private AbilityStats abilityStatsMult;
+    private FishingStats fishingStatsMult;
+    private MiningStats miningStatsMult;
+    private GatheringStats gatheringStatsMult;
+    private LuckStats luckStatsMult;
 
     public PlayerStats() {
         super(100, 0, 100, 0, 30, 50, 0, 0);
@@ -28,22 +33,11 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
         miningStats = new MiningStats(0, 0, 0);
         gatheringStats = new GatheringStats(0, 0);
         luckStats = new LuckStats(0, 0);
-    }
-
-    public double getIntelligence() {
-        return abilityStats.getStatValue(StatType.INTELLIGENCE);
-    }
-
-    public void setIntelligence(double intelligence) {
-        abilityStats.setStatValue(StatType.INTELLIGENCE, intelligence);
-    }
-
-    public double getAbilityDamage() {
-        return abilityStats.getStatValue(StatType.ABILITY_DAMAGE);
-    }
-
-    public void setAbilityDamage(double abilityDamage) {
-        abilityStats.setStatValue(StatType.ABILITY_DAMAGE, abilityDamage);
+        abilityStatsMult = AbilityStats.createMult();
+        fishingStatsMult = FishingStats.createMult();
+        miningStatsMult = MiningStats.createMult();
+        gatheringStatsMult = GatheringStats.createMult();
+        luckStatsMult = LuckStats.createMult();
     }
 
     public double getMana() {
@@ -78,78 +72,10 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
         this.absorption = absorption;
     }
 
-    public double getSeaCreatureChance() {
-        return fishingStats.getStatValue(StatType.SEA_CREATURE_CHANCE);
-    }
-
-    public void setSeaCreatureChance(double seaCreatureChance) {
-        fishingStats.setStatValue(StatType.SEA_CREATURE_CHANCE, seaCreatureChance);
-    }
-
-    public double getMiningSpeed() {
-        return miningStats.getStatValue(StatType.MINING_SPEED);
-    }
-
-    public void setMiningSpeed(double miningSpeed) {
-        miningStats.setStatValue(StatType.MINING_SPEED, miningSpeed);
-    }
-
-    public double getMiningFortune() {
-        return miningStats.getStatValue(StatType.MINING_FORTUNE);
-    }
-
-    public void setMiningFortune(double miningFortune) {
-        miningStats.setStatValue(StatType.MINING_FORTUNE, miningFortune);
-    }
-
-    public double getPristine() {
-        return miningStats.getStatValue(StatType.PRISTINE);
-    }
-
-    public void setPristine(double pristine) {
-        miningStats.setStatValue(StatType.PRISTINE, pristine);
-    }
-
-    public double getPurity() {
-        return miningStats.getStatValue(StatType.PURITY);
-    }
-
-    public void setPurity(double purity) {
-        miningStats.setStatValue(StatType.PURITY, purity);
-    }
-
-    public double getFarmingFortune() {
-        return gatheringStats.getStatValue(StatType.FARMING_FORTUNE);
-    }
-
-    public void setFarmingFortune(double farmingFortune) {
-        gatheringStats.setStatValue(StatType.FARMING_FORTUNE, farmingFortune);
-    }
-
-    public double getForagingFortune() {
-        return gatheringStats.getStatValue(StatType.FORAGING_FORTUNE);
-    }
-
-    public void setForagingFortune(double foragingFortune) {
-        gatheringStats.setStatValue(StatType.FORAGING_FORTUNE, foragingFortune);
-    }
-
-    public double getMagicFind() {
-        return luckStats.getStatValue(StatType.MAGIC_FIND);
-    }
-
-    public void setMagicFind(double magicFind) {
-        luckStats.setStatValue(StatType.MAGIC_FIND, magicFind);
-    }
-
-    public double getPetLuck() {
-        return luckStats.getStatValue(StatType.PET_LUCK);
-    }
-
-    public double getStat(StatType type) {
+    @Override
+    public double getStatValue(StatType type) {
         return switch (type.getStatCategory()) {
-            case COMBAT -> super.getCombatStatValue(type);
-            case ARMOR -> super.getArmorStatValue(type);
+            case COMBAT, ARMOR -> super.getStatValue(type);
             case INTELLIGENCE -> abilityStats.getStatValue(type);
             case FISHING -> fishingStats.getStatValue(type);
             case MINING -> miningStats.getStatValue(type);
@@ -158,8 +84,40 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
         };
     }
 
-    public void setPetLuck(double petLuck) {
-        luckStats.setStatValue(StatType.PET_LUCK, petLuck);
+    @Override
+    public void setStatValue(StatType type, double value) {
+        switch (type.getStatCategory()) {
+            case COMBAT, ARMOR -> super.setStatValue(type, value);
+            case INTELLIGENCE -> abilityStats.setStatValue(type, value);
+            case FISHING -> fishingStats.setStatValue(type, value);
+            case MINING -> miningStats.setStatValue(type, value);
+            case GATHERING -> gatheringStats.setStatValue(type, value);
+            case LUCK -> luckStats.setStatValue(type, value);
+        }
+    }
+
+    @Override
+    public double getStatMultValue(StatType type) {
+        return switch (type.getStatCategory()) {
+            case COMBAT, ARMOR -> super.getStatMultValue(type);
+            case INTELLIGENCE -> abilityStatsMult.getStatValue(type);
+            case FISHING -> fishingStatsMult.getStatValue(type);
+            case MINING -> miningStatsMult.getStatValue(type);
+            case GATHERING -> gatheringStatsMult.getStatValue(type);
+            case LUCK -> luckStatsMult.getStatValue(type);
+        };
+    }
+
+    @Override
+    public void setStatMultValue(StatType type, double value) {
+        switch (type.getStatCategory()) {
+            case COMBAT, ARMOR -> super.setStatMultValue(type, value);
+            case INTELLIGENCE -> abilityStatsMult.setStatValue(type, value);
+            case FISHING -> fishingStatsMult.setStatValue(type, value);
+            case MINING -> miningStatsMult.setStatValue(type, value);
+            case GATHERING -> gatheringStatsMult.setStatValue(type, value);
+            case LUCK -> luckStatsMult.setStatValue(type, value);
+        }
     }
 
     public void setAbilityStats(AbilityStats abilityStats) {

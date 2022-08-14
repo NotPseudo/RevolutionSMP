@@ -66,7 +66,7 @@ public class MobListeners implements Listener {
             living.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(vanillaHealth);
             living.setHealth(healthPercent * vanillaHealth);
             // Adjusts an entity's Speed
-            double speed = mobInfo.getArmorStatValue(StatType.SPEED);
+            double speed = mobInfo.getStatValue(StatType.SPEED);
             double defaultSpeed = living.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue();
             living.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(defaultSpeed * (1 + (speed / 100)));
             HealthListeners.updateHealthBar(living);
@@ -117,7 +117,7 @@ public class MobListeners implements Listener {
         entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(vanillaHealth);
         entity.setHealth(healthPercent * vanillaHealth);
         // Adjusts an entity's Speed
-        double speed = mobInfo.getArmorStatValue(StatType.SPEED);
+        double speed = mobInfo.getStatValue(StatType.SPEED);
         double defaultSpeed = entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue();
         entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(defaultSpeed * (1 + (speed / 100)));
         HealthListeners.updateHealthBar(entity);

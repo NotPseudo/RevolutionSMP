@@ -54,7 +54,7 @@ public class VenemousEnchantmentObject extends EnchantmentObject implements Acti
             }
             // ((PlayerStats) targetStats).setSpeedMultiplier(((PlayerStats) targetStats).getSpeedMultiplier() * 0.95);
         } else {
-            double speed = targetStats.getArmorStatValue(StatType.SPEED);
+            double speed = targetStats.getStatValue(StatType.SPEED);
             double originalSpeed = target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue();
             target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(originalSpeed * 0.95 * (1 + (speed / 100)));
         }
@@ -74,7 +74,7 @@ public class VenemousEnchantmentObject extends EnchantmentObject implements Acti
                     if (target instanceof Player) {
                         // ((PlayerStats) finalTargetStats).setSpeedMultiplier(((PlayerStats) finalTargetStats).getSpeedMultiplier() / 0.95);
                     } else {
-                        double speed = finalTargetStats.getArmorStatValue(StatType.SPEED);
+                        double speed = finalTargetStats.getStatValue(StatType.SPEED);
                         double originalSpeed = target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue();
                         target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(originalSpeed / 0.95 * (1 + (speed / 100)));
                     }

@@ -65,11 +65,11 @@ public class InfernoEnchantmentObject extends EnchantmentObject implements Actio
             if(!super.getAttacked().containsKey(targetUUID)) {
                 if(target instanceof Player) {
                     targetStats = target.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
-                    speed = targetStats.getArmorStatValue(StatType.SPEED);
+                    speed = targetStats.getStatValue(StatType.SPEED);
                     target.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), (PlayerStats) targetStats);
                 } else {
                     if(targetStats != null) {
-                        targetStats.setArmorStatValue(StatType.SPEED, 0);
+                        targetStats.setStatValue(StatType.SPEED, 0);
                     }
                     if(target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED) != null) {
                         vanillaMoveSpeed = target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue();
@@ -99,7 +99,7 @@ public class InfernoEnchantmentObject extends EnchantmentObject implements Actio
                     }
                     if(count == 5) {
                         if(finalTargetStats != null) {
-                            finalTargetStats.setArmorStatValue(StatType.SPEED, finalSpeed);
+                            finalTargetStats.setStatValue(StatType.SPEED, finalSpeed);
                         }
                         if(target instanceof Player) {
                             target.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), (PlayerStats) finalTargetStats);

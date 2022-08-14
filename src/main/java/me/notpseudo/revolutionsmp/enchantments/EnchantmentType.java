@@ -197,7 +197,7 @@ public enum EnchantmentType {
             if (targetStats == null) {
                 percentMissing = (int) ((target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() - target.getHealth()) / target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()) * 100;
             } else {
-                percentMissing = (int) ((targetStats.getMaxHealth() - targetStats.getArmorStatValue(StatType.HEALTH)) / targetStats.getMaxHealth()) * 100;
+                percentMissing = (int) ((targetStats.getMaxHealth() - targetStats.getStatValue(StatType.HEALTH)) / targetStats.getMaxHealth()) * 100;
             }
             if (level == 6) {
                 return new WeaponStats(1.25 * percentMissing, 0, 0, 0, 0, 0);
@@ -293,7 +293,7 @@ public enum EnchantmentType {
             if (targetStats == null || damagerStats == null) {
                 morePercent = (int) ((target.getHealth() - damager.getHealth()) / damager.getHealth()) * 100;
             } else {
-                morePercent = (int) ((targetStats.getArmorStatValue(StatType.HEALTH) - damagerStats.getArmorStatValue(StatType.HEALTH)) / damagerStats.getArmorStatValue(StatType.HEALTH)) * 100;
+                morePercent = (int) ((targetStats.getStatValue(StatType.HEALTH) - damagerStats.getStatValue(StatType.HEALTH)) / damagerStats.getStatValue(StatType.HEALTH)) * 100;
             }
             return switch (level) {
                 case 1, 2, 3, 4 -> new WeaponStats(Math.min(level * 5, morePercent) * level * 0.1, 0, 0, 0, 0, 0);
@@ -467,7 +467,7 @@ public enum EnchantmentType {
             if (targetStats == null) {
                 percentHealth = (int) (target.getHealth() / target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()) * 100;
             } else {
-                percentHealth = (int) (targetStats.getArmorStatValue(StatType.HEALTH) / targetStats.getMaxHealth()) * 100;
+                percentHealth = (int) (targetStats.getStatValue(StatType.HEALTH) / targetStats.getMaxHealth()) * 100;
             }
             return switch (level) {
                 case 1, 2, 3, 4 -> new WeaponStats(level * 0.1 * percentHealth, 0, 0, 0, 0, 0);
@@ -660,7 +660,7 @@ public enum EnchantmentType {
             }
             int defenseCount = 0;
             if (targetStats != null) {
-                defenseCount = (int) (targetStats.getArmorStatValue(StatType.DEFENSE) / 100);
+                defenseCount = (int) (targetStats.getStatValue(StatType.DEFENSE) / 100);
             }
             return switch (level) {
                 case 1, 2, 3, 4 -> new WeaponStats(Math.min(level * 6, level * 2 * defenseCount), 0, 0, 0, 0, 0);

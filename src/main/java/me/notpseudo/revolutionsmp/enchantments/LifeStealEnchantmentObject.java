@@ -35,7 +35,7 @@ public class LifeStealEnchantmentObject extends EnchantmentObject implements Act
         double percentToHeal = super.getLevel() * 0.005;
         double currentHealth = damager.getHealth(), maxHealth = damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
         if (damagerStats != null) {
-            currentHealth = damagerStats.getArmorStatValue(StatType.HEALTH);
+            currentHealth = damagerStats.getStatValue(StatType.HEALTH);
             maxHealth = damagerStats.getMaxHealth();
         }
         if (currentHealth != maxHealth) {
@@ -43,7 +43,7 @@ public class LifeStealEnchantmentObject extends EnchantmentObject implements Act
             double finalHealth = Math.min((currentHealth + addHealth), maxHealth);
             damager.setHealth(Math.min(finalHealth, (finalHealth / maxHealth) * 2048));
             if (damagerStats != null) {
-                damagerStats.setArmorStatValue(StatType.HEALTH, finalHealth);
+                damagerStats.setStatValue(StatType.HEALTH, finalHealth);
                 if (damager instanceof Player) {
                     damager.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), (PlayerStats) damagerStats);
                 } else {

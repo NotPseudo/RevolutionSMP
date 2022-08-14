@@ -1,5 +1,6 @@
 package me.notpseudo.revolutionsmp.enchantments;
 
+import me.notpseudo.revolutionsmp.itemstats.StatType;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStatsDataType;
@@ -29,7 +30,7 @@ public class ManaStealEnchantmentObject extends EnchantmentObject implements Act
             playerStats = new PlayerStats();
         }
         double percentToAdd = super.getLevel() * 0.0025;
-        double mana = playerStats.getMana(), intelligence = playerStats.getIntelligence();
+        double mana = playerStats.getMana(), intelligence = playerStats.getStatValue(StatType.INTELLIGENCE);
         if (mana != intelligence) {
             double addMana = percentToAdd * intelligence;
             double finalMana = Math.min((mana + addMana), intelligence);

@@ -115,7 +115,7 @@ public class HealthListeners implements Listener {
         String nameString = "" + mobInfo.getMobBehavior().getBehaviorColor() + mobInfo.getName();
         String healthString;
         // Gets max Health of the LivingEntity
-        double currentHealth = mobInfo.getArmorStatValue(StatType.HEALTH), maxHealth = mobInfo.getMaxHealth();
+        double currentHealth = mobInfo.getStatValue(StatType.HEALTH), maxHealth = mobInfo.getMaxHealth();
         if (currentHealth < maxHealth / 2) {
             if (currentHealth < 0) {
                 currentHealth = 0;
@@ -172,7 +172,7 @@ public class HealthListeners implements Listener {
         }
         String nameString = "" + mobInfo.getMobBehavior().getBehaviorColor() + mobInfo.getName();
         String healthString;
-        double currentHealth = mobInfo.getArmorStatValue(StatType.HEALTH), maxHealth = mobInfo.getMaxHealth();
+        double currentHealth = mobInfo.getStatValue(StatType.HEALTH), maxHealth = mobInfo.getMaxHealth();
         if (currentHealth < maxHealth / 2) {
             if (currentHealth < 0) {
                 currentHealth = 0;
@@ -297,7 +297,7 @@ public class HealthListeners implements Listener {
                     event.getCause() == EntityDamageEvent.DamageCause.HOT_FLOOR ||
                     event.getCause() == EntityDamageEvent.DamageCause.SUICIDE) {
                 PlayerStats playerStats = StatsListeners.getPlayerStats(player);
-                trueDefense = playerStats.getArmorStatValue(StatType.TRUE_DEFENSE);
+                trueDefense = playerStats.getStatValue(StatType.TRUE_DEFENSE);
                 color = ChatColor.GOLD;
             }
             if (event.getCause() == EntityDamageEvent.DamageCause.MAGIC) {
@@ -319,7 +319,7 @@ public class HealthListeners implements Listener {
                     event.getCause() == EntityDamageEvent.DamageCause.HOT_FLOOR ||
                     event.getCause() == EntityDamageEvent.DamageCause.SUICIDE) {
                 if (mobInfo != null) {
-                    trueDefense = mobInfo.getArmorStatValue(StatType.TRUE_DEFENSE);
+                    trueDefense = mobInfo.getStatValue(StatType.TRUE_DEFENSE);
                 }
                 color = ChatColor.GOLD;
             }
@@ -402,7 +402,7 @@ public class HealthListeners implements Listener {
         } else {
             damagerStats = MobListeners.getMobInfo(attacker);
             if (damagerStats != null) {
-                weaponDamage = damagerStats.getCombatStatValue(StatType.DAMAGE);
+                weaponDamage = damagerStats.getStatValue(StatType.DAMAGE);
             }
         }
         if (target instanceof Player player) {
@@ -414,13 +414,13 @@ public class HealthListeners implements Listener {
             targetStats = MobListeners.getMobInfo(target);
         }
         if (damagerStats != null) {
-            strength = (damagerStats.getCombatStatValue(StatType.STRENGTH) + damageInc.getStatValue(StatType.STRENGTH)) * (1 + (damageAddPercent.getStatValue(StatType.STRENGTH) / 100)) * damageMult.getStatValue(StatType.STRENGTH);
-            critDamage = (damagerStats.getCombatStatValue(StatType.CRIT_DAMAGE) + damageInc.getStatValue(StatType.CRIT_DAMAGE)) * (1 + (damageAddPercent.getStatValue(StatType.CRIT_DAMAGE) / 100)) * damageMult.getStatValue(StatType.CRIT_DAMAGE);
-            critChance = (damagerStats.getCombatStatValue(StatType.CRIT_CHANCE) + damageInc.getStatValue(StatType.CRIT_CHANCE)) * (1 + (damageAddPercent.getStatValue(StatType.CRIT_CHANCE) / 100)) * damageMult.getStatValue(StatType.CRIT_CHANCE);
-            ferocity = (damagerStats.getCombatStatValue(StatType.FEROCITY) + damageInc.getStatValue(StatType.FEROCITY)) * (1 + (damageAddPercent.getStatValue(StatType.FEROCITY) / 100)) * damageMult.getStatValue(StatType.FEROCITY);
+            strength = (damagerStats.getStatValue(StatType.STRENGTH) + damageInc.getStatValue(StatType.STRENGTH)) * (1 + (damageAddPercent.getStatValue(StatType.STRENGTH) / 100)) * damageMult.getStatValue(StatType.STRENGTH);
+            critDamage = (damagerStats.getStatValue(StatType.CRIT_DAMAGE) + damageInc.getStatValue(StatType.CRIT_DAMAGE)) * (1 + (damageAddPercent.getStatValue(StatType.CRIT_DAMAGE) / 100)) * damageMult.getStatValue(StatType.CRIT_DAMAGE);
+            critChance = (damagerStats.getStatValue(StatType.CRIT_CHANCE) + damageInc.getStatValue(StatType.CRIT_CHANCE)) * (1 + (damageAddPercent.getStatValue(StatType.CRIT_CHANCE) / 100)) * damageMult.getStatValue(StatType.CRIT_CHANCE);
+            ferocity = (damagerStats.getStatValue(StatType.FEROCITY) + damageInc.getStatValue(StatType.FEROCITY)) * (1 + (damageAddPercent.getStatValue(StatType.FEROCITY) / 100)) * damageMult.getStatValue(StatType.FEROCITY);
         }
         if (targetStats != null) {
-            defense = (targetStats.getArmorStatValue(StatType.DEFENSE) + healthInc.getStatValue(StatType.DEFENSE)) * (1 + (healthAddPercent.getStatValue(StatType.DEFENSE) / 100)) * healthMult.getStatValue(StatType.DEFENSE);
+            defense = (targetStats.getStatValue(StatType.DEFENSE) + healthInc.getStatValue(StatType.DEFENSE)) * (1 + (healthAddPercent.getStatValue(StatType.DEFENSE) / 100)) * healthMult.getStatValue(StatType.DEFENSE);
         }
         boolean critical = Math.random() * 100 < critChance;
         if (!critical) {
@@ -505,8 +505,8 @@ public class HealthListeners implements Listener {
     private static double getVanillaDamage(LivingEntity target, double amount) {
         if (target instanceof Player player) {
             PlayerStats playerStats = StatsListeners.getPlayerStats(player);
-            double currentHealth = playerStats.getArmorStatValue(StatType.HEALTH), healthLeft = Math.max(currentHealth - amount, 0);
-            playerStats.setArmorStatValue(StatType.HEALTH, healthLeft);
+            double currentHealth = playerStats.getStatValue(StatType.HEALTH), healthLeft = Math.max(currentHealth - amount, 0);
+            playerStats.setStatValue(StatType.HEALTH, healthLeft);
             player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
             if (currentHealth > 2048) {
                 if (healthLeft < 2048) {
@@ -520,8 +520,8 @@ public class HealthListeners implements Listener {
         if (mobInfo == null) {
             return amount;
         }
-        double currentHealth = mobInfo.getArmorStatValue(StatType.HEALTH), healthLeft = Math.max(currentHealth - amount, 0);
-        mobInfo.setArmorStatValue(StatType.HEALTH, healthLeft);
+        double currentHealth = mobInfo.getStatValue(StatType.HEALTH), healthLeft = Math.max(currentHealth - amount, 0);
+        mobInfo.setStatValue(StatType.HEALTH, healthLeft);
         target.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
         StatsListeners.updateEntityStats(target);
         updateHealthBar(target);
@@ -537,8 +537,8 @@ public class HealthListeners implements Listener {
     private static double getVanillaHealing(LivingEntity target, double amount) {
         if (target instanceof Player player) {
             PlayerStats playerStats = StatsListeners.getPlayerStats(player);
-            double original = playerStats.getArmorStatValue(StatType.HEALTH), updated = Math.min(original + amount, playerStats.getMaxHealth());
-            playerStats.setArmorStatValue(StatType.HEALTH, updated);
+            double original = playerStats.getStatValue(StatType.HEALTH), updated = Math.min(original + amount, playerStats.getMaxHealth());
+            playerStats.setStatValue(StatType.HEALTH, updated);
             player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
             StatsListeners.updateStats(player);
             if (original >= 2048) {
@@ -553,8 +553,8 @@ public class HealthListeners implements Listener {
         if (mobInfo == null) {
             return amount;
         }
-        double original = mobInfo.getArmorStatValue(StatType.HEALTH), updated = Math.min(original + amount, mobInfo.getMaxHealth());
-        mobInfo.setArmorStatValue(StatType.HEALTH, updated);
+        double original = mobInfo.getStatValue(StatType.HEALTH), updated = Math.min(original + amount, mobInfo.getMaxHealth());
+        mobInfo.setStatValue(StatType.HEALTH, updated);
         target.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
         StatsListeners.updateEntityStats(target);
         updateHealthBar(target);
@@ -592,12 +592,12 @@ public class HealthListeners implements Listener {
         AbilityStats add = StatsListeners.getEventAbilityStats(player, target, IncreaseType.INCREASE),
                 addPercent = StatsListeners.getEventAbilityStats(player, target, IncreaseType.ADDITIVE_PERCENT),
                 mult = StatsListeners.getEventAbilityStats(player, target, IncreaseType.MULTIPLICATIVE_PERCENT);
-        double abilityDamage = (playerStats.getAbilityDamage() + add.getStatValue(StatType.ABILITY_DAMAGE)) * (1 + (addPercent.getStatValue(StatType.ABILITY_DAMAGE) / 100)) * mult.getStatValue(StatType.ABILITY_DAMAGE),
-                intel = (playerStats.getIntelligence() + add.getStatValue(StatType.INTELLIGENCE)) * (1 + (addPercent.getStatValue(StatType.INTELLIGENCE) / 100)) * mult.getStatValue(StatType.INTELLIGENCE);
+        double abilityDamage = (playerStats.getStatValue(StatType.ABILITY_DAMAGE) + add.getStatValue(StatType.ABILITY_DAMAGE)) * (1 + (addPercent.getStatValue(StatType.ABILITY_DAMAGE) / 100)) * mult.getStatValue(StatType.ABILITY_DAMAGE),
+                intel = (playerStats.getStatValue(StatType.INTELLIGENCE) + add.getStatValue(StatType.INTELLIGENCE)) * (1 + (addPercent.getStatValue(StatType.INTELLIGENCE) / 100)) * mult.getStatValue(StatType.INTELLIGENCE);
         double intelligenceScale = 1 + (intel / 100) * type.getAbilityScaling();
         double critScale = 1;
-        if (type.allowCrit() && Math.random() < playerStats.getCombatStatValue(StatType.CRIT_CHANCE)) {
-            critScale = 1 + (playerStats.getCombatStatValue(StatType.CRIT_DAMAGE) / 100);
+        if (type.allowCrit() && Math.random() < playerStats.getStatValue(StatType.CRIT_CHANCE)) {
+            critScale = 1 + (playerStats.getStatValue(StatType.CRIT_DAMAGE) / 100);
         }
         double abilityDamageScale = 1 + (abilityDamage / 100);
         return type.getBaseAbilityDamage() * intelligenceScale * critScale * abilityDamageScale;

@@ -179,7 +179,7 @@ public class HarvestingListeners implements Listener {
         MiningStats add = StatsListeners.getEventMining(player, block, IncreaseType.INCREASE),
                 addPercent = StatsListeners.getEventMining(player, block, IncreaseType.ADDITIVE_PERCENT),
                 mult = StatsListeners.getEventMining(player, block, IncreaseType.MULTIPLICATIVE_PERCENT);
-        double miningSpeed = (playerStats.getMiningSpeed() + add.getStatValue(StatType.MINING_SPEED)) * (1 + (addPercent.getStatValue(StatType.MINING_SPEED) / 100)) * mult.getStatValue(StatType.MINING_SPEED);
+        double miningSpeed = (playerStats.getStatValue(StatType.MINING_SPEED) + add.getStatValue(StatType.MINING_SPEED)) * (1 + (addPercent.getStatValue(StatType.MINING_SPEED) / 100)) * mult.getStatValue(StatType.MINING_SPEED);
         BreakingBlock breakBlock = CustomMiningUtils.getBreakingBlock(blockLoc);
         double damage = Math.max(1, miningSpeed) / 20;
         if (isVanilla) {
@@ -214,9 +214,9 @@ public class HarvestingListeners implements Listener {
         MiningStats add = StatsListeners.getEventMining(player, block, IncreaseType.INCREASE),
                 addPercent = StatsListeners.getEventMining(player, block, IncreaseType.ADDITIVE_PERCENT),
                 mult = StatsListeners.getEventMining(player, block, IncreaseType.MULTIPLICATIVE_PERCENT);
-        double miningFortune = (playerStats.getMiningFortune() + add.getStatValue(StatType.MINING_FORTUNE)) * (1 + (addPercent.getStatValue(StatType.MINING_FORTUNE) / 100)) * mult.getStatValue(StatType.MINING_FORTUNE),
-                pristine = (playerStats.getPristine() + add.getStatValue(StatType.PRISTINE)) * (1 + (addPercent.getStatValue(StatType.PRISTINE) / 100)) * mult.getStatValue(StatType.PRISTINE),
-                purity = (playerStats.getPristine() + add.getStatValue(StatType.PURITY)) * (1 + (addPercent.getStatValue(StatType.PURITY) / 100)) * mult.getStatValue(StatType.PURITY);
+        double miningFortune = (playerStats.getStatValue(StatType.MINING_FORTUNE) + add.getStatValue(StatType.MINING_FORTUNE)) * (1 + (addPercent.getStatValue(StatType.MINING_FORTUNE) / 100)) * mult.getStatValue(StatType.MINING_FORTUNE),
+                pristine = (playerStats.getStatValue(StatType.PRISTINE) + add.getStatValue(StatType.PRISTINE)) * (1 + (addPercent.getStatValue(StatType.PRISTINE) / 100)) * mult.getStatValue(StatType.PRISTINE),
+                purity = (playerStats.getStatValue(StatType.PRISTINE) + add.getStatValue(StatType.PURITY)) * (1 + (addPercent.getStatValue(StatType.PURITY) / 100)) * mult.getStatValue(StatType.PURITY);
         if (playerPlaced) {
             miningFortune = 0;
             pristine = 0;
@@ -326,7 +326,7 @@ public class HarvestingListeners implements Listener {
         GatheringStats add = StatsListeners.getEventGathering(player, event.getBlock(), IncreaseType.INCREASE),
                 addPercent = StatsListeners.getEventGathering(player, event.getBlock(), IncreaseType.ADDITIVE_PERCENT),
                 mult = StatsListeners.getEventGathering(player, event.getBlock(), IncreaseType.MULTIPLICATIVE_PERCENT);
-        double foragingFortune = (playerStats.getForagingFortune() + add.getStatValue(StatType.FORAGING_FORTUNE)) * (1 + (addPercent.getStatValue(StatType.FORAGING_FORTUNE) / 100)) * mult.getStatValue(StatType.FORAGING_FORTUNE);
+        double foragingFortune = (playerStats.getStatValue(StatType.FORAGING_FORTUNE) + add.getStatValue(StatType.FORAGING_FORTUNE)) * (1 + (addPercent.getStatValue(StatType.FORAGING_FORTUNE) / 100)) * mult.getStatValue(StatType.FORAGING_FORTUNE);
         for (ItemDropObject drop : getDropsForMaterial(event.getBlock().getType(), foragingFortune)) {
             drop.drop(event.getBlock().getLocation());
         }
@@ -353,7 +353,7 @@ public class HarvestingListeners implements Listener {
         GatheringStats add = StatsListeners.getEventGathering(event.getPlayer(), event.getBlock(), IncreaseType.INCREASE),
                 addPercent = StatsListeners.getEventGathering(event.getPlayer(), event.getBlock(), IncreaseType.ADDITIVE_PERCENT),
                 mult = StatsListeners.getEventGathering(event.getPlayer(), event.getBlock(), IncreaseType.MULTIPLICATIVE_PERCENT);
-        double farming = (playerStats.getFarmingFortune() + add.getStatValue(StatType.FARMING_FORTUNE)) * (1 + (addPercent.getStatValue(StatType.FARMING_FORTUNE) / 100)) * mult.getStatValue(StatType.FARMING_FORTUNE);
+        double farming = (playerStats.getStatValue(StatType.FARMING_FORTUNE) + add.getStatValue(StatType.FARMING_FORTUNE)) * (1 + (addPercent.getStatValue(StatType.FARMING_FORTUNE) / 100)) * mult.getStatValue(StatType.FARMING_FORTUNE);
         if (block.getType() == Material.SUGAR_CANE || block.getType() == Material.CACTUS) {
             List<Block> above = getBlocksInDirectionMatching(block.getLocation(), block.getType(), BlockFace.UP);
             for (Block aboveBlock : above) {
@@ -432,7 +432,7 @@ public class HarvestingListeners implements Listener {
         GatheringStats add = StatsListeners.getEventGathering(event.getPlayer(), event.getBlock(), IncreaseType.INCREASE),
                 addPercent = StatsListeners.getEventGathering(event.getPlayer(), event.getBlock(), IncreaseType.ADDITIVE_PERCENT),
                 mult = StatsListeners.getEventGathering(event.getPlayer(), event.getBlock(), IncreaseType.MULTIPLICATIVE_PERCENT);
-        double farmingFortune = (playerStats.getFarmingFortune() + add.getStatValue(StatType.FARMING_FORTUNE)) * (1 + (addPercent.getStatValue(StatType.FARMING_FORTUNE) / 100)) * mult.getStatValue(StatType.FARMING_FORTUNE);
+        double farmingFortune = (playerStats.getStatValue(StatType.FARMING_FORTUNE) + add.getStatValue(StatType.FARMING_FORTUNE)) * (1 + (addPercent.getStatValue(StatType.FARMING_FORTUNE) / 100)) * mult.getStatValue(StatType.FARMING_FORTUNE);
         for (ItemDropObject drop : getDropsForMaterial(event.getBlock().getType(), farmingFortune)) {
             drop.drop(event.getBlock().getLocation());
         }
