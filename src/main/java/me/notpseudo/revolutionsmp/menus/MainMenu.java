@@ -1,7 +1,6 @@
 package me.notpseudo.revolutionsmp.menus;
 
 import me.notpseudo.revolutionsmp.collections.CollectionUtils;
-import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.itemstats.StatType;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
@@ -82,7 +81,7 @@ public class MainMenu extends Menu {
         ItemMeta moneyMeta = money.getItemMeta();
         moneyMeta.displayName(Component.text("Money", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
         moneyMeta.lore(List.of(Component.text("View your Bank and Purse. Speak to any Nitwit to deposit or withdraw from your bank", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)));
-        inventory.setItem(21, makeMenuItem(money, MenuType.BANK));
+        inventory.setItem(21, makeMenuItem(money, MenuType.MONEY));
 
         ItemStack builder = new ItemStack(Material.CRAFTING_TABLE, 1);
         ItemMeta builderMeta = builder.getItemMeta();

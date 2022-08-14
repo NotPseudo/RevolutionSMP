@@ -53,7 +53,8 @@ public abstract class Menu implements InventoryHolder {
     }
 
     public void addCloseButton() {
-        addCloseButton(49);
+        int lastRowMiddle = getSlots() - 5;
+        addCloseButton(lastRowMiddle);
     }
 
     public void addCloseButton(int index) {
@@ -63,6 +64,20 @@ public abstract class Menu implements InventoryHolder {
         ItemStack close = new ItemStack(Material.BARRIER);
         close.getItemMeta().displayName(Component.text("Close", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
         inventory.setItem(index, makeMenuItem(close, MenuType.CLOSE));
+    }
+
+    public void addBackButton(MenuType previous) {
+        int lastRowPosition = getSlots() - 6;
+        addBackButton(lastRowPosition, previous);
+    }
+
+    public void addBackButton(int index, MenuType previous) {
+        if (index >= getSlots()) {
+            return;
+        }
+        ItemStack back = new ItemStack(Material.ARROW);
+        back.getItemMeta().displayName(Component.text("Back", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
+        inventory.setItem(index, makeMenuItem(back, previous));
     }
 
     public abstract void setItems();

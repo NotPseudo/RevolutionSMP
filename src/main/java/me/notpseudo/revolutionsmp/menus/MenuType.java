@@ -60,8 +60,48 @@ public enum MenuType {
         }
     },
     BUILDER,
-    ENCHANT,
-    BANK,
+    ENCHANT {
+        @Override
+        public Menu getNext(Player player) {
+            return new EnchantmentTableMenu(player);
+        }
+    },
+    MONEY {
+        @Override
+        public Menu getNext(Player player) {
+            return new MoneyMenu(player);
+        }
+    },
+    BANK {
+        @Override
+        public Menu getNext(Player player) {
+            return new BankMenu(player);
+        }
+    },
+    DEPOSIT {
+        @Override
+        public Menu getNext(Player player) {
+            return new DepositMenu(player);
+        }
+    },
+    WITHDRAW {
+        @Override
+        public Menu getNext(Player player) {
+            return new WithdrawMenu(player);
+        }
+    },
+    CUSTOM_DEPOSIT {
+        @Override
+        public Menu getNext(Player player) {
+            return new CustomDepositMenu(player);
+        }
+    },
+    CUSTOM_WITHDRAW {
+        @Override
+        public Menu getNext(Player player) {
+            return new CustomWithdrawMenu(player);
+        }
+    },
     REFORGE {
         @Override
         public Menu getNext(Player player) {

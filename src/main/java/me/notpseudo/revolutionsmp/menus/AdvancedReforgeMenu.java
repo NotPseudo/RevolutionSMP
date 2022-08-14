@@ -87,7 +87,7 @@ public class AdvancedReforgeMenu extends Menu {
             if (reforge()) {
                 player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
             } else {
-                player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1F, 1F);
+                player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1F, 0.5F);
             }
         }
     }

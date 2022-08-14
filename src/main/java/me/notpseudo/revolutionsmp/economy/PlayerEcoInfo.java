@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class PlayerEcoInfo implements Serializable {
 
-    private UUID player;
+    private final UUID player;
     private double purse;
     private double bank;
 
@@ -30,30 +30,76 @@ public class PlayerEcoInfo implements Serializable {
     }
 
     public void addPurse(double amount) {
-        purse += amount;
+        purse += Math.round(amount * 100) / 100.0;
         EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
     }
 
     public void addBank(double amount) {
-        bank += amount;
+        bank += Math.round(amount * 100) / 100.0;
         EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
     }
 
-    public boolean addToBankFromPurse(double amount) {
+    private void setPurse(double amount) {
+        purse = Math.round(amount * 100) / 100.0;
+    }
+
+    private void setBank(double amount) {
+        bank = Math.round(amount * 100) / 100.0;
+    }
+
+    public boolean depositFromPurse(double amount) {
         double remain = purse - amount;
         if (remain < 0) {
             EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
             return false;
         }
-        purse = remain;
-        bank += amount;
+        addBank(amount);
+        setPurse(remain);
         EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
         return true;
     }
 
+    public double depositPercentFromPurse(double percent) {
+        double amountTake = purse * (percent / 100);
+        double remain = purse - amountTake;
+        if (remain < 0) {
+            EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
+            return 0;
+        }
+        addBank(amountTake);
+        setPurse(remain);
+        EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
+        return Math.round(amountTake * 100) / 100.0;
+    }
+
+    public boolean withdrawFromBank(double amount) {
+        double remain = bank - amount;
+        if (remain < 0) {
+            EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
+            return false;
+        }
+        addPurse(amount);
+        setBank(remain);
+        EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
+        return true;
+    }
+
+    public double withdrawPercentFromBank(double percent) {
+        double amountTake = bank * (percent / 100);
+        double remain = bank - amountTake;
+        if (remain < 0) {
+            EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
+            return 0;
+        }
+        addPurse(amountTake);
+        setBank(remain);
+        EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
+        return Math.round(amountTake * 100) / 100.0;
+    }
+
     public double removeDeathAmount(double percent) {
-        double amountRemoved = Math.round(purse * (percent / 100) * 100) / 100.0;
-        purse -= amountRemoved;
+        double amountRemoved = purse * (percent / 100);
+        addPurse(-1 * amountRemoved);
         EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
         return amountRemoved;
     }
