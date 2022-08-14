@@ -1,5 +1,6 @@
 package me.notpseudo.revolutionsmp.enchantments;
 
+import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
@@ -8,6 +9,9 @@ import me.notpseudo.revolutionsmp.listeners.StatsListeners;
 import me.notpseudo.revolutionsmp.mobstats.BaseEntityStats;
 import me.notpseudo.revolutionsmp.mobstats.MobCategory;
 import me.notpseudo.revolutionsmp.mobstats.MobInfoDataType;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
@@ -16,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public enum EnchantmentType {
 
@@ -44,8 +49,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
     },
     CLEAVE {
@@ -55,13 +60,18 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
 
         @Override
-        public EnchantmentObject createObject(EnchantmentType type) {
+        public EnchantmentObject createObject() {
             return new CleaveEnchantmentObject();
+        }
+
+        @Override
+        public EnchantmentObject createObject(int level) {
+            return new CleaveEnchantmentObject(level);
         }
 
     },
@@ -82,8 +92,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
     },
     CUBISM {
@@ -112,8 +122,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
     },
     DRAGON_HUNTER {
@@ -137,8 +147,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
     },
     ENDER_SLAYER {
@@ -166,8 +176,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
     },
     EXECUTE {
@@ -201,8 +211,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
     },
     EXPERIENCE {
@@ -217,8 +227,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
     },
     FIRE_ASPECT {
@@ -233,13 +243,18 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
 
         @Override
-        public EnchantmentObject createObject(EnchantmentType type) {
+        public EnchantmentObject createObject() {
             return new FireAspectEnchantmentObject();
+        }
+
+        @Override
+        public EnchantmentObject createObject(int level) {
+            return new FireAspectEnchantmentObject(level);
         }
 
     },
@@ -250,13 +265,18 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
 
         @Override
-        public EnchantmentObject createObject(EnchantmentType type) {
+        public EnchantmentObject createObject() {
             return new FirstStrikeEnchantmentObject();
+        }
+
+        @Override
+        public EnchantmentObject createObject(int level) {
+            return new FirstStrikeEnchantmentObject(level);
         }
     },
     GIANT_KILLER {
@@ -290,8 +310,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
     },
     IMPALING {
@@ -320,8 +340,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
     },
     KNOCKBACK {
@@ -336,8 +356,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
     },
     LETHALITY {
@@ -347,13 +367,18 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
 
         @Override
-        public EnchantmentObject createObject(EnchantmentType type) {
+        public EnchantmentObject createObject() {
             return new LethalityEnchantmentObject();
+        }
+
+        @Override
+        public EnchantmentObject createObject(int level) {
+            return new LethalityEnchantmentObject(level);
         }
     },
     LIFE_STEAL {
@@ -363,13 +388,18 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
 
         @Override
-        public EnchantmentObject createObject(EnchantmentType type) {
+        public EnchantmentObject createObject() {
             return new LifeStealEnchantmentObject();
+        }
+
+        @Override
+        public EnchantmentObject createObject(int level) {
+            return new LifeStealEnchantmentObject(level);
         }
     },
     LOOTING {
@@ -379,8 +409,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
     },
     LUCK {
@@ -390,8 +420,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
     },
     MANA_STEAL {
@@ -406,13 +436,18 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
 
         @Override
-        public EnchantmentObject createObject(EnchantmentType type) {
+        public EnchantmentObject createObject() {
             return new ManaStealEnchantmentObject();
+        }
+
+        @Override
+        public EnchantmentObject createObject(int level) {
+            return new ManaStealEnchantmentObject(level);
         }
     },
     PROSECUTE {
@@ -448,8 +483,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
     },
     SCAVENGER {
@@ -459,8 +494,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
     },
     SHARPNESS {
@@ -487,8 +522,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
     },
     SMITE {
@@ -518,8 +553,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
     },
     SMOLDERING {
@@ -543,8 +578,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
     },
     SYPHON {
@@ -554,13 +589,18 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
 
         @Override
-        public EnchantmentObject createObject(EnchantmentType type) {
+        public EnchantmentObject createObject() {
             return new SyphonEnchantmentObject();
+        }
+
+        @Override
+        public EnchantmentObject createObject(int level) {
+            return new SyphonEnchantmentObject(level);
         }
     },
     THUNDERBOLT {
@@ -570,13 +610,18 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
 
         @Override
-        public EnchantmentObject createObject(EnchantmentType type) {
+        public EnchantmentObject createObject() {
             return new ThunderboltEnchantmentObject();
+        }
+
+        @Override
+        public EnchantmentObject createObject(int level) {
+            return new ThunderboltEnchantmentObject(level);
         }
     },
     THUNDERLORD {
@@ -586,13 +631,18 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
 
         @Override
-        public EnchantmentObject createObject(EnchantmentType type) {
+        public EnchantmentObject createObject() {
             return new ThunderlordEnchantmentObject();
+        }
+
+        @Override
+        public EnchantmentObject createObject(int level) {
+            return new ThunderlordEnchantmentObject(level);
         }
     },
     TITAN_KILLER {
@@ -627,8 +677,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
     },
     TRIPLE_STRIKE {
@@ -638,13 +688,18 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
 
         @Override
-        public EnchantmentObject createObject(EnchantmentType type) {
+        public EnchantmentObject createObject() {
             return new TripleStrikeEnchantmentObject();
+        }
+
+        @Override
+        public EnchantmentObject createObject(int level) {
+            return new TripleStrikeEnchantmentObject(level);
         }
     },
     VAMPIRISM {
@@ -654,13 +709,18 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
 
         @Override
-        public EnchantmentObject createObject(EnchantmentType type) {
+        public EnchantmentObject createObject() {
             return new VampirismEnchantmentObject();
+        }
+
+        @Override
+        public EnchantmentObject createObject(int level) {
+            return new VampirismEnchantmentObject(level);
         }
     },
     VENEMOUS {
@@ -675,13 +735,18 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
 
         @Override
-        public EnchantmentObject createObject(EnchantmentType type) {
+        public EnchantmentObject createObject() {
             return new VenemousEnchantmentObject();
+        }
+
+        @Override
+        public EnchantmentObject createObject(int level) {
+            return new VenemousEnchantmentObject(level);
         }
     },
     VICIOUS {
@@ -701,8 +766,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
     },
     COMBO {
@@ -712,8 +777,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
 
         @Override
@@ -728,8 +793,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
 
         @Override
@@ -738,8 +803,13 @@ public enum EnchantmentType {
         }
 
         @Override
-        public EnchantmentObject createObject(EnchantmentType type) {
+        public EnchantmentObject createObject() {
             return new InfernoEnchantmentObject();
+        }
+
+        @Override
+        public EnchantmentObject createObject(int level) {
+            return new InfernoEnchantmentObject(level);
         }
     },
     ONE_FOR_ALL {
@@ -765,8 +835,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
 
         @Override
@@ -781,8 +851,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
 
         @Override
@@ -814,8 +884,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD);
         }
 
         @Override
@@ -830,8 +900,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.SWORD, ItemType.WAND};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.SWORD, ItemType.WAND);
         }
 
         @Override
@@ -841,14 +911,14 @@ public enum EnchantmentType {
     },
     LEGION {
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.HELMET, ItemType.CHESTPLATE, ItemType.LEGGINGS, ItemType.BOOTS};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.HELMET, ItemType.CHESTPLATE, ItemType.LEGGINGS, ItemType.BOOTS);
         }
     },
     GROWTH {
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.HELMET, ItemType.CHESTPLATE, ItemType.LEGGINGS, ItemType.BOOTS};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.HELMET, ItemType.CHESTPLATE, ItemType.LEGGINGS, ItemType.BOOTS);
         }
 
         @Override
@@ -858,8 +928,8 @@ public enum EnchantmentType {
     },
     PROTECTION {
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[]{ItemType.HELMET, ItemType.CHESTPLATE, ItemType.LEGGINGS, ItemType.BOOTS};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.HELMET, ItemType.CHESTPLATE, ItemType.LEGGINGS, ItemType.BOOTS);
         }
 
         @Override
@@ -869,14 +939,14 @@ public enum EnchantmentType {
     },
     SILK_TOUCH {
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[] {ItemType.AXE, ItemType.PICKAXE, ItemType.HOE, ItemType.SHOVEL};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.AXE, ItemType.PICKAXE, ItemType.HOE, ItemType.SHOVEL);
         }
     },
     LURE {
         @Override
-        public ItemType[] getItemTypes() {
-            return new ItemType[] {ItemType.FISHING_ROD, ItemType.FISHING_WEAPON};
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.FISHING_ROD, ItemType.FISHING_WEAPON);
         }
     };
 
@@ -884,6 +954,10 @@ public enum EnchantmentType {
      * The NamespacedKey from the MobListeners class used to access MobInfo stored in Persistent Data
      */
     private final static NamespacedKey mobKey = MobListeners.getMobKey();
+
+    public String getName() {
+        return ItemEditor.getStringFromEnum(this);
+    }
 
     public WeaponStats getApplyWeaponStats(int level) {
         return null;
@@ -1037,10 +1111,14 @@ public enum EnchantmentType {
         return 5;
     }
 
-    public abstract ItemType[] getItemTypes();
+    public abstract List<ItemType> getItemTypes();
 
-    public EnchantmentObject createObject(EnchantmentType type) {
-        return new EnchantmentObject(type);
+    public EnchantmentObject createObject() {
+        return new EnchantmentObject(this);
+    }
+
+    public EnchantmentObject createObject(int level) {
+        return new EnchantmentObject(this, level);
     }
 
     public ArrayList<EnchantmentType> getIncompatibleEnchants() {
@@ -1061,6 +1139,29 @@ public enum EnchantmentType {
 
     public boolean isUltimate() {
         return false;
+    }
+
+    public int getExpLevelsNeeded(int level) {
+        return switch (level) {
+            case 1, 2, 3, 4, 5 -> level * 10;
+            default -> (level - 2) * 30;
+        };
+    }
+
+    public ArrayList<Component> getConflictLore() {
+        if (getIncompatibleEnchants().size() > 0) {
+            ArrayList<Component> lore = new ArrayList<>();
+            lore.add(Component.text("Applying will remove conflicting enchantments: ", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
+            for (EnchantmentType conflict : getIncompatibleEnchants()) {
+                lore.add(Component.text("- " + conflict.getName(), NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
+            }
+            return lore;
+        }
+        return new ArrayList<>();
+    }
+
+    public ArrayList<Component> getEnchantLore(int level) {
+        return new ArrayList<>();
     }
 
 }

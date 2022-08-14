@@ -16,18 +16,13 @@ public class EnchantmentObject implements Serializable, Comparable<EnchantmentOb
 
     private final EnchantmentType type;
     private int level;
-    private int enchTableMax;
-    private int maxLevel;
     private HashMap<UUID, Integer> attacked;
     private UUID lastHit;
     private int hitCount;
 
-
     public EnchantmentObject(EnchantmentType type) {
         this.type = type;
         level = type.getMinLevel();
-        enchTableMax = type.getEnchTableMax();
-        maxLevel = type.getMaxLevel();
         attacked = new HashMap<>();
         hitCount = 0;
     }
@@ -35,8 +30,6 @@ public class EnchantmentObject implements Serializable, Comparable<EnchantmentOb
     public EnchantmentObject(EnchantmentType type, int level) {
         this.type = type;
         this.level = level;
-        enchTableMax = type.getEnchTableMax();
-        maxLevel = type.getMaxLevel();
         attacked = new HashMap<>();
         hitCount = 0;
     }
@@ -79,13 +72,13 @@ public class EnchantmentObject implements Serializable, Comparable<EnchantmentOb
 
     public String getText() {
         if (type.isUltimate()) {
-            return "" + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + type.toString() + " " + level;
+            return "" + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + type + " " + level;
         } else if (level >= type.getMaxLevel()) {
-            return "" + ChatColor.GOLD + type.toString() + " " + level;
+            return "" + ChatColor.GOLD + type + " " + level;
         } else if (level > type.getEnchTableMax()) {
-            return "" + ChatColor.DARK_PURPLE + type.toString() + " " + level;
+            return "" + ChatColor.DARK_PURPLE + type + " " + level;
         } else {
-            return "" + ChatColor.BLUE + type.toString() + " " + level;
+            return "" + ChatColor.BLUE + type + " " + level;
         }
     }
 

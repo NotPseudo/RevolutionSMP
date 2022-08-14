@@ -96,4 +96,9 @@ public enum Rarity {
   {
     return values[(this.ordinal() + 1) % values.length];
   }
+
+  public String getName() {
+    return ItemEditor.getStringFromEnum(this);
+  }
+
 }

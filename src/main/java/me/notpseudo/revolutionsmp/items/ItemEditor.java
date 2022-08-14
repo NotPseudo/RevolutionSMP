@@ -480,7 +480,7 @@ public class ItemEditor {
      * @param statObject The StatObject storing the value to generate a formatted String for
      * @return The formatted String representing the stat
      */
-    private static String getStatString(StatObject statObject) {
+    public static String getStatString(StatObject statObject) {
         double stat = statObject.getValue();
         if (stat == 0) {
             return "";
@@ -613,21 +613,18 @@ public class ItemEditor {
 
     public static void addEnchant(ItemStack item, EnchantmentType type, int level) {
         ItemMeta meta = item.getItemMeta();
-        ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        ItemInfo itemInfo = getInfo(item);
         if (itemInfo == null) {
             return;
         }
-        if (!(Arrays.asList(type.getItemTypes()).contains(itemInfo.getItemType()))) {
+        if (!itemInfo.getItemType().allowEnchants()) {
             return;
         }
-        EnchantmentsHolder enchantHolder = itemInfo.getEnchantmentsHolder();
-        if (enchantHolder == null) {
-            enchantHolder = new EnchantmentsHolder();
+        if (!type.getItemTypes().contains(itemInfo.getItemType())) {
+            return;
         }
-        EnchantmentObject enchant = type.createObject(type);
-        enchant.setLevel(level);
-        enchantHolder.addEnchant(enchant);
-        itemInfo.setEnchantmentsHolder(enchantHolder);
+        EnchantmentObject enchant = type.createObject(level);
+        itemInfo.addEnchant(enchant);
         meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), itemInfo);
         updateLore(meta);
         item.setItemMeta(meta);
@@ -731,6 +728,14 @@ public class ItemEditor {
         return player.getInventory().getItemInOffHand().getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
     }
 
+    @Nullable
+    public static ItemInfo getInfo(ItemStack item) {
+        if (item == null || item.getType() == Material.AIR) {
+            return null;
+        }
+        return item.getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+    }
+
     /**
      * Gets a formatted String from an Enum value
      * @param value The Enum value to get the String from
@@ -746,10 +751,6 @@ public class ItemEditor {
             }
         }
         return name.toString();
-    }
-
-    public static Component getStringWithSymbol(StatType type) {
-        return Component.text(type.getSymbol() + " " + getStringFromEnum(type) + " ", type.getColor());
     }
 
     /**

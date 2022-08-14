@@ -43,18 +43,56 @@ public enum ItemType {
         public boolean allowReforge() {
             return false;
         }
+
+        @Override
+        public boolean allowEnchants() {
+            return false;
+        }
     },
     ACCESSORY {
+        @Override
+        public boolean allowEnchants() {
+            return false;
+        }
+    },
+    REFORGE_STONE {
+        @Override
+        public boolean allowReforge() {
+            return false;
+        }
 
+        @Override
+        public boolean allowEnchants() {
+            return false;
+        }
     },
     VANILLA_ITEM {
+        @Override
+        public boolean allowReforge() {
+            return false;
+        }
 
+        @Override
+        public boolean allowEnchants() {
+            return false;
+        }
     },
     WAND {
-
+        @Override
+        public boolean allowReforge() {
+            return false;
+        }
     },
     DEPLOYABLE {
+        @Override
+        public boolean allowReforge() {
+            return false;
+        }
 
+        @Override
+        public boolean allowEnchants() {
+            return false;
+        }
     },
     DRILL {
 
@@ -65,6 +103,10 @@ public enum ItemType {
     LONGSWORD {
 
     };
+
+    public String getName() {
+        return ItemEditor.getStringFromEnum(this);
+    }
 
     public boolean allowEnchants() {
         return true;

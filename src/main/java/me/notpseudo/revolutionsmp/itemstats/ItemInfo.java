@@ -2,6 +2,7 @@ package me.notpseudo.revolutionsmp.itemstats;
 
 import me.notpseudo.revolutionsmp.abilities.AbilityType;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
+import me.notpseudo.revolutionsmp.enchantments.EnchantmentType;
 import me.notpseudo.revolutionsmp.specialiteminfo.GemstoneObject;
 import me.notpseudo.revolutionsmp.specialiteminfo.SpecialItemInfo;
 import me.notpseudo.revolutionsmp.items.*;
@@ -53,7 +54,7 @@ public class ItemInfo implements Serializable {
         if (itemID.getGemstoneSlots() != null) {
             gemstonesHolder = new GemstonesHolder(this, itemID.getGemstoneSlots());
         }
-        enchantmentsHolder = new EnchantmentsHolder();
+        enchantmentsHolder = new EnchantmentsHolder(this);
         abilitiesHolder = new AbilitiesHolder(this);
         for (AbilityType type : itemID.getDefaultAbilities()) {
             abilitiesHolder.addAbility(type);
@@ -84,7 +85,7 @@ public class ItemInfo implements Serializable {
             if (itemID.getGemstoneSlots() != null) {
                 gemstonesHolder = new GemstonesHolder(this, itemID.getGemstoneSlots());
             }
-            enchantmentsHolder = new EnchantmentsHolder();
+            enchantmentsHolder = new EnchantmentsHolder(this);
             abilitiesHolder = new AbilitiesHolder(this);
             for (AbilityType type : itemID.getDefaultAbilities()) {
                 abilitiesHolder.addAbility(type);
@@ -268,6 +269,19 @@ public class ItemInfo implements Serializable {
         recalculate();
     }
 
+    public void addEnchant(EnchantmentObject enchant) {
+        if (enchantmentsHolder != null) {
+            enchantmentsHolder.addEnchant(enchant);
+            recalculate();
+        }
+    }
+
+    public void removeEnchant(EnchantmentType enchant) {
+        if (enchantmentsHolder != null) {
+            enchantmentsHolder.removeEnchant(enchant);
+            recalculate();
+        }
+    }
     public AbilitiesHolder getAbilitiesHolder() {
         return abilitiesHolder;
     }

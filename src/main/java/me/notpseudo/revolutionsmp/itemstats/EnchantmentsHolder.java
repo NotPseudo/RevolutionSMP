@@ -10,9 +10,11 @@ import java.util.List;
 
 public class EnchantmentsHolder implements Serializable {
 
+    private final ItemInfo HOLDER;
     private ArrayList<EnchantmentObject> enchants;
 
-    public EnchantmentsHolder() {
+    public EnchantmentsHolder(ItemInfo holder) {
+        HOLDER = holder;
         enchants = new ArrayList<>();
     }
 
@@ -21,6 +23,9 @@ public class EnchantmentsHolder implements Serializable {
     }
 
     public void addEnchant(EnchantmentObject addEnchant) {
+        if (!addEnchant.getType().getItemTypes().contains(HOLDER.getItemType())) {
+            return;
+        }
         for (EnchantmentType incompatibleType : addEnchant.getType().getIncompatibleEnchants()) {
             removeEnchant(incompatibleType);
         }

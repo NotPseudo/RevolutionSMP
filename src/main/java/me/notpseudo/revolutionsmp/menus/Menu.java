@@ -52,6 +52,19 @@ public abstract class Menu implements InventoryHolder {
         }
     }
 
+    public void addCloseButton() {
+        addCloseButton(49);
+    }
+
+    public void addCloseButton(int index) {
+        if (index >= getSlots()) {
+            return;
+        }
+        ItemStack close = new ItemStack(Material.BARRIER);
+        close.getItemMeta().displayName(Component.text("Close", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
+        inventory.setItem(index, makeMenuItem(close, MenuType.CLOSE));
+    }
+
     public abstract void setItems();
 
     public void handleClick(InventoryClickEvent event) {
@@ -123,6 +136,16 @@ public abstract class Menu implements InventoryHolder {
         }
         ItemMeta meta = item.getItemMeta();
         meta.getPersistentDataContainer().set(MenuUtils.getMenuKey(), new MenuItemDataType(), new MenuItem(nextType));
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public ItemStack makeMenuItemAction(ItemStack item, MenuAction action) {
+        if (item == null || item.getType() == Material.AIR) {
+            return null;
+        }
+        ItemMeta meta = item.getItemMeta();
+        meta.getPersistentDataContainer().set(MenuUtils.getMenuKey(), new MenuItemDataType(), new MenuItem(action));
         item.setItemMeta(meta);
         return item;
     }

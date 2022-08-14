@@ -191,19 +191,19 @@ public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
         if (craftTier >= 2) {
             specialLore.add(Component.text("Logarithmic Counter", NamedTextColor.GOLD));
             specialLore.add(Component.text("Harvest ", NamedTextColor.GRAY).append(Component.text("+16% ", NamedTextColor.GREEN)).append(Component.text(cropName + " per digits on the Counter, minus 3!")));
-            specialLore.add(Component.text("+" + logarithmicCounter() + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.FARMING_FORTUNE)).append(Component.text("for " + cropName)));
+            specialLore.add(Component.text("+" + logarithmicCounter() + " ", NamedTextColor.GREEN).append(StatType.FARMING_FORTUNE.getNameWithSymbol()).append(Component.text("for " + cropName)));
             specialLore.add(Component.empty());
         }
         if (craftTier >= 3) {
             specialLore.add(Component.text("Collection Analysis", NamedTextColor.GOLD));
             specialLore.add(Component.text("Harvest ", NamedTextColor.GRAY).append(Component.text("+8% ", NamedTextColor.GREEN)).append(Component.text(cropName + " per digits of your collection, minus 3!")));
-            specialLore.add(Component.text("+" + collectionAnalysis(null) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.FARMING_FORTUNE)).append(Component.text("for " + cropName)));
+            specialLore.add(Component.text("+" + collectionAnalysis(null) + " ", NamedTextColor.GREEN).append(StatType.FARMING_FORTUNE.getNameWithSymbol()).append(Component.text("for " + cropName)));
             specialLore.add(Component.empty());
         }
         if (craftTier >= 4) {
             specialLore.add(Component.text("Knowledge of the Land", NamedTextColor.GOLD));
             specialLore.add(Component.text("Harvest ", NamedTextColor.GRAY).append(Component.text("+6% ", NamedTextColor.GREEN)).append(Component.text(cropName + " per digits of your total Farming Exp, minus 3!")));
-            specialLore.add(Component.text("+" + knowledgeOfTheLand(null) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.FARMING_FORTUNE)).append(Component.text("for " + cropName)));
+            specialLore.add(Component.text("+" + knowledgeOfTheLand(null) + " ", NamedTextColor.GREEN).append(StatType.FARMING_FORTUNE.getNameWithSymbol()).append(Component.text("for " + cropName)));
             specialLore.add(Component.empty());
         }
         if (!count2Reached) {

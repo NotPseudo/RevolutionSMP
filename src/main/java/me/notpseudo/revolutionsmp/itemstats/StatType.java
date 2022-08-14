@@ -1,5 +1,7 @@
 package me.notpseudo.revolutionsmp.itemstats;
 
+import me.notpseudo.revolutionsmp.items.ItemEditor;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 public enum StatType {
@@ -310,6 +312,14 @@ public enum StatType {
             return StatCategory.LUCK;
         }
     };
+
+    public String getName() {
+        return ItemEditor.getStringFromEnum(this);
+    }
+
+    public Component getNameWithSymbol() {
+        return Component.text(getSymbol() + " " + getNameWithSymbol() + " ", getColor());
+    }
 
     public boolean isPercentage() {
         return false;

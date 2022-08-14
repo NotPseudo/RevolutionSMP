@@ -377,7 +377,7 @@ public enum Reforge {
         @Override
         public List<Component> getBonusLore(Rarity rarity) {
             return List.of(Component.text("Grants ", NamedTextColor.GRAY).append(Component.text("+1 ", NamedTextColor.GREEN))
-                    .append(ItemEditor.getStringWithSymbol(StatType.STRENGTH)).append(Component.text("per ", NamedTextColor.GRAY))
+                    .append(StatType.STRENGTH.getNameWithSymbol()).append(Component.text("per ", NamedTextColor.GRAY))
                     .append(Component.text("Abyss ", NamedTextColor.DARK_RED)).append(Component.text("level", NamedTextColor.GRAY)));
         }
     },
@@ -1018,7 +1018,7 @@ public enum Reforge {
 
         @Override
         public List<Component> getBonusLore(Rarity rarity) {
-            return List.of((Component.text("Increases ", NamedTextColor.GRAY).append(ItemEditor.getStringWithSymbol(StatType.DEFENSE)).append(Component.text("by ", NamedTextColor.GRAY)).append(Component.text("+2%", NamedTextColor.GREEN))));
+            return List.of((Component.text("Increases ", NamedTextColor.GRAY).append(StatType.DEFENSE.getNameWithSymbol()).append(Component.text("by ", NamedTextColor.GRAY)).append(Component.text("+2%", NamedTextColor.GREEN))));
         }
 
         @Override
@@ -1373,10 +1373,12 @@ public enum Reforge {
         @Override
         public @NotNull WeaponStats getWeaponStats(Rarity rarity, UUID player) {
             int critDamage = 0;
-            Player holder = Bukkit.getPlayer(player);
-            if (holder != null) {
-                SkillHolder skillContainer = SkillUtils.getHolder(holder);
-                critDamage = (int) skillContainer.getSkill(SkillType.ABYSS).getLevel();
+            if (player != null) {
+                Player holder = Bukkit.getPlayer(player);
+                if (holder != null) {
+                    SkillHolder skillContainer = SkillUtils.getHolder(holder);
+                    critDamage = (int) skillContainer.getSkill(SkillType.ABYSS).getLevel();
+                }
             }
             return switch (rarity) {
                 case COMMON -> new WeaponStats(0, 4, 3, critDamage, 0, 0);
@@ -1415,7 +1417,7 @@ public enum Reforge {
         @Override
         public List<Component> getBonusLore(Rarity rarity) {
             return List.of(Component.text("Grants ", NamedTextColor.GRAY).append(Component.text("+1 ", NamedTextColor.GREEN))
-                    .append(ItemEditor.getStringWithSymbol(StatType.CRIT_DAMAGE)).append(Component.text("per ", NamedTextColor.GRAY))
+                    .append(StatType.CRIT_DAMAGE.getNameWithSymbol()).append(Component.text("per ", NamedTextColor.GRAY))
                     .append(Component.text("Abyss ", NamedTextColor.DARK_RED)).append(Component.text("level", NamedTextColor.GRAY)));
         }
     },
@@ -1509,7 +1511,7 @@ public enum Reforge {
 
         @Override
         public List<Component> getBonusLore(Rarity rarity) {
-            return List.of(Component.text("Increases ", NamedTextColor.GRAY).append(ItemEditor.getStringWithSymbol(StatType.ABILITY_DAMAGE))
+            return List.of(Component.text("Increases ", NamedTextColor.GRAY).append(StatType.ABILITY_DAMAGE.getNameWithSymbol())
                     .append(Component.text("by ", NamedTextColor.GRAY)).append(Component.text("5%", NamedTextColor.GREEN)));
         }
 
@@ -1622,6 +1624,10 @@ public enum Reforge {
 
     // Gets list of ItemTypes the Reforge can be applied to
     public abstract List<ItemType> getItemTypes();
+
+    public String getName() {
+        return ItemEditor.getStringFromEnum(this);
+    }
 
     public boolean hasBonus() {
         return false;

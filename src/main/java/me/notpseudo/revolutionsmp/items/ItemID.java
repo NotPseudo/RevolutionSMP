@@ -720,6 +720,12 @@ public enum ItemID {
         public ItemStack getItem() {
             return GemstoneUtils.createGemstone(GemstoneType.RUBY, Rarity.COMMON);
         }
+    },
+    ENCHANTED_BOOK {
+        @Override
+        public Material getMaterial() {
+            return Material.ENCHANTED_BOOK;
+        }
     };
 
     // Gets default stats for specific item

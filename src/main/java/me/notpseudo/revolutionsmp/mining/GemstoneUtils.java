@@ -386,7 +386,7 @@ public class GemstoneUtils {
     public static ItemStack createGemstone(GemstoneType type, Rarity rarity) {
         ItemStack item = ItemEditor.createItem(ItemID.GEMSTONE);
         ItemMeta meta = item.getItemMeta();
-        ItemInfo info = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        ItemInfo info = ItemEditor.getInfo(item);
         GemstoneObject gemInfo = (GemstoneObject) info.getExtraInfo();
         gemInfo.setGem(type);
         gemInfo.setQuality(rarity);

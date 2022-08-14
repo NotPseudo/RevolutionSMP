@@ -118,34 +118,34 @@ public class SkillUtils implements Listener {
         AbilityStats ability = SkillUtils.getBonusAbility(skill, IncreaseType.INCREASE);
         switch (skill.getType()) {
             case FARMING:
-                lore.add(Component.text(ItemEditor.getStatString(gather.getStatValue(StatType.FARMING_FORTUNE)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.FARMING_FORTUNE)).decoration(TextDecoration.ITALIC, false));
-                lore.add(Component.text(ItemEditor.getStatString(armor.getStatValue(StatType.HEALTH)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.HEALTH)).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text(ItemEditor.getStatString(gather.getStatValue(StatType.FARMING_FORTUNE)) + " ", NamedTextColor.GREEN).append(StatType.FARMING_FORTUNE.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text(ItemEditor.getStatString(armor.getStatValue(StatType.HEALTH)) + " ", NamedTextColor.GREEN).append(StatType.HEALTH.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
                 break;
             case MINING:
-                lore.add(Component.text(ItemEditor.getStatString(mining.getStatValue(StatType.MINING_FORTUNE)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.MINING_FORTUNE)).decoration(TextDecoration.ITALIC, false));
-                lore.add(Component.text(ItemEditor.getStatString(armor.getStatValue(StatType.DEFENSE)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.DEFENSE)).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text(ItemEditor.getStatString(mining.getStatValue(StatType.MINING_FORTUNE)) + " ", NamedTextColor.GREEN).append(StatType.MINING_FORTUNE.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text(ItemEditor.getStatString(armor.getStatValue(StatType.DEFENSE)) + " ", NamedTextColor.GREEN).append(StatType.DEFENSE.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
                 break;
             case COMBAT:
                 WeaponStats incDamage = SkillUtils.getEventWeapon(skill, IncreaseType.MULTIPLICATIVE_PERCENT);
-                lore.add(Component.text(ItemEditor.getStatString(incDamage.getStatValue(StatType.DAMAGE)) + "% ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.DAMAGE)).decoration(TextDecoration.ITALIC, false));
-                lore.add(Component.text(ItemEditor.getStatString(weapon.getStatValue(StatType.CRIT_CHANCE)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.CRIT_CHANCE)).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text(ItemEditor.getStatString(incDamage.getStatValue(StatType.DAMAGE)) + "% ", NamedTextColor.GREEN).append(StatType.DAMAGE.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text(ItemEditor.getStatString(weapon.getStatValue(StatType.CRIT_CHANCE)) + " ", NamedTextColor.GREEN).append(StatType.CRIT_CHANCE.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
                 break;
             case FORAGING:
-                lore.add(Component.text(ItemEditor.getStatString(gather.getStatValue(StatType.FORAGING_FORTUNE)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.FORAGING_FORTUNE)).decoration(TextDecoration.ITALIC, false));
-                lore.add(Component.text(ItemEditor.getStatString(weapon.getStatValue(StatType.STRENGTH)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.STRENGTH)).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text(ItemEditor.getStatString(gather.getStatValue(StatType.FORAGING_FORTUNE)) + " ", NamedTextColor.GREEN).append(StatType.FORAGING_FORTUNE.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text(ItemEditor.getStatString(weapon.getStatValue(StatType.STRENGTH)) + " ", NamedTextColor.GREEN).append(StatType.STRENGTH.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
                 break;
             case FISHING:
                 lore.add(Component.text("Increases the quality of treasure fished up each level").decoration(TextDecoration.ITALIC, false));
-                lore.add(Component.text(ItemEditor.getStatString(armor.getStatValue(StatType.HEALTH)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.HEALTH)).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text(ItemEditor.getStatString(armor.getStatValue(StatType.HEALTH)) + " ", NamedTextColor.GREEN).append(StatType.HEALTH.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
                 break;
             case ENCHANTING:
                 lore.add(Component.text("Gain ", NamedTextColor.WHITE).append(Component.text(4 * (int) skill.getLevel() + "% ", NamedTextColor.GREEN)).append(Component.text("more experience orbs from all sources", NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false));
-                lore.add(Component.text(ItemEditor.getStatString(ability.getStatValue(StatType.ABILITY_DAMAGE)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.ABILITY_DAMAGE)).decoration(TextDecoration.ITALIC, false));
-                lore.add(Component.text(ItemEditor.getStatString(ability.getStatValue(StatType.INTELLIGENCE)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.INTELLIGENCE)).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text(ItemEditor.getStatString(ability.getStatValue(StatType.ABILITY_DAMAGE)) + " ", NamedTextColor.GREEN).append(StatType.ABILITY_DAMAGE.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text(ItemEditor.getStatString(ability.getStatValue(StatType.INTELLIGENCE)) + " ", NamedTextColor.GREEN).append(StatType.INTELLIGENCE.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
                 break;
             case ALCHEMY:
-                lore.add(Component.text(ItemEditor.getStatString(ability.getStatValue(StatType.ABILITY_DAMAGE)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.ABILITY_DAMAGE)).decoration(TextDecoration.ITALIC, false));
-                lore.add(Component.text(ItemEditor.getStatString(ability.getStatValue(StatType.INTELLIGENCE)) + " ", NamedTextColor.GREEN).append(ItemEditor.getStringWithSymbol(StatType.INTELLIGENCE)).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text(ItemEditor.getStatString(ability.getStatValue(StatType.ABILITY_DAMAGE)) + " ", NamedTextColor.GREEN).append(StatType.ABILITY_DAMAGE.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text(ItemEditor.getStatString(ability.getStatValue(StatType.INTELLIGENCE)) + " ", NamedTextColor.GREEN).append(StatType.INTELLIGENCE.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
                 break;
         }
         return lore;
