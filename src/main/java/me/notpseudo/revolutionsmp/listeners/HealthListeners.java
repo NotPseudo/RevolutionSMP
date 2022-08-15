@@ -116,19 +116,21 @@ public class HealthListeners implements Listener {
         String healthString;
         // Gets max Health of the LivingEntity
         double currentHealth = mobInfo.getStatValue(StatType.HEALTH), maxHealth = mobInfo.getMaxHealth();
-        if (currentHealth < maxHealth / 2) {
+        if (mobInfo.getHits() > 0) {
+            healthString = "" + ChatColor.WHITE + mobInfo.getHits() + " Hits";
+        } else if (currentHealth < maxHealth / 2) {
             if (currentHealth < 0) {
                 currentHealth = 0;
             }
-            healthString = "" + ChatColor.YELLOW + ItemEditor.numberFormatted((int) Math.round(currentHealth));
+            healthString = "" + ChatColor.YELLOW + ItemEditor.numberFormatted((int) Math.round(currentHealth)) + ChatColor.GRAY + "/" + ChatColor.GREEN + ItemEditor.numberFormatted(Math.round(maxHealth)) + ChatColor.RED + "❤";
         } else {
             if (currentHealth > maxHealth) {
                 currentHealth = (int) maxHealth;
             }
-            healthString = "" + ChatColor.GREEN + ItemEditor.numberFormatted((int) Math.round(currentHealth));
+            healthString = "" + ChatColor.GREEN + ItemEditor.numberFormatted((int) Math.round(currentHealth)) + ChatColor.GRAY + "/" + ChatColor.GREEN + ItemEditor.numberFormatted(Math.round(maxHealth)) + ChatColor.RED + "❤";
         }
         // Health bar shows name and current Health out of max Health
-        String healthBarString = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Lv" + mobInfo.getLevel() + ChatColor.DARK_GRAY + "] " + nameString + " " + healthString + ChatColor.GRAY + "/" + ChatColor.GREEN + ItemEditor.numberFormatted(Math.round(maxHealth)) + ChatColor.RED + "❤";
+        String healthBarString = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Lv" + mobInfo.getLevel() + ChatColor.DARK_GRAY + "] " + nameString + " " + healthString;
         // Working with packets using ProtocolLib
         WrappedDataWatcher dataWatcher = WrappedDataWatcher.getEntityWatcher(entity).deepClone();
         WrappedDataWatcher.Serializer chatSerializer = WrappedDataWatcher.Registry.getChatComponentSerializer(true);
@@ -173,18 +175,21 @@ public class HealthListeners implements Listener {
         String nameString = "" + mobInfo.getMobBehavior().getBehaviorColor() + mobInfo.getName();
         String healthString;
         double currentHealth = mobInfo.getStatValue(StatType.HEALTH), maxHealth = mobInfo.getMaxHealth();
-        if (currentHealth < maxHealth / 2) {
+        if (mobInfo.getHits() > 0) {
+            healthString = "" + ChatColor.WHITE + mobInfo.getHits() + " Hits";
+        } else if (currentHealth < maxHealth / 2) {
             if (currentHealth < 0) {
                 currentHealth = 0;
             }
-            healthString = "" + ChatColor.YELLOW + ItemEditor.numberFormatted((int) Math.round(currentHealth));
+            healthString = "" + ChatColor.YELLOW + ItemEditor.numberFormatted((int) Math.round(currentHealth)) + ChatColor.GRAY + "/" + ChatColor.GREEN + ItemEditor.numberFormatted(Math.round(maxHealth)) + ChatColor.RED + "❤";
         } else {
             if (currentHealth > maxHealth) {
                 currentHealth = (int) maxHealth;
             }
-            healthString = "" + ChatColor.GREEN + ItemEditor.numberFormatted((int) Math.round(currentHealth));
+            healthString = "" + ChatColor.GREEN + ItemEditor.numberFormatted((int) Math.round(currentHealth)) + ChatColor.GRAY + "/" + ChatColor.GREEN + ItemEditor.numberFormatted(Math.round(maxHealth)) + ChatColor.RED + "❤";
         }
-        String healthBarString = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Lv" + mobInfo.getLevel() + ChatColor.DARK_GRAY + "] " + nameString + " " + healthString + ChatColor.GRAY + "/" + ChatColor.GREEN + ItemEditor.numberFormatted(Math.round(maxHealth)) + ChatColor.RED + "❤";
+        // Health bar shows name and current Health out of max Health
+        String healthBarString = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Lv" + mobInfo.getLevel() + ChatColor.DARK_GRAY + "] " + nameString + " " + healthString;
         WrappedDataWatcher dataWatcher = WrappedDataWatcher.getEntityWatcher(entity).deepClone();
         WrappedDataWatcher.Serializer chatSerializer = WrappedDataWatcher.Registry.getChatComponentSerializer(true);
         WrappedDataWatcher.WrappedDataWatcherObject watcherObject = new WrappedDataWatcher.WrappedDataWatcherObject(2, chatSerializer);
@@ -520,6 +525,10 @@ public class HealthListeners implements Listener {
         if (mobInfo == null) {
             return amount;
         }
+        if (mobInfo.getHits() > 0) {
+            mobInfo.setHits(mobInfo.getHits() - 1);
+            return 0;
+        }
         double currentHealth = mobInfo.getStatValue(StatType.HEALTH), healthLeft = Math.max(currentHealth - amount, 0);
         mobInfo.setStatValue(StatType.HEALTH, healthLeft);
         target.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
@@ -579,7 +588,7 @@ public class HealthListeners implements Listener {
         Bukkit.getServer().getPluginManager().callEvent(new EntityDamageEvent(target, EntityDamageEvent.DamageCause.MAGIC, amount));
     }
 
-    public static void playerTrueDmaageEntity(Player attacker, LivingEntity target, double amount) {
+    public static void playerTrueDamageEntity(Player attacker, LivingEntity target, double amount) {
         Bukkit.getServer().getPluginManager().callEvent(new EntityDamageEvent(target, EntityDamageEvent.DamageCause.SUICIDE, amount));
     }
 

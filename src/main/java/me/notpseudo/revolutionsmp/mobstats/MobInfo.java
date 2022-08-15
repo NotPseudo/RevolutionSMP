@@ -15,6 +15,7 @@ public class MobInfo extends BaseEntityStats implements Serializable {
     private CustomMobType customMobType;
     private String name;
     private int level;
+    private int hits;
 
     private double magicResistance;
 
@@ -28,6 +29,7 @@ public class MobInfo extends BaseEntityStats implements Serializable {
         owningPlayer = null;
         attackers = new HashMap<>();
         this.holder = holder;
+        hits = 0;
     }
 
     public MobInfo(CustomMobType customMobType, int level, UUID holder, UUID player) {
@@ -40,10 +42,19 @@ public class MobInfo extends BaseEntityStats implements Serializable {
         owningPlayer = player;
         this.holder = holder;
         attackers = new HashMap<>();
+        hits = 0;
     }
 
     public int getLevel() {
         return level;
+    }
+
+    public int getHits() {
+        return hits;
+    }
+
+    public void setHits(int hits) {
+        this.hits = hits;
     }
 
     public double getMagicResistance() {
