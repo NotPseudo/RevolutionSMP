@@ -318,7 +318,7 @@ public enum StatType {
     }
 
     public Component getNameWithSymbol() {
-        return Component.text(getSymbol() + " " + getNameWithSymbol() + " ", getColor());
+        return Component.text(getSymbol() + " " + getName() + " ", getColor());
     }
 
     public boolean isPercentage() {

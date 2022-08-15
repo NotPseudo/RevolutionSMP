@@ -42,8 +42,9 @@ public class DepositMenu extends Menu {
                 Component.text("Bank Deposit", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false),
                 Component.empty(),
                 Component.text("Current Balance: ", NamedTextColor.GRAY).append(Component.text(ecoInfo.getBank(), NamedTextColor.GOLD)).decoration(TextDecoration.ITALIC, false),
-                Component.text("Amount to deposit: ", NamedTextColor.GRAY).append(Component.text((int) ecoInfo.getPurse(), NamedTextColor.GRAY)).decoration(TextDecoration.ITALIC, false)
+                Component.text("Amount to deposit: ", NamedTextColor.GRAY).append(Component.text((int) ecoInfo.getPurse(), NamedTextColor.GOLD)).decoration(TextDecoration.ITALIC, false)
         ));
+        depositAll.setItemMeta(allMeta);
         inventory.setItem(11, makeMenuItemAction(depositAll, MenuAction.DEPOSIT_ALL));
 
         ItemStack depositHalf = new ItemStack(Material.CHEST, 32);
@@ -53,8 +54,9 @@ public class DepositMenu extends Menu {
                 Component.text("Bank Deposit", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false),
                 Component.empty(),
                 Component.text("Current Balance: ", NamedTextColor.GRAY).append(Component.text(ecoInfo.getBank(), NamedTextColor.GOLD)).decoration(TextDecoration.ITALIC, false),
-                Component.text("Amount to deposit: ", NamedTextColor.GRAY).append(Component.text((int) (0.5 * ecoInfo.getPurse()), NamedTextColor.GRAY)).decoration(TextDecoration.ITALIC, false)
+                Component.text("Amount to deposit: ", NamedTextColor.GRAY).append(Component.text((int) (0.5 * ecoInfo.getPurse()), NamedTextColor.GOLD)).decoration(TextDecoration.ITALIC, false)
         ));
+        depositHalf.setItemMeta(halfMeta);
         inventory.setItem(13, makeMenuItemAction(depositHalf, MenuAction.DEPOSIT_HALF));
 
         ItemStack custom = new ItemStack(Material.ANVIL);
@@ -65,6 +67,7 @@ public class DepositMenu extends Menu {
                 Component.empty(),
                 Component.text("Click to deposit a specific amount of coins", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false)
                 ));
+        custom.setItemMeta(customMeta);
         inventory.setItem(15, makeMenuItem(custom, MenuType.CUSTOM_DEPOSIT));
 
         addBackButton(31, MenuType.BANK);
@@ -107,7 +110,8 @@ public class DepositMenu extends Menu {
         if (menuItem.getAction() == MenuAction.DEPOSIT_HALF) {
             percent = 50;
         }
-        player.sendMessage(Component.text("Deposited " + info.depositPercentFromPurse(percent) + " coins into your bank account from your purse", NamedTextColor.GREEN));
+        double amount = info.depositPercentFromPurse(percent);
+        player.sendMessage(Component.text("Deposited " + amount + " coins into your bank account from your purse", NamedTextColor.GREEN));
         BukkitRunnable back = new BukkitRunnable() {
             @Override
             public void run() {

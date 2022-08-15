@@ -32,7 +32,7 @@ public class MoneyMenu extends Menu {
     public void setItems() {
         PlayerEcoInfo ecoInfo = EcoUtils.getEcoInfo(player);
 
-        ItemStack bank = new ItemStack(Material.YELLOW_SHULKER_BOX);
+        ItemStack bank = new ItemStack(Material.ENDER_CHEST);
         ItemMeta bankMeta = bank.getItemMeta();
         bankMeta.displayName(Component.text("Bank Account", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
         bankMeta.lore(List.of(
@@ -43,9 +43,10 @@ public class MoneyMenu extends Menu {
                 Component.empty(),
                 Component.text("Balance: ", NamedTextColor.GRAY).append(Component.text(ecoInfo.getBank(), NamedTextColor.GOLD)).decoration(TextDecoration.ITALIC, false)
         ));
+        bank.setItemMeta(bankMeta);
         inventory.setItem(11, makeMenuItem(bank, MenuType.BANK));
 
-        ItemStack purse = new ItemStack(Material.BUNDLE);
+        ItemStack purse = new ItemStack(Material.CHEST);
         ItemMeta purseMeta = purse.getItemMeta();
         purseMeta.displayName(Component.text("Purse", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
         purseMeta.lore(List.of(
@@ -55,6 +56,7 @@ public class MoneyMenu extends Menu {
                 Component.empty(),
                 Component.text("Purse: ", NamedTextColor.GRAY).append(Component.text(ecoInfo.getPurse(), NamedTextColor.GOLD)).decoration(TextDecoration.ITALIC, false)
                 ));
+        purse.setItemMeta(purseMeta);
         inventory.setItem(15, makeMenuItem(purse, null));
 
         addBackButton(MenuType.MAIN);

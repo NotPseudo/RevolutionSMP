@@ -39,11 +39,11 @@ public class PlayerEcoInfo implements Serializable {
         EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
     }
 
-    private void setPurse(double amount) {
+    public void setPurse(double amount) {
         purse = Math.round(amount * 100) / 100.0;
     }
 
-    private void setBank(double amount) {
+    public void setBank(double amount) {
         bank = Math.round(amount * 100) / 100.0;
     }
 

@@ -61,6 +61,7 @@ public class EnchantmentTableMenu extends Menu {
         placeMeta.lore(List.of(
                 Component.text("Place an item into the open slot to see available enchantments", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
         ));
+        place.setItemMeta(placeMeta);
         inventory.setItem(23, makeMenuItem(place, null));
 
         ItemStack enchant = new ItemStack(Material.ENCHANTING_TABLE);
@@ -69,6 +70,7 @@ public class EnchantmentTableMenu extends Menu {
         enchantMeta.lore(List.of(
                 Component.text("Place an item into the slot above to see available enchantments", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
         ));
+        enchant.setItemMeta(enchantMeta);
         inventory.setItem(28, makeMenuItem(enchant, null));
         addCloseButton();
 
@@ -189,6 +191,7 @@ public class EnchantmentTableMenu extends Menu {
                     placeMeta.lore(List.of(
                             Component.text("This item can not be enchanted", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false)
                     ));
+                    place.setItemMeta(placeMeta);
                     inventory.setItem(23, makeMenuItem(place, null));
                 }
             }
@@ -262,6 +265,7 @@ public class EnchantmentTableMenu extends Menu {
             backMeta.lore(List.of(
                Component.text("Click to view the previous page of enchants", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
             ));
+            back.setItemMeta(backMeta);
             inventory.setItem(17, makeMenuItemAction(back, MenuAction.PREVIOUS_PAGE));
         }
         if (moreHigher()) {
@@ -271,6 +275,7 @@ public class EnchantmentTableMenu extends Menu {
             nextMeta.lore(List.of(
                     Component.text("Click to view the next page of enchants", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
             ));
+            next.setItemMeta(nextMeta);
             inventory.setItem(35, makeMenuItemAction(next, MenuAction.NEXT_PAGE));
         }
     }

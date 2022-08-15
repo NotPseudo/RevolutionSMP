@@ -20,6 +20,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -48,7 +49,7 @@ public abstract class Menu implements InventoryHolder {
 
     public void fillGlass() {
         for (int i = 0; i < getSlots(); i++) {
-            inventory.setItem(i, makeMenuItem(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1), null));
+            inventory.setItem(i, makeMenuGlass(new ItemStack(Material.GRAY_STAINED_GLASS_PANE)));
         }
     }
 
@@ -62,7 +63,9 @@ public abstract class Menu implements InventoryHolder {
             return;
         }
         ItemStack close = new ItemStack(Material.BARRIER);
-        close.getItemMeta().displayName(Component.text("Close", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
+        ItemMeta closeMeta = close.getItemMeta();
+        closeMeta.displayName(Component.text("Close", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
+        close.setItemMeta(closeMeta);
         inventory.setItem(index, makeMenuItem(close, MenuType.CLOSE));
     }
 
@@ -76,7 +79,9 @@ public abstract class Menu implements InventoryHolder {
             return;
         }
         ItemStack back = new ItemStack(Material.ARROW);
-        back.getItemMeta().displayName(Component.text("Back", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
+        ItemMeta backMeta = back.getItemMeta();
+        backMeta.displayName(Component.text("Back", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
+        back.setItemMeta(backMeta);
         inventory.setItem(index, makeMenuItem(back, previous));
     }
 
@@ -110,7 +115,9 @@ public abstract class Menu implements InventoryHolder {
                 next.open();
             }
         }
-    };
+    }
+
+    ;
 
     public void handleMoveOut(InventoryMoveItemEvent event) {
         MenuItem menuItem = event.getItem().getItemMeta().getPersistentDataContainer().get(MenuUtils.getMenuKey(), new MenuItemDataType());
@@ -150,6 +157,7 @@ public abstract class Menu implements InventoryHolder {
             return null;
         }
         ItemMeta meta = item.getItemMeta();
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_DYE, ItemFlag.HIDE_PLACED_ON, ItemFlag.HIDE_POTION_EFFECTS);
         meta.getPersistentDataContainer().set(MenuUtils.getMenuKey(), new MenuItemDataType(), new MenuItem(nextType));
         item.setItemMeta(meta);
         return item;
@@ -161,6 +169,18 @@ public abstract class Menu implements InventoryHolder {
         }
         ItemMeta meta = item.getItemMeta();
         meta.getPersistentDataContainer().set(MenuUtils.getMenuKey(), new MenuItemDataType(), new MenuItem(action));
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public ItemStack makeMenuGlass(ItemStack item) {
+        if (item == null || item.getType() == Material.AIR) {
+            return null;
+        }
+        ItemMeta meta = item.getItemMeta();
+        meta.displayName(Component.empty());
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_DYE, ItemFlag.HIDE_PLACED_ON, ItemFlag.HIDE_POTION_EFFECTS);
+        meta.getPersistentDataContainer().set(MenuUtils.getMenuKey(), new MenuItemDataType(), new MenuItem());
         item.setItemMeta(meta);
         return item;
     }
@@ -185,7 +205,7 @@ public abstract class Menu implements InventoryHolder {
 
     public List<Component> getProgressList(SkillObject skill) {
         ArrayList<Component> lore = new ArrayList<>();
-        lore.add(Component.text("Progress to Level " + (int) skill.getLevel() + 1 + ": ", NamedTextColor.GRAY).append(Component.text(Math.round(skill.getPercent() * 100) + "%", NamedTextColor.YELLOW)).decoration(TextDecoration.ITALIC, false));
+        lore.add(Component.text("Progress to Level " + (int) (skill.getLevel() + 1) + ": ", NamedTextColor.GRAY).append(Component.text(Math.round(skill.getPercent() * 100) + "%", NamedTextColor.YELLOW)).decoration(TextDecoration.ITALIC, false));
         lore.add(Component.text(getProgressString(skill.getPercent())).append(Component.text(" " + skill.getCurrentXP(), NamedTextColor.YELLOW)).append(Component.text("/", NamedTextColor.GOLD)).append(Component.text(skill.getXpForNextLevel(), NamedTextColor.YELLOW)).decoration(TextDecoration.ITALIC, false));
         lore.add(Component.empty());
         lore.addAll(SkillUtils.getSkillRewards(skill));
@@ -195,7 +215,8 @@ public abstract class Menu implements InventoryHolder {
     public List<Component> getTotalCollectionProgress(CollectionsHolder holder, SkillType type) {
         ArrayList<Component> lore = new ArrayList<>();
         if (type == null) {
-            lore.add(Component.text("View your Collections progression. Collect more of a material to unlock rewards", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+            lore.add(Component.text("View your Collections progression", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+            lore.add(Component.text("Collect more of a material to unlock rewards", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
         } else {
             lore.add(Component.text("View your " + ItemEditor.getStringFromEnum(type) + " Collection!", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
         }

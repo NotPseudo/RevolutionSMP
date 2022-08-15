@@ -48,6 +48,7 @@ public class CustomDepositMenu extends Menu {
                 Component.empty(),
                 Component.text("Click the right to deposit the amount you wrote", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
         ));
+        left.setItemMeta(leftMeta);
         anvil.setFirstItem(makeMenuItem(left, null));
 
         ItemStack right = new ItemStack(Material.BOOK);
@@ -58,6 +59,7 @@ public class CustomDepositMenu extends Menu {
                 Component.empty(),
                 Component.text("Click this to deposit the amount you wrote", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false)
         ));
+        right.setItemMeta(rightMeta);
         anvil.setResult(makeMenuItemAction(right, MenuAction.DEPOSIT_CUSTOM));
     }
 

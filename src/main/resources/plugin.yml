@@ -71,3 +71,9 @@ commands:
   spawncustom:
     description: Admin command to test spawning custom mobs
     usage: /spawncustom <CustomMobType>
+  money:
+    description: View balances and admin command to edit money values
+    usage: /money <bank | purse> <add | set | remove> <amount>
+  menu:
+    description: Used to open the player menu
+    usage: /menu

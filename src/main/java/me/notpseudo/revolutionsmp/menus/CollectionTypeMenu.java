@@ -51,6 +51,7 @@ public class CollectionTypeMenu extends Menu {
         ItemMeta topMeta = top.getItemMeta();
         topMeta.displayName(Component.text(ItemEditor.getStringFromEnum(category) + " Collection", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
         topMeta.lore(getTotalCollectionProgress(holder, category));
+        top.setItemMeta(topMeta);
         inventory.setItem(4, makeMenuItem(top, null));
 
         ArrayList<CollectionObject> collections = holder.getCollectionsFromCategory(category);

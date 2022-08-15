@@ -23,7 +23,7 @@ public class ProfileMenu extends Menu {
 
     @Override
     public Component getTitle() {
-        return null;
+        return Component.text("Profile");
     }
 
     @Override
@@ -79,6 +79,7 @@ public class ProfileMenu extends Menu {
         generalLore.add(StatType.FEROCITY.getNameWithSymbol().append(Component.text(" " + stats.getStatValue(StatType.FEROCITY), NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false));
         generalLore.add(StatType.ABILITY_DAMAGE.getNameWithSymbol().append(Component.text(" " + stats.getStatValue(StatType.ABILITY_DAMAGE), NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false));
         generalMeta.lore(generalLore);
+        general.setItemMeta(generalMeta);
         inventory.setItem(24, makeMenuItem(general, null));
 
         ItemStack skill = new ItemStack(Material.CLOCK, 1);
@@ -87,22 +88,19 @@ public class ProfileMenu extends Menu {
         List<Component> skillLore = new ArrayList<>();
         skillLore.add(Component.text("Skill statistics that improve some activities", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
         skillLore.add(Component.empty());
-        generalLore.add(StatType.FORAGING_FORTUNE.getNameWithSymbol().append(Component.text(" " + stats.getStatValue(StatType.FARMING_FORTUNE), NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false));
-        generalLore.add(StatType.MINING_FORTUNE.getNameWithSymbol().append(Component.text(" " + stats.getStatValue(StatType.MINING_FORTUNE), NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false));
-        generalLore.add(StatType.FARMING_FORTUNE.getNameWithSymbol().append(Component.text(" " + stats.getStatValue(StatType.FARMING_FORTUNE), NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false));
-        generalLore.add(StatType.BREAKING_POWER.getNameWithSymbol().append(Component.text(" " + stats.getStatValue(StatType.BREAKING_POWER), NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false));
-        generalLore.add(StatType.PRISTINE.getNameWithSymbol().append(Component.text(" " + stats.getStatValue(StatType.PRISTINE), NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false));
-        generalLore.add(StatType.PURITY.getNameWithSymbol().append(Component.text(" " + stats.getStatValue(StatType.PURITY), NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false));
+        skillLore.add(StatType.FORAGING_FORTUNE.getNameWithSymbol().append(Component.text(" " + stats.getStatValue(StatType.FARMING_FORTUNE), NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false));
+        skillLore.add(StatType.MINING_FORTUNE.getNameWithSymbol().append(Component.text(" " + stats.getStatValue(StatType.MINING_FORTUNE), NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false));
+        skillLore.add(StatType.FARMING_FORTUNE.getNameWithSymbol().append(Component.text(" " + stats.getStatValue(StatType.FARMING_FORTUNE), NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false));
+        skillLore.add(StatType.BREAKING_POWER.getNameWithSymbol().append(Component.text(" " + stats.getStatValue(StatType.BREAKING_POWER), NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false));
+        skillLore.add(StatType.PRISTINE.getNameWithSymbol().append(Component.text(" " + stats.getStatValue(StatType.PRISTINE), NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false));
+        skillLore.add(StatType.PURITY.getNameWithSymbol().append(Component.text(" " + stats.getStatValue(StatType.PURITY), NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false));
         skillMeta.lore(skillLore);
+        skill.setItemMeta(skillMeta);
         inventory.setItem(25, makeMenuItem(skill, null));
 
-        ItemStack back = new ItemStack(Material.ARROW, 1);
-        back.getItemMeta().displayName(Component.text("Back", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
-        inventory.setItem(48, makeMenuItem(back, MenuType.MAIN));
+        addBackButton(MenuType.MAIN);
 
-        ItemStack close = new ItemStack(Material.BARRIER, 1);
-        close.getItemMeta().displayName(Component.text("Close", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
-        inventory.setItem(49, makeMenuItem(close, MenuType.CLOSE));
+        addCloseButton();
     }
 
 }

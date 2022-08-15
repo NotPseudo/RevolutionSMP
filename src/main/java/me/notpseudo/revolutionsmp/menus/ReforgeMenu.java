@@ -52,6 +52,7 @@ public class ReforgeMenu extends Menu {
         reforgeMeta.displayName(Component.text("Reforge Item", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
         reforgeMeta.lore(List.of(Component.text("Place an item above and click here to randomly reforge it!", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
                 Component.text("Reforging an item gives it stat boosts", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)));
+        reforge.setItemMeta(reforgeMeta);
         inventory.setItem(22, makeMenuItemAction(reforge, MenuAction.REFORGE));
 
         addCloseButton();

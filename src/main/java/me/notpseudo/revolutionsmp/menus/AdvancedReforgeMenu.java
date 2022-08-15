@@ -48,19 +48,18 @@ public class AdvancedReforgeMenu extends Menu {
 
         ItemStack reforge = new ItemStack(Material.ANVIL);
         ItemMeta reforgeMeta = reforge.getItemMeta();
-        reforgeMeta.displayName(Component.text("Reforge Item", NamedTextColor.YELLOW));
+        reforgeMeta.displayName(Component.text("Reforge Item", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
         reforgeMeta.lore(List.of(
                 Component.text("Place an item to reforge on the left", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
                 Component.empty(),
                 Component.text("Place a Reforge Stone on the right", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
                 Component.empty(),
-                Component.text("Click the anvil to apply the reforge")
+                Component.text("Click the anvil to apply the reforge", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false)
         ));
+        reforge.setItemMeta(reforgeMeta);
         inventory.setItem(22, makeMenuItemAction(reforge, MenuAction.REFORGE));
 
-        ItemStack close = new ItemStack(Material.BARRIER);
-        close.getItemMeta().displayName(Component.text("Close", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
-        inventory.setItem(49, makeMenuItem(close, MenuType.CLOSE));
+        addCloseButton();
     }
 
     @Override
@@ -201,21 +200,21 @@ public class AdvancedReforgeMenu extends Menu {
     }
 
     private void setLeft(Material material) {
-        inventory.setItem(11, makeMenuItem(new ItemStack(material), null));
-        inventory.setItem(12, makeMenuItem(new ItemStack(material), null));
-        inventory.setItem(20, makeMenuItem(new ItemStack(material), null));
+        inventory.setItem(11, makeMenuGlass(new ItemStack(material)));
+        inventory.setItem(12, makeMenuGlass(new ItemStack(material)));
+        inventory.setItem(20, makeMenuGlass(new ItemStack(material)));
     }
 
     private void setRight(Material material) {
-        inventory.setItem(14, makeMenuItem(new ItemStack(material), null));
-        inventory.setItem(15, makeMenuItem(new ItemStack(material), null));
-        inventory.setItem(24, makeMenuItem(new ItemStack(material), null));
+        inventory.setItem(14, makeMenuGlass(new ItemStack(material)));
+        inventory.setItem(15, makeMenuGlass(new ItemStack(material)));
+        inventory.setItem(24, makeMenuGlass(new ItemStack(material)));
     }
 
     private void setBottomRow(Material material) {
         for (int i = 45; i < 54; i++) {
             if (i != 49) {
-                inventory.setItem(i, makeMenuItem(new ItemStack(material), null));
+                inventory.setItem(i, makeMenuGlass(new ItemStack(material)));
             }
         }
     }

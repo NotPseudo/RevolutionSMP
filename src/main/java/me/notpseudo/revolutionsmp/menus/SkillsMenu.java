@@ -38,6 +38,7 @@ public class SkillsMenu extends Menu {
         ItemMeta skillsMeta = skills.getItemMeta();
         skillsMeta.displayName(Component.text("Skills", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
         skillsMeta.lore(List.of(Component.text("View your Skill progression and rewards", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)));
+        skills.setItemMeta(skillsMeta);
         inventory.setItem(4, makeMenuItem(skills, null));
 
         SkillHolder holder = SkillUtils.getHolder(player);
@@ -50,16 +51,19 @@ public class SkillsMenu extends Menu {
         farmingLore.add(Component.empty());
         farmingLore.addAll(getProgressList(holder.getSkill(SkillType.FARMING)));
         farmingMeta.lore(farmingLore);
+        farming.setItemMeta(farmingMeta);
         inventory.setItem(19, makeMenuItem(farming, null));
 
         ItemStack mining = new ItemStack(Material.STONE_PICKAXE, 1);
         ItemMeta miningMeta = mining.getItemMeta();
         miningMeta.displayName(Component.text("Mining", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
         List<Component> miningLore = new ArrayList<>();
-        miningLore.add(Component.text("Explore deep into the ground for ores and valuable materials to earn Mining XP!", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+        miningLore.add(Component.text("Explore deep into the ground", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+        miningLore.add(Component.text("for ores and valuable materials to earn Mining XP!", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
         miningLore.add(Component.empty());
         miningLore.addAll(getProgressList(holder.getSkill(SkillType.MINING)));
         miningMeta.lore(miningLore);
+        mining.setItemMeta(miningMeta);
         inventory.setItem(20, makeMenuItem(mining, null));
 
         ItemStack combat = new ItemStack(Material.STONE_SWORD, 1);
@@ -70,6 +74,7 @@ public class SkillsMenu extends Menu {
         combatLore.add(Component.empty());
         combatLore.addAll(getProgressList(holder.getSkill(SkillType.COMBAT)));
         combatMeta.lore(combatLore);
+        combat.setItemMeta(combatMeta);
         inventory.setItem(21, makeMenuItem(combat, null));
 
         ItemStack foraging = new ItemStack(Material.JUNGLE_SAPLING, 1);
@@ -80,16 +85,19 @@ public class SkillsMenu extends Menu {
         foragingLore.add(Component.empty());
         foragingLore.addAll(getProgressList(holder.getSkill(SkillType.FORAGING)));
         foragingMeta.lore(foragingLore);
+        foraging.setItemMeta(foragingMeta);
         inventory.setItem(22, makeMenuItem(foraging, null));
 
         ItemStack fishing = new ItemStack(Material.FISHING_ROD, 1);
         ItemMeta fishingMeta = fishing.getItemMeta();
         fishingMeta.displayName(Component.text("Fishing", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
         List<Component> fishingLore = new ArrayList<>();
-        fishingLore.add(Component.text("Fish up items, treasure, and powerful creatures to earn Fishing XP!", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+        fishingLore.add(Component.text("Fish up items, treasure, and powerful creatures", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+        fishingLore.add(Component.text("to earn Fishing XP!", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
         fishingLore.add(Component.empty());
         fishingLore.addAll(getProgressList(holder.getSkill(SkillType.FISHING)));
         fishingMeta.lore(fishingLore);
+        fishing.setItemMeta(fishingMeta);
         inventory.setItem(23, makeMenuItem(fishing, null));
 
         ItemStack enchanting = new ItemStack(Material.ENCHANTING_TABLE, 1);
@@ -100,25 +108,23 @@ public class SkillsMenu extends Menu {
         enchantingLore.add(Component.empty());
         enchantingLore.addAll(getProgressList(holder.getSkill(SkillType.ENCHANTING)));
         enchantingMeta.lore(enchantingLore);
+        enchanting.setItemMeta(enchantingMeta);
         inventory.setItem(24, makeMenuItem(enchanting, null));
 
-        ItemStack alchemy = new ItemStack(Material.ENCHANTING_TABLE, 1);
+        ItemStack alchemy = new ItemStack(Material.BREWING_STAND, 1);
         ItemMeta alchemyMeta = alchemy.getItemMeta();
-        alchemyMeta.displayName(Component.text("Enchanting", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
+        alchemyMeta.displayName(Component.text("Alchemy", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
         List<Component> alchemyLore = new ArrayList<>();
-        alchemyLore.add(Component.text("Brew potions to earn Enchanting XP!", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+        alchemyLore.add(Component.text("Brew potions to earn alchemy XP!", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
         alchemyLore.add(Component.empty());
         alchemyLore.addAll(getProgressList(holder.getSkill(SkillType.ALCHEMY)));
         alchemyMeta.lore(alchemyLore);
+        alchemy.setItemMeta(alchemyMeta);
         inventory.setItem(25, makeMenuItem(alchemy, null));
 
-        ItemStack back = new ItemStack(Material.ARROW, 1);
-        back.getItemMeta().displayName(Component.text("Back", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
-        inventory.setItem(48, makeMenuItem(back, MenuType.MAIN));
+        addBackButton(MenuType.MAIN);
 
-        ItemStack close = new ItemStack(Material.BARRIER, 1);
-        close.getItemMeta().displayName(Component.text("Close", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
-        inventory.setItem(49, makeMenuItem(close, MenuType.CLOSE));
+        addCloseButton();
     }
 
 }

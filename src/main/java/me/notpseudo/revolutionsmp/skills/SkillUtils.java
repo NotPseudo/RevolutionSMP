@@ -110,7 +110,6 @@ public class SkillUtils implements Listener {
     public static List<Component> getSkillRewards(SkillObject skill) {
         ArrayList<Component> lore = new ArrayList<>();
         lore.add(Component.text("Level " + (int) skill.getLevel() + " Rewards: ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
-        lore.add(Component.text("Level " + (int) skill.getLevel() + " Rewards: ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
         GatheringStats gather = SkillUtils.getBonusGathering(skill, IncreaseType.INCREASE);
         ArmorStats armor = SkillUtils.getBonusArmor(skill, IncreaseType.INCREASE);
         MiningStats mining = SkillUtils.getBonusMining(skill, IncreaseType.INCREASE);
@@ -126,7 +125,7 @@ public class SkillUtils implements Listener {
                 lore.add(Component.text(ItemEditor.getStatString(armor.getStatValue(StatType.DEFENSE)) + " ", NamedTextColor.GREEN).append(StatType.DEFENSE.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
                 break;
             case COMBAT:
-                WeaponStats incDamage = SkillUtils.getEventWeapon(skill, IncreaseType.MULTIPLICATIVE_PERCENT);
+                WeaponStats incDamage = SkillUtils.getEventWeapon(skill, IncreaseType.ADDITIVE_PERCENT);
                 lore.add(Component.text(ItemEditor.getStatString(incDamage.getStatValue(StatType.DAMAGE)) + "% ", NamedTextColor.GREEN).append(StatType.DAMAGE.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
                 lore.add(Component.text(ItemEditor.getStatString(weapon.getStatValue(StatType.CRIT_CHANCE)) + " ", NamedTextColor.GREEN).append(StatType.CRIT_CHANCE.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
                 break;
@@ -135,7 +134,7 @@ public class SkillUtils implements Listener {
                 lore.add(Component.text(ItemEditor.getStatString(weapon.getStatValue(StatType.STRENGTH)) + " ", NamedTextColor.GREEN).append(StatType.STRENGTH.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
                 break;
             case FISHING:
-                lore.add(Component.text("Increases the quality of treasure fished up each level").decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text("Increases the quality of treasure fished up each level", NamedTextColor.WHITE).decoration(TextDecoration.ITALIC, false));
                 lore.add(Component.text(ItemEditor.getStatString(armor.getStatValue(StatType.HEALTH)) + " ", NamedTextColor.GREEN).append(StatType.HEALTH.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
                 break;
             case ENCHANTING:
