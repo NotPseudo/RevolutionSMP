@@ -100,7 +100,7 @@ public class HarvestingListeners implements Listener {
         affectedByMiningSpeed.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("STONE") && !m.isLegacy()).collect(Collectors.toSet()));
         affectedByMiningSpeed.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("BRICK") && !m.isLegacy()).collect(Collectors.toSet()));
         affectedByMiningSpeed.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("PURPUR") && !m.isLegacy()).collect(Collectors.toSet()));
-        affectedByMiningSpeed.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("CONCRETE") && !m.isLegacy()).collect(Collectors.toSet()));
+        affectedByMiningSpeed.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("CONCRETE") && !m.toString().contains("CONCRETE_POWDER") && !m.isLegacy()).collect(Collectors.toSet()));
         affectedByMiningSpeed.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("TERRACOTTA") && !m.isLegacy()).collect(Collectors.toSet()));
         affectedByMiningSpeed.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("QUARTZ") && !m.isLegacy()).collect(Collectors.toSet()));
         affectedByMiningSpeed.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("RAIL") && !m.isLegacy()).collect(Collectors.toSet()));
@@ -109,7 +109,7 @@ public class HarvestingListeners implements Listener {
                 Material.IRON_BARS, Material.IRON_DOOR, Material.IRON_TRAPDOOR, Material.SPAWNER,
                 Material.BLAST_FURNACE, Material.DISPENSER, Material.DROPPER, Material.FURNACE, Material.LANTERN, Material.OBSERVER, Material.STONECUTTER, Material.SMOKER, Material.LODESTONE, Material.HOPPER,
                 Material.BEACON, Material.LIGHTNING_ROD, Material.CONDUIT, Material.CAULDRON, Material.SHULKER_BOX, Material.BREWING_STAND, Material.LIGHT_WEIGHTED_PRESSURE_PLATE, Material.HEAVY_WEIGHTED_PRESSURE_PLATE));
-        List.of(Material.SCULK, Material.SCULK_VEIN, Material.SCULK_SENSOR, Material.SCULK_CATALYST, Material.SCULK_SHRIEKER).forEach(affectedByMiningSpeed::remove);
+        List.of(Material.SCULK, Material.SCULK_VEIN, Material.SCULK_SENSOR, Material.SCULK_CATALYST, Material.SCULK_SHRIEKER, Material.SAND, Material.GRAVEL, Material.SPONGE, Material.WET_SPONGE).forEach(affectedByMiningSpeed::remove);
     }
 
     public static NamespacedKey getWorldPlacedKey() {
@@ -515,7 +515,7 @@ public class HarvestingListeners implements Listener {
     }
 
     public static List<ItemDropObject> getDropsForMaterial(Material material, double fortune) {
-        int multiplier = getAddedTimes(fortune);
+        int multiplier = 1 + getAddedTimes(fortune);
         return switch (material) {
             default -> List.of(new ItemDropObject(material, 1));
             case WHEAT ->
