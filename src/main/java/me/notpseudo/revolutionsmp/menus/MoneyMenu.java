@@ -36,10 +36,12 @@ public class MoneyMenu extends Menu {
         ItemMeta bankMeta = bank.getItemMeta();
         bankMeta.displayName(Component.text("Bank Account", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
         bankMeta.lore(List.of(
-                Component.text("Keep your coins safe by putting them in the bank", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
+                Component.text("Keep your coins safe by", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
+                Component.text("putting them in the bank", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
                 Component.empty(),
                 Component.text("Speak to a Nitwit to access the bank menu", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
-                Component.text("Reach a high enough ", NamedTextColor.GRAY).append(Component.text("Emerald Collection ", NamedTextColor.GRAY)).append(Component.text("to access the menu from anywhere", NamedTextColor.GRAY)).decoration(TextDecoration.ITALIC, false),
+                Component.text("Reach a high enough ", NamedTextColor.GRAY).append(Component.text("Emerald Collection ", NamedTextColor.GREEN)).decoration(TextDecoration.ITALIC, false),
+                Component.text("to access the menu from anywhere", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
                 Component.empty(),
                 Component.text("Balance: ", NamedTextColor.GRAY).append(Component.text(ecoInfo.getBank(), NamedTextColor.GOLD)).decoration(TextDecoration.ITALIC, false)
         ));
@@ -55,7 +57,7 @@ public class MoneyMenu extends Menu {
                 Component.text("Deposit your coins into your bank account to keep them safe", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
                 Component.empty(),
                 Component.text("Purse: ", NamedTextColor.GRAY).append(Component.text(ecoInfo.getPurse(), NamedTextColor.GOLD)).decoration(TextDecoration.ITALIC, false)
-                ));
+        ));
         purse.setItemMeta(purseMeta);
         inventory.setItem(15, makeMenuItem(purse, null));
 

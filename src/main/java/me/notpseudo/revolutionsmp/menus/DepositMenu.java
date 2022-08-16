@@ -101,16 +101,16 @@ public class DepositMenu extends Menu {
             if (next != null) {
                 next.open();
             }
+            return;
         }
         PlayerEcoInfo info = EcoUtils.getEcoInfo(player);
-        double percent = 0;
+        double amount = 0;
         if (menuItem.getAction() == MenuAction.DEPOSIT_ALL) {
-            percent = 100;
+            amount = info.depositPercentFromPurse(100);
         }
         if (menuItem.getAction() == MenuAction.DEPOSIT_HALF) {
-            percent = 50;
+            amount = info.depositPercentFromPurse(50);
         }
-        double amount = info.depositPercentFromPurse(percent);
         player.sendMessage(Component.text("Deposited " + amount + " coins into your bank account from your purse", NamedTextColor.GREEN));
         BukkitRunnable back = new BukkitRunnable() {
             @Override

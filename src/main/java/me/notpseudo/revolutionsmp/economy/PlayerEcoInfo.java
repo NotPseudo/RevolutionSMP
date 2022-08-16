@@ -41,10 +41,12 @@ public class PlayerEcoInfo implements Serializable {
 
     public void setPurse(double amount) {
         purse = Math.round(amount * 100) / 100.0;
+        EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
     }
 
     public void setBank(double amount) {
         bank = Math.round(amount * 100) / 100.0;
+        EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
     }
 
     public boolean depositFromPurse(double amount) {
@@ -53,8 +55,8 @@ public class PlayerEcoInfo implements Serializable {
             EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
             return false;
         }
-        addBank(amount);
-        setPurse(remain);
+        bank += Math.round(amount * 100) / 100.0;
+        purse = Math.round(remain * 100) / 100.0;
         EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
         return true;
     }
@@ -66,8 +68,8 @@ public class PlayerEcoInfo implements Serializable {
             EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
             return 0;
         }
-        addBank(amountTake);
-        setPurse(remain);
+        bank += Math.round(amountTake * 100) / 100.0;
+        purse = Math.round(remain * 100) / 100.0;
         EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
         return Math.round(amountTake * 100) / 100.0;
     }
@@ -78,8 +80,8 @@ public class PlayerEcoInfo implements Serializable {
             EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
             return false;
         }
-        addPurse(amount);
-        setBank(remain);
+        purse += Math.round(amount * 100) / 100.0;
+        bank = Math.round(remain * 100) / 100.0;
         EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
         return true;
     }
@@ -91,17 +93,17 @@ public class PlayerEcoInfo implements Serializable {
             EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
             return 0;
         }
-        addPurse(amountTake);
-        setBank(remain);
+        purse += Math.round(amountTake * 100) / 100.0;
+        bank = Math.round(remain * 100) / 100.0;
         EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
         return Math.round(amountTake * 100) / 100.0;
     }
 
     public double removeDeathAmount(double percent) {
         double amountRemoved = purse * (percent / 100);
-        addPurse(-1 * amountRemoved);
+        purse += Math.round((-1 * amountRemoved) * 100) / 100.0;
         EcoUtils.updatePlayerEco(Bukkit.getPlayer(player), this);
-        return amountRemoved;
+        return Math.round(amountRemoved * 100) / 100.0;
     }
 
 }

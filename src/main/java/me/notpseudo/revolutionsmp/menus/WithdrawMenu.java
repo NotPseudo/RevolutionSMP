@@ -113,19 +113,20 @@ public class WithdrawMenu extends Menu {
             if (next != null) {
                 next.open();
             }
+            return;
         }
         PlayerEcoInfo info = EcoUtils.getEcoInfo(player);
-        double percent = 0;
+        double amount = 0;
         if (menuItem.getAction() == MenuAction.WITHDRAW_ALL) {
-            percent = 100;
+            amount = info.withdrawPercentFromBank(100);
         }
         if (menuItem.getAction() == MenuAction.WITHDRAW_HALF) {
-            percent = 50;
+            amount = info.withdrawPercentFromBank(50);
         }
         if (menuItem.getAction() == MenuAction.WITHDRAW_25) {
-            percent = 25;
+            amount = info.withdrawPercentFromBank(25);
         }
-        player.sendMessage(Component.text("Withdrew " + info.withdrawPercentFromBank(percent) + " coins into your purse from your bank account", NamedTextColor.GREEN));
+        player.sendMessage(Component.text("Withdrew " + amount + " coins into your purse from your bank account", NamedTextColor.GREEN));
         BukkitRunnable back = new BukkitRunnable() {
             @Override
             public void run() {
