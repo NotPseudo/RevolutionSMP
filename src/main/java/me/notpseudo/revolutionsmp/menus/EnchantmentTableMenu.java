@@ -86,6 +86,26 @@ public class EnchantmentTableMenu extends Menu {
         }
         MenuItem menuItem = event.getCurrentItem().getItemMeta().getPersistentDataContainer().get(MenuUtils.getMenuKey(), new MenuItemDataType());
         if (menuItem == null) {
+            BukkitRunnable check = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    boolean show = checkItem();
+                    setItems();
+                    if (show) {
+                        showEnchants(0);
+                    } else {
+                        ItemStack place = new ItemStack(Material.RED_DYE);
+                        ItemMeta placeMeta = place.getItemMeta();
+                        placeMeta.displayName(Component.text("Invalid Item", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
+                        placeMeta.lore(List.of(
+                                Component.text("This item can not be enchanted", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false)
+                        ));
+                        place.setItemMeta(placeMeta);
+                        inventory.setItem(23, makeMenuItem(place, null));
+                    }
+                }
+            };
+            check.runTaskLater(RevolutionSMP.getPlugin(), 1);
             return;
         }
         event.setCancelled(true);
@@ -163,42 +183,6 @@ public class EnchantmentTableMenu extends Menu {
         }
     }
 
-    @Override
-    public void handleMoveOut(InventoryMoveItemEvent event) {
-        super.handleMoveOut(event);
-        BukkitRunnable check = new BukkitRunnable() {
-            @Override
-            public void run() {
-                checkItem();
-                setItems();
-            }
-        };
-        check.runTaskLater(RevolutionSMP.getPlugin(), 1);
-    }
-
-    @Override
-    public void handleMoveIn(InventoryMoveItemEvent event) {
-        super.handleMoveIn(event);
-        BukkitRunnable check = new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (checkItem()) {
-                    showEnchants(0);
-                } else {
-                    ItemStack place = new ItemStack(Material.RED_DYE);
-                    ItemMeta placeMeta = place.getItemMeta();
-                    placeMeta.displayName(Component.text("Invalid Item", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
-                    placeMeta.lore(List.of(
-                            Component.text("This item can not be enchanted", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false)
-                    ));
-                    place.setItemMeta(placeMeta);
-                    inventory.setItem(23, makeMenuItem(place, null));
-                }
-            }
-        };
-        check.runTaskLater(RevolutionSMP.getPlugin(), 1);
-    }
-
     private void showDetails(EnchantmentType type) {
         if (type.getEnchTableMax() < type.getMinLevel()) {
             return;
@@ -214,27 +198,32 @@ public class EnchantmentTableMenu extends Menu {
         for (int enchLevel = type.getMinLevel(); enchLevel <= type.getEnchTableMax(); enchLevel++) {
             int actualLocation = ((enchLevel - 1) / 7 + 2) * 9 + ((enchLevel - 1) % 7 + 1);
             ItemStack book = EnchantmentUtils.createGeneral(type, enchLevel);
-            List<Component> lore = book.getItemMeta().lore();
+            ItemMeta bookMeta = book.getItemMeta();
+            List<Component> lore = bookMeta.lore();
             if (lore == null) {
                 lore = new ArrayList<>();
             }
             if (enchant == null) {
                 lore.add(Component.text("Click to apply this enchantment on your item", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
-                book.getItemMeta().lore(lore);
+                bookMeta.lore(lore);
+                book.setItemMeta(bookMeta);
                 inventory.setItem(actualLocation, makeMenuItemAction(book, MenuAction.ADD_ENCHANT));
             } else {
                 if (enchLevel < enchant.getLevel()) {
                     lore.add(Component.text("Higher level of this enchantment is already present!", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
-                    book.getItemMeta().lore(lore);
+                    bookMeta.lore(lore);
+                    book.setItemMeta(bookMeta);
                     inventory.setItem(actualLocation, makeMenuItemAction(book, null));
                 } else if (enchLevel == enchant.getLevel()) {
                     lore.add(Component.text("This enchantment is already present", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
                     lore.add(Component.text("Click to remove this enchantment", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
-                    book.getItemMeta().lore(lore);
+                    bookMeta.lore(lore);
+                    book.setItemMeta(bookMeta);
                     inventory.setItem(actualLocation, makeMenuItemAction(book, MenuAction.REMOVE_ENCHANT));
                 } else {
                     lore.add(Component.text("Click to apply this enchantment on your item", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
-                    book.getItemMeta().lore(lore);
+                    bookMeta.lore(lore);
+                    book.setItemMeta(bookMeta);
                     inventory.setItem(actualLocation, makeMenuItemAction(book, MenuAction.ADD_ENCHANT));
                 }
             }
@@ -254,7 +243,7 @@ public class EnchantmentTableMenu extends Menu {
                 item = makeMenuItemAction(EnchantmentUtils.createGeneral(shownEnchants.get(menuIndex + actualStart)), MenuAction.ENCHANT_DETAILS);
                 lastShown = menuIndex + actualStart;
             } else {
-                item = makeMenuItem(new ItemStack(Material.GRAY_STAINED_GLASS_PANE), null);
+                item = makeMenuGlass(new ItemStack(Material.GRAY_STAINED_GLASS_PANE));
             }
             inventory.setItem(actualIndex, item);
         }

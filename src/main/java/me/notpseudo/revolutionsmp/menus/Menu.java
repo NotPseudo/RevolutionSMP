@@ -27,6 +27,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -36,11 +37,8 @@ public abstract class Menu implements InventoryHolder {
 
     protected Player player;
 
-    protected ArrayList<ItemStack> nonMenuItems;
-
     public Menu(Player player) {
         this.player = player;
-        nonMenuItems = new ArrayList<>();
     }
 
     public abstract Component getTitle();
@@ -88,7 +86,9 @@ public abstract class Menu implements InventoryHolder {
     public abstract void setItems();
 
     public void handleClick(InventoryClickEvent event) {
+        player.sendMessage("Click Event");
         if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) {
+            player.sendMessage("Current Item Is Null, Returning");
             return;
         }
         MenuItem menuItem = event.getCurrentItem().getItemMeta().getPersistentDataContainer().get(MenuUtils.getMenuKey(), new MenuItemDataType());
@@ -117,30 +117,9 @@ public abstract class Menu implements InventoryHolder {
         }
     }
 
-    ;
-
-    public void handleMoveOut(InventoryMoveItemEvent event) {
-        MenuItem menuItem = event.getItem().getItemMeta().getPersistentDataContainer().get(MenuUtils.getMenuKey(), new MenuItemDataType());
-        if (menuItem != null) {
-            event.setCancelled(true);
-            return;
-        }
-        nonMenuItems.remove(event.getItem());
-    }
-
-    public void handleMoveIn(InventoryMoveItemEvent event) {
-        MenuItem menuItem = event.getItem().getItemMeta().getPersistentDataContainer().get(MenuUtils.getMenuKey(), new MenuItemDataType());
-        if (menuItem != null) {
-            event.setCancelled(true);
-            return;
-        }
-        if (!(nonMenuItems.contains(event.getItem()))) {
-            nonMenuItems.add(event.getItem());
-        }
-    }
-
     public void handleClose(InventoryCloseEvent event) {
-        for (ItemStack item : player.getInventory().addItem(nonMenuItems.toArray(new ItemStack[0])).values()) {
+        List<ItemStack> nonMenu = Arrays.stream(inventory.getContents()).filter(i -> i != null && MenuUtils.getMenuInfo(i) == null).toList();
+        for (ItemStack item : player.getInventory().addItem(nonMenu.toArray(new ItemStack[0])).values()) {
             player.getWorld().dropItemNaturally(player.getLocation(), item);
         }
     }

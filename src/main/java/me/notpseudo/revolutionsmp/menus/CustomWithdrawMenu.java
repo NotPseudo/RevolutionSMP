@@ -4,6 +4,7 @@ import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.economy.EcoUtils;
 import me.notpseudo.revolutionsmp.economy.PlayerEcoInfo;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
@@ -37,9 +38,6 @@ public class CustomWithdrawMenu extends Menu {
 
     @Override
     public void setItems() {
-        if (!(inventory instanceof AnvilInventory anvil)) {
-            return;
-        }
         ItemStack left = new ItemStack(Material.PAPER);
         ItemMeta leftMeta = left.getItemMeta();
         leftMeta.displayName(Component.text("Enter a custom amount", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
@@ -49,8 +47,9 @@ public class CustomWithdrawMenu extends Menu {
                 Component.text("Click the right to withdraw the amount you wrote", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
         ));
         left.setItemMeta(leftMeta);
-        anvil.setFirstItem(makeMenuItem(left, null));
+        inventory.setItem(0, makeMenuItem(left, null));
 
+        /*
         ItemStack right = new ItemStack(Material.BOOK);
         ItemMeta rightMeta = right.getItemMeta();
         rightMeta.displayName(Component.text("Click to withdraw", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
@@ -60,7 +59,8 @@ public class CustomWithdrawMenu extends Menu {
                 Component.text("Click this to withdraw the amount you wrote", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false)
         ));
         right.setItemMeta(rightMeta);
-        anvil.setResult(makeMenuItemAction(right, MenuAction.WITHDRAW_CUSTOM));
+        inventory.setItem(1, makeMenuItemAction(right, MenuAction.WITHDRAW_CUSTOM));
+         */
     }
 
     @Override
@@ -105,15 +105,14 @@ public class CustomWithdrawMenu extends Menu {
     }
 
     private void withdrawCustom() {
-        if (!(inventory instanceof AnvilInventory anvil)) {
+        ItemStack paper = inventory.getItem(2);
+        if (paper == null || paper.getType() == Material.AIR) {
             return;
         }
-        String coinString = anvil.getRenameText();
-        if (coinString == null) {
-            player.sendMessage(Component.text("Could not read this number", NamedTextColor.RED));
-            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1F, 0.5F);
+        if (!(paper.displayName() instanceof TextComponent name)) {
             return;
         }
+        String coinString = name.content();
         double coins;
         try {
             coins = Double.parseDouble(coinString);

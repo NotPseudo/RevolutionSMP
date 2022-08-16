@@ -2,6 +2,7 @@ package me.notpseudo.revolutionsmp.listeners;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.menus.Menu;
+import me.notpseudo.revolutionsmp.menus.MenuUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -21,20 +22,14 @@ public class MenuListeners implements Listener {
         if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) {
             return;
         }
-        if (!(event.getInventory().getHolder() instanceof Menu menu)) {
-            return;
+        if (event.getInventory().getHolder() instanceof Menu menu) {
+            menu.handleClick(event);
+        } else {
+            if (MenuUtils.getMenuInfo(event.getCurrentItem()) != null) {
+                event.setCancelled(true);
+            }
         }
-        menu.handleClick(event);
-    }
 
-    @EventHandler
-    public void onInventoryMove(InventoryMoveItemEvent event) {
-        if (event.getInitiator().getHolder() instanceof Menu origin) {
-            origin.handleMoveOut(event);
-        }
-        if (event.getDestination().getHolder() instanceof Menu destination) {
-            destination.handleMoveIn(event);
-        }
     }
 
     @EventHandler

@@ -13,7 +13,6 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -69,6 +68,15 @@ public class AdvancedReforgeMenu extends Menu {
         }
         MenuItem menuItem = event.getCurrentItem().getItemMeta().getPersistentDataContainer().get(MenuUtils.getMenuKey(), new MenuItemDataType());
         if (menuItem == null) {
+            BukkitRunnable checkItem = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    checkLeft();
+                    checkRight();
+                    checkBoth();
+                }
+            };
+            checkItem.runTaskLater(RevolutionSMP.getPlugin(), 1);
             return;
         }
         event.setCancelled(true);
@@ -91,34 +99,6 @@ public class AdvancedReforgeMenu extends Menu {
         }
     }
 
-    @Override
-    public void handleMoveOut(InventoryMoveItemEvent event) {
-        super.handleMoveOut(event);
-        BukkitRunnable checkItem = new BukkitRunnable() {
-            @Override
-            public void run() {
-                checkLeft();
-                checkRight();
-                checkBoth();
-            }
-        };
-        checkItem.runTaskLater(RevolutionSMP.getPlugin(), 1);
-    }
-
-    @Override
-    public void handleMoveIn(InventoryMoveItemEvent event) {
-        super.handleMoveIn(event);
-        BukkitRunnable checkItem = new BukkitRunnable() {
-            @Override
-            public void run() {
-                checkLeft();
-                checkRight();
-                checkBoth();
-            }
-        };
-        checkItem.runTaskLater(RevolutionSMP.getPlugin(), 1);
-    }
-
     private boolean reforge() {
         if (!checkBoth()) {
             return false;
@@ -126,7 +106,6 @@ public class AdvancedReforgeMenu extends Menu {
         ItemStack result = inventory.getItem(33);
         if (result != null) {
             result.getItemMeta().getPersistentDataContainer().remove(MenuUtils.getMenuKey());
-            nonMenuItems.add(inventory.getItem(33));
             inventory.setItem(29, null);
             inventory.setItem(33, null);
         }

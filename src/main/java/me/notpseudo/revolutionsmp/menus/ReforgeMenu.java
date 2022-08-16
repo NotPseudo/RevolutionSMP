@@ -95,6 +95,13 @@ public class ReforgeMenu extends Menu {
         }
         MenuItem menuItem = event.getCurrentItem().getItemMeta().getPersistentDataContainer().get(MenuUtils.getMenuKey(), new MenuItemDataType());
         if (menuItem == null) {
+            BukkitRunnable checkReforge = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    checkItem();
+                }
+            };
+            checkReforge.runTaskLater(RevolutionSMP.getPlugin(), 1);
             return;
         }
         event.setCancelled(true);
@@ -116,30 +123,6 @@ public class ReforgeMenu extends Menu {
                 player.sendMessage(Component.text("This item could not be reforged!", NamedTextColor.RED));
             }
         }
-    }
-
-    @Override
-    public void handleMoveOut(InventoryMoveItemEvent event) {
-        super.handleMoveOut(event);
-        BukkitRunnable checkReforge = new BukkitRunnable() {
-            @Override
-            public void run() {
-                checkItem();
-            }
-        };
-        checkReforge.runTaskLater(RevolutionSMP.getPlugin(), 1);
-    }
-
-    @Override
-    public void handleMoveIn(InventoryMoveItemEvent event) {
-        super.handleMoveIn(event);
-        BukkitRunnable checkReforge = new BukkitRunnable() {
-            @Override
-            public void run() {
-                checkItem();
-            }
-        };
-        checkReforge.runTaskLater(RevolutionSMP.getPlugin(), 1);
     }
 
     private void checkItem() {

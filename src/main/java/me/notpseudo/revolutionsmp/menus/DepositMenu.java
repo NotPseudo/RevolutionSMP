@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -83,9 +84,6 @@ public class DepositMenu extends Menu {
             return;
         }
         event.setCancelled(true);
-        if (menuItem.getType() == null) {
-            return;
-        }
         if (menuItem.getType() == MenuType.CLOSE) {
             BukkitRunnable close = new BukkitRunnable() {
                 @Override
@@ -96,7 +94,7 @@ public class DepositMenu extends Menu {
             close.runTaskLater(RevolutionSMP.getPlugin(), 1);
             return;
         }
-        if (menuItem.getType().meetsRequirement(player)) {
+        if (menuItem.getType() != null && menuItem.getType().meetsRequirement(player)) {
             Menu next = menuItem.getType().getNext(player);
             if (next != null) {
                 next.open();
@@ -112,6 +110,7 @@ public class DepositMenu extends Menu {
             amount = info.depositPercentFromPurse(50);
         }
         player.sendMessage(Component.text("Deposited " + amount + " coins into your bank account from your purse", NamedTextColor.GREEN));
+        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F);
         BukkitRunnable back = new BukkitRunnable() {
             @Override
             public void run() {
