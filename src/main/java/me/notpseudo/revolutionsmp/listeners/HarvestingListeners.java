@@ -57,16 +57,16 @@ public class HarvestingListeners implements Listener {
         foragingCollectionBlocks.addAll(flowers);
         foragingCollectionBlocks.addAll(List.of(Material.CRIMSON_STEM, Material.STRIPPED_CRIMSON_STEM,
                 Material.WARPED_STEM, Material.STRIPPED_WARPED_STEM,
-                Material.OAK_WOOD, Material.OAK_LOG, Material.STRIPPED_OAK_WOOD, Material.STRIPPED_OAK_LOG,
+                Material.OAK_LOG, Material.OAK_WOOD, Material.STRIPPED_OAK_WOOD, Material.STRIPPED_OAK_LOG,
                 Material.DARK_OAK_LOG,
                 Material.BIRCH_LOG,
                 Material.JUNGLE_LOG,
                 Material.ACACIA_WOOD, Material.ACACIA_LOG, Material.STRIPPED_ACACIA_LOG,
                 Material.SPRUCE_WOOD, Material.SPRUCE_LOG, Material.STRIPPED_SPRUCE_WOOD, Material.STRIPPED_SPRUCE_LOG,
                 Material.MANGROVE_LOG));
-        miningCollectionBlocks.addAll(List.of(Material.COBBLESTONE, Material.STONE, Material.DEEPSLATE, Material.COBBLED_DEEPSLATE, Material.ANDESITE, Material.DIORITE, Material.GRANITE, Material.CALCITE, Material.BONE_BLOCK,
+        miningCollectionBlocks.addAll(List.of(Material.COBBLESTONE, Material.MOSSY_COBBLESTONE, Material.STONE, Material.DEEPSLATE, Material.COBBLED_DEEPSLATE, Material.ANDESITE, Material.DIORITE, Material.GRANITE, Material.CALCITE, Material.BONE_BLOCK,
                 Material.COAL_ORE, Material.DEEPSLATE_COAL_ORE, Material.COAL_BLOCK,
-                Material.GRAVEL, Material.SAND, Material.SPONGE, Material.ICE, Material.PACKED_ICE, Material.BLUE_ICE, Material.FROSTED_ICE,
+                Material.GRAVEL, Material.SAND, Material.SPONGE, Material.ICE, Material.PACKED_ICE, Material.BLUE_ICE,
                 Material.GLOWSTONE, Material.BASALT, Material.BLACKSTONE, Material.POLISHED_BASALT, Material.SMOOTH_BASALT, Material.OBSIDIAN, Material.CRYING_OBSIDIAN, Material.TUFF, Material.MAGMA_BLOCK, Material.NETHERRACK, Material.CRIMSON_NYLIUM, Material.WARPED_NYLIUM,
                 Material.COPPER_ORE, Material.DEEPSLATE_COPPER_ORE, Material.RAW_COPPER_BLOCK, Material.COPPER_BLOCK,
                 Material.LAPIS_ORE, Material.DEEPSLATE_LAPIS_ORE, Material.LAPIS_BLOCK,
@@ -79,8 +79,8 @@ public class HarvestingListeners implements Listener {
                 Material.ANCIENT_DEBRIS, Material.NETHERITE_BLOCK,
                 Material.SMALL_AMETHYST_BUD, Material.MEDIUM_AMETHYST_BUD, Material.LARGE_AMETHYST_BUD, Material.AMETHYST_CLUSTER,
                 Material.BUDDING_AMETHYST, Material.AMETHYST_BLOCK,
+                Material.PRISMARINE, Material.PRISMARINE_BRICKS, Material.DARK_PRISMARINE,
                 Material.SCULK, Material.SCULK_VEIN, Material.SCULK_SENSOR, Material.SCULK_CATALYST, Material.SCULK_SHRIEKER));
-        miningCollectionBlocks.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("PRISMARINE") && !m.isLegacy()).collect(Collectors.toSet()));
         farmingCollectionBlocks.addAll(List.of(Material.WHEAT, Material.POTATOES, Material.CARROTS,
                 Material.PUMPKIN, Material.CARVED_PUMPKIN, Material.PUMPKIN_STEM, Material.ATTACHED_PUMPKIN_STEM,
                 Material.MELON, Material.MELON_STEM, Material.ATTACHED_MELON_STEM,
@@ -95,7 +95,12 @@ public class HarvestingListeners implements Listener {
                 Material.CAVE_VINES, Material.CAVE_VINES_PLANT,
                 Material.DEAD_BUSH));
         affectedByMiningSpeed.addAll(miningCollectionBlocks);
+        affectedByMiningSpeed.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("BLACKSTONE") && !m.isLegacy()).collect(Collectors.toSet()));
         affectedByMiningSpeed.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("DEEPSLATE") && !m.isLegacy()).collect(Collectors.toSet()));
+        affectedByMiningSpeed.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("PRISMARINE") && !m.isLegacy()).collect(Collectors.toSet()));
+        affectedByMiningSpeed.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("ANDESITE") && !m.isLegacy()).collect(Collectors.toSet()));
+        affectedByMiningSpeed.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("DIORITE") && !m.isLegacy()).collect(Collectors.toSet()));
+        affectedByMiningSpeed.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("GRANITE") && !m.isLegacy()).collect(Collectors.toSet()));
         affectedByMiningSpeed.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("COPPER") && !m.isLegacy()).collect(Collectors.toSet()));
         affectedByMiningSpeed.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("STONE") && !m.isLegacy()).collect(Collectors.toSet()));
         affectedByMiningSpeed.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("BRICK") && !m.isLegacy()).collect(Collectors.toSet()));
@@ -103,13 +108,16 @@ public class HarvestingListeners implements Listener {
         affectedByMiningSpeed.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("CONCRETE") && !m.toString().contains("CONCRETE_POWDER") && !m.isLegacy()).collect(Collectors.toSet()));
         affectedByMiningSpeed.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("TERRACOTTA") && !m.isLegacy()).collect(Collectors.toSet()));
         affectedByMiningSpeed.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("QUARTZ") && !m.isLegacy()).collect(Collectors.toSet()));
-        affectedByMiningSpeed.addAll(Arrays.stream(Material.values()).filter(m -> m.isBlock() && m.toString().contains("RAIL") && !m.isLegacy()).collect(Collectors.toSet()));
         affectedByMiningSpeed.addAll(List.of(
-                Material.RESPAWN_ANCHOR, Material.ENDER_CHEST, Material.ANVIL, Material.BELL, Material.CHAIN, Material.ENCHANTING_TABLE,
-                Material.IRON_BARS, Material.IRON_DOOR, Material.IRON_TRAPDOOR, Material.SPAWNER,
-                Material.BLAST_FURNACE, Material.DISPENSER, Material.DROPPER, Material.FURNACE, Material.LANTERN, Material.OBSERVER, Material.STONECUTTER, Material.SMOKER, Material.LODESTONE, Material.HOPPER,
-                Material.BEACON, Material.LIGHTNING_ROD, Material.CONDUIT, Material.CAULDRON, Material.SHULKER_BOX, Material.BREWING_STAND, Material.LIGHT_WEIGHTED_PRESSURE_PLATE, Material.HEAVY_WEIGHTED_PRESSURE_PLATE));
-        List.of(Material.SCULK, Material.SCULK_VEIN, Material.SCULK_SENSOR, Material.SCULK_CATALYST, Material.SCULK_SHRIEKER, Material.SAND, Material.GRAVEL, Material.SPONGE, Material.WET_SPONGE).forEach(affectedByMiningSpeed::remove);
+                Material.ANVIL, Material.BELL, Material.BREWING_STAND, Material.CAULDRON, Material.CHAIN, Material.HOPPER, Material.IRON_BARS, Material.IRON_DOOR, Material.IRON_TRAPDOOR, Material.LANTERN, Material.LIGHT_WEIGHTED_PRESSURE_PLATE, Material.HEAVY_WEIGHTED_PRESSURE_PLATE,
+                Material.LIGHTNING_ROD,
+                Material.PISTON, Material.STICKY_PISTON,
+                Material.CONDUIT, Material.SHULKER_BOX,
+                Material.ACTIVATOR_RAIL, Material.DETECTOR_RAIL, Material.POWERED_RAIL, Material.RAIL,
+                Material.BLAST_FURNACE, Material.DISPENSER, Material.DROPPER, Material.DRIPSTONE_BLOCK, Material.ENCHANTING_TABLE, Material.ENDER_CHEST, Material.FURNACE, Material.GRINDSTONE, Material.LODESTONE, Material.OBSERVER, Material.PACKED_MUD, Material.POINTED_DRIPSTONE, Material.SMOKER, Material.SPAWNER, Material.STONECUTTER,
+                Material.RESPAWN_ANCHOR,
+                Material.BEACON, Material.SEA_LANTERN, Material.REDSTONE_LAMP));
+        List.of(Material.SCULK, Material.SCULK_VEIN, Material.SCULK_SENSOR, Material.SCULK_CATALYST, Material.SCULK_SHRIEKER, Material.SAND, Material.GRAVEL, Material.SPONGE, Material.WET_SPONGE, Material.REINFORCED_DEEPSLATE).forEach(affectedByMiningSpeed::remove);
     }
 
     public static NamespacedKey getWorldPlacedKey() {
@@ -141,7 +149,7 @@ public class HarvestingListeners implements Listener {
         }
         if (breakingPower < breakingPowerNeeded) {
             event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1F, 0.5F);
-            event.getPlayer().sendMessage(Component.text("You need a stronger tool to mine " + material, NamedTextColor.RED));
+            event.getPlayer().sendMessage(Component.text("You need a stronger tool to get drops from " + material, NamedTextColor.RED));
         }
         CustomMiningUtils.addSlow(event.getPlayer(), (int) (hardness * 1.5));
         CustomMiningUtils.createBreakingBlock(event.getBlock(), hardness * 0.15);
@@ -232,10 +240,13 @@ public class HarvestingListeners implements Listener {
             exp = customOre.getType().getXp();
         } else {
             if (!miningCollectionBlocks.contains(event.getBlock().getType())) {
-                if (affectedByMiningSpeed.contains(event.getBlock().getType()) && !foragingCollectionBlocks.contains(event.getBlock().getType()) && !farmingCollectionBlocks.contains(event.getBlock().getType())) {
-                    for (ItemDropObject drop : getDropsForMaterial(event.getBlock().getType(), 0)) {
-                        drop.drop(event.getBlock().getLocation());
+                if (affectedByMiningSpeed.contains(event.getBlock().getType())) {
+                    if (breakingPower < breakingPowerNeeded) {
+                        event.setDropItems(false);
+                    } else {
+                        event.setDropItems(true);
                     }
+                    return;
                 }
                 return;
             }
@@ -376,13 +387,11 @@ public class HarvestingListeners implements Listener {
         }
         block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(material, notPlaced * getAddedTimes(farming)));
         ItemStack mainHand = event.getPlayer().getInventory().getItemInMainHand();
-        if (mainHand.getType() == Material.AIR) {
-            ItemInfo info = mainHand.getItemMeta().getPersistentDataContainer().get(ItemEditor.getItemKey(), new ItemInfoDataType());
-            if (info != null && info.getExtraInfo() != null && info.getExtraInfo() instanceof FarmingToolInfo farmTool) {
-                farmTool.add(block.getType(), notPlaced);
-                info.setExtraInfo(farmTool);
-                mainHand.getItemMeta().getPersistentDataContainer().set(ItemEditor.getItemKey(), new ItemInfoDataType(), info);
-            }
+        ItemInfo info = ItemEditor.getInfo(mainHand);
+        if (info != null && info.getExtraInfo() != null && info.getExtraInfo() instanceof FarmingToolInfo farmTool) {
+            farmTool.add(block.getType(), notPlaced);
+            info.setExtraInfo(farmTool);
+            mainHand.getItemMeta().getPersistentDataContainer().set(ItemEditor.getItemKey(), new ItemInfoDataType(), info);
         }
         SkillUtils.addBreakingXpToPlayer(event.getPlayer(), SkillType.FARMING, block, exp);
     }
@@ -554,7 +563,8 @@ public class HarvestingListeners implements Listener {
         return switch (material) {
             default -> List.of(new ItemDropObject(material, multiplier));
             case STONE -> List.of(new ItemDropObject(Material.COBBLESTONE, multiplier));
-            case COAL_ORE, DEEPSLATE_COAL_ORE -> List.of(new ItemDropObject(Material.COAL, multiplier), new ItemDropObject(GemstoneType.PEARL, 4, gemDefault));
+            case COAL_ORE, DEEPSLATE_COAL_ORE ->
+                    List.of(new ItemDropObject(Material.COAL, multiplier), new ItemDropObject(GemstoneType.PEARL, 4, gemDefault));
             case GLOWSTONE ->
                     List.of(new ItemDropObject(Material.GLOWSTONE_DUST, (gemDefault) * multiplier), new ItemDropObject(GemstoneType.TOPAZ, 4, gemDefault), new ItemDropObject(GemstoneType.AMBER, 2, gemDefault));
             case COPPER_ORE, DEEPSLATE_COPPER_ORE ->
@@ -564,15 +574,20 @@ public class HarvestingListeners implements Listener {
             case IRON_ORE, DEEPSLATE_IRON_ORE -> List.of(new ItemDropObject(Material.RAW_IRON, multiplier));
             case REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE ->
                     List.of(new ItemDropObject(Material.REDSTONE, ((int) (Math.random() * 2) + 4) * multiplier), new ItemDropObject(GemstoneType.RUBY, 4, gemDefault));
-            case DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE -> List.of(new ItemDropObject(Material.DIAMOND, multiplier), new ItemDropObject(GemstoneType.JASPER, 2, gemDefault), new ItemDropObject(GemstoneType.SAPPHIRE, 4, gemDefault));
-            case GOLD_ORE, DEEPSLATE_GOLD_ORE -> List.of(new ItemDropObject(Material.RAW_GOLD, multiplier), new ItemDropObject(GemstoneType.TOPAZ, 2, gemDefault));
+            case DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE ->
+                    List.of(new ItemDropObject(Material.DIAMOND, multiplier), new ItemDropObject(GemstoneType.JASPER, 2, gemDefault), new ItemDropObject(GemstoneType.SAPPHIRE, 4, gemDefault));
+            case GOLD_ORE, DEEPSLATE_GOLD_ORE ->
+                    List.of(new ItemDropObject(Material.RAW_GOLD, multiplier), new ItemDropObject(GemstoneType.TOPAZ, 2, gemDefault));
             case NETHER_GOLD_ORE ->
                     List.of(new ItemDropObject(Material.GOLD_NUGGET, ((int) (Math.random() * 5) + 2) * multiplier), new ItemDropObject(GemstoneType.TOPAZ, 3, gemDefault));
-            case EMERALD_ORE, DEEPSLATE_EMERALD_ORE -> List.of(new ItemDropObject(Material.EMERALD, multiplier), new ItemDropObject(GemstoneType.JASPER, 2, gemDefault));
-            case NETHER_QUARTZ_ORE -> List.of(new ItemDropObject(Material.QUARTZ, multiplier), new ItemDropObject(GemstoneType.OPAL, 4, gemDefault));
+            case EMERALD_ORE, DEEPSLATE_EMERALD_ORE ->
+                    List.of(new ItemDropObject(Material.EMERALD, multiplier), new ItemDropObject(GemstoneType.JASPER, 2, gemDefault));
+            case NETHER_QUARTZ_ORE ->
+                    List.of(new ItemDropObject(Material.QUARTZ, multiplier), new ItemDropObject(GemstoneType.OPAL, 4, gemDefault));
             case SMALL_AMETHYST_BUD, MEDIUM_AMETHYST_BUD, LARGE_AMETHYST_BUD, AMETHYST_CLUSTER ->
                     List.of(new ItemDropObject(Material.AMETHYST_SHARD, 4 * multiplier), new ItemDropObject(GemstoneType.AMETHYST, 2, gemDefault));
-            case BUDDING_AMETHYST -> List.of(new ItemDropObject(Material.AMETHYST_BLOCK, multiplier), new ItemDropObject(GemstoneType.AMETHYST, 4, gemDefault));
+            case BUDDING_AMETHYST ->
+                    List.of(new ItemDropObject(Material.AMETHYST_BLOCK, multiplier), new ItemDropObject(GemstoneType.AMETHYST, 4, gemDefault));
         };
     }
 
@@ -582,7 +597,7 @@ public class HarvestingListeners implements Listener {
                 return 3;
             }
             if (material == Material.CRIMSON_STEM || material == Material.WARPED_STEM ||
-            material == Material.STRIPPED_CRIMSON_STEM || material == Material.STRIPPED_WARPED_STEM) {
+                    material == Material.STRIPPED_CRIMSON_STEM || material == Material.STRIPPED_WARPED_STEM) {
                 return 18;
             }
             return 10;
@@ -591,13 +606,16 @@ public class HarvestingListeners implements Listener {
             default -> 0;
             case NETHERRACK, ICE -> 0.5;
             case COBBLESTONE, STONE, ANDESITE, DIORITE, GRANITE, CALCITE, GRAVEL, DEEPSLATE -> 1;
-            case SUGAR_CANE, RED_MUSHROOM_BLOCK, BROWN_MUSHROOM_BLOCK, MUSHROOM_STEM, CACTUS, CAVE_VINES, CAVE_VINES_PLANT -> 2;
+            case SUGAR_CANE, RED_MUSHROOM_BLOCK, BROWN_MUSHROOM_BLOCK, MUSHROOM_STEM, CACTUS, CAVE_VINES, CAVE_VINES_PLANT ->
+                    2;
             case SAND, SCULK_VEIN -> 3;
             case WHEAT, MELON, POTATOES, CARROTS, COCOA, BEETROOTS, SWEET_BERRY_BUSH -> 4;
             case PUMPKIN, CARVED_PUMPKIN -> 4.5;
             case COAL_ORE, IRON_ORE, NETHER_QUARTZ_ORE, COPPER_ORE, SCULK -> 5;
-            case GOLD_ORE, RED_MUSHROOM, BROWN_MUSHROOM, DEEPSLATE_COAL_ORE, DEEPSLATE_IRON_ORE, DEEPSLATE_COPPER_ORE -> 6;
-            case LAPIS_ORE, REDSTONE_ORE, GLOWSTONE, DEEPSLATE_GOLD_ORE, SCULK_SENSOR, SCULK_CATALYST, SCULK_SHRIEKER -> 7;
+            case GOLD_ORE, RED_MUSHROOM, BROWN_MUSHROOM, DEEPSLATE_COAL_ORE, DEEPSLATE_IRON_ORE, DEEPSLATE_COPPER_ORE ->
+                    6;
+            case LAPIS_ORE, REDSTONE_ORE, GLOWSTONE, DEEPSLATE_GOLD_ORE, SCULK_SENSOR, SCULK_CATALYST, SCULK_SHRIEKER ->
+                    7;
             case NETHER_WART -> 8;
             case DEEPSLATE_LAPIS_ORE, DEEPSLATE_REDSTONE_ORE, RAW_IRON_BLOCK, RAW_COPPER_BLOCK -> 9;
             case DIAMOND_ORE, EMERALD_ORE, COAL_BLOCK, IRON_BLOCK, QUARTZ_BLOCK, COPPER_BLOCK, RAW_GOLD_BLOCK -> 10;
@@ -612,14 +630,19 @@ public class HarvestingListeners implements Listener {
         if (!affectedByMiningSpeed.contains(material)) {
             return 0;
         }
+        if (material.toString().contains("SHULKER_BOX")) {
+            return 0;
+        }
         if (material.toString().contains("COPPER")) {
             return 2;
         }
         return switch (material) {
+            case BEACON, GLOWSTONE, REDSTONE_LAMP, ACTIVATOR_RAIL, DETECTOR_RAIL, POWERED_RAIL, RAIL, PISTON, STICKY_PISTON, CONDUIT ->
+                    0;
             default -> 1;
-            case DEEPSLATE, IRON_ORE, DEEPSLATE_IRON_ORE, IRON_BLOCK, LAPIS_ORE, DEEPSLATE_LAPIS_ORE, LAPIS_BLOCK, COPPER_ORE, DEEPSLATE_COPPER_ORE, LIGHTNING_ROD ->
+            case DEEPSLATE, IRON_ORE, DEEPSLATE_IRON_ORE, RAW_IRON_BLOCK, IRON_BLOCK, LAPIS_ORE, DEEPSLATE_LAPIS_ORE, LAPIS_BLOCK, COPPER_ORE, DEEPSLATE_COPPER_ORE, LIGHTNING_ROD ->
                     2;
-            case DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE, DIAMOND_BLOCK, EMERALD_ORE, DEEPSLATE_EMERALD_ORE, EMERALD_BLOCK, GOLD_ORE, DEEPSLATE_GOLD_ORE, GOLD_BLOCK, REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE, REDSTONE_BLOCK ->
+            case DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE, DIAMOND_BLOCK, EMERALD_ORE, DEEPSLATE_EMERALD_ORE, EMERALD_BLOCK, GOLD_ORE, DEEPSLATE_GOLD_ORE, RAW_GOLD_BLOCK, GOLD_BLOCK, REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE ->
                     3;
             case OBSIDIAN, CRYING_OBSIDIAN, NETHERITE_BLOCK, RESPAWN_ANCHOR, ANCIENT_DEBRIS -> 4;
         };
@@ -672,11 +695,16 @@ public class HarvestingListeners implements Listener {
                     List.of(CustomOreType.MITHRIL, CustomOreType.TITANIUM);
             case GLOWSTONE, COPPER_ORE, DEEPSLATE_COPPER_ORE, GOLD_ORE, DEEPSLATE_GOLD_ORE, NETHER_GOLD_ORE, GOLD_BLOCK ->
                     List.of(CustomOreType.AMBER, CustomOreType.TOPAZ);
-            case COAL_ORE, DEEPSLATE_COAL_ORE, COAL_BLOCK -> List.of(CustomOreType.RUBY, CustomOreType.SAPPHIRE, CustomOreType.PEARL);
-            case LAPIS_ORE, DEEPSLATE_LAPIS_ORE, LAPIS_BLOCK -> List.of(CustomOreType.JADE, CustomOreType.SAPPHIRE, CustomOreType.AMETHYST);
-            case REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE, REDSTONE_BLOCK -> List.of(CustomOreType.RUBY, CustomOreType.JADE);
-            case DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE, DIAMOND_BLOCK -> List.of(CustomOreType.SAPPHIRE, CustomOreType.JASPER);
-            case EMERALD_ORE, DEEPSLATE_EMERALD_ORE, EMERALD_BLOCK -> List.of(CustomOreType.JASPER, CustomOreType.PEARL);
+            case COAL_ORE, DEEPSLATE_COAL_ORE, COAL_BLOCK ->
+                    List.of(CustomOreType.RUBY, CustomOreType.SAPPHIRE, CustomOreType.PEARL);
+            case LAPIS_ORE, DEEPSLATE_LAPIS_ORE, LAPIS_BLOCK ->
+                    List.of(CustomOreType.JADE, CustomOreType.SAPPHIRE, CustomOreType.AMETHYST);
+            case REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE, REDSTONE_BLOCK ->
+                    List.of(CustomOreType.RUBY, CustomOreType.JADE);
+            case DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE, DIAMOND_BLOCK ->
+                    List.of(CustomOreType.SAPPHIRE, CustomOreType.JASPER);
+            case EMERALD_ORE, DEEPSLATE_EMERALD_ORE, EMERALD_BLOCK ->
+                    List.of(CustomOreType.JASPER, CustomOreType.PEARL);
             case NETHER_QUARTZ_ORE, QUARTZ_BLOCK, NETHERRACK -> List.of(CustomOreType.OPAL, CustomOreType.PEARL);
             case ANCIENT_DEBRIS, NETHERITE_BLOCK -> List.of(CustomOreType.JASPER, CustomOreType.OPAL);
             case OBSIDIAN, CRYING_OBSIDIAN, TUFF, MAGMA_BLOCK -> List.of(CustomOreType.TOPAZ, CustomOreType.OPAL);
