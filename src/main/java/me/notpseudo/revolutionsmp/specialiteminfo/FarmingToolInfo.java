@@ -136,14 +136,8 @@ public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
                 return 0;
             }
         }
-        SkillHolder skillHolder = player.getPersistentDataContainer().get(SkillUtils.getSkillKey(), new SkillsDataType());
-        if (skillHolder == null) {
-            return 0;
-        }
+        SkillHolder skillHolder = SkillUtils.getHolder(player);
         SkillObject farming = skillHolder.getSkill(SkillType.FARMING);
-        if (farming == null) {
-            return 0;
-        }
         return 6 * Math.max(digitsInValue(farming.getTotalXP()) - 3, 0);
     }
 

@@ -38,6 +38,13 @@ public class CollectionUtils implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
+    public static void updatePlayerCollections(Player player, CollectionsHolder holder) {
+        if (player == null) {
+            return;
+        }
+        player.getPersistentDataContainer().set(collectionsKey, new CollectionsDataType(), holder);
+    }
+
     @EventHandler
     public void onPlayerDrop(PlayerDropItemEvent event) {
         event.getItemDrop().getPersistentDataContainer().set(playerDroppedKey, new UUIDDataType(), event.getPlayer().getUniqueId());

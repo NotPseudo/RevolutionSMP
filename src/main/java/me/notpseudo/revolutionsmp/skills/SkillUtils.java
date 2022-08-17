@@ -73,6 +73,13 @@ public class SkillUtils implements Listener {
         }
     }
 
+    public static void updatePlayerSkills(Player player, SkillHolder holder) {
+        if (player == null) {
+            return;
+        }
+        player.getPersistentDataContainer().set(skillKey, new SkillsDataType(), holder);
+    }
+
     public static void addCombatXpToPlayer(Player player, SkillType type, LivingEntity target, double exp) {
         ExpDropObject add = StatsListeners.getCombatXpBoost(player, type, target, IncreaseType.INCREASE),
                 addPercent = StatsListeners.getCombatXpBoost(player, type, target, IncreaseType.ADDITIVE_PERCENT),

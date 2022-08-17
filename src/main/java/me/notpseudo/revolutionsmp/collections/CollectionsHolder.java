@@ -2,7 +2,6 @@ package me.notpseudo.revolutionsmp.collections;
 
 import me.notpseudo.revolutionsmp.skills.SkillType;
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +12,6 @@ import java.util.UUID;
 
 public class CollectionsHolder implements Serializable {
 
-    private final static NamespacedKey collectionsKey = CollectionUtils.getCollectionsKey();
     private final UUID player;
     private ArrayList<CollectionObject> collections;
 
@@ -24,7 +22,7 @@ public class CollectionsHolder implements Serializable {
             collections.add(new CollectionObject(this, type));
         }
         reorder();
-        Bukkit.getPlayer(player).getPersistentDataContainer().set(collectionsKey, new CollectionsDataType(), this);
+        CollectionUtils.updatePlayerCollections(Bukkit.getPlayer(player), this);
     }
 
     public UUID getPlayer() {
@@ -40,7 +38,7 @@ public class CollectionsHolder implements Serializable {
         }
         CollectionObject newCollection = new CollectionObject(this, type);
         collections.add(newCollection);
-        Bukkit.getPlayer(player).getPersistentDataContainer().set(collectionsKey, new CollectionsDataType(), this);
+        CollectionUtils.updatePlayerCollections(Bukkit.getPlayer(player), this);
         return newCollection;
     }
 
@@ -48,7 +46,7 @@ public class CollectionsHolder implements Serializable {
         if (!contains(type)) {
             collections.add(new CollectionObject(this, type));
             reorder();
-            Bukkit.getPlayer(player).getPersistentDataContainer().set(collectionsKey, new CollectionsDataType(), this);
+            CollectionUtils.updatePlayerCollections(Bukkit.getPlayer(player), this);
         }
     }
 
@@ -77,6 +75,7 @@ public class CollectionsHolder implements Serializable {
 
     public void addCollectionAmount(CollectionType type, int amount) {
         getCollection(type).add(amount);
+        CollectionUtils.updatePlayerCollections(Bukkit.getPlayer(player), this);
     }
 
     public int getCollectionsUnlocked(@Nullable SkillType category) {

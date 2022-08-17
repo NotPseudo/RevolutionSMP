@@ -3,9 +3,6 @@ package me.notpseudo.revolutionsmp.skills;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
-import org.bukkit.block.Block;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,8 +11,6 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class SkillHolder implements Serializable {
-
-    private final static NamespacedKey skillKey = SkillUtils.getSkillKey();
 
     private UUID player;
     private ArrayList<SkillObject> skills;
@@ -26,7 +21,7 @@ public class SkillHolder implements Serializable {
         for (SkillType skillType : SkillType.values()) {
             skills.add(new SkillObject(this, skillType));
         }
-        Bukkit.getPlayer(player).getPersistentDataContainer().set(skillKey, new SkillsDataType(), this);
+       SkillUtils.updatePlayerSkills(Bukkit.getPlayer(player), this);
     }
 
     public UUID getPlayer() {
@@ -42,14 +37,14 @@ public class SkillHolder implements Serializable {
         }
         SkillObject newSkill = new SkillObject(this, type);
         skills.add(newSkill);
-        Bukkit.getPlayer(player).getPersistentDataContainer().set(skillKey, new SkillsDataType(), this);
+        SkillUtils.updatePlayerSkills(Bukkit.getPlayer(player), this);
         return newSkill;
     }
 
     public void addSkill(SkillType type) {
         if (!contains(type)) {
             skills.add(new SkillObject(this, type));
-            Bukkit.getPlayer(player).getPersistentDataContainer().set(skillKey, new SkillsDataType(), this);
+            SkillUtils.updatePlayerSkills(Bukkit.getPlayer(player), this);
         }
     }
 
@@ -68,7 +63,7 @@ public class SkillHolder implements Serializable {
         if (owner != null) {
             StatsListeners.showExpGainBar(owner, exp, skill.getPercent());
         }
-         Bukkit.getPlayer(player).getPersistentDataContainer().set(skillKey, new SkillsDataType(), this);
+         SkillUtils.updatePlayerSkills(Bukkit.getPlayer(player), this);
      }
 
     @NotNull
