@@ -19,6 +19,166 @@ import java.util.List;
 
 // Enum used to identify the exact custom item type an item is
 public enum ItemID {
+
+    WOODEN_SWORD {
+        @Override
+        public Material getMaterial() {
+            return Material.WOODEN_SWORD;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.SWORD;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(20, 0, 0, 0, 0, 0);
+        }
+    },
+    GOLDEN_SWORD {
+        @Override
+        public Material getMaterial() {
+            return Material.GOLDEN_SWORD;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.SWORD;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(20, 0, 0, 0, 0, 0);
+        }
+    },
+    STONE_SWORD {
+        @Override
+        public Material getMaterial() {
+            return Material.STONE_SWORD;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.SWORD;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(25, 0, 0, 0, 0, 0);
+        }
+    },
+    IRON_SWORD {
+        @Override
+        public Material getMaterial() {
+            return Material.IRON_SWORD;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.SWORD;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(30, 0, 0, 0, 0, 0);
+        }
+    },
+    DIAMOND_SWORD {
+        @Override
+        public Material getMaterial() {
+            return Material.DIAMOND_SWORD;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.SWORD;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(35, 0, 0, 0, 0, 0);
+        }
+    },
+    NETHERITE_SWORD {
+        @Override
+        public Material getMaterial() {
+            return Material.NETHERITE_SWORD;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.SWORD;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(40, 0, 0, 0, 0, 0);
+        }
+    },
+    TRIDENT {
+        @Override
+        public Material getMaterial() {
+            return Material.TRIDENT;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.SWORD;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(45, 0, 0, 0, 0, 0);
+        }
+    },
+    BOW {
+        @Override
+        public Material getMaterial() {
+            return Material.BOW;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.BOW;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(30, 0, 0, 0, 0, 0);
+        }
+    },
+    CROSSBOW {
+        @Override
+        public Material getMaterial() {
+            return Material.CROSSBOW;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.BOW;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(50, 0, 0, 0, 0, 0);
+        }
+    },
     WOODEN_PICKAXE {
         @Override
         public WeaponStats getDefaultWeaponStats() {
@@ -71,6 +231,7 @@ public enum ItemID {
         public MiningStats getDefaultMiningStats() {
             return new MiningStats(250, 0, 0, 1);
         }
+
         @Override
         public ItemType getItemType() {
             return ItemType.PICKAXE;
@@ -91,6 +252,7 @@ public enum ItemID {
         public MiningStats getDefaultMiningStats() {
             return new MiningStats(150, 0, 0, 3);
         }
+
         @Override
         public ItemType getItemType() {
             return ItemType.PICKAXE;
@@ -111,6 +273,7 @@ public enum ItemID {
         public MiningStats getDefaultMiningStats() {
             return new MiningStats(200, 0, 0, 4);
         }
+
         @Override
         public ItemType getItemType() {
             return ItemType.PICKAXE;
@@ -131,6 +294,7 @@ public enum ItemID {
         public MiningStats getDefaultMiningStats() {
             return new MiningStats(225, 0, 0, 5);
         }
+
         @Override
         public ItemType getItemType() {
             return ItemType.PICKAXE;
@@ -139,6 +303,784 @@ public enum ItemID {
         @Override
         public Material getMaterial() {
             return Material.NETHERITE_PICKAXE;
+        }
+    },
+    WOODEN_AXE {
+        @Override
+        public Material getMaterial() {
+            return Material.WOODEN_AXE;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.AXE;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(35, 0, 0, 0, 0, 0);
+        }
+    },
+    GOLDEN_AXE {
+        @Override
+        public Material getMaterial() {
+            return Material.GOLDEN_AXE;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.AXE;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(35, 0, 0, 0, 0, 0);
+        }
+    },
+    STONE_AXE {
+        @Override
+        public Material getMaterial() {
+            return Material.STONE_AXE;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.AXE;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(45, 0, 0, 0, 0, 0);
+        }
+    },
+    IRON_AXE {
+        @Override
+        public Material getMaterial() {
+            return Material.IRON_AXE;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.AXE;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(45, 0, 0, 0, 0, 0);
+        }
+    },
+    DIAMOND_AXE {
+        @Override
+        public Material getMaterial() {
+            return Material.DIAMOND_AXE;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.AXE;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(45, 0, 0, 0, 0, 0);
+        }
+    },
+    NETHERITE_AXE {
+        @Override
+        public Material getMaterial() {
+            return Material.NETHERITE_AXE;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.AXE;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(50, 0, 0, 0, 0, 0);
+        }
+    },
+    WOODEN_HOE {
+        @Override
+        public Material getMaterial() {
+            return Material.WOODEN_HOE;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.HOE;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(5, 0, 0, 0, 0, 0);
+        }
+    },
+    GOLDEN_HOE {
+        @Override
+        public Material getMaterial() {
+            return Material.GOLDEN_HOE;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.HOE;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(5, 0, 0, 0, 0, 0);
+        }
+    },
+    STONE_HOE {
+        @Override
+        public Material getMaterial() {
+            return Material.STONE_HOE;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.HOE;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(5, 0, 0, 0, 0, 0);
+        }
+    },
+    IRON_HOE {
+        @Override
+        public Material getMaterial() {
+            return Material.IRON_HOE;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.HOE;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(5, 0, 0, 0, 0, 0);
+        }
+    },
+    DIAMOND_HOE {
+        @Override
+        public Material getMaterial() {
+            return Material.DIAMOND_HOE;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.HOE;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(5, 0, 0, 0, 0, 0);
+        }
+    },
+    NETHERITE_HOE {
+        @Override
+        public Material getMaterial() {
+            return Material.NETHERITE_HOE;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.HOE;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(5, 0, 0, 0, 0, 0);
+        }
+    },
+    WOODEN_SHOVEL {
+        @Override
+        public Material getMaterial() {
+            return Material.WOODEN_SHOVEL;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.SHOVEL;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(12.5, 0, 0, 0, 0, 0);
+        }
+    },
+    GOLDEN_SHOVEL {
+        @Override
+        public Material getMaterial() {
+            return Material.GOLDEN_SHOVEL;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.SHOVEL;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(12.5, 0, 0, 0, 0, 0);
+        }
+    },
+    STONE_SHOVEL {
+        @Override
+        public Material getMaterial() {
+            return Material.STONE_SHOVEL;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.SHOVEL;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(17.5, 0, 0, 0, 0, 0);
+        }
+    },
+    IRON_SHOVEL {
+        @Override
+        public Material getMaterial() {
+            return Material.IRON_SHOVEL;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.SHOVEL;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(22.5, 0, 0, 0, 0, 0);
+        }
+    },
+    DIAMOND_SHOVEL {
+        @Override
+        public Material getMaterial() {
+            return Material.DIAMOND_SHOVEL;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.SHOVEL;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(27.5, 0, 0, 0, 0, 0);
+        }
+    },
+    NETHERITE_SHOVEL {
+        @Override
+        public Material getMaterial() {
+            return Material.NETHERITE_SHOVEL;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.SHOVEL;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(32.5, 0, 0, 0, 0, 0);
+        }
+    },
+    FISHING_ROD {
+        @Override
+        public Material getMaterial() {
+            return Material.FISHING_ROD;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.FISHING_ROD;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(10, 5, 0, 0, 0, 0);
+        }
+    },
+    LEATHER_HELMET {
+        @Override
+        public Material getMaterial() {
+            return Material.LEATHER_HELMET;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.HELMET;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 5, 0);
+        }
+    },
+    LEATHER_CHESTPLATE {
+        @Override
+        public Material getMaterial() {
+            return Material.LEATHER_CHESTPLATE;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.CHESTPLATE;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 15, 0);
+        }
+    },
+    LEATHER_LEGGINGS {
+        @Override
+        public Material getMaterial() {
+            return Material.LEATHER_LEGGINGS;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.LEGGINGS;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 10, 0);
+        }
+    },
+    LEATHER_BOOTS {
+        @Override
+        public Material getMaterial() {
+            return Material.LEATHER_BOOTS;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.BOOTS;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 5, 0);
+        }
+    },
+    GOLDEN_HELMET {
+        @Override
+        public Material getMaterial() {
+            return Material.GOLDEN_HELMET;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.HELMET;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 10, 0);
+        }
+    },
+    GOLDEN_CHESTPLATE {
+        @Override
+        public Material getMaterial() {
+            return Material.GOLDEN_CHESTPLATE;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.CHESTPLATE;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 25, 0);
+        }
+    },
+    GOLDEN_LEGGINGS {
+        @Override
+        public Material getMaterial() {
+            return Material.GOLDEN_LEGGINGS;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.LEGGINGS;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 15, 0);
+        }
+    },
+    GOLDEN_BOOTS {
+        @Override
+        public Material getMaterial() {
+            return Material.GOLDEN_BOOTS;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.BOOTS;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 5, 0);
+        }
+    },
+    IRON_HELMET {
+        @Override
+        public Material getMaterial() {
+            return Material.IRON_HELMET;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.HELMET;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 10, 0);
+        }
+    },
+    IRON_CHESTPLATE {
+        @Override
+        public Material getMaterial() {
+            return Material.IRON_CHESTPLATE;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.CHESTPLATE;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 30, 0);
+        }
+    },
+    IRON_LEGGINGS {
+        @Override
+        public Material getMaterial() {
+            return Material.IRON_LEGGINGS;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.LEGGINGS;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 25, 0);
+        }
+    },
+    IRON_BOOTS {
+        @Override
+        public Material getMaterial() {
+            return Material.IRON_BOOTS;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.BOOTS;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 10, 0);
+        }
+    },
+    CHAINMAIL_HELMET {
+        @Override
+        public Material getMaterial() {
+            return Material.CHAINMAIL_HELMET;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.HELMET;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 12, 0);
+        }
+    },
+    CHAINMAIL_CHESTPLATE {
+        @Override
+        public Material getMaterial() {
+            return Material.CHAINMAIL_CHESTPLATE;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.CHESTPLATE;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 30, 0);
+        }
+    },
+    CHAINMAIL_LEGGINGS {
+        @Override
+        public Material getMaterial() {
+            return Material.CHAINMAIL_LEGGINGS;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.LEGGINGS;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 20, 0);
+        }
+    },
+    CHAINMAIL_BOOTS {
+        @Override
+        public Material getMaterial() {
+            return Material.CHAINMAIL_BOOTS;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.BOOTS;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 7, 0);
+        }
+    },
+    DIAMOND_HELMET {
+        @Override
+        public Material getMaterial() {
+            return Material.DIAMOND_HELMET;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.HELMET;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 15, 0);
+        }
+    },
+    DIAMOND_CHESTPLATE {
+        @Override
+        public Material getMaterial() {
+            return Material.DIAMOND_CHESTPLATE;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.CHESTPLATE;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 40, 0);
+        }
+    },
+    DIAMOND_LEGGINGS {
+        @Override
+        public Material getMaterial() {
+            return Material.DIAMOND_LEGGINGS;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.LEGGINGS;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 30, 0);
+        }
+    },
+    DIAMOND_BOOTS {
+        @Override
+        public Material getMaterial() {
+            return Material.DIAMOND_BOOTS;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.BOOTS;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 15, 0);
+        }
+    },
+    NETHERITE_HELMET {
+        @Override
+        public Material getMaterial() {
+            return Material.DIAMOND_HELMET;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.HELMET;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 25, 0);
+        }
+    },
+    NETHERITE_CHESTPLATE {
+        @Override
+        public Material getMaterial() {
+            return Material.DIAMOND_CHESTPLATE;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.CHESTPLATE;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 55, 0);
+        }
+    },
+    NETHERITE_LEGGINGS {
+        @Override
+        public Material getMaterial() {
+            return Material.DIAMOND_LEGGINGS;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.LEGGINGS;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 45, 0);
+        }
+    },
+    NETHERITE_BOOTS {
+        @Override
+        public Material getMaterial() {
+            return Material.DIAMOND_BOOTS;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.BOOTS;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public ArmorStats getDefaultArmorStats() {
+            return new ArmorStats(0, 25, 0);
         }
     },
     STORM_CHESTPLATE {
@@ -174,7 +1116,7 @@ public enum ItemID {
 
         @Override
         public GemstoneSlotType[] getGemstoneSlots() {
-            return new GemstoneSlotType[] {GemstoneSlotType.SAPPHIRE, GemstoneSlotType.COMBAT};
+            return new GemstoneSlotType[]{GemstoneSlotType.SAPPHIRE, GemstoneSlotType.COMBAT};
         }
     },
     STORM_LEGGINGS {
@@ -210,7 +1152,7 @@ public enum ItemID {
 
         @Override
         public GemstoneSlotType[] getGemstoneSlots() {
-            return new GemstoneSlotType[] {GemstoneSlotType.SAPPHIRE, GemstoneSlotType.COMBAT};
+            return new GemstoneSlotType[]{GemstoneSlotType.SAPPHIRE, GemstoneSlotType.COMBAT};
         }
     },
     STORM_BOOTS {
@@ -246,7 +1188,7 @@ public enum ItemID {
 
         @Override
         public GemstoneSlotType[] getGemstoneSlots() {
-            return new GemstoneSlotType[] {GemstoneSlotType.SAPPHIRE, GemstoneSlotType.COMBAT};
+            return new GemstoneSlotType[]{GemstoneSlotType.SAPPHIRE, GemstoneSlotType.COMBAT};
         }
     },
     HYPERION {
@@ -277,7 +1219,7 @@ public enum ItemID {
 
         @Override
         public GemstoneSlotType[] getGemstoneSlots() {
-            return new GemstoneSlotType[] {GemstoneSlotType.SAPPHIRE, GemstoneSlotType.COMBAT};
+            return new GemstoneSlotType[]{GemstoneSlotType.SAPPHIRE, GemstoneSlotType.COMBAT};
         }
     },
     VALKYRIE {
@@ -308,7 +1250,7 @@ public enum ItemID {
 
         @Override
         public GemstoneSlotType[] getGemstoneSlots() {
-            return new GemstoneSlotType[] {GemstoneSlotType.JASPER, GemstoneSlotType.COMBAT};
+            return new GemstoneSlotType[]{GemstoneSlotType.JASPER, GemstoneSlotType.COMBAT};
         }
     },
     SCYLLA {
@@ -339,7 +1281,7 @@ public enum ItemID {
 
         @Override
         public GemstoneSlotType[] getGemstoneSlots() {
-            return new GemstoneSlotType[] {GemstoneSlotType.COMBAT, GemstoneSlotType.COMBAT};
+            return new GemstoneSlotType[]{GemstoneSlotType.COMBAT, GemstoneSlotType.COMBAT};
         }
     },
     ASTRAEA {
@@ -375,7 +1317,7 @@ public enum ItemID {
 
         @Override
         public GemstoneSlotType[] getGemstoneSlots() {
-            return new GemstoneSlotType[] {GemstoneSlotType.DEFENSIVE, GemstoneSlotType.COMBAT};
+            return new GemstoneSlotType[]{GemstoneSlotType.DEFENSIVE, GemstoneSlotType.COMBAT};
         }
     },
     ASPECT_OF_THE_END {
@@ -411,7 +1353,7 @@ public enum ItemID {
 
         @Override
         public GemstoneSlotType[] getGemstoneSlots() {
-            return new GemstoneSlotType[] {GemstoneSlotType.SAPPHIRE};
+            return new GemstoneSlotType[]{GemstoneSlotType.SAPPHIRE};
         }
     },
     JUJU_SHORTBOW {
@@ -561,7 +1503,7 @@ public enum ItemID {
 
         @Override
         public GemstoneSlotType[] getGemstoneSlots() {
-            return new GemstoneSlotType[] {GemstoneSlotType.AMBER, GemstoneSlotType.JADE, GemstoneSlotType.MINING};
+            return new GemstoneSlotType[]{GemstoneSlotType.AMBER, GemstoneSlotType.JADE, GemstoneSlotType.MINING};
         }
     },
     TITANIUM {
@@ -673,7 +1615,6 @@ public enum ItemID {
         }
     },
     JUDGEMENT_CORE {
-
         @Override
         public Material getMaterial() {
             return Material.PLAYER_HEAD;
@@ -788,7 +1729,12 @@ public enum ItemID {
     }
 
     public boolean isUnbreakable() {
-        return true;
+        try {
+            Material.valueOf(this.toString());
+            return false;
+        } catch (IllegalArgumentException exception) {
+            return true;
+        }
     }
 
     public boolean isEnchantGlint() {
