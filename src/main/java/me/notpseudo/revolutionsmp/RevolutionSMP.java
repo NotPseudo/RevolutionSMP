@@ -45,6 +45,7 @@ public final class RevolutionSMP extends JavaPlugin {
         new MenuListeners(this);
         new MenuCommand(this);
         new MoneyCommand(this);
+        new CraftingListeners(this);
         AbilitiesUtil.createPassSet();
         plugin = this;
     }

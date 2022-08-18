@@ -17,9 +17,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.List;
-import java.util.UUID;
-
 public class GemstoneUtils {
 
     private static final NamespacedKey itemKey = ItemEditor.getItemKey();
@@ -385,21 +382,17 @@ public class GemstoneUtils {
 
     public static ItemStack createGemstone(GemstoneType type, Rarity rarity) {
         ItemStack item = ItemEditor.createItem(ItemID.GEMSTONE);
-        ItemMeta meta = item.getItemMeta();
         ItemInfo info = ItemEditor.getInfo(item);
         GemstoneObject gemInfo = (GemstoneObject) info.getExtraInfo();
         gemInfo.setGem(type);
         gemInfo.setQuality(rarity);
-        meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), info);
-        ItemEditor.updateLore(meta);
-        item.setItemMeta(meta);
-        return item;
+        return ItemEditor.updateItemInfo(item, info);
     }
 
     public static ItemStack createGemstone(GemstoneType type, Rarity rarity, int count) {
         ItemStack item = ItemEditor.createItem(ItemID.GEMSTONE);
         ItemMeta meta = item.getItemMeta();
-        ItemInfo info = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        ItemInfo info = ItemEditor.getInfo(item);
         GemstoneObject gemInfo = (GemstoneObject) info.getExtraInfo();
         gemInfo.setGem(type);
         gemInfo.setQuality(rarity);

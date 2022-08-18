@@ -28,11 +28,7 @@ public class EnchantmentUtils {
         EnchantmentsHolder holder = new EnchantmentsHolder(info);
         holder.addEnchant(enchant.createObject(level));
         info.setEnchantmentsHolder(holder);
-        ItemMeta meta = book.getItemMeta();
-        meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), info);
-        updateEnchantLore(book);
-        book.setItemMeta(meta);
-        return book;
+        return ItemEditor.updateItemInfo(book, info);
     }
 
     public static void updateEnchantLore(ItemStack item) {

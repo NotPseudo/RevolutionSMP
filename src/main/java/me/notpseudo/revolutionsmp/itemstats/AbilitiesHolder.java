@@ -44,6 +44,9 @@ public class AbilitiesHolder implements Serializable {
     }
 
     public void combine(AbilitiesHolder other) {
+        if (other == null) {
+            return;
+        }
         for(AbilityObject ability: other.abilities) {
             addAbility(ability.getAbilityType());
         }

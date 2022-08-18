@@ -1,5 +1,6 @@
 package me.notpseudo.revolutionsmp.items;
 
+import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.abilities.AbilityType;
 import me.notpseudo.revolutionsmp.collections.CollectionType;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
@@ -12,7 +13,10 @@ import me.notpseudo.revolutionsmp.specialiteminfo.GemstoneObject;
 import me.notpseudo.revolutionsmp.specialiteminfo.SpecialItemInfo;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapedRecipe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -1191,6 +1195,41 @@ public enum ItemID {
             return new GemstoneSlotType[]{GemstoneSlotType.SAPPHIRE, GemstoneSlotType.COMBAT};
         }
     },
+    NECRONS_BLADE {
+        @Override
+        public Material getMaterial() {
+            return Material.IRON_SWORD;
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return ItemType.SWORD;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.LEGENDARY;
+        }
+
+        @Override
+        public WeaponStats getDefaultWeaponStats() {
+            return new WeaponStats(260, 110, 0, 0, 0, 30);
+        }
+
+        @Override
+        public AbilityStats getDefaultAbilityStats() {
+            return new AbilityStats(0, 50);
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.shape(" W ", " W ", " H ");
+            recipe.setIngredient('W', new ItemIDChoice(WITHER_CATALYST, 12));
+            recipe.setIngredient('H', new ItemIDChoice(NECRONS_HANDLE));
+            return recipe;
+        }
+    },
     HYPERION {
         @Override
         public ItemType getItemType() {
@@ -1570,6 +1609,17 @@ public enum ItemID {
             return new GatheringStats(200, 200);
         }
     },
+    WITHER_CATALYST {
+        @Override
+        public Material getMaterial() {
+            return Material.WITHER_SKELETON_SKULL;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.RARE;
+        }
+    },
     NECRONS_HANDLE {
         @Override
         public String getDefaultName() {
@@ -1751,6 +1801,10 @@ public enum ItemID {
 
     public ItemStack getItem() {
         return ItemEditor.createItem(this);
+    }
+
+    public Recipe getRecipe() {
+        return null;
     }
 
 }

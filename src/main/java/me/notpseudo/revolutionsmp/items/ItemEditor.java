@@ -23,7 +23,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,6 +39,14 @@ public class ItemEditor {
     private final static NamespacedKey itemKey = new NamespacedKey(RevolutionSMP.getPlugin(RevolutionSMP.class), "items");
 
     private final static UUID skullUUID = UUID.fromString("dbff4122-fa87-4f79-91f5-0986b8e3f9b3");
+
+    static {
+        for (ItemID id : ItemID.values()) {
+            if (id.getRecipe() != null) {
+                Bukkit.addRecipe(id.getRecipe());
+            }
+        }
+    }
 
 
     /**
@@ -454,12 +461,12 @@ public class ItemEditor {
         }
     }
 
-    public static void updateItem(ItemStack item, UUID newOwner) {
+    public static void updateItemOwner(ItemStack item, UUID newOwner) {
         ItemMeta meta = item.getItemMeta();
         if (item.getType() == Material.AIR || meta == null) {
             return;
         }
-        ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        ItemInfo itemInfo = getInfo(item);
         if (itemInfo != null) {
             if (itemInfo.getVanillaMaterial() != item.getType()) {
                 item.setType(itemInfo.getVanillaMaterial());
@@ -472,6 +479,17 @@ public class ItemEditor {
         } else {
             item.setItemMeta(createMetaFromMat(meta, item.getType()));
         }
+    }
+
+    public static ItemStack updateItemInfo(ItemStack item, ItemInfo info) {
+        if (item == null || item.getType() == Material.AIR || info == null) {
+            return item;
+        }
+        ItemMeta meta = item.getItemMeta();
+        meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), info);
+        updateLore(meta);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
@@ -535,13 +553,10 @@ public class ItemEditor {
      * @param item The item to recombobulate
      */
     public static void recombobulate(ItemStack item) {
-        ItemMeta meta = item.getItemMeta();
-        ItemInfo info = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        ItemInfo info = getInfo(item);
         if (info != null) {
             info.recomb();
-            meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), info);
-            updateLore(meta);
-            item.setItemMeta(meta);
+            updateItemInfo(item, info);
         }
     }
 
@@ -551,41 +566,32 @@ public class ItemEditor {
      * @param item The item to add the book to
      */
     public static void addHotPotatoBook(ItemStack item) {
-        ItemMeta meta = item.getItemMeta();
-        ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        ItemInfo itemInfo = getInfo(item);
         if (itemInfo == null) {
             return;
         }
         int currentPotatoBooks = itemInfo.getPotatoBooks();
         itemInfo.setPotatoBooks(currentPotatoBooks + 1);
-        meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), itemInfo);
-        updateLore(meta);
-        item.setItemMeta(meta);
+        updateItemInfo(item, itemInfo);
     }
 
     public static void addHotPotatoBook(ItemStack item, int books) {
-        ItemMeta meta = item.getItemMeta();
-        ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        ItemInfo itemInfo = getInfo(item);
         if (itemInfo == null) {
             return;
         }
         int currentPotatoBooks = itemInfo.getPotatoBooks();
         itemInfo.setPotatoBooks(currentPotatoBooks + books);
-        meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), itemInfo);
-        updateLore(meta);
-        item.setItemMeta(meta);
+        updateItemInfo(item, itemInfo);
     }
 
     public static void setHotPotatoBook(ItemStack item, int books) {
-        ItemMeta meta = item.getItemMeta();
-        ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        ItemInfo itemInfo = getInfo(item);
         if (itemInfo == null) {
             return;
         }
         itemInfo.setPotatoBooks(books);
-        meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), itemInfo);
-        updateLore(meta);
-        item.setItemMeta(meta);
+        updateItemInfo(item, itemInfo);
     }
 
     /**
@@ -598,21 +604,17 @@ public class ItemEditor {
         if (reforge == null) {
             return;
         }
-        ItemMeta meta = item.getItemMeta();
-        ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        ItemInfo itemInfo = getInfo(item);
         if (itemInfo == null) {
             return;
         }
         if (reforge.getItemTypes().contains(itemInfo.getItemType())) {
             itemInfo.setReforge(reforge);
-            meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), itemInfo);
-            updateLore(meta);
-            item.setItemMeta(meta);
+            updateItemInfo(item, itemInfo);
         }
     }
 
     public static void addEnchant(ItemStack item, EnchantmentType type, int level) {
-        ItemMeta meta = item.getItemMeta();
         ItemInfo itemInfo = getInfo(item);
         if (itemInfo == null) {
             return;
@@ -625,14 +627,11 @@ public class ItemEditor {
         }
         EnchantmentObject enchant = type.createObject(level);
         itemInfo.addEnchant(enchant);
-        meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), itemInfo);
-        updateLore(meta);
-        item.setItemMeta(meta);
+        updateItemInfo(item, itemInfo);
     }
 
     public static void addAbility(ItemStack item, AbilityType type) {
-        ItemMeta meta = item.getItemMeta();
-        ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        ItemInfo itemInfo = getInfo(item);
         if (itemInfo == null) {
             return;
         }
@@ -642,9 +641,7 @@ public class ItemEditor {
         }
         abilityHolder.addAbility(type);
         itemInfo.setAbilitiesHolder(abilityHolder);
-        meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), itemInfo);
-        updateLore(meta);
-        item.setItemMeta(meta);
+        updateItemInfo(item, itemInfo);
     }
 
     /**
@@ -714,18 +711,12 @@ public class ItemEditor {
 
     @Nullable
     public static ItemInfo getMainHandInfo(Player player) {
-        if (player.getInventory().getItemInMainHand().getType() == Material.AIR) {
-            return null;
-        }
-        return player.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        return getInfo(player.getInventory().getItemInMainHand());
     }
 
     @Nullable
     public static ItemInfo getOffHandInfo(Player player) {
-        if (player.getInventory().getItemInOffHand().getType() == Material.AIR) {
-            return null;
-        }
-        return player.getInventory().getItemInOffHand().getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        return getInfo(player.getInventory().getItemInOffHand());
     }
 
     @Nullable
@@ -756,7 +747,7 @@ public class ItemEditor {
     /**
      * Method to format large numbers with suffixes
      * <p>
-     *     Taken from https://stackoverflow.com/a/9769590
+     *     Taken from <a href="https://stackoverflow.com/a/9769590">...</a>
      * </p>
      * @param number The number to format
      * @return The formatted String

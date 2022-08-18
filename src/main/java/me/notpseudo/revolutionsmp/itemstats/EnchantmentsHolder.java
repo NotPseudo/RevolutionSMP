@@ -45,6 +45,9 @@ public class EnchantmentsHolder implements Serializable {
     }
 
     public void combine(EnchantmentsHolder other) {
+        if (other == null) {
+            return;
+        }
         for (EnchantmentObject addEnchant : other.enchants) {
             addEnchant(addEnchant);
         }

@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GemstonesHolder implements Serializable {
@@ -33,15 +34,33 @@ public class GemstonesHolder implements Serializable {
         return gems;
     }
 
-    public void forceAdd(GemstoneObject[] oldGemList) {
-        oldGems.addAll(List.of(oldGemList));
+    public void forceAdd(ArrayList<GemstoneObject> oldGemList) {
+        oldGems.addAll(oldGemList);
+    }
+
+    public void combine(GemstonesHolder other) {
+        if (other == null) {
+            return;
+        }
+        ArrayList<GemstoneObject> failedGems = new ArrayList<>();
+        for (GemstoneObject gem : other.gems) {
+            if (!add(gem)) {
+                failedGems.add(gem);
+            }
+        }
+        for (GemstoneObject gem : other.oldGems) {
+            if (!add(gem)) {
+                failedGems.add(gem);
+            }
+        }
+        forceAdd(failedGems);
     }
 
     public boolean socket(ItemStack item) {
         if (item.getType() == Material.AIR) {
             return false;
         }
-        ItemInfo info = item.getItemMeta().getPersistentDataContainer().get(ItemEditor.getItemKey(), new ItemInfoDataType());
+        ItemInfo info = ItemEditor.getInfo(item);
         if (info == null) {
             return false;
         }

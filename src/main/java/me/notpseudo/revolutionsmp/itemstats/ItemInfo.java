@@ -341,6 +341,28 @@ public class ItemInfo implements Serializable {
         recalculate();
     }
 
+    public void copy(ItemInfo other) {
+        potatoBooks = other.potatoBooks;
+        reforge = other.reforge;
+        if (other.recomb) {
+            recomb();
+        }
+        if (enchantmentsHolder != null && other.enchantmentsHolder != null) {
+            enchantmentsHolder.combine(other.enchantmentsHolder);
+        }
+        if (abilitiesHolder != null && other.abilitiesHolder != null) {
+            abilitiesHolder.combine(other.abilitiesHolder);
+        }
+        if (gemstonesHolder != null && other.gemstonesHolder != null) {
+            gemstonesHolder.combine(other.gemstonesHolder);
+        }
+        if (texture == null) {
+            texture = other.texture;
+        }
+        owner = other.owner;
+        recalculate();
+    }
+
     public void recalculate() {
         if (itemID != null) {
             weaponStats = itemID.getDefaultWeaponStats();

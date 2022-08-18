@@ -103,7 +103,7 @@ public class StatsListeners implements Listener {
         if (player.isDead()) {
             return;
         }
-        ItemEditor.updateItem(player.getInventory().getItemInMainHand(), player.getUniqueId());
+        ItemEditor.updateItemOwner(player.getInventory().getItemInMainHand(), player.getUniqueId());
         // Assign base values for each stat
         WeaponStats damageStats = new WeaponStats(0, 0, 30, 50, 0, 0);
         ArmorStats healthStats = new ArmorStats(100, 0, 100, 0);
@@ -370,7 +370,7 @@ public class StatsListeners implements Listener {
             @Override
             public void run() {
                 ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
-                ItemEditor.updateItem(item, event.getPlayer().getUniqueId());
+                ItemEditor.updateItemOwner(item, event.getPlayer().getUniqueId());
                 updateStats(event.getPlayer());
             }
         };
