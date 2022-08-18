@@ -9,6 +9,7 @@ public enum SkillType {
     FISHING,
     ENCHANTING,
     ALCHEMY,
+    BUILDING,
     TAMING,
     ORIGIN,
     ABYSS,

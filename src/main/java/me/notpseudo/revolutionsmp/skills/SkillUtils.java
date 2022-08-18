@@ -96,6 +96,10 @@ public class SkillUtils implements Listener {
         getHolder(player).addExp(new ExpDropObject(type, finalExp));
     }
 
+    public static void addBuildingXpToPlayer(Player player, double exp) {
+        getHolder(player).addExp(new ExpDropObject(SkillType.BUILDING, exp));
+    }
+
     public static double getTotalXpForMaxLevel(SkillType type) {
         double total = 0;
         for (int i = 0; i < type.getMaxLevel(); i++) {

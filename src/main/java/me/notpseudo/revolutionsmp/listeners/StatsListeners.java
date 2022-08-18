@@ -4,6 +4,9 @@ import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.abilities.AbilityObject;
 import me.notpseudo.revolutionsmp.abilities.AbilityType;
+import me.notpseudo.revolutionsmp.collections.CollectionType;
+import me.notpseudo.revolutionsmp.collections.CollectionUtils;
+import me.notpseudo.revolutionsmp.collections.CollectionsHolder;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
 import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.*;
@@ -13,7 +16,9 @@ import me.notpseudo.revolutionsmp.mobstats.MobInfoDataType;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStatsDataType;
 import me.notpseudo.revolutionsmp.skills.ExpDropObject;
+import me.notpseudo.revolutionsmp.skills.SkillHolder;
 import me.notpseudo.revolutionsmp.skills.SkillType;
+import me.notpseudo.revolutionsmp.skills.SkillUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -168,7 +173,7 @@ public class StatsListeners implements Listener {
         playerStats.setLuckStats(luckStats);
         player.setWalkSpeed(Math.min(1f, (float) (healthStats.getStatValue(StatType.SPEED) / 500)));
         player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4 * (1 + (damageStats.getStatValue(StatType.ATTACK_SPEED) / 100)));
-        player.getPersistentDataContainer().set(playerStatsKey, new PlayerStatsDataType(), playerStats);
+        updatePlayerStats(player, playerStats);
     }
 
     public static void updateEntityStats(LivingEntity entity) {
@@ -233,7 +238,7 @@ public class StatsListeners implements Listener {
             double finalMana = (Math.min(mana + addMana, intelligence));
             playerStats.setMana(finalMana);
         }
-        player.getPersistentDataContainer().set(playerStatsKey, new PlayerStatsDataType(), playerStats);
+        updatePlayerStats(player, playerStats);
     }
 
     /**
@@ -345,8 +350,18 @@ public class StatsListeners implements Listener {
         updateStats(player);
         PlayerStats playerStats = getPlayerStats(player);
         playerStats.setMana(playerStats.getStatValue(StatType.INTELLIGENCE));
-        player.getPersistentDataContainer().set(playerStatsKey, new PlayerStatsDataType(), playerStats);
+        updatePlayerStats(player, playerStats);
         showActionBar(player);
+        SkillHolder skills = SkillUtils.getHolder(player);
+        for (SkillType type : SkillType.values()) {
+            skills.addSkill(type);
+        }
+        SkillUtils.updatePlayerSkills(player, skills);
+        CollectionsHolder collections = CollectionUtils.getCollectionHolder(player);
+        for (CollectionType collection : CollectionType.values()) {
+            collections.addCollection(collection);
+        }
+        CollectionUtils.updatePlayerCollections(player, collections);
     }
 
     /**
@@ -388,7 +403,14 @@ public class StatsListeners implements Listener {
         PlayerStats playerStats = getPlayerStats(player);
         playerStats.setStatValue(StatType.HEALTH, playerStats.getMaxHealth());
         playerStats.setMana(playerStats.getStatValue(StatType.INTELLIGENCE) / 2);
-        player.getPersistentDataContainer().set(playerStatsKey, new PlayerStatsDataType(), playerStats);
+        updatePlayerStats(player, playerStats);
+    }
+
+    public static void updatePlayerStats(Player player, PlayerStats stats) {
+        if (player == null || stats == null) {
+            return;
+        }
+        player.getPersistentDataContainer().set(playerStatsKey, new PlayerStatsDataType(), stats);
     }
 
     @NotNull
@@ -1123,7 +1145,7 @@ public class StatsListeners implements Listener {
         PlayerStats playerStats = player.getPersistentDataContainer().get(playerStatsKey, new PlayerStatsDataType());
         if (playerStats == null) {
             playerStats = new PlayerStats();
-            player.getPersistentDataContainer().set(playerStatsKey, new PlayerStatsDataType(), playerStats);
+            updatePlayerStats(player, playerStats);
         }
         return playerStats;
     }
