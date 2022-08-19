@@ -47,7 +47,7 @@ public enum CollectionType {
         }
         @Override
         public List<Material> getVanillaMaterials() {
-            return List.of(Material.MELON_SLICE, Material.MELON);
+            return List.of(Material.MELON, Material.MELON_SLICE);
         }
     },
     SUGAR_CANE {
@@ -87,7 +87,7 @@ public enum CollectionType {
         }
         @Override
         public List<Material> getVanillaMaterials() {
-            return List.of(Material.LEATHER);
+            return List.of(Material.LEATHER, Material.BEEF, Material.COOKED_BEEF);
         }
     },
     MUTTON {
@@ -97,7 +97,7 @@ public enum CollectionType {
         }
         @Override
         public List<Material> getVanillaMaterials() {
-            return List.of(Material.MUTTON);
+            return List.of(Material.MUTTON, Material.COOKED_MUTTON);
         }
     },
     CHICKEN {
@@ -107,7 +107,7 @@ public enum CollectionType {
         }
         @Override
         public List<Material> getVanillaMaterials() {
-            return List.of(Material.CHICKEN);
+            return List.of(Material.CHICKEN, Material.COOKED_CHICKEN, Material.EGG);
         }
     },
     PORK {
@@ -117,7 +117,7 @@ public enum CollectionType {
         }
         @Override
         public List<Material> getVanillaMaterials() {
-            return List.of(Material.PORKCHOP);
+            return List.of(Material.PORKCHOP, Material.COOKED_PORKCHOP);
         }
     },
     RABBIT {
@@ -127,7 +127,7 @@ public enum CollectionType {
         }
         @Override
         public List<Material> getVanillaMaterials() {
-            return List.of(Material.RABBIT, Material.RABBIT_HIDE, Material.RABBIT_FOOT);
+            return List.of(Material.RABBIT, Material.COOKED_RABBIT, Material.RABBIT_HIDE, Material.RABBIT_FOOT);
         }
     },
     CACTUS {
@@ -147,7 +147,7 @@ public enum CollectionType {
         }
         @Override
         public List<Material> getVanillaMaterials() {
-            return List.of(Material.BROWN_MUSHROOM, Material.RED_MUSHROOM, Material.MUSHROOM_STEM, Material.BROWN_MUSHROOM_BLOCK, Material.RED_MUSHROOM_BLOCK);
+            return List.of(Material.RED_MUSHROOM, Material.BROWN_MUSHROOM, Material.MUSHROOM_STEM, Material.BROWN_MUSHROOM_BLOCK, Material.RED_MUSHROOM_BLOCK);
         }
     },
     BEETROOT {
@@ -257,7 +257,7 @@ public enum CollectionType {
         }
         @Override
         public List<Material> getVanillaMaterials() {
-            return List.of(Material.ICE, Material.PACKED_ICE, Material.BLUE_ICE, Material.FROSTED_ICE);
+            return List.of(Material.ICE, Material.PACKED_ICE, Material.BLUE_ICE);
         }
     },
     COAL {
@@ -297,7 +297,7 @@ public enum CollectionType {
         }
         @Override
         public List<Material> getVanillaMaterials() {
-            return List.of(Material.RAW_GOLD, Material.GOLD_NUGGET, Material.GOLD_INGOT, Material.GOLD_BLOCK, Material.RAW_GOLD_BLOCK);
+            return List.of(Material.GOLD_INGOT, Material.GOLD_NUGGET, Material.RAW_GOLD, Material.GOLD_BLOCK, Material.RAW_GOLD_BLOCK);
         }
     },
     IRON {
@@ -307,7 +307,7 @@ public enum CollectionType {
         }
         @Override
         public List<Material> getVanillaMaterials() {
-            return List.of(Material.RAW_IRON, Material.IRON_INGOT, Material.IRON_BLOCK, Material.RAW_IRON_BLOCK);
+            return List.of(Material.IRON_INGOT, Material.RAW_IRON, Material.IRON_BLOCK, Material.RAW_IRON_BLOCK);
         }
     },
     COPPER {
@@ -317,7 +317,7 @@ public enum CollectionType {
         }
         @Override
         public List<Material> getVanillaMaterials() {
-            return List.of(Material.RAW_COPPER, Material.COPPER_INGOT, Material.COPPER_BLOCK, Material.RAW_COPPER_BLOCK);
+            return List.of(Material.COPPER_INGOT, Material.RAW_COPPER, Material.COPPER_BLOCK, Material.RAW_COPPER_BLOCK);
         }
     },
     LAPIS {
@@ -377,7 +377,7 @@ public enum CollectionType {
         }
         @Override
         public List<Material> getVanillaMaterials() {
-            return List.of(Material.GLOWSTONE_DUST, Material.GLOWSTONE_DUST);
+            return List.of(Material.GLOWSTONE_DUST, Material.GLOWSTONE);
         }
     },
     BASALT {
@@ -397,7 +397,7 @@ public enum CollectionType {
         }
         @Override
         public List<Material> getVanillaMaterials() {
-            return List.of(Material.ANCIENT_DEBRIS, Material.NETHERITE_INGOT, Material.NETHERITE_BLOCK, Material.NETHERITE_SCRAP);
+            return List.of(Material.NETHERITE_INGOT, Material.ANCIENT_DEBRIS, Material.NETHERITE_BLOCK, Material.NETHERITE_SCRAP);
         }
     },
     OBSIDIAN {
@@ -557,7 +557,7 @@ public enum CollectionType {
         }
         @Override
         public List<Material> getVanillaMaterials() {
-            return List.of(Material.ACACIA_WOOD, Material.ACACIA_LOG, Material.STRIPPED_ACACIA_LOG);
+            return List.of(Material.ACACIA_LOG,Material.ACACIA_WOOD, Material.STRIPPED_ACACIA_LOG);
         }
     },
     BITCH_WOOD {
@@ -597,7 +597,7 @@ public enum CollectionType {
         }
         @Override
         public List<Material> getVanillaMaterials() {
-            return List.of(Material.OAK_WOOD, Material.OAK_LOG, Material.STRIPPED_OAK_WOOD, Material.STRIPPED_OAK_LOG);
+            return List.of(Material.OAK_LOG, Material.OAK_WOOD, Material.STRIPPED_OAK_WOOD, Material.STRIPPED_OAK_LOG);
         }
     },
     SPRUCE_WOOD {
@@ -607,7 +607,7 @@ public enum CollectionType {
         }
         @Override
         public List<Material> getVanillaMaterials() {
-            return List.of(Material.SPRUCE_WOOD, Material.SPRUCE_LOG, Material.STRIPPED_SPRUCE_WOOD, Material.STRIPPED_SPRUCE_LOG);
+            return List.of(Material.SPRUCE_LOG, Material.SPRUCE_WOOD, Material.STRIPPED_SPRUCE_WOOD, Material.STRIPPED_SPRUCE_LOG);
         }
     },
     MANGROVE_WOOD {

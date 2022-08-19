@@ -17,6 +17,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -1087,6 +1088,1098 @@ public enum ItemID {
             return new ArmorStats(0, 25, 0);
         }
     },
+
+    ENCHANTED_HAY_BALE {
+        @Override
+        public Material getMaterial() {
+            return Material.HAY_BLOCK;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.shape("HHH", "HHH", "HHH");
+            recipe.setIngredient('H', new ItemStack(Material.HAY_BLOCK, 4));
+            return recipe;
+        }
+    },
+    ENCHANTED_POTATO {
+        @Override
+        public Material getMaterial() {
+            return Material.POTATO;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.POTATO, 8));
+            recipe.addIngredient(new ItemStack(Material.POTATO, 8));
+            recipe.addIngredient(new ItemStack(Material.POTATO, 8));
+            recipe.addIngredient(new ItemStack(Material.POTATO, 8));
+            recipe.addIngredient(new ItemStack(Material.POTATO, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_BAKED_POTATO {
+        @Override
+        public Material getMaterial() {
+            return Material.BAKED_POTATO;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_POTATO, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_POTATO, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_POTATO, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_POTATO, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_POTATO, 8));
+            return recipe;
+        }
+    },
+    HOT_POTATO_BOOK {
+        @Override
+        public Material getMaterial() {
+            return Material.WRITTEN_BOOK;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.EPIC;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.shape("PP ", "PB ", "   ");
+            recipe.setIngredient('P', Material.PAPER);
+            recipe.setIngredient('B', new ItemIDChoice(ENCHANTED_BAKED_POTATO));
+            return recipe;
+        }
+    },
+    FUMING_POTATO_BOOK {
+        @Override
+        public Material getMaterial() {
+            return Material.WRITTEN_BOOK;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.EPIC;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.shape("PPP", "PBP", "PPP");
+            recipe.setIngredient('P', new ItemIDChoice(ENCHANTED_BAKED_POTATO));
+            recipe.setIngredient('B', new ItemIDChoice(HOT_POTATO_BOOK));
+            return recipe;
+        }
+    },
+    ENCHANTED_CARROT {
+        @Override
+        public Material getMaterial() {
+            return Material.CARROT;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.CARROT, 8));
+            recipe.addIngredient(new ItemStack(Material.CARROT, 8));
+            recipe.addIngredient(new ItemStack(Material.CARROT, 8));
+            recipe.addIngredient(new ItemStack(Material.CARROT, 8));
+            recipe.addIngredient(new ItemStack(Material.CARROT, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_GOLDEN_CARROT {
+        @Override
+        public Material getMaterial() {
+            return Material.GOLDEN_CARROT;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_CARROT, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_CARROT, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_CARROT, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_CARROT, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_CARROT, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_MELON {
+        @Override
+        public Material getMaterial() {
+            return Material.MELON_SLICE;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.MELON_SLICE, 8));
+            recipe.addIngredient(new ItemStack(Material.MELON_SLICE, 8));
+            recipe.addIngredient(new ItemStack(Material.MELON_SLICE, 8));
+            recipe.addIngredient(new ItemStack(Material.MELON_SLICE, 8));
+            recipe.addIngredient(new ItemStack(Material.MELON_SLICE, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_GLISTERING_MELON {
+        @Override
+        public Material getMaterial() {
+            return Material.GLISTERING_MELON_SLICE;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.RARE;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.GLISTERING_MELON_SLICE, 8));
+            recipe.addIngredient(new ItemStack(Material.GLISTERING_MELON_SLICE, 8));
+            recipe.addIngredient(new ItemStack(Material.GLISTERING_MELON_SLICE, 8));
+            recipe.addIngredient(new ItemStack(Material.GLISTERING_MELON_SLICE, 8));
+            recipe.addIngredient(new ItemStack(Material.GLISTERING_MELON_SLICE, 8));
+            recipe.addIngredient(new ItemStack(Material.GLISTERING_MELON_SLICE, 8));
+            recipe.addIngredient(new ItemStack(Material.GLISTERING_MELON_SLICE, 8));
+            recipe.addIngredient(new ItemStack(Material.GLISTERING_MELON_SLICE, 8));
+            return recipe;
+        }
+    },
+    ENCAHNTED_MELON_BLOCK {
+        @Override
+        public Material getMaterial() {
+            return Material.MELON;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.RARE;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_MELON, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_MELON, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_MELON, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_MELON, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_MELON, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_SUGAR {
+        @Override
+        public Material getMaterial() {
+            return Material.SUGAR;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.SUGAR_CANE, 8));
+            recipe.addIngredient(new ItemStack(Material.SUGAR_CANE, 8));
+            recipe.addIngredient(new ItemStack(Material.SUGAR_CANE, 8));
+            recipe.addIngredient(new ItemStack(Material.SUGAR_CANE, 8));
+            recipe.addIngredient(new ItemStack(Material.SUGAR_CANE, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_PAPER {
+        @Override
+        public Material getMaterial() {
+            return Material.PAPER;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.SUGAR_CANE, 16));
+            recipe.addIngredient(new ItemStack(Material.SUGAR_CANE, 16));
+            recipe.addIngredient(new ItemStack(Material.SUGAR_CANE, 16));
+            return recipe;
+        }
+    },
+    ENCHANTED_SUGAR_CANE {
+        @Override
+        public Material getMaterial() {
+            return Material.SUGAR_CANE;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.RARE;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_SUGAR, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_SUGAR, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_SUGAR, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_SUGAR, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_SUGAR, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_PUMPKIN {
+        @Override
+        public Material getMaterial() {
+            return Material.PUMPKIN;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.PUMPKIN, 8));
+            recipe.addIngredient(new ItemStack(Material.PUMPKIN, 8));
+            recipe.addIngredient(new ItemStack(Material.PUMPKIN, 8));
+            recipe.addIngredient(new ItemStack(Material.PUMPKIN, 8));
+            recipe.addIngredient(new ItemStack(Material.PUMPKIN, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_FEATHER {
+        @Override
+        public Material getMaterial() {
+            return Material.FEATHER;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.FEATHER, 8));
+            recipe.addIngredient(new ItemStack(Material.FEATHER, 8));
+            recipe.addIngredient(new ItemStack(Material.FEATHER, 8));
+            recipe.addIngredient(new ItemStack(Material.FEATHER, 8));
+            recipe.addIngredient(new ItemStack(Material.FEATHER, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_RAW_BEEF {
+        @Override
+        public Material getMaterial() {
+            return Material.BEEF;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.BEEF, 8));
+            recipe.addIngredient(new ItemStack(Material.BEEF, 8));
+            recipe.addIngredient(new ItemStack(Material.BEEF, 8));
+            recipe.addIngredient(new ItemStack(Material.BEEF, 8));
+            recipe.addIngredient(new ItemStack(Material.BEEF, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_LEATHER {
+        @Override
+        public Material getMaterial() {
+            return Material.LEATHER;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.LEATHER, 8));
+            recipe.addIngredient(new ItemStack(Material.LEATHER, 8));
+            recipe.addIngredient(new ItemStack(Material.LEATHER, 8));
+            recipe.addIngredient(new ItemStack(Material.LEATHER, 8));
+            recipe.addIngredient(new ItemStack(Material.LEATHER, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_MUTTON {
+        @Override
+        public Material getMaterial() {
+            return Material.MUTTON;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.MUTTON, 8));
+            recipe.addIngredient(new ItemStack(Material.MUTTON, 8));
+            recipe.addIngredient(new ItemStack(Material.MUTTON, 8));
+            recipe.addIngredient(new ItemStack(Material.MUTTON, 8));
+            recipe.addIngredient(new ItemStack(Material.MUTTON, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_COOKED_MUTTON {
+        @Override
+        public Material getMaterial() {
+            return Material.COOKED_MUTTON;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.RARE;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_MUTTON, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_MUTTON, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_MUTTON, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_MUTTON, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_MUTTON, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_CHICKEN {
+        @Override
+        public Material getMaterial() {
+            return Material.CHICKEN;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.CHICKEN, 8));
+            recipe.addIngredient(new ItemStack(Material.CHICKEN, 8));
+            recipe.addIngredient(new ItemStack(Material.CHICKEN, 8));
+            recipe.addIngredient(new ItemStack(Material.CHICKEN, 8));
+            recipe.addIngredient(new ItemStack(Material.CHICKEN, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_EGG {
+        @Override
+        public Material getMaterial() {
+            return Material.EGG;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.RARE;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.EGG, 4));
+            recipe.addIngredient(new ItemStack(Material.EGG, 4));
+            recipe.addIngredient(new ItemStack(Material.EGG, 4));
+            recipe.addIngredient(new ItemStack(Material.EGG, 4));
+            recipe.addIngredient(new ItemStack(Material.EGG, 4));
+            recipe.addIngredient(new ItemStack(Material.EGG, 4));
+            recipe.addIngredient(new ItemStack(Material.EGG, 4));
+            recipe.addIngredient(new ItemStack(Material.EGG, 4));
+            recipe.addIngredient(new ItemStack(Material.EGG, 4));
+            return recipe;
+        }
+    },
+    SUPER_ENCHANTED_EGG {
+        @Override
+        public Material getMaterial() {
+            return Material.GHAST_SPAWN_EGG;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.RARE;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EGG, 4));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EGG, 4));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EGG, 4));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EGG, 4));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EGG, 4));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EGG, 4));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EGG, 4));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EGG, 4));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EGG, 4));
+            return recipe;
+        }
+    },
+    OMEGA_ENCHANTED_EGG {
+        @Override
+        public Material getMaterial() {
+            return Material.ENDERMITE_SPAWN_EGG;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.EPIC;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemIDChoice(SUPER_ENCHANTED_EGG, 4));
+            recipe.addIngredient(new ItemIDChoice(SUPER_ENCHANTED_EGG, 4));
+            recipe.addIngredient(new ItemIDChoice(SUPER_ENCHANTED_EGG, 4));
+            recipe.addIngredient(new ItemIDChoice(SUPER_ENCHANTED_EGG, 4));
+            recipe.addIngredient(new ItemIDChoice(SUPER_ENCHANTED_EGG, 4));
+            recipe.addIngredient(new ItemIDChoice(SUPER_ENCHANTED_EGG, 4));
+            recipe.addIngredient(new ItemIDChoice(SUPER_ENCHANTED_EGG, 4));
+            recipe.addIngredient(new ItemIDChoice(SUPER_ENCHANTED_EGG, 4));
+            recipe.addIngredient(new ItemIDChoice(SUPER_ENCHANTED_EGG, 4));
+            return recipe;
+        }
+    },
+    ENCHANTED_PORK {
+        @Override
+        public Material getMaterial() {
+            return Material.PORKCHOP;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.PORKCHOP, 8));
+            recipe.addIngredient(new ItemStack(Material.PORKCHOP, 8));
+            recipe.addIngredient(new ItemStack(Material.PORKCHOP, 8));
+            recipe.addIngredient(new ItemStack(Material.PORKCHOP, 8));
+            recipe.addIngredient(new ItemStack(Material.PORKCHOP, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_GRILLED_PORK {
+        @Override
+        public Material getMaterial() {
+            return Material.COOKED_PORKCHOP;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.RARE;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_PORK, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_PORK, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_PORK, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_PORK, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_PORK, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_RABBIT_FOOT {
+        @Override
+        public Material getMaterial() {
+            return Material.RABBIT_FOOT;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.RARE;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.RABBIT_FOOT, 8));
+            recipe.addIngredient(new ItemStack(Material.RABBIT_FOOT, 8));
+            recipe.addIngredient(new ItemStack(Material.RABBIT_FOOT, 8));
+            recipe.addIngredient(new ItemStack(Material.RABBIT_FOOT, 8));
+            recipe.addIngredient(new ItemStack(Material.RABBIT_FOOT, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_RABBIT_HIDE {
+        @Override
+        public Material getMaterial() {
+            return Material.RABBIT_HIDE;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.RARE;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.RABBIT_HIDE, 16));
+            recipe.addIngredient(new ItemStack(Material.RABBIT_HIDE, 16));
+            recipe.addIngredient(new ItemStack(Material.RABBIT_HIDE, 16));
+            recipe.addIngredient(new ItemStack(Material.RABBIT_HIDE, 16));
+            recipe.addIngredient(new ItemStack(Material.RABBIT_HIDE, 16));
+            recipe.addIngredient(new ItemStack(Material.RABBIT_HIDE, 16));
+            recipe.addIngredient(new ItemStack(Material.RABBIT_HIDE, 16));
+            recipe.addIngredient(new ItemStack(Material.RABBIT_HIDE, 16));
+            recipe.addIngredient(new ItemStack(Material.RABBIT_HIDE, 16));
+            return recipe;
+        }
+    },
+    ENCHANTED_CACTUS_GREEN {
+        @Override
+        public Material getMaterial() {
+            return Material.GREEN_DYE;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.GREEN_DYE, 8));
+            recipe.addIngredient(new ItemStack(Material.GREEN_DYE, 8));
+            recipe.addIngredient(new ItemStack(Material.GREEN_DYE, 8));
+            recipe.addIngredient(new ItemStack(Material.GREEN_DYE, 8));
+            recipe.addIngredient(new ItemStack(Material.GREEN_DYE, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_CACTUS {
+        @Override
+        public Material getMaterial() {
+            return Material.COOKED_PORKCHOP;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.RARE;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_CACTUS_GREEN, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_CACTUS_GREEN, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_CACTUS_GREEN, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_CACTUS_GREEN, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_CACTUS_GREEN, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_BROWN_MUSHROOM {
+        @Override
+        public Material getMaterial() {
+            return Material.BROWN_MUSHROOM;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.BROWN_MUSHROOM, 8));
+            recipe.addIngredient(new ItemStack(Material.BROWN_MUSHROOM, 8));
+            recipe.addIngredient(new ItemStack(Material.BROWN_MUSHROOM, 8));
+            recipe.addIngredient(new ItemStack(Material.BROWN_MUSHROOM, 8));
+            recipe.addIngredient(new ItemStack(Material.BROWN_MUSHROOM, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_RED_MUSHROOM {
+        @Override
+        public Material getMaterial() {
+            return Material.RED_MUSHROOM;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.RED_MUSHROOM, 8));
+            recipe.addIngredient(new ItemStack(Material.RED_MUSHROOM, 8));
+            recipe.addIngredient(new ItemStack(Material.RED_MUSHROOM, 8));
+            recipe.addIngredient(new ItemStack(Material.RED_MUSHROOM, 8));
+            recipe.addIngredient(new ItemStack(Material.RED_MUSHROOM, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_BEETROOT {
+        @Override
+        public Material getMaterial() {
+            return Material.BEETROOT;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.BEETROOT, 8));
+            recipe.addIngredient(new ItemStack(Material.BEETROOT, 8));
+            recipe.addIngredient(new ItemStack(Material.BEETROOT, 8));
+            recipe.addIngredient(new ItemStack(Material.BEETROOT, 8));
+            recipe.addIngredient(new ItemStack(Material.BEETROOT, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_SWEET_BERRIES {
+        @Override
+        public Material getMaterial() {
+            return Material.SWEET_BERRIES;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.SWEET_BERRIES, 8));
+            recipe.addIngredient(new ItemStack(Material.SWEET_BERRIES, 8));
+            recipe.addIngredient(new ItemStack(Material.SWEET_BERRIES, 8));
+            recipe.addIngredient(new ItemStack(Material.SWEET_BERRIES, 8));
+            recipe.addIngredient(new ItemStack(Material.SWEET_BERRIES, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_COCOA_BEANS {
+        @Override
+        public Material getMaterial() {
+            return Material.COCOA_BEANS;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.COCOA_BEANS, 8));
+            recipe.addIngredient(new ItemStack(Material.COCOA_BEANS, 8));
+            recipe.addIngredient(new ItemStack(Material.COCOA_BEANS, 8));
+            recipe.addIngredient(new ItemStack(Material.COCOA_BEANS, 8));
+            recipe.addIngredient(new ItemStack(Material.COCOA_BEANS, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_COOKIE {
+        @Override
+        public Material getMaterial() {
+            return Material.COOKIE;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.RARE;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.WHEAT, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_COCOA_BEANS, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_COCOA_BEANS, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_COCOA_BEANS, 8));
+            recipe.addIngredient(new ItemIDChoice(ENCHANTED_COCOA_BEANS, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_NETHER_WART {
+        @Override
+        public Material getMaterial() {
+            return Material.NETHER_WART;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.NETHER_WART, 8));
+            recipe.addIngredient(new ItemStack(Material.NETHER_WART, 8));
+            recipe.addIngredient(new ItemStack(Material.NETHER_WART, 8));
+            recipe.addIngredient(new ItemStack(Material.NETHER_WART, 8));
+            recipe.addIngredient(new ItemStack(Material.NETHER_WART, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_CRIMSON_FUNGUS {
+        @Override
+        public Material getMaterial() {
+            return Material.CRIMSON_FUNGUS;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.CRIMSON_FUNGUS, 8));
+            recipe.addIngredient(new ItemStack(Material.CRIMSON_FUNGUS, 8));
+            recipe.addIngredient(new ItemStack(Material.CRIMSON_FUNGUS, 8));
+            recipe.addIngredient(new ItemStack(Material.CRIMSON_FUNGUS, 8));
+            recipe.addIngredient(new ItemStack(Material.CRIMSON_FUNGUS, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_WARPED_FUNGUS {
+        @Override
+        public Material getMaterial() {
+            return Material.WARPED_FUNGUS;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.WARPED_FUNGUS, 8));
+            recipe.addIngredient(new ItemStack(Material.WARPED_FUNGUS, 8));
+            recipe.addIngredient(new ItemStack(Material.WARPED_FUNGUS, 8));
+            recipe.addIngredient(new ItemStack(Material.WARPED_FUNGUS, 8));
+            recipe.addIngredient(new ItemStack(Material.WARPED_FUNGUS, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_GLOW_BERRIES {
+        @Override
+        public Material getMaterial() {
+            return Material.GLOW_BERRIES;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.GLOW_BERRIES, 8));
+            recipe.addIngredient(new ItemStack(Material.GLOW_BERRIES, 8));
+            recipe.addIngredient(new ItemStack(Material.GLOW_BERRIES, 8));
+            recipe.addIngredient(new ItemStack(Material.GLOW_BERRIES, 8));
+            recipe.addIngredient(new ItemStack(Material.GLOW_BERRIES, 8));
+            return recipe;
+        }
+    },
+    ENCHANTED_DEAD_BUSH {
+        @Override
+        public Material getMaterial() {
+            return Material.DEAD_BUSH;
+        }
+
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
+        public boolean isEnchantGlint() {
+            return true;
+        }
+
+        @Override
+        public Recipe getRecipe() {
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(new ItemStack(Material.DEAD_BUSH, 8));
+            recipe.addIngredient(new ItemStack(Material.DEAD_BUSH, 8));
+            recipe.addIngredient(new ItemStack(Material.DEAD_BUSH, 8));
+            recipe.addIngredient(new ItemStack(Material.DEAD_BUSH, 8));
+            recipe.addIngredient(new ItemStack(Material.DEAD_BUSH, 8));
+            return recipe;
+        }
+    },
+
     STORM_CHESTPLATE {
         @Override
         public ItemType getItemType() {

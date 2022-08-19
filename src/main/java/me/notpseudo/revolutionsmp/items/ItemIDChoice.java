@@ -10,19 +10,23 @@ import java.util.*;
 
 public class ItemIDChoice implements RecipeChoice {
 
-    private List<ItemIDCount> ids;
+    private List<ItemID> ids;
+    private int count;
 
     public ItemIDChoice(@NotNull ItemID id) {
         this(List.of(id));
+        count = 1;
     }
 
     public ItemIDChoice(@NotNull ItemID id, int count) {
-        ids = new ArrayList<>(List.of(new ItemIDCount(id, count)));
+        this(List.of(id));
+        this.count = count;
     }
 
 
     public ItemIDChoice(@NotNull ItemID... ids) {
         this(Arrays.asList(ids));
+        count = 1;
     }
 
     public ItemIDChoice(@NotNull List<ItemID> ids) {
@@ -31,31 +35,22 @@ public class ItemIDChoice implements RecipeChoice {
         for (ItemID id : ids) {
             Preconditions.checkArgument(id != null, "Can not have null IDs");
         }
-        this.ids = new ArrayList<>();
-        for (ItemID id : ids) {
-            this.ids.add(new ItemIDCount(id, 1));
-        }
+        this.ids = new ArrayList<>(ids);
     }
 
-    public ItemIDChoice(@NotNull List<ItemID> ids, @NotNull List<Integer> counts) {
+    public ItemIDChoice(@NotNull List<ItemID> ids, int count) {
         Preconditions.checkArgument(ids != null, "ids can not be null");
         Preconditions.checkArgument(!ids.isEmpty(), "Must have at least one ItemID");
         for (ItemID id : ids) {
             Preconditions.checkArgument(id != null, "Can not have null IDs");
         }
-        this.ids = new ArrayList<>();
-        for (int i = 0; i < ids.size(); i++) {
-            if (i < counts.size()) {
-                this.ids.add(new ItemIDCount(ids.get(i), counts.get(i)));
-            } else {
-                this.ids.add(new ItemIDCount(ids.get(i), 1));
-            }
-        }
+        this.ids = new ArrayList<>(ids);
+        this.count = count;
     }
 
     @Override
     public @NotNull ItemStack getItemStack() {
-        return ids.get(0).getItemID().getItem();
+        return ids.get(0).getItem();
     }
 
     @Override
@@ -77,8 +72,8 @@ public class ItemIDChoice implements RecipeChoice {
         }
         ItemID id = info.getItemID();
         int amount = itemStack.getAmount();
-        for (ItemIDCount count : ids) {
-            if (id == count.getItemID() && amount >= count.getCount()) {
+        for (ItemID itemID : ids) {
+            if (id ==itemID && amount >= count) {
                 return true;
             }
         }
@@ -86,7 +81,7 @@ public class ItemIDChoice implements RecipeChoice {
     }
 
     @NotNull
-    public List<ItemIDCount> getChoices() {
+    public List<ItemID> getChoices() {
         return Collections.unmodifiableList(ids);
     }
 
