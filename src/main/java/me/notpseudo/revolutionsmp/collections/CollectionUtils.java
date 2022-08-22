@@ -1,9 +1,9 @@
 package me.notpseudo.revolutionsmp.collections;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
-import me.notpseudo.revolutionsmp.customcrafting.items.ItemEditor;
-import me.notpseudo.revolutionsmp.customcrafting.items.ItemID;
-import me.notpseudo.revolutionsmp.customcrafting.items.ItemType;
+import me.notpseudo.revolutionsmp.items.ItemEditor;
+import me.notpseudo.revolutionsmp.items.ItemID;
+import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfoDataType;
 import me.notpseudo.revolutionsmp.listeners.HarvestingListeners;

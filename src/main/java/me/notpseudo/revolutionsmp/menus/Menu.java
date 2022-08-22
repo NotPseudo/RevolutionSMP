@@ -4,7 +4,7 @@ import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.collections.CollectionObject;
 import me.notpseudo.revolutionsmp.collections.CollectionType;
 import me.notpseudo.revolutionsmp.collections.CollectionsHolder;
-import me.notpseudo.revolutionsmp.customcrafting.items.ItemEditor;
+import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.skills.SkillObject;
 import me.notpseudo.revolutionsmp.skills.SkillType;
 import me.notpseudo.revolutionsmp.skills.SkillUtils;

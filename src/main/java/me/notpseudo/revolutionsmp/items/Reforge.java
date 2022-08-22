@@ -1,4 +1,4 @@
-package me.notpseudo.revolutionsmp.customcrafting.items;
+package me.notpseudo.revolutionsmp.items;
 
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.itemstats.IncreaseType;

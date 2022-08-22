@@ -1,4 +1,4 @@
-package me.notpseudo.revolutionsmp.customcrafting.items;
+package me.notpseudo.revolutionsmp.items;
 
 import com.google.common.base.Preconditions;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfo;

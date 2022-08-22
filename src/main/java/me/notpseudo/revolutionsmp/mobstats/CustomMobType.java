@@ -1,6 +1,6 @@
 package me.notpseudo.revolutionsmp.mobstats;
 
-import me.notpseudo.revolutionsmp.customcrafting.items.ItemEditor;
+import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.skills.ExpDropObject;
 import me.notpseudo.revolutionsmp.skills.SkillType;
 import org.bukkit.entity.EntityType;

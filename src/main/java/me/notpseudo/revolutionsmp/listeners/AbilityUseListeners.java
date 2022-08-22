@@ -5,7 +5,7 @@ import me.notpseudo.revolutionsmp.abilities.AbilityObject;
 import me.notpseudo.revolutionsmp.abilities.AbilityUseType;
 import me.notpseudo.revolutionsmp.itemstats.AbilitiesHolder;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfoDataType;
-import me.notpseudo.revolutionsmp.customcrafting.items.ItemEditor;
+import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStatsDataType;
 import org.bukkit.Bukkit;

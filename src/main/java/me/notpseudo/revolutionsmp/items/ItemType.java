@@ -1,4 +1,4 @@
-package me.notpseudo.revolutionsmp.customcrafting.items;
+package me.notpseudo.revolutionsmp.items;
 
 // Enum of ItemTypes a custom item can be
 public enum ItemType {

@@ -1,7 +1,7 @@
 package me.notpseudo.revolutionsmp.enchantments;
 
-import me.notpseudo.revolutionsmp.customcrafting.items.ItemEditor;
-import me.notpseudo.revolutionsmp.customcrafting.items.ItemID;
+import me.notpseudo.revolutionsmp.items.ItemEditor;
+import me.notpseudo.revolutionsmp.items.ItemID;
 import me.notpseudo.revolutionsmp.itemstats.EnchantmentsHolder;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
 import net.kyori.adventure.text.Component;

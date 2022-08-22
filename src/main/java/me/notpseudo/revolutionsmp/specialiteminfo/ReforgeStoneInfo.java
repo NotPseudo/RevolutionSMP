@@ -1,9 +1,9 @@
 package me.notpseudo.revolutionsmp.specialiteminfo;
 
-import me.notpseudo.revolutionsmp.customcrafting.items.ItemEditor;
-import me.notpseudo.revolutionsmp.customcrafting.items.ItemType;
-import me.notpseudo.revolutionsmp.customcrafting.items.Rarity;
-import me.notpseudo.revolutionsmp.customcrafting.items.Reforge;
+import me.notpseudo.revolutionsmp.items.ItemEditor;
+import me.notpseudo.revolutionsmp.items.ItemType;
+import me.notpseudo.revolutionsmp.items.Rarity;
+import me.notpseudo.revolutionsmp.items.Reforge;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;

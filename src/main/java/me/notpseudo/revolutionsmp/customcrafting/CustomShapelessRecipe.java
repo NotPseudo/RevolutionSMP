@@ -1,5 +1,6 @@
 package me.notpseudo.revolutionsmp.customcrafting.items;
 
+import me.notpseudo.revolutionsmp.items.ItemID;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;

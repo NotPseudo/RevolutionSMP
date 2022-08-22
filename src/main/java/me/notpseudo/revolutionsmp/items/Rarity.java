@@ -1,4 +1,4 @@
-package me.notpseudo.revolutionsmp.customcrafting.items;
+package me.notpseudo.revolutionsmp.items;
 
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.ChatColor;

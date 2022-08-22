@@ -1,5 +1,6 @@
 package me.notpseudo.revolutionsmp.customcrafting.items;
 
+import me.notpseudo.revolutionsmp.items.ItemID;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;

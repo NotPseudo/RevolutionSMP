@@ -1,7 +1,7 @@
 package me.notpseudo.revolutionsmp.itemstats;
 
-import me.notpseudo.revolutionsmp.customcrafting.items.ItemEditor;
-import me.notpseudo.revolutionsmp.customcrafting.items.Rarity;
+import me.notpseudo.revolutionsmp.items.ItemEditor;
+import me.notpseudo.revolutionsmp.items.Rarity;
 import me.notpseudo.revolutionsmp.mining.GemstoneSlotType;
 import me.notpseudo.revolutionsmp.specialiteminfo.GemstoneObject;
 import net.kyori.adventure.text.Component;

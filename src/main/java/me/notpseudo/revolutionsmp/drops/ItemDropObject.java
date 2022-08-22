@@ -1,8 +1,8 @@
 package me.notpseudo.revolutionsmp.drops;
 
-import me.notpseudo.revolutionsmp.customcrafting.items.ItemEditor;
-import me.notpseudo.revolutionsmp.customcrafting.items.ItemID;
-import me.notpseudo.revolutionsmp.customcrafting.items.Rarity;
+import me.notpseudo.revolutionsmp.items.ItemEditor;
+import me.notpseudo.revolutionsmp.items.ItemID;
+import me.notpseudo.revolutionsmp.items.Rarity;
 import me.notpseudo.revolutionsmp.mining.GemstoneType;
 import me.notpseudo.revolutionsmp.mining.GemstoneUtils;
 import org.bukkit.Location;

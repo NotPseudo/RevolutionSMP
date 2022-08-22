@@ -1,7 +1,7 @@
 package me.notpseudo.revolutionsmp.specialiteminfo;
 
-import me.notpseudo.revolutionsmp.customcrafting.items.ItemEditor;
-import me.notpseudo.revolutionsmp.customcrafting.items.Rarity;
+import me.notpseudo.revolutionsmp.items.ItemEditor;
+import me.notpseudo.revolutionsmp.items.Rarity;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.mining.GemstoneType;
 import me.notpseudo.revolutionsmp.mining.GemstoneUtils;
