@@ -131,7 +131,7 @@ public class AdvancedReforgeMenu extends Menu {
         if (!(reforge.getItemTypes().contains(leftInfo.getItemType()))) {
             return false;
         }
-        ItemStack itemClone = left.clone();
+        ItemStack itemClone = new ItemStack(left);
         ItemInfo infoClone = ItemEditor.getInfo(itemClone);
         infoClone.setReforge(reforge);
         ItemMeta meta = itemClone.getItemMeta();
