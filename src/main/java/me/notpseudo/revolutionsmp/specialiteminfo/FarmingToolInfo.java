@@ -40,7 +40,8 @@ public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
         count2Reached = false;
     }
 
-    public void upgradeFromCraft() {
+    @Override
+    public void upgradeFromCrafting() {
         craftTier++;
         super.getHolder().upgradeRarity();
         switch (craftTier) {

@@ -161,6 +161,10 @@ public class SpecialItemInfo implements Serializable {
 
     }
 
+    public void upgradeFromCrafting() {
+
+    }
+
     public List<Component> getSpecialLore() {
         return new ArrayList<>();
     }
