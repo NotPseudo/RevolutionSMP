@@ -17,6 +17,7 @@ public enum MenuAction {
     WITHDRAW_HALF,
     WITHDRAW_25,
     DEPOSIT_CUSTOM,
-    WITHDRAW_CUSTOM;
+    WITHDRAW_CUSTOM,
+    CRAFT;
 
 }
