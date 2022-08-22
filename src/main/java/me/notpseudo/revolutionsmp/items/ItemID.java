@@ -1129,11 +1129,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.POTATO, 8));
-            recipe.addIngredient(new ItemStack(Material.POTATO, 8));
-            recipe.addIngredient(new ItemStack(Material.POTATO, 8));
-            recipe.addIngredient(new ItemStack(Material.POTATO, 8));
-            recipe.addIngredient(new ItemStack(Material.POTATO, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.POTATO, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.POTATO, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.POTATO, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.POTATO, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.POTATO, 8));
             return recipe;
         }
     },
@@ -1233,11 +1233,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.CARROT, 8));
-            recipe.addIngredient(new ItemStack(Material.CARROT, 8));
-            recipe.addIngredient(new ItemStack(Material.CARROT, 8));
-            recipe.addIngredient(new ItemStack(Material.CARROT, 8));
-            recipe.addIngredient(new ItemStack(Material.CARROT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.CARROT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.CARROT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.CARROT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.CARROT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.CARROT, 8));
             return recipe;
         }
     },
@@ -1287,11 +1287,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.MELON_SLICE, 8));
-            recipe.addIngredient(new ItemStack(Material.MELON_SLICE, 8));
-            recipe.addIngredient(new ItemStack(Material.MELON_SLICE, 8));
-            recipe.addIngredient(new ItemStack(Material.MELON_SLICE, 8));
-            recipe.addIngredient(new ItemStack(Material.MELON_SLICE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.MELON_SLICE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.MELON_SLICE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.MELON_SLICE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.MELON_SLICE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.MELON_SLICE, 8));
             return recipe;
         }
     },
@@ -1314,14 +1314,14 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.GLISTERING_MELON_SLICE, 8));
-            recipe.addIngredient(new ItemStack(Material.GLISTERING_MELON_SLICE, 8));
-            recipe.addIngredient(new ItemStack(Material.GLISTERING_MELON_SLICE, 8));
-            recipe.addIngredient(new ItemStack(Material.GLISTERING_MELON_SLICE, 8));
-            recipe.addIngredient(new ItemStack(Material.GLISTERING_MELON_SLICE, 8));
-            recipe.addIngredient(new ItemStack(Material.GLISTERING_MELON_SLICE, 8));
-            recipe.addIngredient(new ItemStack(Material.GLISTERING_MELON_SLICE, 8));
-            recipe.addIngredient(new ItemStack(Material.GLISTERING_MELON_SLICE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GLISTERING_MELON_SLICE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GLISTERING_MELON_SLICE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GLISTERING_MELON_SLICE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GLISTERING_MELON_SLICE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GLISTERING_MELON_SLICE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GLISTERING_MELON_SLICE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GLISTERING_MELON_SLICE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GLISTERING_MELON_SLICE, 8));
             return recipe;
         }
     },
@@ -1371,11 +1371,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.SUGAR_CANE, 8));
-            recipe.addIngredient(new ItemStack(Material.SUGAR_CANE, 8));
-            recipe.addIngredient(new ItemStack(Material.SUGAR_CANE, 8));
-            recipe.addIngredient(new ItemStack(Material.SUGAR_CANE, 8));
-            recipe.addIngredient(new ItemStack(Material.SUGAR_CANE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.SUGAR_CANE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.SUGAR_CANE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.SUGAR_CANE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.SUGAR_CANE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.SUGAR_CANE, 8));
             return recipe;
         }
     },
@@ -1398,9 +1398,9 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.SUGAR_CANE, 16));
-            recipe.addIngredient(new ItemStack(Material.SUGAR_CANE, 16));
-            recipe.addIngredient(new ItemStack(Material.SUGAR_CANE, 16));
+            recipe.addIngredient(new MaterialCountChoice(Material.SUGAR_CANE, 16));
+            recipe.addIngredient(new MaterialCountChoice(Material.SUGAR_CANE, 16));
+            recipe.addIngredient(new MaterialCountChoice(Material.SUGAR_CANE, 16));
             return recipe;
         }
     },
@@ -1450,11 +1450,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.PUMPKIN, 8));
-            recipe.addIngredient(new ItemStack(Material.PUMPKIN, 8));
-            recipe.addIngredient(new ItemStack(Material.PUMPKIN, 8));
-            recipe.addIngredient(new ItemStack(Material.PUMPKIN, 8));
-            recipe.addIngredient(new ItemStack(Material.PUMPKIN, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.PUMPKIN, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.PUMPKIN, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.PUMPKIN, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.PUMPKIN, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.PUMPKIN, 8));
             return recipe;
         }
     },
@@ -1477,11 +1477,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.FEATHER, 8));
-            recipe.addIngredient(new ItemStack(Material.FEATHER, 8));
-            recipe.addIngredient(new ItemStack(Material.FEATHER, 8));
-            recipe.addIngredient(new ItemStack(Material.FEATHER, 8));
-            recipe.addIngredient(new ItemStack(Material.FEATHER, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.FEATHER, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.FEATHER, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.FEATHER, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.FEATHER, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.FEATHER, 8));
             return recipe;
         }
     },
@@ -1504,11 +1504,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.BEEF, 8));
-            recipe.addIngredient(new ItemStack(Material.BEEF, 8));
-            recipe.addIngredient(new ItemStack(Material.BEEF, 8));
-            recipe.addIngredient(new ItemStack(Material.BEEF, 8));
-            recipe.addIngredient(new ItemStack(Material.BEEF, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.BEEF, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.BEEF, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.BEEF, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.BEEF, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.BEEF, 8));
             return recipe;
         }
     },
@@ -1531,11 +1531,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.LEATHER, 8));
-            recipe.addIngredient(new ItemStack(Material.LEATHER, 8));
-            recipe.addIngredient(new ItemStack(Material.LEATHER, 8));
-            recipe.addIngredient(new ItemStack(Material.LEATHER, 8));
-            recipe.addIngredient(new ItemStack(Material.LEATHER, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.LEATHER, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.LEATHER, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.LEATHER, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.LEATHER, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.LEATHER, 8));
             return recipe;
         }
     },
@@ -1558,11 +1558,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.MUTTON, 8));
-            recipe.addIngredient(new ItemStack(Material.MUTTON, 8));
-            recipe.addIngredient(new ItemStack(Material.MUTTON, 8));
-            recipe.addIngredient(new ItemStack(Material.MUTTON, 8));
-            recipe.addIngredient(new ItemStack(Material.MUTTON, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.MUTTON, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.MUTTON, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.MUTTON, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.MUTTON, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.MUTTON, 8));
             return recipe;
         }
     },
@@ -1612,11 +1612,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.CHICKEN, 8));
-            recipe.addIngredient(new ItemStack(Material.CHICKEN, 8));
-            recipe.addIngredient(new ItemStack(Material.CHICKEN, 8));
-            recipe.addIngredient(new ItemStack(Material.CHICKEN, 8));
-            recipe.addIngredient(new ItemStack(Material.CHICKEN, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.CHICKEN, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.CHICKEN, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.CHICKEN, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.CHICKEN, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.CHICKEN, 8));
             return recipe;
         }
     },
@@ -1639,15 +1639,15 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.EGG, 4));
-            recipe.addIngredient(new ItemStack(Material.EGG, 4));
-            recipe.addIngredient(new ItemStack(Material.EGG, 4));
-            recipe.addIngredient(new ItemStack(Material.EGG, 4));
-            recipe.addIngredient(new ItemStack(Material.EGG, 4));
-            recipe.addIngredient(new ItemStack(Material.EGG, 4));
-            recipe.addIngredient(new ItemStack(Material.EGG, 4));
-            recipe.addIngredient(new ItemStack(Material.EGG, 4));
-            recipe.addIngredient(new ItemStack(Material.EGG, 4));
+            recipe.addIngredient(new MaterialCountChoice(Material.EGG, 4));
+            recipe.addIngredient(new MaterialCountChoice(Material.EGG, 4));
+            recipe.addIngredient(new MaterialCountChoice(Material.EGG, 4));
+            recipe.addIngredient(new MaterialCountChoice(Material.EGG, 4));
+            recipe.addIngredient(new MaterialCountChoice(Material.EGG, 4));
+            recipe.addIngredient(new MaterialCountChoice(Material.EGG, 4));
+            recipe.addIngredient(new MaterialCountChoice(Material.EGG, 4));
+            recipe.addIngredient(new MaterialCountChoice(Material.EGG, 4));
+            recipe.addIngredient(new MaterialCountChoice(Material.EGG, 4));
             return recipe;
         }
     },
@@ -1732,11 +1732,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.PORKCHOP, 8));
-            recipe.addIngredient(new ItemStack(Material.PORKCHOP, 8));
-            recipe.addIngredient(new ItemStack(Material.PORKCHOP, 8));
-            recipe.addIngredient(new ItemStack(Material.PORKCHOP, 8));
-            recipe.addIngredient(new ItemStack(Material.PORKCHOP, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.PORKCHOP, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.PORKCHOP, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.PORKCHOP, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.PORKCHOP, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.PORKCHOP, 8));
             return recipe;
         }
     },
@@ -1786,11 +1786,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.RABBIT_FOOT, 8));
-            recipe.addIngredient(new ItemStack(Material.RABBIT_FOOT, 8));
-            recipe.addIngredient(new ItemStack(Material.RABBIT_FOOT, 8));
-            recipe.addIngredient(new ItemStack(Material.RABBIT_FOOT, 8));
-            recipe.addIngredient(new ItemStack(Material.RABBIT_FOOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_FOOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_FOOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_FOOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_FOOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_FOOT, 8));
             return recipe;
         }
     },
@@ -1813,15 +1813,15 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.RABBIT_HIDE, 16));
-            recipe.addIngredient(new ItemStack(Material.RABBIT_HIDE, 16));
-            recipe.addIngredient(new ItemStack(Material.RABBIT_HIDE, 16));
-            recipe.addIngredient(new ItemStack(Material.RABBIT_HIDE, 16));
-            recipe.addIngredient(new ItemStack(Material.RABBIT_HIDE, 16));
-            recipe.addIngredient(new ItemStack(Material.RABBIT_HIDE, 16));
-            recipe.addIngredient(new ItemStack(Material.RABBIT_HIDE, 16));
-            recipe.addIngredient(new ItemStack(Material.RABBIT_HIDE, 16));
-            recipe.addIngredient(new ItemStack(Material.RABBIT_HIDE, 16));
+            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_HIDE, 16));
+            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_HIDE, 16));
+            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_HIDE, 16));
+            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_HIDE, 16));
+            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_HIDE, 16));
+            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_HIDE, 16));
+            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_HIDE, 16));
+            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_HIDE, 16));
+            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_HIDE, 16));
             return recipe;
         }
     },
@@ -1844,11 +1844,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.GREEN_DYE, 8));
-            recipe.addIngredient(new ItemStack(Material.GREEN_DYE, 8));
-            recipe.addIngredient(new ItemStack(Material.GREEN_DYE, 8));
-            recipe.addIngredient(new ItemStack(Material.GREEN_DYE, 8));
-            recipe.addIngredient(new ItemStack(Material.GREEN_DYE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GREEN_DYE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GREEN_DYE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GREEN_DYE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GREEN_DYE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GREEN_DYE, 8));
             return recipe;
         }
     },
@@ -1898,11 +1898,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.BROWN_MUSHROOM, 8));
-            recipe.addIngredient(new ItemStack(Material.BROWN_MUSHROOM, 8));
-            recipe.addIngredient(new ItemStack(Material.BROWN_MUSHROOM, 8));
-            recipe.addIngredient(new ItemStack(Material.BROWN_MUSHROOM, 8));
-            recipe.addIngredient(new ItemStack(Material.BROWN_MUSHROOM, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.BROWN_MUSHROOM, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.BROWN_MUSHROOM, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.BROWN_MUSHROOM, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.BROWN_MUSHROOM, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.BROWN_MUSHROOM, 8));
             return recipe;
         }
     },
@@ -1925,11 +1925,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.RED_MUSHROOM, 8));
-            recipe.addIngredient(new ItemStack(Material.RED_MUSHROOM, 8));
-            recipe.addIngredient(new ItemStack(Material.RED_MUSHROOM, 8));
-            recipe.addIngredient(new ItemStack(Material.RED_MUSHROOM, 8));
-            recipe.addIngredient(new ItemStack(Material.RED_MUSHROOM, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.RED_MUSHROOM, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.RED_MUSHROOM, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.RED_MUSHROOM, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.RED_MUSHROOM, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.RED_MUSHROOM, 8));
             return recipe;
         }
     },
@@ -1952,11 +1952,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.BEETROOT, 8));
-            recipe.addIngredient(new ItemStack(Material.BEETROOT, 8));
-            recipe.addIngredient(new ItemStack(Material.BEETROOT, 8));
-            recipe.addIngredient(new ItemStack(Material.BEETROOT, 8));
-            recipe.addIngredient(new ItemStack(Material.BEETROOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.BEETROOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.BEETROOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.BEETROOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.BEETROOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.BEETROOT, 8));
             return recipe;
         }
     },
@@ -1979,11 +1979,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.SWEET_BERRIES, 8));
-            recipe.addIngredient(new ItemStack(Material.SWEET_BERRIES, 8));
-            recipe.addIngredient(new ItemStack(Material.SWEET_BERRIES, 8));
-            recipe.addIngredient(new ItemStack(Material.SWEET_BERRIES, 8));
-            recipe.addIngredient(new ItemStack(Material.SWEET_BERRIES, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.SWEET_BERRIES, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.SWEET_BERRIES, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.SWEET_BERRIES, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.SWEET_BERRIES, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.SWEET_BERRIES, 8));
             return recipe;
         }
     },
@@ -2006,11 +2006,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.COCOA_BEANS, 8));
-            recipe.addIngredient(new ItemStack(Material.COCOA_BEANS, 8));
-            recipe.addIngredient(new ItemStack(Material.COCOA_BEANS, 8));
-            recipe.addIngredient(new ItemStack(Material.COCOA_BEANS, 8));
-            recipe.addIngredient(new ItemStack(Material.COCOA_BEANS, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COCOA_BEANS, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COCOA_BEANS, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COCOA_BEANS, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COCOA_BEANS, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COCOA_BEANS, 8));
             return recipe;
         }
     },
@@ -2033,7 +2033,7 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.WHEAT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.WHEAT, 8));
             recipe.addIngredient(new ItemIDChoice(ENCHANTED_COCOA_BEANS, 8));
             recipe.addIngredient(new ItemIDChoice(ENCHANTED_COCOA_BEANS, 8));
             recipe.addIngredient(new ItemIDChoice(ENCHANTED_COCOA_BEANS, 8));
@@ -2060,11 +2060,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.NETHER_WART, 8));
-            recipe.addIngredient(new ItemStack(Material.NETHER_WART, 8));
-            recipe.addIngredient(new ItemStack(Material.NETHER_WART, 8));
-            recipe.addIngredient(new ItemStack(Material.NETHER_WART, 8));
-            recipe.addIngredient(new ItemStack(Material.NETHER_WART, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.NETHER_WART, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.NETHER_WART, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.NETHER_WART, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.NETHER_WART, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.NETHER_WART, 8));
             return recipe;
         }
     },
@@ -2087,11 +2087,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.CRIMSON_FUNGUS, 8));
-            recipe.addIngredient(new ItemStack(Material.CRIMSON_FUNGUS, 8));
-            recipe.addIngredient(new ItemStack(Material.CRIMSON_FUNGUS, 8));
-            recipe.addIngredient(new ItemStack(Material.CRIMSON_FUNGUS, 8));
-            recipe.addIngredient(new ItemStack(Material.CRIMSON_FUNGUS, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.CRIMSON_FUNGUS, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.CRIMSON_FUNGUS, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.CRIMSON_FUNGUS, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.CRIMSON_FUNGUS, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.CRIMSON_FUNGUS, 8));
             return recipe;
         }
     },
@@ -2114,11 +2114,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.WARPED_FUNGUS, 8));
-            recipe.addIngredient(new ItemStack(Material.WARPED_FUNGUS, 8));
-            recipe.addIngredient(new ItemStack(Material.WARPED_FUNGUS, 8));
-            recipe.addIngredient(new ItemStack(Material.WARPED_FUNGUS, 8));
-            recipe.addIngredient(new ItemStack(Material.WARPED_FUNGUS, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.WARPED_FUNGUS, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.WARPED_FUNGUS, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.WARPED_FUNGUS, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.WARPED_FUNGUS, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.WARPED_FUNGUS, 8));
             return recipe;
         }
     },
@@ -2141,11 +2141,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.GLOW_BERRIES, 8));
-            recipe.addIngredient(new ItemStack(Material.GLOW_BERRIES, 8));
-            recipe.addIngredient(new ItemStack(Material.GLOW_BERRIES, 8));
-            recipe.addIngredient(new ItemStack(Material.GLOW_BERRIES, 8));
-            recipe.addIngredient(new ItemStack(Material.GLOW_BERRIES, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GLOW_BERRIES, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GLOW_BERRIES, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GLOW_BERRIES, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GLOW_BERRIES, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GLOW_BERRIES, 8));
             return recipe;
         }
     },
@@ -2168,11 +2168,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.DEAD_BUSH, 8));
-            recipe.addIngredient(new ItemStack(Material.DEAD_BUSH, 8));
-            recipe.addIngredient(new ItemStack(Material.DEAD_BUSH, 8));
-            recipe.addIngredient(new ItemStack(Material.DEAD_BUSH, 8));
-            recipe.addIngredient(new ItemStack(Material.DEAD_BUSH, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.DEAD_BUSH, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.DEAD_BUSH, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.DEAD_BUSH, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.DEAD_BUSH, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.DEAD_BUSH, 8));
             return recipe;
         }
     },
@@ -2195,11 +2195,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.COBBLESTONE, 8));
-            recipe.addIngredient(new ItemStack(Material.COBBLESTONE, 8));
-            recipe.addIngredient(new ItemStack(Material.COBBLESTONE, 8));
-            recipe.addIngredient(new ItemStack(Material.COBBLESTONE, 8));
-            recipe.addIngredient(new ItemStack(Material.COBBLESTONE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COBBLESTONE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COBBLESTONE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COBBLESTONE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COBBLESTONE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COBBLESTONE, 8));
             return recipe;
         }
     },
@@ -2222,11 +2222,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.FLINT, 8));
-            recipe.addIngredient(new ItemStack(Material.FLINT, 8));
-            recipe.addIngredient(new ItemStack(Material.FLINT, 8));
-            recipe.addIngredient(new ItemStack(Material.FLINT, 8));
-            recipe.addIngredient(new ItemStack(Material.FLINT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.FLINT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.FLINT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.FLINT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.FLINT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.FLINT, 8));
             return recipe;
         }
     },
@@ -2249,11 +2249,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.SAND, 8));
-            recipe.addIngredient(new ItemStack(Material.SAND, 8));
-            recipe.addIngredient(new ItemStack(Material.SAND, 8));
-            recipe.addIngredient(new ItemStack(Material.SAND, 8));
-            recipe.addIngredient(new ItemStack(Material.SAND, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.SAND, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.SAND, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.SAND, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.SAND, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.SAND, 8));
             return recipe;
         }
     },
@@ -2276,11 +2276,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.ICE, 8));
-            recipe.addIngredient(new ItemStack(Material.ICE, 8));
-            recipe.addIngredient(new ItemStack(Material.ICE, 8));
-            recipe.addIngredient(new ItemStack(Material.ICE, 8));
-            recipe.addIngredient(new ItemStack(Material.ICE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.ICE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.ICE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.ICE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.ICE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.ICE, 8));
             return recipe;
         }
     },
@@ -2330,11 +2330,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.COAL, 8));
-            recipe.addIngredient(new ItemStack(Material.COAL, 8));
-            recipe.addIngredient(new ItemStack(Material.COAL, 8));
-            recipe.addIngredient(new ItemStack(Material.COAL, 8));
-            recipe.addIngredient(new ItemStack(Material.COAL, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COAL, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COAL, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COAL, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COAL, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COAL, 8));
             return recipe;
         }
     },
@@ -2357,11 +2357,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.COAL, 8));
-            recipe.addIngredient(new ItemStack(Material.COAL, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COAL, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COAL, 8));
             recipe.addIngredient(new RecipeChoice.MaterialChoice(Material.ACACIA_LOG, Material.BIRCH_LOG, Material.DARK_OAK_LOG, Material.JUNGLE_LOG, Material.MANGROVE_LOG, Material.OAK_LOG, Material.SPRUCE_LOG));
-            recipe.addIngredient(new ItemStack(Material.COAL, 8));
-            recipe.addIngredient(new ItemStack(Material.COAL, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COAL, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COAL, 8));
             return recipe;
         }
     },
@@ -2411,11 +2411,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.DIAMOND, 8));
-            recipe.addIngredient(new ItemStack(Material.DIAMOND, 8));
-            recipe.addIngredient(new ItemStack(Material.DIAMOND, 8));
-            recipe.addIngredient(new ItemStack(Material.DIAMOND, 8));
-            recipe.addIngredient(new ItemStack(Material.DIAMOND, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.DIAMOND, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.DIAMOND, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.DIAMOND, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.DIAMOND, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.DIAMOND, 8));
             return recipe;
         }
     },
@@ -2465,11 +2465,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.EMERALD, 8));
-            recipe.addIngredient(new ItemStack(Material.EMERALD, 8));
-            recipe.addIngredient(new ItemStack(Material.EMERALD, 8));
-            recipe.addIngredient(new ItemStack(Material.EMERALD, 8));
-            recipe.addIngredient(new ItemStack(Material.EMERALD, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.EMERALD, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.EMERALD, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.EMERALD, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.EMERALD, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.EMERALD, 8));
             return recipe;
         }
     },
@@ -2519,11 +2519,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.GOLD_INGOT, 8));
-            recipe.addIngredient(new ItemStack(Material.GOLD_INGOT, 8));
-            recipe.addIngredient(new ItemStack(Material.GOLD_INGOT, 8));
-            recipe.addIngredient(new ItemStack(Material.GOLD_INGOT, 8));
-            recipe.addIngredient(new ItemStack(Material.GOLD_INGOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GOLD_INGOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GOLD_INGOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GOLD_INGOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GOLD_INGOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GOLD_INGOT, 8));
             return recipe;
         }
     },
@@ -2573,11 +2573,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.IRON_INGOT, 8));
-            recipe.addIngredient(new ItemStack(Material.IRON_INGOT, 8));
-            recipe.addIngredient(new ItemStack(Material.IRON_INGOT, 8));
-            recipe.addIngredient(new ItemStack(Material.IRON_INGOT, 8));
-            recipe.addIngredient(new ItemStack(Material.IRON_INGOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.IRON_INGOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.IRON_INGOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.IRON_INGOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.IRON_INGOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.IRON_INGOT, 8));
             return recipe;
         }
     },
@@ -2627,11 +2627,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.COPPER_INGOT, 8));
-            recipe.addIngredient(new ItemStack(Material.COPPER_INGOT, 8));
-            recipe.addIngredient(new ItemStack(Material.COPPER_INGOT, 8));
-            recipe.addIngredient(new ItemStack(Material.COPPER_INGOT, 8));
-            recipe.addIngredient(new ItemStack(Material.COPPER_INGOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COPPER_INGOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COPPER_INGOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COPPER_INGOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COPPER_INGOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.COPPER_INGOT, 8));
             return recipe;
         }
     },
@@ -2681,11 +2681,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.LAPIS_LAZULI, 8));
-            recipe.addIngredient(new ItemStack(Material.LAPIS_LAZULI, 8));
-            recipe.addIngredient(new ItemStack(Material.LAPIS_LAZULI, 8));
-            recipe.addIngredient(new ItemStack(Material.LAPIS_LAZULI, 8));
-            recipe.addIngredient(new ItemStack(Material.LAPIS_LAZULI, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.LAPIS_LAZULI, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.LAPIS_LAZULI, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.LAPIS_LAZULI, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.LAPIS_LAZULI, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.LAPIS_LAZULI, 8));
             return recipe;
         }
     },
@@ -2735,11 +2735,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.REDSTONE, 8));
-            recipe.addIngredient(new ItemStack(Material.REDSTONE, 8));
-            recipe.addIngredient(new ItemStack(Material.REDSTONE, 8));
-            recipe.addIngredient(new ItemStack(Material.REDSTONE, 8));
-            recipe.addIngredient(new ItemStack(Material.REDSTONE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.REDSTONE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.REDSTONE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.REDSTONE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.REDSTONE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.REDSTONE, 8));
             return recipe;
         }
     },
@@ -2789,11 +2789,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.SCULK, 8));
-            recipe.addIngredient(new ItemStack(Material.SCULK, 8));
-            recipe.addIngredient(new ItemStack(Material.SCULK, 8));
-            recipe.addIngredient(new ItemStack(Material.SCULK, 8));
-            recipe.addIngredient(new ItemStack(Material.SCULK, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.SCULK, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.SCULK, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.SCULK, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.SCULK, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.SCULK, 8));
             return recipe;
         }
     },
@@ -2843,11 +2843,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.NETHERRACK, 8));
-            recipe.addIngredient(new ItemStack(Material.NETHERRACK, 8));
-            recipe.addIngredient(new ItemStack(Material.NETHERRACK, 8));
-            recipe.addIngredient(new ItemStack(Material.NETHERRACK, 8));
-            recipe.addIngredient(new ItemStack(Material.NETHERRACK, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.NETHERRACK, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.NETHERRACK, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.NETHERRACK, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.NETHERRACK, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.NETHERRACK, 8));
             return recipe;
         }
     },
@@ -2870,11 +2870,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.QUARTZ, 8));
-            recipe.addIngredient(new ItemStack(Material.QUARTZ, 8));
-            recipe.addIngredient(new ItemStack(Material.QUARTZ, 8));
-            recipe.addIngredient(new ItemStack(Material.QUARTZ, 8));
-            recipe.addIngredient(new ItemStack(Material.QUARTZ, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.QUARTZ, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.QUARTZ, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.QUARTZ, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.QUARTZ, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.QUARTZ, 8));
             return recipe;
         }
     },
@@ -2924,11 +2924,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.GLOWSTONE_DUST, 8));
-            recipe.addIngredient(new ItemStack(Material.GLOWSTONE_DUST, 8));
-            recipe.addIngredient(new ItemStack(Material.GLOWSTONE_DUST, 8));
-            recipe.addIngredient(new ItemStack(Material.GLOWSTONE_DUST, 8));
-            recipe.addIngredient(new ItemStack(Material.GLOWSTONE_DUST, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GLOWSTONE_DUST, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GLOWSTONE_DUST, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GLOWSTONE_DUST, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GLOWSTONE_DUST, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.GLOWSTONE_DUST, 8));
             return recipe;
         }
     },
@@ -3004,11 +3004,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.BASALT, 8));
-            recipe.addIngredient(new ItemStack(Material.BASALT, 8));
-            recipe.addIngredient(new ItemStack(Material.BASALT, 8));
-            recipe.addIngredient(new ItemStack(Material.BASALT, 8));
-            recipe.addIngredient(new ItemStack(Material.BASALT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.BASALT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.BASALT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.BASALT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.BASALT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.BASALT, 8));
             return recipe;
         }
     },
@@ -3031,11 +3031,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.NETHERITE_INGOT, 8));
-            recipe.addIngredient(new ItemStack(Material.NETHERITE_INGOT, 8));
-            recipe.addIngredient(new ItemStack(Material.NETHERITE_INGOT, 8));
-            recipe.addIngredient(new ItemStack(Material.NETHERITE_INGOT, 8));
-            recipe.addIngredient(new ItemStack(Material.NETHERITE_INGOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.NETHERITE_INGOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.NETHERITE_INGOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.NETHERITE_INGOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.NETHERITE_INGOT, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.NETHERITE_INGOT, 8));
             return recipe;
         }
     },
@@ -3085,11 +3085,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.OBSIDIAN, 8));
-            recipe.addIngredient(new ItemStack(Material.OBSIDIAN, 8));
-            recipe.addIngredient(new ItemStack(Material.OBSIDIAN, 8));
-            recipe.addIngredient(new ItemStack(Material.OBSIDIAN, 8));
-            recipe.addIngredient(new ItemStack(Material.OBSIDIAN, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.OBSIDIAN, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.OBSIDIAN, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.OBSIDIAN, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.OBSIDIAN, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.OBSIDIAN, 8));
             return recipe;
         }
     },
@@ -3112,11 +3112,11 @@ public enum ItemID {
         @Override
         public Recipe getRecipe() {
             ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemStack(Material.DEEPSLATE, 8));
-            recipe.addIngredient(new ItemStack(Material.DEEPSLATE, 8));
-            recipe.addIngredient(new ItemStack(Material.DEEPSLATE, 8));
-            recipe.addIngredient(new ItemStack(Material.DEEPSLATE, 8));
-            recipe.addIngredient(new ItemStack(Material.DEEPSLATE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.DEEPSLATE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.DEEPSLATE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.DEEPSLATE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.DEEPSLATE, 8));
+            recipe.addIngredient(new MaterialCountChoice(Material.DEEPSLATE, 8));
             return recipe;
         }
     },

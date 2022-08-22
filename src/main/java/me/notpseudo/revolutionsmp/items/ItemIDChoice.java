@@ -73,7 +73,7 @@ public class ItemIDChoice implements RecipeChoice {
         ItemID id = info.getItemID();
         int amount = itemStack.getAmount();
         for (ItemID itemID : ids) {
-            if (id ==itemID && amount >= count) {
+            if (id == itemID && amount >= count) {
                 return true;
             }
         }
