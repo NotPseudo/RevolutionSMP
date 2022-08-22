@@ -86,9 +86,7 @@ public abstract class Menu implements InventoryHolder {
     public abstract void setItems();
 
     public void handleClick(InventoryClickEvent event) {
-        player.sendMessage("Click Event");
         if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) {
-            player.sendMessage("Current Item Is Null, Returning");
             return;
         }
         MenuItem menuItem = event.getCurrentItem().getItemMeta().getPersistentDataContainer().get(MenuUtils.getMenuKey(), new MenuItemDataType());
