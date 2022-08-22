@@ -6,7 +6,9 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CustomShapelessRecipe extends CustomRecipe {
 
@@ -97,6 +99,28 @@ public class CustomShapelessRecipe extends CustomRecipe {
             }
         }
         return true;
+    }
+
+    /**
+     * Returns a Map of index to amount needed for crafting grid slots
+     * <b>This method should not be called until matches() has been evaluated to true</b>
+     *
+     * @param itemMap The Map of crafting inventory indexes to Item
+     * @return A Map of crafting grid indexes to amount needed of the material in that slot
+     */
+    @Override
+    public Map<Integer, Integer> getAmountsNeeded(Map<Integer, @NotNull ItemStack> itemMap) {
+        Map<Integer, Integer> amounts = new HashMap<>();
+        for (CustomRecipeChoice choice : choices) {
+            for (Integer index : itemMap.keySet()) {
+                if (choice.test(itemMap.get(index))) {
+                    amounts.put(index, choice.getCount());
+                    itemMap.remove(index);
+                    break;
+                }
+            }
+        }
+        return amounts;
     }
 
 }

@@ -4,6 +4,9 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Represents a custom crafting recipe
  *
@@ -39,6 +42,10 @@ public class CustomRecipe {
 
     public boolean matches(@NotNull ItemStack[][] grid) {
         return false;
+    }
+
+    public Map<Integer, Integer> getAmountsNeeded(Map<Integer, @NotNull ItemStack> itemMap) {
+        return new HashMap<>();
     }
 
 }

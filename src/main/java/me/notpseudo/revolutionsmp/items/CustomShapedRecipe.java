@@ -189,6 +189,26 @@ public class CustomShapedRecipe extends CustomRecipe {
     }
 
     /**
+     * Returns a Map of index to amount needed for crafting grid slots
+     *
+     * @param itemMap The Map of crafting inventory indexes to Item
+     * @return A Map of crafting grid indexes to amount needed of the material in that slot
+     */
+    @Override
+    public Map<Integer, Integer> getAmountsNeeded(Map<Integer, @NotNull ItemStack> itemMap) {
+        Map<Integer, Integer> amounts = new HashMap<>();
+        for (Integer index : itemMap.keySet()) {
+            int row = index / 9, column = index % 9;
+            if (row >= 3 || column >= 3) {
+                amounts.put(index, 0);
+            } else {
+                amounts.put(index, getAmountNeeded(row, column));
+            }
+        }
+        return amounts;
+    }
+
+    /**
      * Checks if there is an ingredient at the row and column
      *
      * @param row    The row where an ingredient may be
