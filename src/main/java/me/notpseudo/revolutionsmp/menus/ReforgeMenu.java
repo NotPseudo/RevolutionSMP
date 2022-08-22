@@ -1,9 +1,9 @@
 package me.notpseudo.revolutionsmp.menus;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
-import me.notpseudo.revolutionsmp.items.ItemEditor;
-import me.notpseudo.revolutionsmp.items.ItemType;
-import me.notpseudo.revolutionsmp.items.Reforge;
+import me.notpseudo.revolutionsmp.customcrafting.items.ItemEditor;
+import me.notpseudo.revolutionsmp.customcrafting.items.ItemType;
+import me.notpseudo.revolutionsmp.customcrafting.items.Reforge;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfoDataType;
 import net.kyori.adventure.text.Component;
@@ -13,7 +13,6 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;

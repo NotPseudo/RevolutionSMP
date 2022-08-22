@@ -1,8 +1,8 @@
 package me.notpseudo.revolutionsmp.commands;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
-import me.notpseudo.revolutionsmp.items.ItemEditor;
-import me.notpseudo.revolutionsmp.items.Reforge;
+import me.notpseudo.revolutionsmp.customcrafting.items.ItemEditor;
+import me.notpseudo.revolutionsmp.customcrafting.items.Reforge;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
@@ -10,8 +10,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Locale;
 
 // Command to Reforge the current held item to a specified reforge
 public class ReforgeCommand implements CommandExecutor {

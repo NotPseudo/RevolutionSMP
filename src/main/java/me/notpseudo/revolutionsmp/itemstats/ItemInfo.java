@@ -3,9 +3,8 @@ package me.notpseudo.revolutionsmp.itemstats;
 import me.notpseudo.revolutionsmp.abilities.AbilityType;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentType;
-import me.notpseudo.revolutionsmp.specialiteminfo.GemstoneObject;
 import me.notpseudo.revolutionsmp.specialiteminfo.SpecialItemInfo;
-import me.notpseudo.revolutionsmp.items.*;
+import me.notpseudo.revolutionsmp.customcrafting.items.*;
 import org.bukkit.Material;
 
 import java.io.Serializable;

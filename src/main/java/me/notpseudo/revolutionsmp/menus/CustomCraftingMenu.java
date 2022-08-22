@@ -2,15 +2,14 @@ package me.notpseudo.revolutionsmp.menus;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.customcrafting.CustomCraftingUtils;
-import me.notpseudo.revolutionsmp.items.CustomRecipe;
-import me.notpseudo.revolutionsmp.items.ItemEditor;
-import me.notpseudo.revolutionsmp.items.ItemType;
+import me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipe;
+import me.notpseudo.revolutionsmp.customcrafting.items.ItemEditor;
+import me.notpseudo.revolutionsmp.customcrafting.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 

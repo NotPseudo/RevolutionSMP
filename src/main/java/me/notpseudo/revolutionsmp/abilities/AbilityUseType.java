@@ -1,7 +1,5 @@
 package me.notpseudo.revolutionsmp.abilities;
 
-import me.notpseudo.revolutionsmp.items.ItemEditor;
-
 // Enum of how an Ability can be activated
 public enum AbilityUseType {
     RIGHT_CLICK {

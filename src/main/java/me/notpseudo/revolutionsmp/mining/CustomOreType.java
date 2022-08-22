@@ -1,9 +1,8 @@
 package me.notpseudo.revolutionsmp.mining;
 
-import me.notpseudo.revolutionsmp.drops.ItemDropObject;
-import me.notpseudo.revolutionsmp.items.ItemEditor;
-import me.notpseudo.revolutionsmp.items.ItemID;
-import me.notpseudo.revolutionsmp.items.Rarity;
+import me.notpseudo.revolutionsmp.customcrafting.items.ItemEditor;
+import me.notpseudo.revolutionsmp.customcrafting.items.ItemID;
+import me.notpseudo.revolutionsmp.customcrafting.items.Rarity;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

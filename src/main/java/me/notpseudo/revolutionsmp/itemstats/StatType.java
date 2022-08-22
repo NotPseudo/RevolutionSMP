@@ -1,6 +1,6 @@
 package me.notpseudo.revolutionsmp.itemstats;
 
-import me.notpseudo.revolutionsmp.items.ItemEditor;
+import me.notpseudo.revolutionsmp.customcrafting.items.ItemEditor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 

@@ -1,6 +1,6 @@
 package me.notpseudo.revolutionsmp.customcrafting;
 
-import me.notpseudo.revolutionsmp.items.CustomRecipe;
+import me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipe;
 
 import java.util.List;
 

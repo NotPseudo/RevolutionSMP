@@ -1,4 +1,4 @@
-package me.notpseudo.revolutionsmp.items;
+package me.notpseudo.revolutionsmp.customcrafting.items;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.abilities.AbilityType;

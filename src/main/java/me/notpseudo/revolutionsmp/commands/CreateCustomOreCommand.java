@@ -1,7 +1,7 @@
 package me.notpseudo.revolutionsmp.commands;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
-import me.notpseudo.revolutionsmp.items.ItemEditor;
+import me.notpseudo.revolutionsmp.customcrafting.items.ItemEditor;
 import me.notpseudo.revolutionsmp.mining.CustomOreType;
 import me.notpseudo.revolutionsmp.listeners.HarvestingListeners;
 import net.kyori.adventure.text.Component;

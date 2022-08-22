@@ -1,4 +1,4 @@
-package me.notpseudo.revolutionsmp.items;
+package me.notpseudo.revolutionsmp.customcrafting.items;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;

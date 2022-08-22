@@ -1,4 +1,4 @@
-package me.notpseudo.revolutionsmp.items;
+package me.notpseudo.revolutionsmp.customcrafting.items;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;

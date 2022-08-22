@@ -1,6 +1,6 @@
 package me.notpseudo.revolutionsmp.collections;
 
-import me.notpseudo.revolutionsmp.items.ItemID;
+import me.notpseudo.revolutionsmp.customcrafting.items.ItemID;
 import me.notpseudo.revolutionsmp.skills.SkillType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

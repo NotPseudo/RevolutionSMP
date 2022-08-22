@@ -3,7 +3,7 @@ package me.notpseudo.revolutionsmp.menus;
 import me.notpseudo.revolutionsmp.collections.CollectionObject;
 import me.notpseudo.revolutionsmp.collections.CollectionUtils;
 import me.notpseudo.revolutionsmp.collections.CollectionsHolder;
-import me.notpseudo.revolutionsmp.items.ItemEditor;
+import me.notpseudo.revolutionsmp.customcrafting.items.ItemEditor;
 import me.notpseudo.revolutionsmp.skills.SkillType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;

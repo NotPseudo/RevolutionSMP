@@ -1,6 +1,6 @@
 package me.notpseudo.revolutionsmp.slayer;
 
-import me.notpseudo.revolutionsmp.items.ItemEditor;
+import me.notpseudo.revolutionsmp.customcrafting.items.ItemEditor;
 
 public enum SlayerType {
 

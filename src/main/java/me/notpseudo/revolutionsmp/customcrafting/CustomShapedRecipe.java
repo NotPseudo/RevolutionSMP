@@ -1,11 +1,10 @@
-package me.notpseudo.revolutionsmp.items;
+package me.notpseudo.revolutionsmp.customcrafting.items;
 
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,10 +19,10 @@ import java.util.Map;
  * <p>
  * Modified by NotPseudo for RevolutionSMP plugin
  */
-public class CustomShapedRecipe extends CustomRecipe {
+public class CustomShapedRecipe extends me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipe {
 
     private String[] rows;
-    private Map<Character, CustomRecipeChoice> ingredients = new HashMap<>();
+    private Map<Character, me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipeChoice> ingredients = new HashMap<>();
 
     /**
      * Creates a new CustomRecipe with the specified key and result
@@ -60,7 +59,7 @@ public class CustomShapedRecipe extends CustomRecipe {
             this.rows[i] = shape[i];
         }
 
-        HashMap<Character, CustomRecipeChoice> newIngredients = new HashMap<>();
+        HashMap<Character, me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipeChoice> newIngredients = new HashMap<>();
         for (String row : shape) {
             for (Character c : row.toCharArray()) {
                 newIngredients.put(c, this.ingredients.get(c));
@@ -99,7 +98,7 @@ public class CustomShapedRecipe extends CustomRecipe {
      */
     public void setIngredient(char key, ItemStack ingredient) {
         Validate.isTrue(this.ingredients.containsKey(key), "Symbol does not appear in the shape:", key);
-        this.ingredients.put(key, new CustomRecipeChoice.ItemStackChoice(ingredient));
+        this.ingredients.put(key, new me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipeChoice.ItemStackChoice(ingredient));
     }
 
     /**
@@ -121,7 +120,7 @@ public class CustomShapedRecipe extends CustomRecipe {
      */
     public void setIngredient(char key, ItemID id, int count) {
         Validate.isTrue(this.ingredients.containsKey(key), "Symbol does not appear in the shape:", key);
-        this.ingredients.put(key, new CustomRecipeChoice.ItemIDChoice(id, count));
+        this.ingredients.put(key, new me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipeChoice.ItemIDChoice(id, count));
     }
 
     /**
@@ -137,7 +136,7 @@ public class CustomShapedRecipe extends CustomRecipe {
     public boolean matches(@NotNull ItemStack[][] grid) {
         for (int i = 1; i < 4; i++) {
             for (int j = 1; j < 4; j++) {
-                CustomRecipeChoice recipeChoice = this.ingredients.get(this.rows[(i - 1)].charAt(j - 1));
+                me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipeChoice recipeChoice = this.ingredients.get(this.rows[(i - 1)].charAt(j - 1));
                 ItemStack itemInGrid = grid[i][j];
                 if (itemInGrid == null) {
                     if (recipeChoice != null) {
@@ -181,7 +180,7 @@ public class CustomShapedRecipe extends CustomRecipe {
      * @return The amount of the ingredient at the row and column needed. If there is no ingredient, this method returns 0
      */
     public int getAmountNeeded(int row, int column) {
-        CustomRecipeChoice choice = this.ingredients.get(rows[(row - 1)].charAt(column - 1));
+        me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipeChoice choice = this.ingredients.get(rows[(row - 1)].charAt(column - 1));
         if (choice != null) {
             return choice.getCount();
         }
@@ -216,7 +215,7 @@ public class CustomShapedRecipe extends CustomRecipe {
      * @return true if there is an ingredient at the row and column
      */
     public boolean hasItemStack(int row, int column) {
-        CustomRecipeChoice choice = this.ingredients.get(rows[(row - 1)].charAt(column - 1));
+        me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipeChoice choice = this.ingredients.get(rows[(row - 1)].charAt(column - 1));
         return choice != null;
     }
 
