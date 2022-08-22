@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -92,6 +93,28 @@ public class CustomShapedRecipe extends CustomRecipe {
     }
 
     /**
+     * Sets multiple materials to the slot the character represents
+     *
+     * @param key         The character in the recipe shape
+     * @param ingredients The materials to set to the character
+     */
+    public void setIngredient(char key, Material... ingredients) {
+        setIngredient(key, 1, ingredients);
+    }
+
+    /**
+     * Sets multiple materials to the slot the character represents with a required amount
+     *
+     * @param key         The character in the recipe shape
+     * @param count       The required amount of this material
+     * @param ingredients The materials to set to the character
+     */
+    public void setIngredient(char key, int count, Material... ingredients) {
+        Validate.isTrue(this.ingredients.containsKey(key), "Symbol does not appear in the shape:", key);
+        this.ingredients.put(key, new CustomRecipeChoice.ItemStackChoice(List.of(ingredients), count));
+    }
+
+    /**
      * Sets the ingredient that a character represents
      *
      * @param key        The character in the recipe shape
@@ -122,6 +145,28 @@ public class CustomShapedRecipe extends CustomRecipe {
     public void setIngredient(char key, ItemID id, int count) {
         Validate.isTrue(this.ingredients.containsKey(key), "Symbol does not appear in the shape:", key);
         this.ingredients.put(key, new CustomRecipeChoice.ItemIDChoice(id, count));
+    }
+
+    /**
+     * Sets multiple custom materials to the slot the character represents
+     *
+     * @param key         The character in the recipe shape
+     * @param ingredients The custom materials to set to the character
+     */
+    public void setIngredient(char key, ItemID... ingredients) {
+        setIngredient(key, 1, ingredients);
+    }
+
+    /**
+     * Sets multiple custom materials to the slot the character represents with a required amount
+     *
+     * @param key         The character in the recipe shape
+     * @param count       The required amount of this material
+     * @param ingredients The custom  materials to set to the character
+     */
+    public void setIngredient(char key, int count, ItemID... ingredients) {
+        Validate.isTrue(this.ingredients.containsKey(key), "Symbol does not appear in the shape:", key);
+        this.ingredients.put(key, new CustomRecipeChoice.ItemIDChoice(List.of(ingredients), count));
     }
 
     /**

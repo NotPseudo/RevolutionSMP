@@ -3,6 +3,7 @@ package me.notpseudo.revolutionsmp.items;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.abilities.AbilityType;
 import me.notpseudo.revolutionsmp.collections.CollectionType;
+import me.notpseudo.revolutionsmp.customcrafting.*;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.mining.GemstoneSlotType;
@@ -1103,9 +1104,9 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.shape("HHH", "HHH", "HHH");
+        public CustomRecipe getRecipe() {
+            CustomShapedRecipe recipe = new CustomShapedRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.setShape("HHH", "HHH", "HHH");
             recipe.setIngredient('H', new ItemStack(Material.HAY_BLOCK, 4));
             return recipe;
         }
@@ -1127,13 +1128,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.POTATO, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.POTATO, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.POTATO, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.POTATO, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.POTATO, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.POTATO, 8);
+            recipe.addIngredient(Material.POTATO, 8);
+            recipe.addIngredient(Material.POTATO, 8);
+            recipe.addIngredient(Material.POTATO, 8);
+            recipe.addIngredient(Material.POTATO, 8);
             return recipe;
         }
     },
@@ -1154,13 +1155,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_POTATO, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_POTATO, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_POTATO, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_POTATO, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_POTATO, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(ENCHANTED_POTATO, 8);
+            recipe.addIngredient(ENCHANTED_POTATO, 8);
+            recipe.addIngredient(ENCHANTED_POTATO, 8);
+            recipe.addIngredient(ENCHANTED_POTATO, 8);
+            recipe.addIngredient(ENCHANTED_POTATO, 8);
             return recipe;
         }
     },
@@ -1181,11 +1182,11 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.shape("PP ", "PB ", "   ");
+        public CustomRecipe getRecipe() {
+            CustomShapedRecipe recipe = new CustomShapedRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.setShape("PP ", "PB ", "   ");
             recipe.setIngredient('P', Material.PAPER);
-            recipe.setIngredient('B', new ItemIDChoice(ENCHANTED_BAKED_POTATO));
+            recipe.setIngredient('B', ENCHANTED_BAKED_POTATO);
             return recipe;
         }
     },
@@ -1206,11 +1207,11 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.shape("PPP", "PBP", "PPP");
-            recipe.setIngredient('P', new ItemIDChoice(ENCHANTED_BAKED_POTATO));
-            recipe.setIngredient('B', new ItemIDChoice(HOT_POTATO_BOOK));
+        public CustomRecipe getRecipe() {
+            CustomShapedRecipe recipe = new CustomShapedRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.setShape("PPP", "PBP", "PPP");
+            recipe.setIngredient('P', ENCHANTED_BAKED_POTATO);
+            recipe.setIngredient('B', HOT_POTATO_BOOK);
             return recipe;
         }
     },
@@ -1231,13 +1232,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.CARROT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.CARROT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.CARROT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.CARROT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.CARROT, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.CARROT, 8);
+            recipe.addIngredient(Material.CARROT, 8);
+            recipe.addIngredient(Material.CARROT, 8);
+            recipe.addIngredient(Material.CARROT, 8);
+            recipe.addIngredient(Material.CARROT, 8);
             return recipe;
         }
     },
@@ -1258,13 +1259,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_CARROT, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_CARROT, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_CARROT, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_CARROT, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_CARROT, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(ENCHANTED_CARROT, 8);
+            recipe.addIngredient(ENCHANTED_CARROT, 8);
+            recipe.addIngredient(ENCHANTED_CARROT, 8);
+            recipe.addIngredient(ENCHANTED_CARROT, 8);
+            recipe.addIngredient(ENCHANTED_CARROT, 8);
             return recipe;
         }
     },
@@ -1285,13 +1286,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.MELON_SLICE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.MELON_SLICE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.MELON_SLICE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.MELON_SLICE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.MELON_SLICE, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.MELON_SLICE, 8);
+            recipe.addIngredient(Material.MELON_SLICE, 8);
+            recipe.addIngredient(Material.MELON_SLICE, 8);
+            recipe.addIngredient(Material.MELON_SLICE, 8);
+            recipe.addIngredient(Material.MELON_SLICE, 8);
             return recipe;
         }
     },
@@ -1312,16 +1313,16 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.GLISTERING_MELON_SLICE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GLISTERING_MELON_SLICE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GLISTERING_MELON_SLICE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GLISTERING_MELON_SLICE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GLISTERING_MELON_SLICE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GLISTERING_MELON_SLICE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GLISTERING_MELON_SLICE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GLISTERING_MELON_SLICE, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.GLISTERING_MELON_SLICE, 8);
+            recipe.addIngredient(Material.GLISTERING_MELON_SLICE, 8);
+            recipe.addIngredient(Material.GLISTERING_MELON_SLICE, 8);
+            recipe.addIngredient(Material.GLISTERING_MELON_SLICE, 8);
+            recipe.addIngredient(Material.GLISTERING_MELON_SLICE, 8);
+            recipe.addIngredient(Material.GLISTERING_MELON_SLICE, 8);
+            recipe.addIngredient(Material.GLISTERING_MELON_SLICE, 8);
+            recipe.addIngredient(Material.GLISTERING_MELON_SLICE, 8);
             return recipe;
         }
     },
@@ -1342,13 +1343,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_MELON, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_MELON, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_MELON, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_MELON, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_MELON, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(ENCHANTED_MELON, 8);
+            recipe.addIngredient(ENCHANTED_MELON, 8);
+            recipe.addIngredient(ENCHANTED_MELON, 8);
+            recipe.addIngredient(ENCHANTED_MELON, 8);
+            recipe.addIngredient(ENCHANTED_MELON, 8);
             return recipe;
         }
     },
@@ -1369,13 +1370,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.SUGAR_CANE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.SUGAR_CANE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.SUGAR_CANE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.SUGAR_CANE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.SUGAR_CANE, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.SUGAR_CANE, 8);
+            recipe.addIngredient(Material.SUGAR_CANE, 8);
+            recipe.addIngredient(Material.SUGAR_CANE, 8);
+            recipe.addIngredient(Material.SUGAR_CANE, 8);
+            recipe.addIngredient(Material.SUGAR_CANE, 8);
             return recipe;
         }
     },
@@ -1396,11 +1397,11 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.SUGAR_CANE, 16));
-            recipe.addIngredient(new MaterialCountChoice(Material.SUGAR_CANE, 16));
-            recipe.addIngredient(new MaterialCountChoice(Material.SUGAR_CANE, 16));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.SUGAR_CANE, 16);
+            recipe.addIngredient(Material.SUGAR_CANE, 16);
+            recipe.addIngredient(Material.SUGAR_CANE, 16);
             return recipe;
         }
     },
@@ -1421,13 +1422,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_SUGAR, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_SUGAR, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_SUGAR, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_SUGAR, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_SUGAR, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(ENCHANTED_SUGAR, 8);
+            recipe.addIngredient(ENCHANTED_SUGAR, 8);
+            recipe.addIngredient(ENCHANTED_SUGAR, 8);
+            recipe.addIngredient(ENCHANTED_SUGAR, 8);
+            recipe.addIngredient(ENCHANTED_SUGAR, 8);
             return recipe;
         }
     },
@@ -1448,13 +1449,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.PUMPKIN, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.PUMPKIN, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.PUMPKIN, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.PUMPKIN, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.PUMPKIN, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.PUMPKIN, 8);
+            recipe.addIngredient(Material.PUMPKIN, 8);
+            recipe.addIngredient(Material.PUMPKIN, 8);
+            recipe.addIngredient(Material.PUMPKIN, 8);
+            recipe.addIngredient(Material.PUMPKIN, 8);
             return recipe;
         }
     },
@@ -1475,13 +1476,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.FEATHER, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.FEATHER, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.FEATHER, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.FEATHER, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.FEATHER, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.FEATHER, 8);
+            recipe.addIngredient(Material.FEATHER, 8);
+            recipe.addIngredient(Material.FEATHER, 8);
+            recipe.addIngredient(Material.FEATHER, 8);
+            recipe.addIngredient(Material.FEATHER, 8);
             return recipe;
         }
     },
@@ -1502,13 +1503,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.BEEF, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.BEEF, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.BEEF, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.BEEF, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.BEEF, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.BEEF, 8);
+            recipe.addIngredient(Material.BEEF, 8);
+            recipe.addIngredient(Material.BEEF, 8);
+            recipe.addIngredient(Material.BEEF, 8);
+            recipe.addIngredient(Material.BEEF, 8);
             return recipe;
         }
     },
@@ -1529,13 +1530,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.LEATHER, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.LEATHER, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.LEATHER, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.LEATHER, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.LEATHER, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.LEATHER, 8);
+            recipe.addIngredient(Material.LEATHER, 8);
+            recipe.addIngredient(Material.LEATHER, 8);
+            recipe.addIngredient(Material.LEATHER, 8);
+            recipe.addIngredient(Material.LEATHER, 8);
             return recipe;
         }
     },
@@ -1556,13 +1557,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.MUTTON, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.MUTTON, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.MUTTON, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.MUTTON, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.MUTTON, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.MUTTON, 8);
+            recipe.addIngredient(Material.MUTTON, 8);
+            recipe.addIngredient(Material.MUTTON, 8);
+            recipe.addIngredient(Material.MUTTON, 8);
+            recipe.addIngredient(Material.MUTTON, 8);
             return recipe;
         }
     },
@@ -1583,13 +1584,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_MUTTON, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_MUTTON, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_MUTTON, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_MUTTON, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_MUTTON, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(ENCHANTED_MUTTON, 8);
+            recipe.addIngredient(ENCHANTED_MUTTON, 8);
+            recipe.addIngredient(ENCHANTED_MUTTON, 8);
+            recipe.addIngredient(ENCHANTED_MUTTON, 8);
+            recipe.addIngredient(ENCHANTED_MUTTON, 8);
             return recipe;
         }
     },
@@ -1610,13 +1611,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.CHICKEN, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.CHICKEN, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.CHICKEN, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.CHICKEN, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.CHICKEN, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.CHICKEN, 8);
+            recipe.addIngredient(Material.CHICKEN, 8);
+            recipe.addIngredient(Material.CHICKEN, 8);
+            recipe.addIngredient(Material.CHICKEN, 8);
+            recipe.addIngredient(Material.CHICKEN, 8);
             return recipe;
         }
     },
@@ -1637,17 +1638,17 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.EGG, 4));
-            recipe.addIngredient(new MaterialCountChoice(Material.EGG, 4));
-            recipe.addIngredient(new MaterialCountChoice(Material.EGG, 4));
-            recipe.addIngredient(new MaterialCountChoice(Material.EGG, 4));
-            recipe.addIngredient(new MaterialCountChoice(Material.EGG, 4));
-            recipe.addIngredient(new MaterialCountChoice(Material.EGG, 4));
-            recipe.addIngredient(new MaterialCountChoice(Material.EGG, 4));
-            recipe.addIngredient(new MaterialCountChoice(Material.EGG, 4));
-            recipe.addIngredient(new MaterialCountChoice(Material.EGG, 4));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.EGG, 4);
+            recipe.addIngredient(Material.EGG, 4);
+            recipe.addIngredient(Material.EGG, 4);
+            recipe.addIngredient(Material.EGG, 4);
+            recipe.addIngredient(Material.EGG, 4);
+            recipe.addIngredient(Material.EGG, 4);
+            recipe.addIngredient(Material.EGG, 4);
+            recipe.addIngredient(Material.EGG, 4);
+            recipe.addIngredient(Material.EGG, 4);
             return recipe;
         }
     },
@@ -1668,17 +1669,17 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EGG, 4));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EGG, 4));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EGG, 4));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EGG, 4));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EGG, 4));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EGG, 4));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EGG, 4));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EGG, 4));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EGG, 4));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(ENCHANTED_EGG, 4);
+            recipe.addIngredient(ENCHANTED_EGG, 4);
+            recipe.addIngredient(ENCHANTED_EGG, 4);
+            recipe.addIngredient(ENCHANTED_EGG, 4);
+            recipe.addIngredient(ENCHANTED_EGG, 4);
+            recipe.addIngredient(ENCHANTED_EGG, 4);
+            recipe.addIngredient(ENCHANTED_EGG, 4);
+            recipe.addIngredient(ENCHANTED_EGG, 4);
+            recipe.addIngredient(ENCHANTED_EGG, 4);
             return recipe;
         }
     },
@@ -1699,17 +1700,17 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(SUPER_ENCHANTED_EGG, 4));
-            recipe.addIngredient(new ItemIDChoice(SUPER_ENCHANTED_EGG, 4));
-            recipe.addIngredient(new ItemIDChoice(SUPER_ENCHANTED_EGG, 4));
-            recipe.addIngredient(new ItemIDChoice(SUPER_ENCHANTED_EGG, 4));
-            recipe.addIngredient(new ItemIDChoice(SUPER_ENCHANTED_EGG, 4));
-            recipe.addIngredient(new ItemIDChoice(SUPER_ENCHANTED_EGG, 4));
-            recipe.addIngredient(new ItemIDChoice(SUPER_ENCHANTED_EGG, 4));
-            recipe.addIngredient(new ItemIDChoice(SUPER_ENCHANTED_EGG, 4));
-            recipe.addIngredient(new ItemIDChoice(SUPER_ENCHANTED_EGG, 4));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(SUPER_ENCHANTED_EGG, 4);
+            recipe.addIngredient(SUPER_ENCHANTED_EGG, 4);
+            recipe.addIngredient(SUPER_ENCHANTED_EGG, 4);
+            recipe.addIngredient(SUPER_ENCHANTED_EGG, 4);
+            recipe.addIngredient(SUPER_ENCHANTED_EGG, 4);
+            recipe.addIngredient(SUPER_ENCHANTED_EGG, 4);
+            recipe.addIngredient(SUPER_ENCHANTED_EGG, 4);
+            recipe.addIngredient(SUPER_ENCHANTED_EGG, 4);
+            recipe.addIngredient(SUPER_ENCHANTED_EGG, 4);
             return recipe;
         }
     },
@@ -1730,13 +1731,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.PORKCHOP, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.PORKCHOP, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.PORKCHOP, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.PORKCHOP, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.PORKCHOP, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.PORKCHOP, 8);
+            recipe.addIngredient(Material.PORKCHOP, 8);
+            recipe.addIngredient(Material.PORKCHOP, 8);
+            recipe.addIngredient(Material.PORKCHOP, 8);
+            recipe.addIngredient(Material.PORKCHOP, 8);
             return recipe;
         }
     },
@@ -1757,13 +1758,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_PORK, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_PORK, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_PORK, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_PORK, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_PORK, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(ENCHANTED_PORK, 8);
+            recipe.addIngredient(ENCHANTED_PORK, 8);
+            recipe.addIngredient(ENCHANTED_PORK, 8);
+            recipe.addIngredient(ENCHANTED_PORK, 8);
+            recipe.addIngredient(ENCHANTED_PORK, 8);
             return recipe;
         }
     },
@@ -1784,13 +1785,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_FOOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_FOOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_FOOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_FOOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_FOOT, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.RABBIT_FOOT, 8);
+            recipe.addIngredient(Material.RABBIT_FOOT, 8);
+            recipe.addIngredient(Material.RABBIT_FOOT, 8);
+            recipe.addIngredient(Material.RABBIT_FOOT, 8);
+            recipe.addIngredient(Material.RABBIT_FOOT, 8);
             return recipe;
         }
     },
@@ -1811,17 +1812,17 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_HIDE, 16));
-            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_HIDE, 16));
-            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_HIDE, 16));
-            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_HIDE, 16));
-            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_HIDE, 16));
-            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_HIDE, 16));
-            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_HIDE, 16));
-            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_HIDE, 16));
-            recipe.addIngredient(new MaterialCountChoice(Material.RABBIT_HIDE, 16));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.RABBIT_HIDE, 16);
+            recipe.addIngredient(Material.RABBIT_HIDE, 16);
+            recipe.addIngredient(Material.RABBIT_HIDE, 16);
+            recipe.addIngredient(Material.RABBIT_HIDE, 16);
+            recipe.addIngredient(Material.RABBIT_HIDE, 16);
+            recipe.addIngredient(Material.RABBIT_HIDE, 16);
+            recipe.addIngredient(Material.RABBIT_HIDE, 16);
+            recipe.addIngredient(Material.RABBIT_HIDE, 16);
+            recipe.addIngredient(Material.RABBIT_HIDE, 16);
             return recipe;
         }
     },
@@ -1842,13 +1843,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.GREEN_DYE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GREEN_DYE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GREEN_DYE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GREEN_DYE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GREEN_DYE, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.GREEN_DYE, 8);
+            recipe.addIngredient(Material.GREEN_DYE, 8);
+            recipe.addIngredient(Material.GREEN_DYE, 8);
+            recipe.addIngredient(Material.GREEN_DYE, 8);
+            recipe.addIngredient(Material.GREEN_DYE, 8);
             return recipe;
         }
     },
@@ -1869,13 +1870,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_CACTUS_GREEN, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_CACTUS_GREEN, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_CACTUS_GREEN, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_CACTUS_GREEN, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_CACTUS_GREEN, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(ENCHANTED_CACTUS_GREEN, 8);
+            recipe.addIngredient(ENCHANTED_CACTUS_GREEN, 8);
+            recipe.addIngredient(ENCHANTED_CACTUS_GREEN, 8);
+            recipe.addIngredient(ENCHANTED_CACTUS_GREEN, 8);
+            recipe.addIngredient(ENCHANTED_CACTUS_GREEN, 8);
             return recipe;
         }
     },
@@ -1896,13 +1897,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.BROWN_MUSHROOM, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.BROWN_MUSHROOM, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.BROWN_MUSHROOM, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.BROWN_MUSHROOM, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.BROWN_MUSHROOM, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.BROWN_MUSHROOM, 8);
+            recipe.addIngredient(Material.BROWN_MUSHROOM, 8);
+            recipe.addIngredient(Material.BROWN_MUSHROOM, 8);
+            recipe.addIngredient(Material.BROWN_MUSHROOM, 8);
+            recipe.addIngredient(Material.BROWN_MUSHROOM, 8);
             return recipe;
         }
     },
@@ -1923,13 +1924,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.RED_MUSHROOM, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.RED_MUSHROOM, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.RED_MUSHROOM, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.RED_MUSHROOM, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.RED_MUSHROOM, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.RED_MUSHROOM, 8);
+            recipe.addIngredient(Material.RED_MUSHROOM, 8);
+            recipe.addIngredient(Material.RED_MUSHROOM, 8);
+            recipe.addIngredient(Material.RED_MUSHROOM, 8);
+            recipe.addIngredient(Material.RED_MUSHROOM, 8);
             return recipe;
         }
     },
@@ -1950,13 +1951,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.BEETROOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.BEETROOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.BEETROOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.BEETROOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.BEETROOT, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.BEETROOT, 8);
+            recipe.addIngredient(Material.BEETROOT, 8);
+            recipe.addIngredient(Material.BEETROOT, 8);
+            recipe.addIngredient(Material.BEETROOT, 8);
+            recipe.addIngredient(Material.BEETROOT, 8);
             return recipe;
         }
     },
@@ -1977,13 +1978,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.SWEET_BERRIES, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.SWEET_BERRIES, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.SWEET_BERRIES, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.SWEET_BERRIES, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.SWEET_BERRIES, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.SWEET_BERRIES, 8);
+            recipe.addIngredient(Material.SWEET_BERRIES, 8);
+            recipe.addIngredient(Material.SWEET_BERRIES, 8);
+            recipe.addIngredient(Material.SWEET_BERRIES, 8);
+            recipe.addIngredient(Material.SWEET_BERRIES, 8);
             return recipe;
         }
     },
@@ -2004,13 +2005,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.COCOA_BEANS, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.COCOA_BEANS, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.COCOA_BEANS, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.COCOA_BEANS, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.COCOA_BEANS, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.COCOA_BEANS, 8);
+            recipe.addIngredient(Material.COCOA_BEANS, 8);
+            recipe.addIngredient(Material.COCOA_BEANS, 8);
+            recipe.addIngredient(Material.COCOA_BEANS, 8);
+            recipe.addIngredient(Material.COCOA_BEANS, 8);
             return recipe;
         }
     },
@@ -2031,13 +2032,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.WHEAT, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_COCOA_BEANS, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_COCOA_BEANS, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_COCOA_BEANS, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_COCOA_BEANS, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.WHEAT, 8);
+            recipe.addIngredient(ENCHANTED_COCOA_BEANS, 8);
+            recipe.addIngredient(ENCHANTED_COCOA_BEANS, 8);
+            recipe.addIngredient(ENCHANTED_COCOA_BEANS, 8);
+            recipe.addIngredient(ENCHANTED_COCOA_BEANS, 8);
             return recipe;
         }
     },
@@ -2058,13 +2059,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.NETHER_WART, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.NETHER_WART, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.NETHER_WART, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.NETHER_WART, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.NETHER_WART, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.NETHER_WART, 8);
+            recipe.addIngredient(Material.NETHER_WART, 8);
+            recipe.addIngredient(Material.NETHER_WART, 8);
+            recipe.addIngredient(Material.NETHER_WART, 8);
+            recipe.addIngredient(Material.NETHER_WART, 8);
             return recipe;
         }
     },
@@ -2085,13 +2086,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.CRIMSON_FUNGUS, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.CRIMSON_FUNGUS, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.CRIMSON_FUNGUS, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.CRIMSON_FUNGUS, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.CRIMSON_FUNGUS, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.CRIMSON_FUNGUS, 8);
+            recipe.addIngredient(Material.CRIMSON_FUNGUS, 8);
+            recipe.addIngredient(Material.CRIMSON_FUNGUS, 8);
+            recipe.addIngredient(Material.CRIMSON_FUNGUS, 8);
+            recipe.addIngredient(Material.CRIMSON_FUNGUS, 8);
             return recipe;
         }
     },
@@ -2112,13 +2113,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.WARPED_FUNGUS, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.WARPED_FUNGUS, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.WARPED_FUNGUS, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.WARPED_FUNGUS, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.WARPED_FUNGUS, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.WARPED_FUNGUS, 8);
+            recipe.addIngredient(Material.WARPED_FUNGUS, 8);
+            recipe.addIngredient(Material.WARPED_FUNGUS, 8);
+            recipe.addIngredient(Material.WARPED_FUNGUS, 8);
+            recipe.addIngredient(Material.WARPED_FUNGUS, 8);
             return recipe;
         }
     },
@@ -2139,13 +2140,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.GLOW_BERRIES, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GLOW_BERRIES, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GLOW_BERRIES, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GLOW_BERRIES, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GLOW_BERRIES, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.GLOW_BERRIES, 8);
+            recipe.addIngredient(Material.GLOW_BERRIES, 8);
+            recipe.addIngredient(Material.GLOW_BERRIES, 8);
+            recipe.addIngredient(Material.GLOW_BERRIES, 8);
+            recipe.addIngredient(Material.GLOW_BERRIES, 8);
             return recipe;
         }
     },
@@ -2166,13 +2167,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.DEAD_BUSH, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.DEAD_BUSH, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.DEAD_BUSH, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.DEAD_BUSH, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.DEAD_BUSH, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.DEAD_BUSH, 8);
+            recipe.addIngredient(Material.DEAD_BUSH, 8);
+            recipe.addIngredient(Material.DEAD_BUSH, 8);
+            recipe.addIngredient(Material.DEAD_BUSH, 8);
+            recipe.addIngredient(Material.DEAD_BUSH, 8);
             return recipe;
         }
     },
@@ -2193,13 +2194,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.COBBLESTONE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.COBBLESTONE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.COBBLESTONE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.COBBLESTONE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.COBBLESTONE, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.COBBLESTONE, 8);
+            recipe.addIngredient(Material.COBBLESTONE, 8);
+            recipe.addIngredient(Material.COBBLESTONE, 8);
+            recipe.addIngredient(Material.COBBLESTONE, 8);
+            recipe.addIngredient(Material.COBBLESTONE, 8);
             return recipe;
         }
     },
@@ -2220,13 +2221,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.FLINT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.FLINT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.FLINT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.FLINT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.FLINT, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.FLINT, 8);
+            recipe.addIngredient(Material.FLINT, 8);
+            recipe.addIngredient(Material.FLINT, 8);
+            recipe.addIngredient(Material.FLINT, 8);
+            recipe.addIngredient(Material.FLINT, 8);
             return recipe;
         }
     },
@@ -2247,13 +2248,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.SAND, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.SAND, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.SAND, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.SAND, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.SAND, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.SAND, 8);
+            recipe.addIngredient(Material.SAND, 8);
+            recipe.addIngredient(Material.SAND, 8);
+            recipe.addIngredient(Material.SAND, 8);
+            recipe.addIngredient(Material.SAND, 8);
             return recipe;
         }
     },
@@ -2274,13 +2275,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.ICE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.ICE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.ICE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.ICE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.ICE, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.ICE, 8);
+            recipe.addIngredient(Material.ICE, 8);
+            recipe.addIngredient(Material.ICE, 8);
+            recipe.addIngredient(Material.ICE, 8);
+            recipe.addIngredient(Material.ICE, 8);
             return recipe;
         }
     },
@@ -2301,13 +2302,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_ICE, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_ICE, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_ICE, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_ICE, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_ICE, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(ENCHANTED_ICE, 8);
+            recipe.addIngredient(ENCHANTED_ICE, 8);
+            recipe.addIngredient(ENCHANTED_ICE, 8);
+            recipe.addIngredient(ENCHANTED_ICE, 8);
+            recipe.addIngredient(ENCHANTED_ICE, 8);
             return recipe;
         }
     },
@@ -2328,13 +2329,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.COAL, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.COAL, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.COAL, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.COAL, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.COAL, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.COAL, 8);
+            recipe.addIngredient(Material.COAL, 8);
+            recipe.addIngredient(Material.COAL, 8);
+            recipe.addIngredient(Material.COAL, 8);
+            recipe.addIngredient(Material.COAL, 8);
             return recipe;
         }
     },
@@ -2355,13 +2356,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.COAL, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.COAL, 8));
-            recipe.addIngredient(new RecipeChoice.MaterialChoice(Material.ACACIA_LOG, Material.BIRCH_LOG, Material.DARK_OAK_LOG, Material.JUNGLE_LOG, Material.MANGROVE_LOG, Material.OAK_LOG, Material.SPRUCE_LOG));
-            recipe.addIngredient(new MaterialCountChoice(Material.COAL, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.COAL, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.COAL, 8);
+            recipe.addIngredient(Material.COAL, 8);
+            recipe.addIngredient(Material.ACACIA_LOG, Material.BIRCH_LOG, Material.DARK_OAK_LOG, Material.JUNGLE_LOG, Material.MANGROVE_LOG, Material.OAK_LOG, Material.SPRUCE_LOG);
+            recipe.addIngredient(Material.COAL, 8);
+            recipe.addIngredient(Material.COAL, 8);
             return recipe;
         }
     },
@@ -2382,13 +2383,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_COAL, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_COAL, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_COAL, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_COAL, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_COAL, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(ENCHANTED_COAL, 8);
+            recipe.addIngredient(ENCHANTED_COAL, 8);
+            recipe.addIngredient(ENCHANTED_COAL, 8);
+            recipe.addIngredient(ENCHANTED_COAL, 8);
+            recipe.addIngredient(ENCHANTED_COAL, 8);
             return recipe;
         }
     },
@@ -2409,13 +2410,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.DIAMOND, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.DIAMOND, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.DIAMOND, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.DIAMOND, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.DIAMOND, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.DIAMOND, 8);
+            recipe.addIngredient(Material.DIAMOND, 8);
+            recipe.addIngredient(Material.DIAMOND, 8);
+            recipe.addIngredient(Material.DIAMOND, 8);
+            recipe.addIngredient(Material.DIAMOND, 8);
             return recipe;
         }
     },
@@ -2436,13 +2437,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_DIAMOND, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_DIAMOND, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_DIAMOND, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_DIAMOND, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_DIAMOND, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(ENCHANTED_DIAMOND, 8);
+            recipe.addIngredient(ENCHANTED_DIAMOND, 8);
+            recipe.addIngredient(ENCHANTED_DIAMOND, 8);
+            recipe.addIngredient(ENCHANTED_DIAMOND, 8);
+            recipe.addIngredient(ENCHANTED_DIAMOND, 8);
             return recipe;
         }
     },
@@ -2463,13 +2464,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.EMERALD, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.EMERALD, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.EMERALD, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.EMERALD, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.EMERALD, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.EMERALD, 8);
+            recipe.addIngredient(Material.EMERALD, 8);
+            recipe.addIngredient(Material.EMERALD, 8);
+            recipe.addIngredient(Material.EMERALD, 8);
+            recipe.addIngredient(Material.EMERALD, 8);
             return recipe;
         }
     },
@@ -2490,13 +2491,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EMERALD, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EMERALD, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EMERALD, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EMERALD, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_EMERALD, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(ENCHANTED_EMERALD, 8);
+            recipe.addIngredient(ENCHANTED_EMERALD, 8);
+            recipe.addIngredient(ENCHANTED_EMERALD, 8);
+            recipe.addIngredient(ENCHANTED_EMERALD, 8);
+            recipe.addIngredient(ENCHANTED_EMERALD, 8);
             return recipe;
         }
     },
@@ -2517,13 +2518,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.GOLD_INGOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GOLD_INGOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GOLD_INGOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GOLD_INGOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GOLD_INGOT, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.GOLD_INGOT, 8);
+            recipe.addIngredient(Material.GOLD_INGOT, 8);
+            recipe.addIngredient(Material.GOLD_INGOT, 8);
+            recipe.addIngredient(Material.GOLD_INGOT, 8);
+            recipe.addIngredient(Material.GOLD_INGOT, 8);
             return recipe;
         }
     },
@@ -2544,13 +2545,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_GOLD, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_GOLD, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_GOLD, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_GOLD, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_GOLD, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(ENCHANTED_GOLD, 8);
+            recipe.addIngredient(ENCHANTED_GOLD, 8);
+            recipe.addIngredient(ENCHANTED_GOLD, 8);
+            recipe.addIngredient(ENCHANTED_GOLD, 8);
+            recipe.addIngredient(ENCHANTED_GOLD, 8);
             return recipe;
         }
     },
@@ -2571,13 +2572,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.IRON_INGOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.IRON_INGOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.IRON_INGOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.IRON_INGOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.IRON_INGOT, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.IRON_INGOT, 8);
+            recipe.addIngredient(Material.IRON_INGOT, 8);
+            recipe.addIngredient(Material.IRON_INGOT, 8);
+            recipe.addIngredient(Material.IRON_INGOT, 8);
+            recipe.addIngredient(Material.IRON_INGOT, 8);
             return recipe;
         }
     },
@@ -2598,13 +2599,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_IRON, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_IRON, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_IRON, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_IRON, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_IRON, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(ENCHANTED_IRON, 8);
+            recipe.addIngredient(ENCHANTED_IRON, 8);
+            recipe.addIngredient(ENCHANTED_IRON, 8);
+            recipe.addIngredient(ENCHANTED_IRON, 8);
+            recipe.addIngredient(ENCHANTED_IRON, 8);
             return recipe;
         }
     },
@@ -2625,13 +2626,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.COPPER_INGOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.COPPER_INGOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.COPPER_INGOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.COPPER_INGOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.COPPER_INGOT, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.COPPER_INGOT, 8);
+            recipe.addIngredient(Material.COPPER_INGOT, 8);
+            recipe.addIngredient(Material.COPPER_INGOT, 8);
+            recipe.addIngredient(Material.COPPER_INGOT, 8);
+            recipe.addIngredient(Material.COPPER_INGOT, 8);
             return recipe;
         }
     },
@@ -2652,13 +2653,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_COPPER, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_COPPER, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_COPPER, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_COPPER, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_COPPER, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(ENCHANTED_COPPER, 8);
+            recipe.addIngredient(ENCHANTED_COPPER, 8);
+            recipe.addIngredient(ENCHANTED_COPPER, 8);
+            recipe.addIngredient(ENCHANTED_COPPER, 8);
+            recipe.addIngredient(ENCHANTED_COPPER, 8);
             return recipe;
         }
     },
@@ -2679,13 +2680,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.LAPIS_LAZULI, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.LAPIS_LAZULI, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.LAPIS_LAZULI, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.LAPIS_LAZULI, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.LAPIS_LAZULI, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.LAPIS_LAZULI, 8);
+            recipe.addIngredient(Material.LAPIS_LAZULI, 8);
+            recipe.addIngredient(Material.LAPIS_LAZULI, 8);
+            recipe.addIngredient(Material.LAPIS_LAZULI, 8);
+            recipe.addIngredient(Material.LAPIS_LAZULI, 8);
             return recipe;
         }
     },
@@ -2706,13 +2707,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_LAPIS_LAZULI, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_LAPIS_LAZULI, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_LAPIS_LAZULI, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_LAPIS_LAZULI, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_LAPIS_LAZULI, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(ENCHANTED_LAPIS_LAZULI, 8);
+            recipe.addIngredient(ENCHANTED_LAPIS_LAZULI, 8);
+            recipe.addIngredient(ENCHANTED_LAPIS_LAZULI, 8);
+            recipe.addIngredient(ENCHANTED_LAPIS_LAZULI, 8);
+            recipe.addIngredient(ENCHANTED_LAPIS_LAZULI, 8);
             return recipe;
         }
     },
@@ -2733,13 +2734,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.REDSTONE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.REDSTONE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.REDSTONE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.REDSTONE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.REDSTONE, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.REDSTONE, 8);
+            recipe.addIngredient(Material.REDSTONE, 8);
+            recipe.addIngredient(Material.REDSTONE, 8);
+            recipe.addIngredient(Material.REDSTONE, 8);
+            recipe.addIngredient(Material.REDSTONE, 8);
             return recipe;
         }
     },
@@ -2760,13 +2761,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_REDSTONE, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_REDSTONE, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_REDSTONE, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_REDSTONE, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_REDSTONE, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(ENCHANTED_REDSTONE, 8);
+            recipe.addIngredient(ENCHANTED_REDSTONE, 8);
+            recipe.addIngredient(ENCHANTED_REDSTONE, 8);
+            recipe.addIngredient(ENCHANTED_REDSTONE, 8);
+            recipe.addIngredient(ENCHANTED_REDSTONE, 8);
             return recipe;
         }
     },
@@ -2787,13 +2788,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.SCULK, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.SCULK, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.SCULK, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.SCULK, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.SCULK, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.SCULK, 8);
+            recipe.addIngredient(Material.SCULK, 8);
+            recipe.addIngredient(Material.SCULK, 8);
+            recipe.addIngredient(Material.SCULK, 8);
+            recipe.addIngredient(Material.SCULK, 8);
             return recipe;
         }
     },
@@ -2814,13 +2815,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_SCULK, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_SCULK, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_SCULK, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_SCULK, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_SCULK, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(ENCHANTED_SCULK, 8);
+            recipe.addIngredient(ENCHANTED_SCULK, 8);
+            recipe.addIngredient(ENCHANTED_SCULK, 8);
+            recipe.addIngredient(ENCHANTED_SCULK, 8);
+            recipe.addIngredient(ENCHANTED_SCULK, 8);
             return recipe;
         }
     },
@@ -2841,13 +2842,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.NETHERRACK, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.NETHERRACK, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.NETHERRACK, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.NETHERRACK, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.NETHERRACK, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.NETHERRACK, 8);
+            recipe.addIngredient(Material.NETHERRACK, 8);
+            recipe.addIngredient(Material.NETHERRACK, 8);
+            recipe.addIngredient(Material.NETHERRACK, 8);
+            recipe.addIngredient(Material.NETHERRACK, 8);
             return recipe;
         }
     },
@@ -2868,13 +2869,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.QUARTZ, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.QUARTZ, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.QUARTZ, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.QUARTZ, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.QUARTZ, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.QUARTZ, 8);
+            recipe.addIngredient(Material.QUARTZ, 8);
+            recipe.addIngredient(Material.QUARTZ, 8);
+            recipe.addIngredient(Material.QUARTZ, 8);
+            recipe.addIngredient(Material.QUARTZ, 8);
             return recipe;
         }
     },
@@ -2895,13 +2896,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_QUARTZ, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_QUARTZ, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_QUARTZ, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_QUARTZ, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_QUARTZ, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(ENCHANTED_QUARTZ, 8);
+            recipe.addIngredient(ENCHANTED_QUARTZ, 8);
+            recipe.addIngredient(ENCHANTED_QUARTZ, 8);
+            recipe.addIngredient(ENCHANTED_QUARTZ, 8);
+            recipe.addIngredient(ENCHANTED_QUARTZ, 8);
             return recipe;
         }
     },
@@ -2922,13 +2923,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.GLOWSTONE_DUST, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GLOWSTONE_DUST, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GLOWSTONE_DUST, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GLOWSTONE_DUST, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.GLOWSTONE_DUST, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.GLOWSTONE_DUST, 8);
+            recipe.addIngredient(Material.GLOWSTONE_DUST, 8);
+            recipe.addIngredient(Material.GLOWSTONE_DUST, 8);
+            recipe.addIngredient(Material.GLOWSTONE_DUST, 8);
+            recipe.addIngredient(Material.GLOWSTONE_DUST, 8);
             return recipe;
         }
     },
@@ -2949,12 +2950,12 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_GLOWSTONE_DUST, 12));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_GLOWSTONE_DUST, 12));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_GLOWSTONE_DUST, 12));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_GLOWSTONE_DUST, 12));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(ENCHANTED_GLOWSTONE_DUST, 12);
+            recipe.addIngredient(ENCHANTED_GLOWSTONE_DUST, 12);
+            recipe.addIngredient(ENCHANTED_GLOWSTONE_DUST, 12);
+            recipe.addIngredient(ENCHANTED_GLOWSTONE_DUST, 12);
             return recipe;
         }
     },
@@ -2975,13 +2976,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_REDSTONE, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_REDSTONE, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_GLOWSTONE_DUST, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_REDSTONE, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_REDSTONE, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(ENCHANTED_REDSTONE, 8);
+            recipe.addIngredient(ENCHANTED_REDSTONE, 8);
+            recipe.addIngredient(ENCHANTED_GLOWSTONE_DUST, 8);
+            recipe.addIngredient(ENCHANTED_REDSTONE, 8);
+            recipe.addIngredient(ENCHANTED_REDSTONE, 8);
             return recipe;
         }
     },
@@ -3002,13 +3003,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.BASALT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.BASALT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.BASALT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.BASALT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.BASALT, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.BASALT, 8);
+            recipe.addIngredient(Material.BASALT, 8);
+            recipe.addIngredient(Material.BASALT, 8);
+            recipe.addIngredient(Material.BASALT, 8);
+            recipe.addIngredient(Material.BASALT, 8);
             return recipe;
         }
     },
@@ -3029,13 +3030,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.NETHERITE_INGOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.NETHERITE_INGOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.NETHERITE_INGOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.NETHERITE_INGOT, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.NETHERITE_INGOT, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.NETHERITE_INGOT, 8);
+            recipe.addIngredient(Material.NETHERITE_INGOT, 8);
+            recipe.addIngredient(Material.NETHERITE_INGOT, 8);
+            recipe.addIngredient(Material.NETHERITE_INGOT, 8);
+            recipe.addIngredient(Material.NETHERITE_INGOT, 8);
             return recipe;
         }
     },
@@ -3056,13 +3057,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_NETHERITE, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_NETHERITE, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_NETHERITE, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_NETHERITE, 8));
-            recipe.addIngredient(new ItemIDChoice(ENCHANTED_NETHERITE, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(ENCHANTED_NETHERITE, 8);
+            recipe.addIngredient(ENCHANTED_NETHERITE, 8);
+            recipe.addIngredient(ENCHANTED_NETHERITE, 8);
+            recipe.addIngredient(ENCHANTED_NETHERITE, 8);
+            recipe.addIngredient(ENCHANTED_NETHERITE, 8);
             return recipe;
         }
     },
@@ -3083,13 +3084,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.OBSIDIAN, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.OBSIDIAN, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.OBSIDIAN, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.OBSIDIAN, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.OBSIDIAN, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.OBSIDIAN, 8);
+            recipe.addIngredient(Material.OBSIDIAN, 8);
+            recipe.addIngredient(Material.OBSIDIAN, 8);
+            recipe.addIngredient(Material.OBSIDIAN, 8);
+            recipe.addIngredient(Material.OBSIDIAN, 8);
             return recipe;
         }
     },
@@ -3110,13 +3111,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new MaterialCountChoice(Material.DEEPSLATE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.DEEPSLATE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.DEEPSLATE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.DEEPSLATE, 8));
-            recipe.addIngredient(new MaterialCountChoice(Material.DEEPSLATE, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(Material.DEEPSLATE, 8);
+            recipe.addIngredient(Material.DEEPSLATE, 8);
+            recipe.addIngredient(Material.DEEPSLATE, 8);
+            recipe.addIngredient(Material.DEEPSLATE, 8);
+            recipe.addIngredient(Material.DEEPSLATE, 8);
             return recipe;
         }
     },
@@ -3137,13 +3138,13 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.addIngredient(new ItemIDChoice(MITHRIL, 8));
-            recipe.addIngredient(new ItemIDChoice(MITHRIL, 8));
-            recipe.addIngredient(new ItemIDChoice(MITHRIL, 8));
-            recipe.addIngredient(new ItemIDChoice(MITHRIL, 8));
-            recipe.addIngredient(new ItemIDChoice(MITHRIL, 8));
+        public CustomRecipe getRecipe() {
+            CustomShapelessRecipe recipe = new CustomShapelessRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.addIngredient(MITHRIL, 8);
+            recipe.addIngredient(MITHRIL, 8);
+            recipe.addIngredient(MITHRIL, 8);
+            recipe.addIngredient(MITHRIL, 8);
+            recipe.addIngredient(MITHRIL, 8);
             return recipe;
         }
     },
@@ -3283,11 +3284,11 @@ public enum ItemID {
         }
 
         @Override
-        public Recipe getRecipe() {
-            ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
-            recipe.shape(" W ", " W ", " H ");
-            recipe.setIngredient('W', new ItemIDChoice(WITHER_CATALYST, 12));
-            recipe.setIngredient('H', new ItemIDChoice(NECRONS_HANDLE));
+        public CustomRecipe getRecipe() {
+            CustomShapedRecipe recipe = new CustomShapedRecipe(new NamespacedKey(RevolutionSMP.getPlugin(), this.toString()), getItem());
+            recipe.setShape(" W ", " W ", " H ");
+            recipe.setIngredient('W', WITHER_CATALYST, 12);
+            recipe.setIngredient('H', NECRONS_HANDLE);
             return recipe;
         }
     },
@@ -3868,7 +3869,7 @@ public enum ItemID {
         return ItemEditor.createItem(this);
     }
 
-    public Recipe getRecipe() {
+    public CustomRecipe getRecipe() {
         return null;
     }
 

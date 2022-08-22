@@ -40,6 +40,28 @@ public class CustomShapelessRecipe extends CustomRecipe {
     }
 
     /**
+     * Adds multiple materials to one slot of the ingredients
+     *
+     * @param ingredients The materials to add to the ingredients
+     */
+    public void addIngredient(Material... ingredients) {
+        addIngredient(1, ingredients);
+    }
+
+    /**
+     * Adds multiple materials with a specified required amount to one slot of the ingredients
+     *
+     * @param count       The amount of material needed for a slot
+     * @param ingredients The materials to add to the ingredients
+     */
+    public void addIngredient(int count, Material... ingredients) {
+        if (choices.size() >= 9) {
+            return;
+        }
+        choices.add(new CustomRecipeChoice.ItemStackChoice(List.of(ingredients), count));
+    }
+
+    /**
      * Adds a material with a specified required amount to the ingredients
      *
      * @param ingredient The ItemStack containing the material and required amount to add
@@ -71,6 +93,28 @@ public class CustomShapelessRecipe extends CustomRecipe {
             return;
         }
         choices.add(new CustomRecipeChoice.ItemIDChoice(id, count));
+    }
+
+    /**
+     * Adds multiple custom materials to one slot of the ingredients
+     *
+     * @param ingredients The materials to add to the ingredients
+     */
+    public void addIngredient(ItemID... ingredients) {
+        addIngredient(1, ingredients);
+    }
+
+    /**
+     * Adds multiple custom materials with a specified required amount to one slot of the ingredients
+     *
+     * @param count       The amount of material needed for a slot
+     * @param ingredients The materials to add to the ingredients
+     */
+    public void addIngredient(int count, ItemID... ingredients) {
+        if (choices.size() >= 9) {
+            return;
+        }
+        choices.add(new CustomRecipeChoice.ItemIDChoice(List.of(ingredients), count));
     }
 
     @Override

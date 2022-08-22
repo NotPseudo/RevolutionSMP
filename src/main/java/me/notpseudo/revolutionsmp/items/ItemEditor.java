@@ -40,15 +40,6 @@ public class ItemEditor {
 
     private final static UUID skullUUID = UUID.fromString("dbff4122-fa87-4f79-91f5-0986b8e3f9b3");
 
-    static {
-        for (ItemID id : ItemID.values()) {
-            if (id.getRecipe() != null) {
-                Bukkit.addRecipe(id.getRecipe());
-            }
-        }
-    }
-
-
     /**
      * Returns the ItemInfo NamespacedKey for other classes to access ItemInfo in persistent data
      *
