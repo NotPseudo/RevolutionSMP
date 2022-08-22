@@ -2,7 +2,7 @@ package me.notpseudo.revolutionsmp.menus;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.customcrafting.CustomCraftingUtils;
-import me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipe;
+import me.notpseudo.revolutionsmp.customcrafting.CustomRecipe;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
@@ -125,9 +125,10 @@ public class CustomCraftingMenu extends Menu {
     }
 
     private boolean checkGrid() {
+        ItemStack middle = inventory.getItem(20);
         ItemStack[][] grid = new ItemStack[][] {
                 new ItemStack[] {inventory.getItem(10), inventory.getItem(11), inventory.getItem(12)},
-                new ItemStack[] {inventory.getItem(19), inventory.getItem(20), inventory.getItem(21)},
+                new ItemStack[] {inventory.getItem(19), middle, inventory.getItem(21)},
                 new ItemStack[] {inventory.getItem(28), inventory.getItem(29), inventory.getItem(30)}
         };
         Map<Integer, ItemStack> gridMap = new HashMap<>();
@@ -139,7 +140,12 @@ public class CustomCraftingMenu extends Menu {
         for (CustomRecipe recipe : customRecipes) {
             if (recipe.matches(grid)) {
                 shownRecipe = recipe;
-                result = makeMenuItemAction(new ItemStack(recipe.getResult()), MenuAction.CRAFT);
+                ItemInfo middleInfo = ItemEditor.getInfo(middle);
+                if (middleInfo != null && middleInfo.getItemType() != ItemType.VANILLA_ITEM) {
+                    result = makeMenuItemAction(recipe.getResult(middleInfo), MenuAction.CRAFT);
+                } else {
+                    result = makeMenuItemAction(recipe.getResult(), MenuAction.CRAFT);
+                }
                 amountsNeeded = recipe.getAmountsNeeded(gridMap);
                 return true;
             }

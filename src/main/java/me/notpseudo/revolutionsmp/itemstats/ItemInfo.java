@@ -5,7 +5,6 @@ import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentType;
 import me.notpseudo.revolutionsmp.items.*;
 import me.notpseudo.revolutionsmp.specialiteminfo.SpecialItemInfo;
-import me.notpseudo.revolutionsmp.customcrafting.items.*;
 import org.bukkit.Material;
 
 import java.io.Serializable;
@@ -341,25 +340,48 @@ public class ItemInfo implements Serializable {
         recalculate();
     }
 
-    public void copy(ItemInfo other) {
-        potatoBooks = other.potatoBooks;
-        reforge = other.reforge;
-        if (other.recomb) {
+    public void copy(ItemInfo older) {
+        potatoBooks = older.potatoBooks;
+        reforge = older.reforge;
+        if (older.recomb) {
             recomb();
         }
-        if (enchantmentsHolder != null && other.enchantmentsHolder != null) {
-            enchantmentsHolder.combine(other.enchantmentsHolder);
+        if (enchantmentsHolder != null && older.enchantmentsHolder != null) {
+            enchantmentsHolder.combine(older.enchantmentsHolder);
         }
-        if (abilitiesHolder != null && other.abilitiesHolder != null) {
-            abilitiesHolder.combine(other.abilitiesHolder);
+        if (abilitiesHolder != null && older.abilitiesHolder != null) {
+            abilitiesHolder.combine(older.abilitiesHolder);
         }
-        if (gemstonesHolder != null && other.gemstonesHolder != null) {
-            gemstonesHolder.combine(other.gemstonesHolder);
+        if (gemstonesHolder != null && older.gemstonesHolder != null) {
+            gemstonesHolder.combine(older.gemstonesHolder);
         }
         if (texture == null) {
-            texture = other.texture;
+            texture = older.texture;
         }
-        owner = other.owner;
+        owner = older.owner;
+        recalculate();
+    }
+
+    public void upgradeFrom(ItemInfo older) {
+        potatoBooks = older.potatoBooks;
+        reforge = older.reforge;
+        if (older.recomb) {
+            recomb();
+        }
+        if (enchantmentsHolder != null && older.enchantmentsHolder != null) {
+            enchantmentsHolder.combine(older.enchantmentsHolder);
+        }
+        if (abilitiesHolder != null && older.abilitiesHolder != null) {
+            abilitiesHolder.combine(older.abilitiesHolder);
+        }
+        if (gemstonesHolder != null && older.gemstonesHolder != null) {
+            gemstonesHolder.combine(older.gemstonesHolder);
+        }
+        if (older.extraInfo != null) {
+            extraInfo = older.extraInfo;
+            extraInfo.upgradeFromCrafting();
+        }
+        owner = older.owner;
         recalculate();
     }
 

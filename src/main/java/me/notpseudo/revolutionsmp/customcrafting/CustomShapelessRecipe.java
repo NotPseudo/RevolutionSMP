@@ -1,4 +1,4 @@
-package me.notpseudo.revolutionsmp.customcrafting.items;
+package me.notpseudo.revolutionsmp.customcrafting;
 
 import me.notpseudo.revolutionsmp.items.ItemID;
 import org.bukkit.Material;
@@ -11,9 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CustomShapelessRecipe extends me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipe {
+public class CustomShapelessRecipe extends CustomRecipe {
 
-    private List<me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipeChoice> choices;
+    private List<CustomRecipeChoice> choices;
 
     public CustomShapelessRecipe(NamespacedKey key, ItemStack result) {
         super(key, result);
@@ -48,7 +48,7 @@ public class CustomShapelessRecipe extends me.notpseudo.revolutionsmp.customcraf
         if (choices.size() >= 9) {
             return;
         }
-        choices.add(new me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipeChoice.ItemStackChoice(ingredient));
+        choices.add(new CustomRecipeChoice.ItemStackChoice(ingredient));
     }
 
     /**
@@ -70,7 +70,7 @@ public class CustomShapelessRecipe extends me.notpseudo.revolutionsmp.customcraf
         if (choices.size() >= 9) {
             return;
         }
-        choices.add(new me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipeChoice.ItemIDChoice(id, count));
+        choices.add(new CustomRecipeChoice.ItemIDChoice(id, count));
     }
 
     @Override
@@ -86,7 +86,7 @@ public class CustomShapelessRecipe extends me.notpseudo.revolutionsmp.customcraf
         if (actualItems.size() != choices.size()) {
             return false;
         }
-        for (me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipeChoice choice : choices) {
+        for (CustomRecipeChoice choice : choices) {
             boolean found = false;
             for (ItemStack item : actualItems) {
                 if (choice.test(item)) {
@@ -112,7 +112,7 @@ public class CustomShapelessRecipe extends me.notpseudo.revolutionsmp.customcraf
     @Override
     public Map<Integer, Integer> getAmountsNeeded(Map<Integer, @NotNull ItemStack> itemMap) {
         Map<Integer, Integer> amounts = new HashMap<>();
-        for (me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipeChoice choice : choices) {
+        for (CustomRecipeChoice choice : choices) {
             for (Integer index : itemMap.keySet()) {
                 if (choice.test(itemMap.get(index))) {
                     amounts.put(index, choice.getCount());

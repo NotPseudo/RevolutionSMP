@@ -3860,6 +3860,10 @@ public enum ItemID {
         return null;
     }
 
+    public List<ItemID> getUpgradedVersion() {
+        return null;
+    }
+
     public ItemStack getItem() {
         return ItemEditor.createItem(this);
     }

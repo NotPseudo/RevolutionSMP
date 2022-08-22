@@ -1,4 +1,4 @@
-package me.notpseudo.revolutionsmp.customcrafting.items;
+package me.notpseudo.revolutionsmp.customcrafting;
 
 import me.notpseudo.revolutionsmp.items.ItemID;
 import org.apache.commons.lang3.Validate;
@@ -20,10 +20,10 @@ import java.util.Map;
  * <p>
  * Modified by NotPseudo for RevolutionSMP plugin
  */
-public class CustomShapedRecipe extends me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipe {
+public class CustomShapedRecipe extends CustomRecipe {
 
     private String[] rows;
-    private Map<Character, me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipeChoice> ingredients = new HashMap<>();
+    private Map<Character, CustomRecipeChoice> ingredients = new HashMap<>();
 
     /**
      * Creates a new CustomRecipe with the specified key and result
@@ -60,7 +60,7 @@ public class CustomShapedRecipe extends me.notpseudo.revolutionsmp.customcraftin
             this.rows[i] = shape[i];
         }
 
-        HashMap<Character, me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipeChoice> newIngredients = new HashMap<>();
+        HashMap<Character, CustomRecipeChoice> newIngredients = new HashMap<>();
         for (String row : shape) {
             for (Character c : row.toCharArray()) {
                 newIngredients.put(c, this.ingredients.get(c));
@@ -99,7 +99,7 @@ public class CustomShapedRecipe extends me.notpseudo.revolutionsmp.customcraftin
      */
     public void setIngredient(char key, ItemStack ingredient) {
         Validate.isTrue(this.ingredients.containsKey(key), "Symbol does not appear in the shape:", key);
-        this.ingredients.put(key, new me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipeChoice.ItemStackChoice(ingredient));
+        this.ingredients.put(key, new CustomRecipeChoice.ItemStackChoice(ingredient));
     }
 
     /**
@@ -121,7 +121,7 @@ public class CustomShapedRecipe extends me.notpseudo.revolutionsmp.customcraftin
      */
     public void setIngredient(char key, ItemID id, int count) {
         Validate.isTrue(this.ingredients.containsKey(key), "Symbol does not appear in the shape:", key);
-        this.ingredients.put(key, new me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipeChoice.ItemIDChoice(id, count));
+        this.ingredients.put(key, new CustomRecipeChoice.ItemIDChoice(id, count));
     }
 
     /**
@@ -137,7 +137,7 @@ public class CustomShapedRecipe extends me.notpseudo.revolutionsmp.customcraftin
     public boolean matches(@NotNull ItemStack[][] grid) {
         for (int i = 1; i < 4; i++) {
             for (int j = 1; j < 4; j++) {
-                me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipeChoice recipeChoice = this.ingredients.get(this.rows[(i - 1)].charAt(j - 1));
+                CustomRecipeChoice recipeChoice = this.ingredients.get(this.rows[(i - 1)].charAt(j - 1));
                 ItemStack itemInGrid = grid[i][j];
                 if (itemInGrid == null) {
                     if (recipeChoice != null) {
@@ -181,7 +181,7 @@ public class CustomShapedRecipe extends me.notpseudo.revolutionsmp.customcraftin
      * @return The amount of the ingredient at the row and column needed. If there is no ingredient, this method returns 0
      */
     public int getAmountNeeded(int row, int column) {
-        me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipeChoice choice = this.ingredients.get(rows[(row - 1)].charAt(column - 1));
+        CustomRecipeChoice choice = this.ingredients.get(rows[(row - 1)].charAt(column - 1));
         if (choice != null) {
             return choice.getCount();
         }
@@ -216,7 +216,7 @@ public class CustomShapedRecipe extends me.notpseudo.revolutionsmp.customcraftin
      * @return true if there is an ingredient at the row and column
      */
     public boolean hasItemStack(int row, int column) {
-        me.notpseudo.revolutionsmp.customcrafting.items.CustomRecipeChoice choice = this.ingredients.get(rows[(row - 1)].charAt(column - 1));
+        CustomRecipeChoice choice = this.ingredients.get(rows[(row - 1)].charAt(column - 1));
         return choice != null;
     }
 
