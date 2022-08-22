@@ -110,6 +110,13 @@ public class MainMenu extends Menu {
         enchant.setItemMeta(enchantMeta);
         inventory.setItem(24, makeMenuItem(enchant, MenuType.ENCHANT));
 
+        ItemStack crafting = new ItemStack(Material.CRAFTING_TABLE);
+        ItemMeta craftingMeta = crafting.getItemMeta();
+        craftingMeta.displayName(Component.text("Custom Crafting Table", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
+        craftingMeta.lore(List.of(Component.text("Access the crafting table to make custom items", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)));
+        crafting.setItemMeta(craftingMeta);
+        inventory.setItem(25, makeMenuItem(crafting, MenuType.CRAFTING));
+
         ItemStack builder = new ItemStack(Material.CRAFTING_TABLE, 1);
         ItemMeta builderMeta = builder.getItemMeta();
         builderMeta.displayName(Component.text("Builder Menu", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));

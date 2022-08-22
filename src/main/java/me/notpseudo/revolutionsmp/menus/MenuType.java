@@ -60,6 +60,12 @@ public enum MenuType {
         }
     },
     BUILDER,
+    CRAFTING {
+        @Override
+        public Menu getNext(Player player) {
+            return new CustomCraftingMenu(player);
+        }
+    },
     ENCHANT {
         @Override
         public Menu getNext(Player player) {
