@@ -68,6 +68,7 @@ public interface CustomRecipeChoice extends Predicate<ItemStack>, Cloneable {
                 Preconditions.checkArgument(id != null, "Can not have null IDs");
             }
             this.ids = new ArrayList<>(ids);
+            count = 1;
         }
 
         public ItemIDChoice(@NotNull List<ItemID> ids, int count) {
@@ -100,6 +101,9 @@ public interface CustomRecipeChoice extends Predicate<ItemStack>, Cloneable {
         public boolean test(@NotNull ItemStack itemStack) {
             ItemInfo info = ItemEditor.getInfo(itemStack);
             if (info == null) {
+                return false;
+            }
+            if (itemStack == null || itemStack.getType() == Material.AIR) {
                 return false;
             }
             ItemID id = info.getItemID();
@@ -182,6 +186,7 @@ public interface CustomRecipeChoice extends Predicate<ItemStack>, Cloneable {
                 Preconditions.checkArgument(material != null, "Can not have null IDs");
             }
             this.materials = new ArrayList<>(materials);
+            count = 1;
         }
 
         public ItemStackChoice(@NotNull List<Material> materials, int count) {
@@ -213,6 +218,9 @@ public interface CustomRecipeChoice extends Predicate<ItemStack>, Cloneable {
         @Override
         public boolean test(@NotNull ItemStack itemStack) {
             ItemInfo info = ItemEditor.getInfo(itemStack);
+            if (itemStack == null || itemStack.getType() == Material.AIR) {
+                return false;
+            }
             if (info == null || info.getItemType() == ItemType.VANILLA_ITEM) {
                 return materials.contains(itemStack.getType()) && itemStack.getAmount() >= count;
             } else {

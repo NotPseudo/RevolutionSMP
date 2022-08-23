@@ -59,8 +59,8 @@ public class ReforgeMenu extends Menu {
 
     private void setSides(Material material) {
         for (int i = 0; i < 6; i++) {
-            inventory.setItem(i * 9, makeMenuItem(new ItemStack(material), null));
-            inventory.setItem(i * 9 + 8, makeMenuItem(new ItemStack(material), null));
+            inventory.setItem(i * 9, makeMenuGlass(new ItemStack(material)));
+            inventory.setItem(i * 9 + 8, makeMenuGlass(new ItemStack(material)));
         }
     }
 
@@ -90,17 +90,12 @@ public class ReforgeMenu extends Menu {
     @Override
     public void handleClick(InventoryClickEvent event) {
         if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) {
+            checkItem();
             return;
         }
         MenuItem menuItem = event.getCurrentItem().getItemMeta().getPersistentDataContainer().get(MenuUtils.getMenuKey(), new MenuItemDataType());
         if (menuItem == null) {
-            BukkitRunnable checkReforge = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    checkItem();
-                }
-            };
-            checkReforge.runTaskLater(RevolutionSMP.getPlugin(), 1);
+            checkItem();
             return;
         }
         event.setCancelled(true);
@@ -125,21 +120,27 @@ public class ReforgeMenu extends Menu {
     }
 
     private void checkItem() {
-        ItemStack item = inventory.getItem(13);
-        if (item == null || item.getType() == Material.AIR) {
-            setSides(Material.RED_STAINED_GLASS_PANE);
-            return;
-        }
-        ItemInfo info = ItemEditor.getInfo(item);
-        if (info == null) {
-            setSides(Material.RED_STAINED_GLASS_PANE);
-            return;
-        }
-        if (!info.getItemType().allowReforge()) {
-            setSides(Material.RED_STAINED_GLASS_PANE);
-            return;
-        }
-        setSides(Material.LIME_STAINED_GLASS_PANE);
+        BukkitRunnable check = new BukkitRunnable() {
+            @Override
+            public void run() {
+                ItemStack item = inventory.getItem(13);
+                if (item == null || item.getType() == Material.AIR) {
+                    setSides(Material.RED_STAINED_GLASS_PANE);
+                    return;
+                }
+                ItemInfo info = ItemEditor.getInfo(item);
+                if (info == null) {
+                    setSides(Material.RED_STAINED_GLASS_PANE);
+                    return;
+                }
+                if (!info.getItemType().allowReforge()) {
+                    setSides(Material.RED_STAINED_GLASS_PANE);
+                    return;
+                }
+                setSides(Material.LIME_STAINED_GLASS_PANE);
+            }
+        };
+        check.runTaskLater(RevolutionSMP.getPlugin(), 1);
     }
 
 }

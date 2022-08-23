@@ -19,9 +19,6 @@ public class MenuListeners implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) {
-            return;
-        }
         if (event.getInventory().getHolder() instanceof Menu menu) {
             menu.handleClick(event);
         } else {

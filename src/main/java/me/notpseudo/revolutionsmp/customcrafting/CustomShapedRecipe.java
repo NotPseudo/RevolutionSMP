@@ -1,7 +1,9 @@
 package me.notpseudo.revolutionsmp.customcrafting;
 
 import me.notpseudo.revolutionsmp.items.ItemID;
+import net.kyori.adventure.text.Component;
 import org.apache.commons.lang3.Validate;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -180,15 +182,18 @@ public class CustomShapedRecipe extends CustomRecipe {
      */
     @Override
     public boolean matches(@NotNull ItemStack[][] grid) {
-        for (int i = 1; i < 4; i++) {
-            for (int j = 1; j < 4; j++) {
-                CustomRecipeChoice recipeChoice = this.ingredients.get(this.rows[(i - 1)].charAt(j - 1));
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                CustomRecipeChoice recipeChoice = this.ingredients.get(this.rows[(i)].charAt(j));
                 ItemStack itemInGrid = grid[i][j];
-                if (itemInGrid == null) {
-                    if (recipeChoice != null) {
+                if (recipeChoice == null) {
+                    if (itemInGrid != null) {
                         return false;
                     }
                 } else {
+                    if (itemInGrid == null) {
+                        return false;
+                    }
                     if (!recipeChoice.test(itemInGrid)) {
                         return false;
                     }
@@ -244,7 +249,7 @@ public class CustomShapedRecipe extends CustomRecipe {
         Map<Integer, Integer> amounts = new HashMap<>();
         for (Integer index : itemMap.keySet()) {
             int row = index / 9, column = index % 9;
-            if (row >= 3 || column >= 3) {
+            if (row >= 4 || column >= 4) {
                 amounts.put(index, 0);
             } else {
                 amounts.put(index, getAmountNeeded(row, column));

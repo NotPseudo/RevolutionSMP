@@ -60,6 +60,7 @@ public class CustomCraftingMenu extends Menu {
     @Override
     public void handleClick(InventoryClickEvent event) {
         if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) {
+            checkGrid();
             return;
         }
         MenuItem menuItem = event.getCurrentItem().getItemMeta().getPersistentDataContainer().get(MenuUtils.getMenuKey(), new MenuItemDataType());
@@ -97,11 +98,13 @@ public class CustomCraftingMenu extends Menu {
         }
         ItemStack onCursor = player.getItemOnCursor();
         if (onCursor.getType() == Material.AIR) {
-            result.getItemMeta().getPersistentDataContainer().remove(MenuUtils.getMenuKey());
-            player.setItemOnCursor(new ItemStack(result));
+            ItemStack newItem = new ItemStack(result);
+            newItem.editMeta(m -> m.getPersistentDataContainer().remove(MenuUtils.getMenuKey()));
+            player.setItemOnCursor(newItem);
         } else if (testItem(result, onCursor)) {
             ItemStack newAmount = new ItemStack(onCursor);
             newAmount.setAmount(onCursor.getAmount() + result.getAmount());
+            newAmount.editMeta(m -> m.getPersistentDataContainer().remove(MenuUtils.getMenuKey()));
             player.setItemOnCursor(newAmount);
         }
         inventory.setItem(23, null);
@@ -119,39 +122,44 @@ public class CustomCraftingMenu extends Menu {
             }
         }
         resetRecipe();
-        if (checkGrid()) {
-            inventory.setItem(23, result);
-        }
+        checkGrid();
     }
 
-    private boolean checkGrid() {
-        ItemStack middle = inventory.getItem(20);
-        ItemStack[][] grid = new ItemStack[][] {
-                new ItemStack[] {inventory.getItem(10), inventory.getItem(11), inventory.getItem(12)},
-                new ItemStack[] {inventory.getItem(19), middle, inventory.getItem(21)},
-                new ItemStack[] {inventory.getItem(28), inventory.getItem(29), inventory.getItem(30)}
-        };
-        Map<Integer, ItemStack> gridMap = new HashMap<>();
-        for (int index : gridSlots) {
-            if (inventory.getItem(index) != null) {
-                gridMap.put(index, inventory.getItem(index));
-            }
-        }
-        for (CustomRecipe recipe : customRecipes) {
-            if (recipe.matches(grid)) {
-                shownRecipe = recipe;
-                ItemInfo middleInfo = ItemEditor.getInfo(middle);
-                if (middleInfo != null && middleInfo.getItemType() != ItemType.VANILLA_ITEM) {
-                    result = makeMenuItemAction(recipe.getResult(middleInfo), MenuAction.CRAFT);
-                } else {
-                    result = makeMenuItemAction(recipe.getResult(), MenuAction.CRAFT);
+    private void checkGrid() {
+        BukkitRunnable check = new BukkitRunnable() {
+            @Override
+            public void run() {
+                ItemStack middle = inventory.getItem(20);
+                ItemStack[][] grid = new ItemStack[][] {
+                        new ItemStack[] {inventory.getItem(10), inventory.getItem(11), inventory.getItem(12)},
+                        new ItemStack[] {inventory.getItem(19), middle, inventory.getItem(21)},
+                        new ItemStack[] {inventory.getItem(28), inventory.getItem(29), inventory.getItem(30)}
+                };
+                Map<Integer, ItemStack> gridMap = new HashMap<>();
+                for (int index : gridSlots) {
+                    if (inventory.getItem(index) != null) {
+                        gridMap.put(index, inventory.getItem(index));
+                    }
                 }
-                amountsNeeded = recipe.getAmountsNeeded(gridMap);
-                return true;
+                for (CustomRecipe recipe : customRecipes) {
+                    if (recipe.matches(grid)) {
+                        shownRecipe = recipe;
+                        ItemInfo middleInfo = ItemEditor.getInfo(middle);
+                        if (middleInfo != null && middleInfo.getItemType() != ItemType.VANILLA_ITEM) {
+                            result = makeMenuItemAction(recipe.getResult(middleInfo), MenuAction.CRAFT);
+                        } else {
+                            result = makeMenuItemAction(recipe.getResult(), MenuAction.CRAFT);
+                        }
+                        amountsNeeded = recipe.getAmountsNeeded(gridMap);
+                        inventory.setItem(23, result);
+                        return;
+                    }
+                }
+                inventory.setItem(23, null);
+                resetRecipe();
             }
-        }
-        resetRecipe();
-        return false;
+        };
+        check.runTaskLater(RevolutionSMP.getPlugin(), 1);
     }
 
     private void resetRecipe() {
@@ -163,10 +171,10 @@ public class CustomCraftingMenu extends Menu {
     private boolean testItem(ItemStack first, ItemStack other) {
         ItemInfo firstInfo = ItemEditor.getInfo(first), otherInfo = ItemEditor.getInfo(other);
         if (firstInfo == null && otherInfo == null) {
-            return first.isSimilar(other);
+            return first.getType() == other.getType();
         }
         if (firstInfo != null && otherInfo != null) {
-            return first.isSimilar(other) && firstInfo.getItemID() == otherInfo.getItemID();
+            return first.getType() == other.getType() && firstInfo.getItemID() == otherInfo.getItemID();
         }
         if (firstInfo != null && otherInfo == null) {
             if (firstInfo.getItemType() != ItemType.VANILLA_ITEM) {
@@ -178,7 +186,7 @@ public class CustomCraftingMenu extends Menu {
             if (otherInfo.getItemType() != ItemType.VANILLA_ITEM) {
                 return false;
             }
-            return otherInfo.getVanillaMaterial() == other.getType();
+            return otherInfo.getVanillaMaterial() == first.getType();
         }
         return false;
     }
