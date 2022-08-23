@@ -390,6 +390,7 @@ public class HealthListeners implements Listener {
         ArmorStats healthInc = new ArmorStats(0, 0, 0), healthAddPercent = new ArmorStats(0, 0, 0), healthMult = new ArmorStats(1, 1, 1);
         BaseEntityStats damagerStats, targetStats;
         if (attacker instanceof Player player) {
+            weaponDamage += 5;
             damagerStats = StatsListeners.getPlayerStats(player);
             attackCharge = player.getAttackCooldown();
             if (player.getInventory().getItemInMainHand().getType() != Material.AIR && player.getInventory().getItemInMainHand().getItemMeta() != null) {

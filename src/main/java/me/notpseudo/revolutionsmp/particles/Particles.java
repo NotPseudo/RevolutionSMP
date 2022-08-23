@@ -68,6 +68,7 @@ public class Particles {
                         count, 0, 0, 0, 0);
                 degree += degreeInc;
                 y += yInc;
+
             }
         };
         dualSpiralUp.runTaskTimer(RevolutionSMP.getPlugin(), 0, 1);
@@ -108,6 +109,7 @@ public class Particles {
                 if(t <= 0) {
                     this.cancel();
                 }
+
             }
         };
         showPoints.runTaskTimer(RevolutionSMP.getPlugin(), 0, 1);
@@ -135,6 +137,7 @@ public class Particles {
                 if(t >= Math.PI * 2) {
                     this.cancel();
                 }
+
             }
         };
         showPoints.runTaskTimer(RevolutionSMP.getPlugin(), 0, 1);
@@ -162,6 +165,7 @@ public class Particles {
                 if(t <= 0) {
                     this.cancel();
                 }
+
             }
         };
         showPoints.runTaskTimer(RevolutionSMP.getPlugin(), 0, 1);
@@ -193,6 +197,7 @@ public class Particles {
                 if(count >= sideLength) {
                     this.cancel();
                 }
+
             }
         };
         draw.runTaskTimer(RevolutionSMP.getPlugin(), 0, 1);

@@ -107,6 +107,7 @@ public class AbilitiesUtil {
                     player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1F, 2F);
                     Particles.hearts(player.getLocation());
                 }
+
             }
         };
         shieldEnd.runTaskLater(RevolutionSMP.getPlugin(), 100);
@@ -146,6 +147,7 @@ public class AbilitiesUtil {
                     if (count >= 100) {
                         this.cancel();
                     }
+
                 }
             };
             distortion.runTaskTimer(RevolutionSMP.getPlugin(), 0, 2);
@@ -153,6 +155,7 @@ public class AbilitiesUtil {
                 @Override
                 public void run() {
                     shadowWarpActivate.remove(playerID);
+
                 }
             };
             remove.runTaskLaterAsynchronously(RevolutionSMP.getPlugin(), 100);
@@ -192,6 +195,7 @@ public class AbilitiesUtil {
                 if(count >= 60) {
                     this.cancel();
                 }
+
             }
         };
         storm.runTaskTimer(RevolutionSMP.getPlugin(), 0, 1);
@@ -200,6 +204,7 @@ public class AbilitiesUtil {
             public void run() {
                 PlayerStats playerStats = player.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
                 playerStats.setManaRegenRate(playerStats.getManaRegenRate() * 10);
+
             }
         };
         redoMana.runTaskLater(RevolutionSMP.getPlugin(), 60);

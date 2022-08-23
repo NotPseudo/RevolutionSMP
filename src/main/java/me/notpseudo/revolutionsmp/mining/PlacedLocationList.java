@@ -100,6 +100,7 @@ public class PlacedLocationList implements Serializable {
                         if (location.getBlock().getType() == Material.AIR) {
                             removeDropLocation(location);
                         }
+                        return;
                     }
                 };
                 removeDrop.runTaskLater(RevolutionSMP.getPlugin(), 40);

@@ -45,6 +45,7 @@ public class InstantTransmissionObject extends AbilityObject {
             @Override
             public void run() {
                 speedUsed.remove(player.getUniqueId());
+
             }
         };
         speed.runTaskLater(RevolutionSMP.getPlugin(), 60);

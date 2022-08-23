@@ -64,6 +64,15 @@ public class AdvancedReforgeMenu extends Menu {
     @Override
     public void handleClick(InventoryClickEvent event) {
         if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) {
+            BukkitRunnable checkItem = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    checkLeft();
+                    checkRight();
+                    checkBoth();
+                }
+            };
+            checkItem.runTaskLater(RevolutionSMP.getPlugin(), 1);
             return;
         }
         MenuItem menuItem = event.getCurrentItem().getItemMeta().getPersistentDataContainer().get(MenuUtils.getMenuKey(), new MenuItemDataType());
@@ -105,7 +114,7 @@ public class AdvancedReforgeMenu extends Menu {
         }
         ItemStack result = inventory.getItem(33);
         if (result != null) {
-            result.getItemMeta().getPersistentDataContainer().remove(MenuUtils.getMenuKey());
+            result.editMeta(m -> m.getPersistentDataContainer().remove(MenuUtils.getMenuKey()));
             inventory.setItem(29, null);
             inventory.setItem(33, null);
         }
@@ -115,20 +124,30 @@ public class AdvancedReforgeMenu extends Menu {
     private boolean checkBoth() {
         ItemStack left = inventory.getItem(29), right = inventory.getItem(33);
         if (left == null || left.getType() == Material.AIR || right == null || right.getType() == Material.AIR) {
+            setLeft(Material.RED_STAINED_GLASS_PANE);
+            setRight(Material.RED_STAINED_GLASS_PANE);
             return false;
         }
         ItemInfo leftInfo = ItemEditor.getInfo(left), rightInfo = ItemEditor.getInfo(right);
         if (leftInfo == null || rightInfo == null) {
+            setLeft(Material.RED_STAINED_GLASS_PANE);
+            setRight(Material.RED_STAINED_GLASS_PANE);
             return false;
         }
         if (!leftInfo.getItemType().allowReforge()) {
+            setLeft(Material.RED_STAINED_GLASS_PANE);
+            setRight(Material.RED_STAINED_GLASS_PANE);
             return false;
         }
         if (!(rightInfo.getExtraInfo() instanceof ReforgeStoneInfo reforgeInfo)) {
+            setLeft(Material.RED_STAINED_GLASS_PANE);
+            setRight(Material.RED_STAINED_GLASS_PANE);
             return false;
         }
         Reforge reforge = reforgeInfo.getReforge();
         if (!(reforge.getItemTypes().contains(leftInfo.getItemType()))) {
+            setLeft(Material.RED_STAINED_GLASS_PANE);
+            setRight(Material.RED_STAINED_GLASS_PANE);
             return false;
         }
         ItemStack itemClone = new ItemStack(left);
