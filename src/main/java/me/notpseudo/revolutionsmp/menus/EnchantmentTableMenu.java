@@ -8,19 +8,20 @@ import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.itemstats.EnchantmentsHolder;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class EnchantmentTableMenu extends Menu {
@@ -40,6 +41,14 @@ public class EnchantmentTableMenu extends Menu {
         itemToEnchant = null;
     }
 
+    public EnchantmentTableMenu(Player player, @NotNull ItemStack item) {
+        super(player);
+        firstShown = 0;
+        lastShown = 0;
+        shownEnchants = new ArrayList<>();
+        itemToEnchant = item;
+    }
+
     @Override
     public Component getTitle() {
         return Component.text("Enchantment Table");
@@ -52,6 +61,8 @@ public class EnchantmentTableMenu extends Menu {
 
     @Override
     public void setItems() {
+        fillGlass();
+
         inventory.setItem(19, itemToEnchant);
 
         checkItem();
@@ -63,9 +74,9 @@ public class EnchantmentTableMenu extends Menu {
                 Component.text("Place an item into the slot above to see available enchantments", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
         ));
         enchant.setItemMeta(enchantMeta);
-        inventory.setItem(28, makeMenuItem(enchant, null));
+        inventory.setItem(28, makeMenuType(enchant, null));
 
-        addBackButton(MenuType.MAIN);
+        addBackType(MenuType.MAIN);
         addCloseButton();
     }
 
@@ -94,27 +105,16 @@ public class EnchantmentTableMenu extends Menu {
         if (menuItem.getType() != null && menuItem.getType().meetsRequirement(player)) {
             menuItem.getType().getNext(player).open();
         }
-        if (menuItem.getAction() == MenuAction.NEXT_PAGE) {
-            if (moreHigher()) {
-                firstShown = lastShown + 1;
-                checkItem();
-            }
-        }
-        if (menuItem.getAction() == MenuAction.PREVIOUS_PAGE) {
-            if (moreLower()) {
-                firstShown = Math.max(0, firstShown - 15);
-                checkItem();
-            }
-        }
         if (menuItem.getAction() == MenuAction.BACK) {
             setItems();
         }
-        if (menuItem.getAction() == MenuAction.ENCHANT_DETAILS) {
+        if (menuItem.getAction() == MenuAction.ENCHANT_DETAIL) {
             EnchantmentObject enchant = menuItem.getEnchant();
             if (enchant == null) {
                 return;
             }
-            showDetails(enchant.getType());
+            showEnchantDetails(enchant.getType());
+            return;
         }
         if (menuItem.getAction() == MenuAction.ADD_ENCHANT) {
             ItemInfo itemInfo = ItemEditor.getInfo(itemToEnchant);
@@ -127,6 +127,8 @@ public class EnchantmentTableMenu extends Menu {
             EnchantmentObject enchant = menuItem.getEnchant();
             itemInfo.addEnchant(enchant);
             ItemEditor.updateItemInfo(itemToEnchant, itemInfo);
+            player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
+            setItems();
         }
         if (menuItem.getAction() == MenuAction.REMOVE_ENCHANT) {
             ItemInfo itemInfo = ItemEditor.getInfo(itemToEnchant);
@@ -142,66 +144,32 @@ public class EnchantmentTableMenu extends Menu {
             }
             itemInfo.removeEnchant(enchant.getType());
             ItemEditor.updateItemInfo(itemToEnchant, itemInfo);
+            player.playSound(player, Sound.ENTITY_ARROW_HIT_PLAYER, 1f, 0.5f);
+            setItems();
+        }
+        if (menuItem.getAction() == MenuAction.NEXT_PAGE) {
+            if (moreHigher()) {
+                firstShown = lastShown + 1;
+                checkItem();
+            }
+        }
+        if (menuItem.getAction() == MenuAction.PREVIOUS_PAGE) {
+            if (moreLower()) {
+                firstShown = Math.max(0, firstShown - 15);
+                checkItem();
+            }
         }
     }
 
-    private void showDetails(EnchantmentType type) {
-        if (type.getEnchTableMax() < type.getMinLevel()) {
-            return;
+    @Override
+    public void handleClose(InventoryCloseEvent event) {
+        Set<ItemStack> nonMenu = Arrays.stream(inventory.getContents()).filter(i -> i != null && MenuUtils.getMenuInfo(i) == null).collect(Collectors.toSet());
+        if (itemToEnchant != null) {
+            nonMenu.add(itemToEnchant);
         }
-        if (itemToEnchant == null) {
-            return;
+        for (ItemStack item : player.getInventory().addItem(nonMenu.toArray(new ItemStack[0])).values()) {
+            player.getWorld().dropItemNaturally(player.getLocation(), item);
         }
-        fillGlass();
-        addBackButton(null);
-        addCloseButton();
-        ItemInfo info = ItemEditor.getInfo(itemToEnchant);
-        if (info == null) {
-            return;
-        }
-        EnchantmentsHolder holder = info.getEnchantmentsHolder();
-        EnchantmentObject enchant = holder.getObjectForType(type);
-        player.sendMessage("Enchant found: " + type);
-        for (int enchLevel = type.getMinLevel(); enchLevel <= type.getEnchTableMax(); enchLevel++) {
-            player.sendMessage("Reached level " + enchLevel);
-        }
-        /*
-        for (int enchLevel = type.getMinLevel(); enchLevel <= type.getEnchTableMax(); enchLevel++) {
-            int levelFromLowest = enchLevel = type.getMinLevel();
-            int row = levelFromLowest / 7 + 2, column = levelFromLowest % 7 + 1;
-            int actualLocation = row * 9 + column;
-            ItemStack book = EnchantmentUtils.createGeneral(type, enchLevel);
-            ItemMeta bookMeta = book.getItemMeta();
-            List<Component> lore = bookMeta.lore();
-            if (lore == null) {
-                lore = new ArrayList<>();
-            }
-            if (enchant == null) {
-                lore.add(Component.text("Click to apply this enchantment on your item", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
-                bookMeta.lore(lore);
-                book.setItemMeta(bookMeta);
-                inventory.setItem(actualLocation, makeMenuItemEnchant(book, type.createObject(enchLevel), MenuAction.ADD_ENCHANT));
-            } else {
-                if (enchLevel < enchant.getLevel()) {
-                    lore.add(Component.text("Higher level of this enchantment is already present!", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
-                    bookMeta.lore(lore);
-                    book.setItemMeta(bookMeta);
-                    inventory.setItem(actualLocation, makeMenuItemAction(book, null));
-                } else if (enchLevel == enchant.getLevel()) {
-                    lore.add(Component.text("This enchantment is already present", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
-                    lore.add(Component.text("Click to remove this enchantment", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
-                    bookMeta.lore(lore);
-                    book.setItemMeta(bookMeta);
-                    inventory.setItem(actualLocation, makeMenuItemEnchant(book, type.createObject(enchLevel), MenuAction.REMOVE_ENCHANT));
-                } else {
-                    lore.add(Component.text("Click to apply this enchantment on your item", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
-                    bookMeta.lore(lore);
-                    book.setItemMeta(bookMeta);
-                    inventory.setItem(actualLocation, makeMenuItemEnchant(book, type.createObject(enchLevel), MenuAction.ADD_ENCHANT));
-                }
-            }
-        }
-         */
     }
 
     private void showEnchants(int start) {
@@ -216,7 +184,7 @@ public class EnchantmentTableMenu extends Menu {
             ItemStack item;
             if (menuIndex + actualStart < shownEnchants.size()) {
                 EnchantmentType type = shownEnchants.get(menuIndex + actualStart);
-                item = makeMenuItemEnchant(EnchantmentUtils.createGeneral(type), type.createObject(type.getMinLevel()), MenuAction.ENCHANT_DETAILS);
+                item = makeMenuEnchant(EnchantmentUtils.createGeneral(type), type.createObject(type.getMinLevel()), MenuAction.ENCHANT_DETAIL);
                 lastShown = menuIndex + actualStart;
             } else {
                 item = makeMenuGlass(new ItemStack(Material.GRAY_STAINED_GLASS_PANE));
@@ -231,7 +199,7 @@ public class EnchantmentTableMenu extends Menu {
                Component.text("Click to view the previous page of enchants", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
             ));
             back.setItemMeta(backMeta);
-            inventory.setItem(17, makeMenuItemAction(back, MenuAction.PREVIOUS_PAGE));
+            inventory.setItem(17, makeMenuAction(back, MenuAction.PREVIOUS_PAGE));
         } else {
             inventory.setItem(17, makeMenuGlass(new ItemStack(Material.GRAY_STAINED_GLASS_PANE)));
         }
@@ -243,10 +211,61 @@ public class EnchantmentTableMenu extends Menu {
                     Component.text("Click to view the next page of enchants", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
             ));
             next.setItemMeta(nextMeta);
-            inventory.setItem(35, makeMenuItemAction(next, MenuAction.NEXT_PAGE));
+            inventory.setItem(35, makeMenuAction(next, MenuAction.NEXT_PAGE));
         } else {
             inventory.setItem(35, makeMenuGlass(new ItemStack(Material.GRAY_STAINED_GLASS_PANE)));
         }
+    }
+
+    private void showEnchantDetails(EnchantmentType type) {
+        fillGlass();
+        ItemInfo info = ItemEditor.getInfo(itemToEnchant);
+        if (info == null) {
+            return;
+        }
+        EnchantmentsHolder holder = info.getEnchantmentsHolder();
+        EnchantmentObject enchant = holder.getObjectForType(type);
+        for (int enchLevel = type.getMinLevel(); enchLevel <= type.getEnchTableMax(); enchLevel++) {
+            int levelFromLowest = enchLevel - type.getMinLevel();
+            int row = levelFromLowest / 7 + 2, column = levelFromLowest % 7 + 1;
+            int actualLocation = row * 9 + column;
+            ItemStack book = EnchantmentUtils.createGeneral(type, enchLevel);
+            ItemMeta bookMeta = book.getItemMeta();
+            List<Component> lore = bookMeta.lore();
+            if (lore == null) {
+                lore = new ArrayList<>();
+            }
+            if (enchant == null) {
+                lore.add(Component.text("Click to apply this enchantment on your item", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+                bookMeta.lore(lore);
+                book.setItemMeta(bookMeta);
+                inventory.setItem(actualLocation, EnchantmentTableMenu.makeMenuEnchant(book, type.createObject(enchLevel), MenuAction.ADD_ENCHANT));
+            } else {
+                if (enchLevel < enchant.getLevel()) {
+                    lore.add(Component.text("Higher level of this enchantment is already present!", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
+                    bookMeta.lore(lore);
+                    book.setItemMeta(bookMeta);
+                    inventory.setItem(actualLocation, makeMenuAction(book, null));
+                } else if (enchLevel == enchant.getLevel()) {
+                    lore.add(Component.text("This enchantment is already present", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
+                    lore.add(Component.text("Click to remove this enchantment", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
+                    bookMeta.lore(lore);
+                    book.setItemMeta(bookMeta);
+                    inventory.setItem(actualLocation, EnchantmentTableMenu.makeMenuEnchant(book, type.createObject(enchLevel), MenuAction.REMOVE_ENCHANT));
+                } else {
+                    lore.add(Component.text("Click to apply this enchantment on your item", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+                    bookMeta.lore(lore);
+                    book.setItemMeta(bookMeta);
+                    inventory.setItem(actualLocation, EnchantmentTableMenu.makeMenuEnchant(book, type.createObject(enchLevel), MenuAction.ADD_ENCHANT));
+                }
+            }
+        }
+        ItemStack back = new ItemStack(Material.ARROW);
+        ItemMeta backMeta = back.getItemMeta();
+        backMeta.displayName(Component.text("Back", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
+        back.setItemMeta(backMeta);
+        inventory.setItem(48, makeMenuAction(back, MenuAction.BACK));
+        addCloseButton();
     }
 
     /**
@@ -325,10 +344,10 @@ public class EnchantmentTableMenu extends Menu {
             ));
             place.setItemMeta(placeMeta);
         }
-        inventory.setItem(23, makeMenuItem(place, null));
+        inventory.setItem(23, makeMenuType(place, null));
     }
 
-    private ItemStack makeMenuItemEnchant(ItemStack item, EnchantmentObject enchant, MenuAction action) {
+    public static ItemStack makeMenuEnchant(ItemStack item, EnchantmentObject enchant, MenuAction action) {
         if (item == null || item.getType() == Material.AIR) {
             return null;
         }

@@ -51,7 +51,7 @@ public class CollectionTypeMenu extends Menu {
         topMeta.displayName(Component.text(ItemEditor.getStringFromEnum(category) + " Collection", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
         topMeta.lore(getTotalCollectionProgress(holder, category));
         top.setItemMeta(topMeta);
-        inventory.setItem(4, makeMenuItem(top, null));
+        inventory.setItem(4, makeMenuType(top, null));
 
         ArrayList<CollectionObject> collections = holder.getCollectionsFromCategory(category);
         for (int i = 0; i < 28; i++) {
@@ -76,10 +76,12 @@ public class CollectionTypeMenu extends Menu {
                 itemLore.addAll(getCollectionProgressList(collection));
                 itemMeta.lore(itemLore);
                 item.setItemMeta(itemMeta);
-                inventory.setItem(row * 9 + rowIndex, makeMenuItem(item, null));
+                inventory.setItem(row * 9 + rowIndex, makeMenuType(item, null));
             }
         }
 
+        addBackType(MenuType.COLLECTIONS);
+        addCloseButton();
     }
 
 }

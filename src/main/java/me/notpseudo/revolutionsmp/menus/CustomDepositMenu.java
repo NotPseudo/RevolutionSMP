@@ -47,7 +47,7 @@ public class CustomDepositMenu extends Menu {
                 Component.text("Click the right to deposit the amount you wrote", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
         ));
         left.setItemMeta(leftMeta);
-        inventory.setItem(0, makeMenuItem(left, null));
+        inventory.setItem(0, makeMenuAction(left, MenuAction.DEPOSIT_CUSTOM));
 
         /*
         ItemStack right = new ItemStack(Material.BOOK);
@@ -97,6 +97,7 @@ public class CustomDepositMenu extends Menu {
             Menu next = menuItem.getType().getNext(player);
             if (next != null) {
                 next.open();
+                return;
             }
         }
         if (menuItem.getAction() == MenuAction.DEPOSIT_CUSTOM) {
@@ -109,10 +110,11 @@ public class CustomDepositMenu extends Menu {
         if (paper == null || paper.getType() == Material.AIR) {
             return;
         }
-        if (!(paper.displayName() instanceof TextComponent name)) {
+        if (inventory.getType() != InventoryType.ANVIL) {
             return;
         }
-        String coinString = name.content();
+        AnvilInventory anvil = (AnvilInventory) inventory;
+        String coinString = anvil.getRenameText();
         double coins;
         try {
             coins = Double.parseDouble(coinString);

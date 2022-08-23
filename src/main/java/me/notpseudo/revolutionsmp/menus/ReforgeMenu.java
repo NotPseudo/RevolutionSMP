@@ -52,8 +52,9 @@ public class ReforgeMenu extends Menu {
         reforgeMeta.lore(List.of(Component.text("Place an item above and click here to randomly reforge it!", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
                 Component.text("Reforging an item gives it stat boosts", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)));
         reforge.setItemMeta(reforgeMeta);
-        inventory.setItem(22, makeMenuItemAction(reforge, MenuAction.REFORGE));
+        inventory.setItem(22, makeMenuAction(reforge, MenuAction.REFORGE));
 
+        addBackType(MenuType.MAIN);
         addCloseButton();
     }
 
@@ -107,6 +108,10 @@ public class ReforgeMenu extends Menu {
                 }
             };
             close.runTaskLater(RevolutionSMP.getPlugin(), 1);
+            return;
+        }
+        if (menuItem.getType() != null && menuItem.getType().meetsRequirement(player)) {
+            menuItem.getType().getNext(player).open();
             return;
         }
         if (menuItem.getAction() == MenuAction.REFORGE) {

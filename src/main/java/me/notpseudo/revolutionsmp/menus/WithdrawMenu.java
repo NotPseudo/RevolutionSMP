@@ -46,7 +46,7 @@ public class WithdrawMenu extends Menu {
                 Component.text("Amount to withdraw: ", NamedTextColor.GRAY).append(Component.text(ecoInfo.getBank(), NamedTextColor.GRAY)).decoration(TextDecoration.ITALIC, false)
         ));
         all.setItemMeta(allMeta);
-        inventory.setItem(10, makeMenuItemAction(all, MenuAction.WITHDRAW_ALL));
+        inventory.setItem(10, makeMenuAction(all, MenuAction.WITHDRAW_ALL));
 
         ItemStack half = new ItemStack(Material.DROPPER, 32);
         ItemMeta halfMeta = half.getItemMeta();
@@ -58,7 +58,7 @@ public class WithdrawMenu extends Menu {
                 Component.text("Amount to withdraw: ", NamedTextColor.GRAY).append(Component.text((int) (0.5 * ecoInfo.getBank()), NamedTextColor.GRAY)).decoration(TextDecoration.ITALIC, false)
         ));
         half.setItemMeta(halfMeta);
-        inventory.setItem(12, makeMenuItemAction(half, MenuAction.WITHDRAW_HALF));
+        inventory.setItem(12, makeMenuAction(half, MenuAction.WITHDRAW_HALF));
 
         ItemStack quarter = new ItemStack(Material.DROPPER, 16);
         ItemMeta quarterMeta = quarter.getItemMeta();
@@ -70,7 +70,7 @@ public class WithdrawMenu extends Menu {
                 Component.text("Amount to withdraw: ", NamedTextColor.GRAY).append(Component.text((int) (0.25 * ecoInfo.getBank()), NamedTextColor.GRAY)).decoration(TextDecoration.ITALIC, false)
         ));
         quarter.setItemMeta(quarterMeta);
-        inventory.setItem(14, makeMenuItemAction(quarter, MenuAction.WITHDRAW_25));
+        inventory.setItem(14, makeMenuAction(quarter, MenuAction.WITHDRAW_25));
 
         ItemStack custom = new ItemStack(Material.ANVIL);
         ItemMeta customMeta = custom.getItemMeta();
@@ -81,9 +81,9 @@ public class WithdrawMenu extends Menu {
                 Component.text("Click to withdraw a specific amount of coins", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false)
         ));
         custom.setItemMeta(customMeta);
-        inventory.setItem(16, makeMenuItem(custom, MenuType.CUSTOM_WITHDRAW));
+        inventory.setItem(16, makeMenuType(custom, MenuType.CUSTOM_WITHDRAW));
 
-        addBackButton(31, MenuType.BANK);
+        addBackType(31, MenuType.BANK);
     }
 
     @Override
@@ -110,8 +110,8 @@ public class WithdrawMenu extends Menu {
             Menu next = menuItem.getType().getNext(player);
             if (next != null) {
                 next.open();
+                return;
             }
-            return;
         }
         PlayerEcoInfo info = EcoUtils.getEcoInfo(player);
         double amount = 0;

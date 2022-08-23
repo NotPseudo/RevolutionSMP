@@ -34,26 +34,26 @@ public class ProfileMenu extends Menu {
     @Override
     public void setItems() {
         PlayerInventory playerInv = player.getInventory();
-        inventory.setItem(2, makeMenuItem(playerInv.getItemInMainHand().clone(), null));
+        inventory.setItem(2, makeMenuType(playerInv.getItemInMainHand().clone(), null));
         if (playerInv.getHelmet() != null) {
-            inventory.setItem(11, makeMenuItem(playerInv.getHelmet().clone(), null));
+            inventory.setItem(11, makeMenuType(playerInv.getHelmet().clone(), null));
         } else {
-            inventory.setItem(11, makeMenuItem(null, null));
+            inventory.setItem(11, makeMenuType(null, null));
         }
         if (playerInv.getChestplate() != null) {
-            inventory.setItem(20, makeMenuItem(playerInv.getChestplate().clone(), null));
+            inventory.setItem(20, makeMenuType(playerInv.getChestplate().clone(), null));
         } else {
-            inventory.setItem(20, makeMenuItem(null, null));
+            inventory.setItem(20, makeMenuType(null, null));
         }
         if (playerInv.getLeggings() != null) {
-            inventory.setItem(29, makeMenuItem(playerInv.getLeggings().clone(), null));
+            inventory.setItem(29, makeMenuType(playerInv.getLeggings().clone(), null));
         } else {
-            inventory.setItem(29, makeMenuItem(null, null));
+            inventory.setItem(29, makeMenuType(null, null));
         }
         if (playerInv.getBoots() != null) {
-            inventory.setItem(38, makeMenuItem(playerInv.getBoots().clone(), null));
+            inventory.setItem(38, makeMenuType(playerInv.getBoots().clone(), null));
         } else {
-            inventory.setItem(38, makeMenuItem(null, null));
+            inventory.setItem(38, makeMenuType(null, null));
         }
 
         ItemStack general = new ItemStack(Material.COMPASS, 1);
@@ -80,7 +80,7 @@ public class ProfileMenu extends Menu {
         generalLore.add(StatType.ABILITY_DAMAGE.getNameWithSymbol().append(Component.text(" " + stats.getStatValue(StatType.ABILITY_DAMAGE), NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false));
         generalMeta.lore(generalLore);
         general.setItemMeta(generalMeta);
-        inventory.setItem(24, makeMenuItem(general, null));
+        inventory.setItem(24, makeMenuType(general, null));
 
         ItemStack skill = new ItemStack(Material.CLOCK, 1);
         ItemMeta skillMeta = skill.getItemMeta();
@@ -96,9 +96,9 @@ public class ProfileMenu extends Menu {
         skillLore.add(StatType.PURITY.getNameWithSymbol().append(Component.text(" " + stats.getStatValue(StatType.PURITY), NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false));
         skillMeta.lore(skillLore);
         skill.setItemMeta(skillMeta);
-        inventory.setItem(25, makeMenuItem(skill, null));
+        inventory.setItem(25, makeMenuType(skill, null));
 
-        addBackButton(MenuType.MAIN);
+        addBackType(MenuType.MAIN);
 
         addCloseButton();
     }

@@ -36,44 +36,44 @@ public class CollectionsMenu extends Menu {
         collectionsMeta.displayName(Component.text("Collections", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
         collectionsMeta.lore(getTotalCollectionProgress(holder, null));
         collections.setItemMeta(collectionsMeta);
-        inventory.setItem(4, makeMenuItem(collections, MenuType.COLLECTIONS));
+        inventory.setItem(4, makeMenuType(collections, MenuType.COLLECTIONS));
 
         ItemStack farming = new ItemStack(Material.GOLDEN_HOE, 1);
         ItemMeta farmingMeta = farming.getItemMeta();
         farmingMeta.displayName(Component.text("Farming Collection", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
         farmingMeta.lore(getTotalCollectionProgress(holder, SkillType.FARMING));
         farming.setItemMeta(farmingMeta);
-        inventory.setItem(20, makeMenuItem(farming, MenuType.FARMING_COLLECTIONS));
+        inventory.setItem(20, makeMenuType(farming, MenuType.FARMING_COLLECTIONS));
 
         ItemStack mining = new ItemStack(Material.STONE_PICKAXE, 1);
         ItemMeta miningMeta = mining.getItemMeta();
         miningMeta.displayName(Component.text("Mining Collection", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
         miningMeta.lore(getTotalCollectionProgress(holder, SkillType.MINING));
         mining.setItemMeta(miningMeta);
-        inventory.setItem(21, makeMenuItem(mining, MenuType.MINING_COLLECTIONS));
+        inventory.setItem(21, makeMenuType(mining, MenuType.MINING_COLLECTIONS));
 
         ItemStack combat = new ItemStack(Material.STONE_SWORD, 1);
         ItemMeta combatMeta = combat.getItemMeta();
         combatMeta.displayName(Component.text("Combat Collection", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
         combatMeta.lore(getTotalCollectionProgress(holder, SkillType.COMBAT));
         combat.setItemMeta(combatMeta);
-        inventory.setItem(22, makeMenuItem(combat, MenuType.COMBAT_COLLECTIONS));
+        inventory.setItem(22, makeMenuType(combat, MenuType.COMBAT_COLLECTIONS));
 
         ItemStack foraging = new ItemStack(Material.JUNGLE_SAPLING, 1);
         ItemMeta foragingMeta = foraging.getItemMeta();
         foragingMeta.displayName(Component.text("Foraging Collection", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
         foragingMeta.lore(getTotalCollectionProgress(holder, SkillType.FORAGING));
         foraging.setItemMeta(foragingMeta);
-        inventory.setItem(23, makeMenuItem(foraging, MenuType.FORAGING_COLLECTIONS));
+        inventory.setItem(23, makeMenuType(foraging, MenuType.FORAGING_COLLECTIONS));
 
         ItemStack fishing = new ItemStack(Material.FISHING_ROD, 1);
         ItemMeta fishingMeta = fishing.getItemMeta();
         fishingMeta.displayName(Component.text("Fishing Collection", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
         fishingMeta.lore(getTotalCollectionProgress(holder, SkillType.FISHING));
         fishing.setItemMeta(fishingMeta);
-        inventory.setItem(24, makeMenuItem(fishing, MenuType.FISHING_COLLECTIONS));
+        inventory.setItem(24, makeMenuType(fishing, MenuType.FISHING_COLLECTIONS));
 
-        addBackButton(MenuType.MAIN);
+        addBackType(MenuType.MAIN);
         addCloseButton();
     }
 

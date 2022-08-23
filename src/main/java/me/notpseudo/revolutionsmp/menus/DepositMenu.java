@@ -46,7 +46,7 @@ public class DepositMenu extends Menu {
                 Component.text("Amount to deposit: ", NamedTextColor.GRAY).append(Component.text((int) ecoInfo.getPurse(), NamedTextColor.GOLD)).decoration(TextDecoration.ITALIC, false)
         ));
         depositAll.setItemMeta(allMeta);
-        inventory.setItem(11, makeMenuItemAction(depositAll, MenuAction.DEPOSIT_ALL));
+        inventory.setItem(11, makeMenuAction(depositAll, MenuAction.DEPOSIT_ALL));
 
         ItemStack depositHalf = new ItemStack(Material.CHEST, 32);
         ItemMeta halfMeta = depositHalf.getItemMeta();
@@ -58,7 +58,7 @@ public class DepositMenu extends Menu {
                 Component.text("Amount to deposit: ", NamedTextColor.GRAY).append(Component.text((int) (0.5 * ecoInfo.getPurse()), NamedTextColor.GOLD)).decoration(TextDecoration.ITALIC, false)
         ));
         depositHalf.setItemMeta(halfMeta);
-        inventory.setItem(13, makeMenuItemAction(depositHalf, MenuAction.DEPOSIT_HALF));
+        inventory.setItem(13, makeMenuAction(depositHalf, MenuAction.DEPOSIT_HALF));
 
         ItemStack custom = new ItemStack(Material.ANVIL);
         ItemMeta customMeta = custom.getItemMeta();
@@ -69,9 +69,9 @@ public class DepositMenu extends Menu {
                 Component.text("Click to deposit a specific amount of coins", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false)
                 ));
         custom.setItemMeta(customMeta);
-        inventory.setItem(15, makeMenuItem(custom, MenuType.CUSTOM_DEPOSIT));
+        inventory.setItem(15, makeMenuType(custom, MenuType.CUSTOM_DEPOSIT));
 
-        addBackButton(31, MenuType.BANK);
+        addBackType(31, MenuType.BANK);
     }
 
     @Override
@@ -98,8 +98,8 @@ public class DepositMenu extends Menu {
             Menu next = menuItem.getType().getNext(player);
             if (next != null) {
                 next.open();
+                return;
             }
-            return;
         }
         PlayerEcoInfo info = EcoUtils.getEcoInfo(player);
         double amount = 0;

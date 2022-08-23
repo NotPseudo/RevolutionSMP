@@ -41,7 +41,7 @@ public class BankMenu extends Menu {
                 Component.text("Keep your coins safe by putting them in the bank", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
                 ));
         deposit.setItemMeta(depositMeta);
-        inventory.setItem(11, makeMenuItem(deposit, MenuType.DEPOSIT));
+        inventory.setItem(11, makeMenuType(deposit, MenuType.DEPOSIT));
 
         ItemStack withdraw = new ItemStack(Material.DROPPER);
         ItemMeta withdrawMeta = withdraw.getItemMeta();
@@ -52,8 +52,9 @@ public class BankMenu extends Menu {
                 Component.text("Take your coins out of your account to use them", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
                 ));
         withdraw.setItemMeta(withdrawMeta);
-        inventory.setItem(15, makeMenuItem(withdraw, MenuType.WITHDRAW));
+        inventory.setItem(15, makeMenuType(withdraw, MenuType.WITHDRAW));
 
+        addBackType(MenuType.MONEY);
         addCloseButton();
     }
 

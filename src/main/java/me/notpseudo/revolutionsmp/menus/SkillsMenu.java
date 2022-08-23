@@ -8,7 +8,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -39,7 +38,7 @@ public class SkillsMenu extends Menu {
         skillsMeta.displayName(Component.text("Skills", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
         skillsMeta.lore(List.of(Component.text("View your Skill progression and rewards", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)));
         skills.setItemMeta(skillsMeta);
-        inventory.setItem(4, makeMenuItem(skills, null));
+        inventory.setItem(4, makeMenuType(skills, null));
 
         SkillHolder holder = SkillUtils.getHolder(player);
 
@@ -52,7 +51,7 @@ public class SkillsMenu extends Menu {
         farmingLore.addAll(getProgressList(holder.getSkill(SkillType.FARMING)));
         farmingMeta.lore(farmingLore);
         farming.setItemMeta(farmingMeta);
-        inventory.setItem(19, makeMenuItem(farming, null));
+        inventory.setItem(19, makeMenuType(farming, null));
 
         ItemStack mining = new ItemStack(Material.STONE_PICKAXE, 1);
         ItemMeta miningMeta = mining.getItemMeta();
@@ -64,7 +63,7 @@ public class SkillsMenu extends Menu {
         miningLore.addAll(getProgressList(holder.getSkill(SkillType.MINING)));
         miningMeta.lore(miningLore);
         mining.setItemMeta(miningMeta);
-        inventory.setItem(20, makeMenuItem(mining, null));
+        inventory.setItem(20, makeMenuType(mining, null));
 
         ItemStack combat = new ItemStack(Material.STONE_SWORD, 1);
         ItemMeta combatMeta = combat.getItemMeta();
@@ -75,7 +74,7 @@ public class SkillsMenu extends Menu {
         combatLore.addAll(getProgressList(holder.getSkill(SkillType.COMBAT)));
         combatMeta.lore(combatLore);
         combat.setItemMeta(combatMeta);
-        inventory.setItem(21, makeMenuItem(combat, null));
+        inventory.setItem(21, makeMenuType(combat, null));
 
         ItemStack foraging = new ItemStack(Material.JUNGLE_SAPLING, 1);
         ItemMeta foragingMeta = foraging.getItemMeta();
@@ -86,7 +85,7 @@ public class SkillsMenu extends Menu {
         foragingLore.addAll(getProgressList(holder.getSkill(SkillType.FORAGING)));
         foragingMeta.lore(foragingLore);
         foraging.setItemMeta(foragingMeta);
-        inventory.setItem(22, makeMenuItem(foraging, null));
+        inventory.setItem(22, makeMenuType(foraging, null));
 
         ItemStack fishing = new ItemStack(Material.FISHING_ROD, 1);
         ItemMeta fishingMeta = fishing.getItemMeta();
@@ -98,7 +97,7 @@ public class SkillsMenu extends Menu {
         fishingLore.addAll(getProgressList(holder.getSkill(SkillType.FISHING)));
         fishingMeta.lore(fishingLore);
         fishing.setItemMeta(fishingMeta);
-        inventory.setItem(23, makeMenuItem(fishing, null));
+        inventory.setItem(23, makeMenuType(fishing, null));
 
         ItemStack enchanting = new ItemStack(Material.ENCHANTING_TABLE, 1);
         ItemMeta enchantingMeta = enchanting.getItemMeta();
@@ -109,7 +108,7 @@ public class SkillsMenu extends Menu {
         enchantingLore.addAll(getProgressList(holder.getSkill(SkillType.ENCHANTING)));
         enchantingMeta.lore(enchantingLore);
         enchanting.setItemMeta(enchantingMeta);
-        inventory.setItem(24, makeMenuItem(enchanting, null));
+        inventory.setItem(24, makeMenuType(enchanting, null));
 
         ItemStack alchemy = new ItemStack(Material.BREWING_STAND, 1);
         ItemMeta alchemyMeta = alchemy.getItemMeta();
@@ -120,9 +119,9 @@ public class SkillsMenu extends Menu {
         alchemyLore.addAll(getProgressList(holder.getSkill(SkillType.ALCHEMY)));
         alchemyMeta.lore(alchemyLore);
         alchemy.setItemMeta(alchemyMeta);
-        inventory.setItem(25, makeMenuItem(alchemy, null));
+        inventory.setItem(25, makeMenuType(alchemy, null));
 
-        addBackButton(MenuType.MAIN);
+        addBackType(MenuType.MAIN);
 
         addCloseButton();
     }

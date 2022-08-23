@@ -23,7 +23,7 @@ public class MenuItem implements Serializable {
     }
 
     public MenuItem(MenuType type) {
-        this.TYPE = type;
+        TYPE = type;
         ACTION = null;
         ENCHANT = null;
         NEXT = null;
@@ -65,8 +65,9 @@ public class MenuItem implements Serializable {
         return ENCHANT;
     }
 
+    @Nullable
     public Menu getNext(Player player) {
-        if (NEXT == null) {
+        if (NEXT == null && TYPE != null && TYPE.meetsRequirement(player)) {
             return TYPE.getNext(player);
         } else {
             return NEXT;

@@ -46,7 +46,7 @@ public class MoneyMenu extends Menu {
                 Component.text("Balance: ", NamedTextColor.GRAY).append(Component.text(ecoInfo.getBank(), NamedTextColor.GOLD)).decoration(TextDecoration.ITALIC, false)
         ));
         bank.setItemMeta(bankMeta);
-        inventory.setItem(11, makeMenuItem(bank, MenuType.BANK));
+        inventory.setItem(11, makeMenuType(bank, MenuType.BANK));
 
         ItemStack purse = new ItemStack(Material.CHEST);
         ItemMeta purseMeta = purse.getItemMeta();
@@ -59,9 +59,9 @@ public class MoneyMenu extends Menu {
                 Component.text("Purse: ", NamedTextColor.GRAY).append(Component.text(ecoInfo.getPurse(), NamedTextColor.GOLD)).decoration(TextDecoration.ITALIC, false)
         ));
         purse.setItemMeta(purseMeta);
-        inventory.setItem(15, makeMenuItem(purse, null));
+        inventory.setItem(15, makeMenuType(purse, null));
 
-        addBackButton(MenuType.MAIN);
+        addBackType(MenuType.MAIN);
         addCloseButton();
     }
 

@@ -11,7 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -49,7 +49,7 @@ public class CustomCraftingMenu extends Menu {
         fillGlass();
         setOpenSlots();
         addCloseButton();
-        addBackButton(MenuType.MAIN);
+        addBackType(MenuType.MAIN);
     }
 
     private void setOpenSlots() {
@@ -91,6 +91,11 @@ public class CustomCraftingMenu extends Menu {
         if (menuItem.getAction() == MenuAction.CRAFT) {
             craftItem(event);
         }
+        checkGrid();
+    }
+
+    @Override
+    public void handleDrag(InventoryDragEvent event) {
         checkGrid();
     }
 
@@ -164,9 +169,9 @@ public class CustomCraftingMenu extends Menu {
                         shownRecipe = recipe;
                         ItemInfo middleInfo = ItemEditor.getInfo(middle);
                         if (middleInfo != null && middleInfo.getItemType() != ItemType.VANILLA_ITEM && middleInfo.getItemType() != ItemType.ITEM) {
-                            result = makeMenuItemAction(recipe.getResult(middleInfo), MenuAction.CRAFT);
+                            result = makeMenuAction(recipe.getResult(middleInfo), MenuAction.CRAFT);
                         } else {
-                            result = makeMenuItemAction(recipe.getResult(), MenuAction.CRAFT);
+                            result = makeMenuAction(recipe.getResult(), MenuAction.CRAFT);
                         }
                         amountsNeeded = recipe.getAmountsNeeded(gridMap);
                         inventory.setItem(23, result);

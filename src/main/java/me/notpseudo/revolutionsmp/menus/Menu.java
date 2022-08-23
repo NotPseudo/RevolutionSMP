@@ -17,6 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemFlag;
@@ -63,15 +64,15 @@ public abstract class Menu implements InventoryHolder {
         ItemMeta closeMeta = close.getItemMeta();
         closeMeta.displayName(Component.text("Close", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
         close.setItemMeta(closeMeta);
-        inventory.setItem(index, makeMenuItem(close, MenuType.CLOSE));
+        inventory.setItem(index, makeMenuType(close, MenuType.CLOSE));
     }
 
-    public void addBackButton(MenuType previous) {
+    public void addBackType(MenuType previous) {
         int lastRowPosition = getSlots() - 6;
-        addBackButton(lastRowPosition, previous);
+        addBackType(lastRowPosition, previous);
     }
 
-    public void addBackButton(int index, MenuType previous) {
+    public void addBackType(int index, MenuType previous) {
         if (index >= getSlots()) {
             return;
         }
@@ -79,7 +80,22 @@ public abstract class Menu implements InventoryHolder {
         ItemMeta backMeta = back.getItemMeta();
         backMeta.displayName(Component.text("Back", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
         back.setItemMeta(backMeta);
-        inventory.setItem(index, makeMenuItem(back, previous));
+        inventory.setItem(index, makeMenuType(back, previous));
+    }
+
+    public void addBackMenu(Menu previous) {
+        addBackMenu(getSlots() - 5, previous);
+    }
+
+    public void addBackMenu(int index, Menu previous) {
+        if (index >= getSlots()) {
+            return;
+        }
+        ItemStack back = new ItemStack(Material.ARROW);
+        ItemMeta backMeta = back.getItemMeta();
+        backMeta.displayName(Component.text("Back", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
+        back.setItemMeta(backMeta);
+        inventory.setItem(index, makeMenuNext(back, previous));
     }
 
     public abstract void setItems();
@@ -106,12 +122,20 @@ public abstract class Menu implements InventoryHolder {
             close.runTaskLater(RevolutionSMP.getPlugin(), 1);
             return;
         }
+        if (menuItem.getNext(player) != null) {
+            menuItem.getNext(player).open();
+            return;
+        }
         if (menuItem.getType().meetsRequirement(player)) {
             Menu next = menuItem.getType().getNext(player);
             if (next != null) {
                 next.open();
             }
         }
+    }
+
+    public void handleDrag(InventoryDragEvent event) {
+
     }
 
     public void handleClose(InventoryCloseEvent event) {
@@ -128,7 +152,7 @@ public abstract class Menu implements InventoryHolder {
         player.openInventory(inventory);
     }
 
-    public ItemStack makeMenuItem(ItemStack item, MenuType nextType) {
+    public ItemStack makeMenuType(ItemStack item, MenuType nextType) {
         if (item == null || item.getType() == Material.AIR) {
             return null;
         }
@@ -139,7 +163,7 @@ public abstract class Menu implements InventoryHolder {
         return item;
     }
 
-    public ItemStack makeMenuItemNext(ItemStack item, Menu next) {
+    public ItemStack makeMenuNext(ItemStack item, Menu next) {
         if (item == null || item.getType() == Material.AIR) {
             return null;
         }
@@ -150,7 +174,7 @@ public abstract class Menu implements InventoryHolder {
         return item;
     }
 
-    public ItemStack makeMenuItemAction(ItemStack item, MenuAction action) {
+    public ItemStack makeMenuAction(ItemStack item, MenuAction action) {
         if (item == null || item.getType() == Material.AIR) {
             return null;
         }
@@ -190,10 +214,28 @@ public abstract class Menu implements InventoryHolder {
         return bar.toString();
     }
 
+    public String getFilledProgressString(double percent) {
+        int green = (int) percent * 20;
+        StringBuilder bar = new StringBuilder();
+        for (int i = 0; i < green; i++) {
+            bar.append("-");
+        }
+        return bar.toString();
+    }
+
+    public String getEmptyProgressString(double percent) {
+        int green = (int) percent * 20;
+        StringBuilder bar = new StringBuilder();
+        for (int i = green; i < 20; i++) {
+            bar.append("-");
+        }
+        return bar.toString();
+    }
+
     public List<Component> getProgressList(SkillObject skill) {
         ArrayList<Component> lore = new ArrayList<>();
         lore.add(Component.text("Progress to Level " + (int) (skill.getLevel() + 1) + ": ", NamedTextColor.GRAY).append(Component.text(Math.round(skill.getPercent() * 100) + "%", NamedTextColor.YELLOW)).decoration(TextDecoration.ITALIC, false));
-        lore.add(Component.text(getProgressString(skill.getPercent())).append(Component.text(" " + skill.getCurrentXP(), NamedTextColor.YELLOW)).append(Component.text("/", NamedTextColor.GOLD)).append(Component.text(skill.getXpForNextLevel(), NamedTextColor.YELLOW)).decoration(TextDecoration.ITALIC, false));
+        lore.add(Component.text(getFilledProgressString(skill.getPercent()), NamedTextColor.GREEN).append(Component.text(getEmptyProgressString(skill.getPercent()), NamedTextColor.WHITE)).append(Component.text(" " + skill.getCurrentXP(), NamedTextColor.YELLOW)).append(Component.text("/", NamedTextColor.GOLD)).append(Component.text(skill.getXpForNextLevel(), NamedTextColor.YELLOW)).decoration(TextDecoration.ITALIC, false));
         lore.add(Component.empty());
         lore.addAll(SkillUtils.getSkillRewards(skill));
         return lore;
@@ -222,14 +264,14 @@ public abstract class Menu implements InventoryHolder {
             progressType = "Collection Maxed: ";
         }
         lore.add(Component.text(progressType, NamedTextColor.GRAY).append(Component.text(Math.round(percent * 100) + "%", NamedTextColor.YELLOW)).decoration(TextDecoration.ITALIC, false));
-        lore.add(Component.text(getProgressString(percent)).append(Component.text(" " + part, NamedTextColor.YELLOW)).append(Component.text("/", NamedTextColor.GOLD)).append(Component.text(total, NamedTextColor.YELLOW)).decoration(TextDecoration.ITALIC, false));
+        lore.add(Component.text(getFilledProgressString(percent), NamedTextColor.GREEN).append(Component.text(getEmptyProgressString(percent), NamedTextColor.WHITE)).append(Component.text(" " + part, NamedTextColor.YELLOW)).append(Component.text("/", NamedTextColor.GOLD)).append(Component.text(total, NamedTextColor.YELLOW)).decoration(TextDecoration.ITALIC, false));
         return lore;
     }
 
     public List<Component> getCollectionProgressList(CollectionObject collection) {
         ArrayList<Component> lore = new ArrayList<>();
         lore.add(Component.text("Progress to Level " + collection.getLevel() + 1 + ": ", NamedTextColor.GRAY).append(Component.text(Math.round(collection.getPercent() * 100) + "%", NamedTextColor.YELLOW)).decoration(TextDecoration.ITALIC, false));
-        lore.add(Component.text(getProgressString(collection.getPercent())).append(Component.text(" " + collection.getCurrentCollected(), NamedTextColor.YELLOW)).append(Component.text("/", NamedTextColor.GOLD)).append(Component.text(collection.getItemsForNextLevel(), NamedTextColor.YELLOW)).decoration(TextDecoration.ITALIC, false));
+        lore.add(Component.text(getFilledProgressString(collection.getPercent()), NamedTextColor.GREEN).append(Component.text(getEmptyProgressString(collection.getPercent()), NamedTextColor.WHITE)).append(Component.text(" " + collection.getCurrentCollected(), NamedTextColor.YELLOW)).append(Component.text("/", NamedTextColor.GOLD)).append(Component.text(collection.getItemsForNextLevel(), NamedTextColor.YELLOW)).decoration(TextDecoration.ITALIC, false));
         lore.add(Component.empty());
         lore.add(Component.text("Level " + collection.getLevel() + " Rewards: ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
         return lore;
