@@ -1005,7 +1005,7 @@ public enum ItemID {
     NETHERITE_HELMET {
         @Override
         public Material getMaterial() {
-            return Material.DIAMOND_HELMET;
+            return Material.NETHERITE_HELMET;
         }
 
         @Override
@@ -1026,7 +1026,7 @@ public enum ItemID {
     NETHERITE_CHESTPLATE {
         @Override
         public Material getMaterial() {
-            return Material.DIAMOND_CHESTPLATE;
+            return Material.NETHERITE_CHESTPLATE;
         }
 
         @Override
@@ -1047,7 +1047,7 @@ public enum ItemID {
     NETHERITE_LEGGINGS {
         @Override
         public Material getMaterial() {
-            return Material.DIAMOND_LEGGINGS;
+            return Material.NETHERITE_LEGGINGS;
         }
 
         @Override
@@ -1068,7 +1068,7 @@ public enum ItemID {
     NETHERITE_BOOTS {
         @Override
         public Material getMaterial() {
-            return Material.DIAMOND_BOOTS;
+            return Material.NETHERITE_BOOTS;
         }
 
         @Override

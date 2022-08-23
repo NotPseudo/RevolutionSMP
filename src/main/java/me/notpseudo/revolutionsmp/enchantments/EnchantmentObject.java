@@ -72,13 +72,13 @@ public class EnchantmentObject implements Serializable, Comparable<EnchantmentOb
 
     public String getText() {
         if (type.isUltimate()) {
-            return "" + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + type + " " + level;
+            return "" + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + type.getName() + " " + level;
         } else if (level >= type.getMaxLevel()) {
-            return "" + ChatColor.GOLD + type + " " + level;
+            return "" + ChatColor.GOLD + type.getName() + " " + level;
         } else if (level > type.getEnchTableMax()) {
-            return "" + ChatColor.DARK_PURPLE + type + " " + level;
+            return "" + ChatColor.DARK_PURPLE + type.getName() + " " + level;
         } else {
-            return "" + ChatColor.BLUE + type + " " + level;
+            return "" + ChatColor.BLUE + type.getName() + " " + level;
         }
     }
 

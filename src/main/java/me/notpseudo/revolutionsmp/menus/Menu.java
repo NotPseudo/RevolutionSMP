@@ -139,6 +139,17 @@ public abstract class Menu implements InventoryHolder {
         return item;
     }
 
+    public ItemStack makeMenuItemNext(ItemStack item, Menu next) {
+        if (item == null || item.getType() == Material.AIR) {
+            return null;
+        }
+        ItemMeta meta = item.getItemMeta();
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_DYE, ItemFlag.HIDE_PLACED_ON, ItemFlag.HIDE_POTION_EFFECTS);
+        meta.getPersistentDataContainer().set(MenuUtils.getMenuKey(), new MenuItemDataType(), new MenuItem(next));
+        item.setItemMeta(meta);
+        return item;
+    }
+
     public ItemStack makeMenuItemAction(ItemStack item, MenuAction action) {
         if (item == null || item.getType() == Material.AIR) {
             return null;

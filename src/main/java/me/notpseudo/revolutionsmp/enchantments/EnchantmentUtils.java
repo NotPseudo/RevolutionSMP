@@ -24,10 +24,9 @@ public class EnchantmentUtils {
     public static ItemStack createEnchantedBook(EnchantmentType enchant, int level) {
         ItemStack book = ItemEditor.createItem(ItemID.ENCHANTED_BOOK);
         ItemInfo info = ItemEditor.getInfo(book);
-        EnchantmentsHolder holder = new EnchantmentsHolder(info);
-        holder.addEnchant(enchant.createObject(level));
-        info.setEnchantmentsHolder(holder);
-        return ItemEditor.updateItemInfo(book, info);
+        info.addEnchant(enchant.createObject(level));
+        ItemEditor.updateItemInfo(book, info);
+        return book;
     }
 
     public static void updateEnchantLore(ItemStack item) {

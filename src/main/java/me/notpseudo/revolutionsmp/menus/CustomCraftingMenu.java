@@ -9,7 +9,9 @@ import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -87,25 +89,41 @@ public class CustomCraftingMenu extends Menu {
             }
         }
         if (menuItem.getAction() == MenuAction.CRAFT) {
-            craftItem();
+            craftItem(event);
         }
         checkGrid();
     }
 
-    private void craftItem() {
+    private void craftItem(InventoryClickEvent event) {
         if (result == null || shownRecipe == null || amountsNeeded == null) {
             return;
         }
-        ItemStack onCursor = player.getItemOnCursor();
-        if (onCursor.getType() == Material.AIR) {
-            ItemStack newItem = new ItemStack(result);
-            newItem.editMeta(m -> m.getPersistentDataContainer().remove(MenuUtils.getMenuKey()));
-            player.setItemOnCursor(newItem);
-        } else if (testItem(result, onCursor)) {
-            ItemStack newAmount = new ItemStack(onCursor);
-            newAmount.setAmount(onCursor.getAmount() + result.getAmount());
-            newAmount.editMeta(m -> m.getPersistentDataContainer().remove(MenuUtils.getMenuKey()));
-            player.setItemOnCursor(newAmount);
+        ClickType clickType = event.getClick();
+        if (!(clickType == ClickType.LEFT || clickType == ClickType.SHIFT_LEFT)) {
+            return;
+        }
+        if (clickType == ClickType.LEFT) {
+            ItemStack onCursor = player.getItemOnCursor();
+            if (onCursor.getType() == Material.AIR) {
+                ItemStack newItem = new ItemStack(result);
+                newItem.editMeta(m -> m.getPersistentDataContainer().remove(MenuUtils.getMenuKey()));
+                player.setItemOnCursor(newItem);
+            } else if (testItem(result, onCursor)) {
+                ItemStack newResult = new ItemStack(onCursor);
+                int newAmount = onCursor.getAmount() + result.getAmount();
+                if (newAmount > result.getType().getMaxStackSize()) {
+                    return;
+                }
+                newResult.setAmount(newAmount);
+                newResult.editMeta(m -> m.getPersistentDataContainer().remove(MenuUtils.getMenuKey()));
+                player.setItemOnCursor(newResult);
+            }
+        } else if (clickType == ClickType.SHIFT_LEFT) {
+            ItemStack add = new ItemStack(result);
+            add.editMeta(m -> m.getPersistentDataContainer().remove(MenuUtils.getMenuKey()));
+            if (player.getInventory().addItem(add).size() > 0) {
+                return;
+            }
         }
         inventory.setItem(23, null);
         for (Integer index : amountsNeeded.keySet()) {
@@ -145,7 +163,7 @@ public class CustomCraftingMenu extends Menu {
                     if (recipe.matches(grid)) {
                         shownRecipe = recipe;
                         ItemInfo middleInfo = ItemEditor.getInfo(middle);
-                        if (middleInfo != null && middleInfo.getItemType() != ItemType.VANILLA_ITEM) {
+                        if (middleInfo != null && middleInfo.getItemType() != ItemType.VANILLA_ITEM && middleInfo.getItemType() != ItemType.ITEM) {
                             result = makeMenuItemAction(recipe.getResult(middleInfo), MenuAction.CRAFT);
                         } else {
                             result = makeMenuItemAction(recipe.getResult(), MenuAction.CRAFT);

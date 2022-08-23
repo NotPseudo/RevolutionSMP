@@ -735,6 +735,19 @@ public class ItemEditor {
         return name.toString();
     }
 
+    public static String getOriginalEnumString(String string) {
+        StringBuilder original = new StringBuilder();
+        for (int i = 0; i < string.length(); i++) {
+            char letter = string.charAt(i);
+            if (letter == ' ') {
+                original.append("_");
+            } else {
+                original.append(letter);
+            }
+        }
+        return original.toString().toUpperCase();
+    }
+
     /**
      * Method to format large numbers with suffixes
      * <p>
