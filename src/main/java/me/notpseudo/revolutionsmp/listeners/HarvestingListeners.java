@@ -224,7 +224,7 @@ public class HarvestingListeners implements Listener {
                 mult = StatsListeners.getEventMining(player, block, IncreaseType.MULTIPLICATIVE_PERCENT);
         double miningFortune = (playerStats.getStatValue(StatType.MINING_FORTUNE) + add.getStatValue(StatType.MINING_FORTUNE)) * (1 + (addPercent.getStatValue(StatType.MINING_FORTUNE) / 100)) * mult.getStatValue(StatType.MINING_FORTUNE),
                 pristine = (playerStats.getStatValue(StatType.PRISTINE) + add.getStatValue(StatType.PRISTINE)) * (1 + (addPercent.getStatValue(StatType.PRISTINE) / 100)) * mult.getStatValue(StatType.PRISTINE),
-                purity = (playerStats.getStatValue(StatType.PRISTINE) + add.getStatValue(StatType.PURITY)) * (1 + (addPercent.getStatValue(StatType.PURITY) / 100)) * mult.getStatValue(StatType.PURITY);
+                purity = (playerStats.getStatValue(StatType.PURITY) + add.getStatValue(StatType.PURITY)) * (1 + (addPercent.getStatValue(StatType.PURITY) / 100)) * mult.getStatValue(StatType.PURITY);
         if (playerPlaced) {
             miningFortune = 0;
             pristine = 0;
