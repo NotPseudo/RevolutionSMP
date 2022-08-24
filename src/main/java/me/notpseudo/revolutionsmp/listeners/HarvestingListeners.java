@@ -564,30 +564,30 @@ public class HarvestingListeners implements Listener {
             default -> List.of(new ItemDropObject(material, multiplier));
             case STONE -> List.of(new ItemDropObject(Material.COBBLESTONE, multiplier));
             case COAL_ORE, DEEPSLATE_COAL_ORE ->
-                    List.of(new ItemDropObject(Material.COAL, multiplier), new ItemDropObject(GemstoneType.PEARL, 4, gemDefault));
+                    List.of(new ItemDropObject(Material.COAL, multiplier), new ItemDropObject(GemstoneType.PEARL, 0.4, gemDefault));
             case GLOWSTONE ->
-                    List.of(new ItemDropObject(Material.GLOWSTONE_DUST, (gemDefault) * multiplier), new ItemDropObject(GemstoneType.TOPAZ, 4, gemDefault), new ItemDropObject(GemstoneType.AMBER, 2, gemDefault));
+                    List.of(new ItemDropObject(Material.GLOWSTONE_DUST, (gemDefault) * multiplier), new ItemDropObject(GemstoneType.TOPAZ, 0.4, gemDefault), new ItemDropObject(GemstoneType.AMBER, 0.2, gemDefault));
             case COPPER_ORE, DEEPSLATE_COPPER_ORE ->
-                    List.of(new ItemDropObject(Material.RAW_COPPER, ((int) (Math.random() * 4) + 2) * multiplier), new ItemDropObject(GemstoneType.AMBER, 4, gemDefault));
+                    List.of(new ItemDropObject(Material.RAW_COPPER, ((int) (Math.random() * 4) + 2) * multiplier), new ItemDropObject(GemstoneType.AMBER, 0.4, gemDefault));
             case LAPIS_ORE, DEEPSLATE_LAPIS_ORE ->
-                    List.of(new ItemDropObject(Material.LAPIS_LAZULI, ((int) (Math.random() * 6) + 4) * multiplier), new ItemDropObject(GemstoneType.SAPPHIRE, 5, gemDefault));
+                    List.of(new ItemDropObject(Material.LAPIS_LAZULI, ((int) (Math.random() * 6) + 4) * multiplier), new ItemDropObject(GemstoneType.SAPPHIRE, 0.5, gemDefault));
             case IRON_ORE, DEEPSLATE_IRON_ORE -> List.of(new ItemDropObject(Material.RAW_IRON, multiplier));
             case REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE ->
-                    List.of(new ItemDropObject(Material.REDSTONE, ((int) (Math.random() * 2) + 4) * multiplier), new ItemDropObject(GemstoneType.RUBY, 4, gemDefault));
+                    List.of(new ItemDropObject(Material.REDSTONE, ((int) (Math.random() * 2) + 4) * multiplier), new ItemDropObject(GemstoneType.RUBY, 0.4, gemDefault));
             case DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE ->
-                    List.of(new ItemDropObject(Material.DIAMOND, multiplier), new ItemDropObject(GemstoneType.JASPER, 2, gemDefault), new ItemDropObject(GemstoneType.SAPPHIRE, 4, gemDefault));
+                    List.of(new ItemDropObject(Material.DIAMOND, multiplier), new ItemDropObject(GemstoneType.JASPER, 0.2, gemDefault), new ItemDropObject(GemstoneType.SAPPHIRE, 0.4, gemDefault));
             case GOLD_ORE, DEEPSLATE_GOLD_ORE ->
-                    List.of(new ItemDropObject(Material.RAW_GOLD, multiplier), new ItemDropObject(GemstoneType.TOPAZ, 2, gemDefault));
+                    List.of(new ItemDropObject(Material.RAW_GOLD, multiplier), new ItemDropObject(GemstoneType.TOPAZ, 0.2, gemDefault));
             case NETHER_GOLD_ORE ->
-                    List.of(new ItemDropObject(Material.GOLD_NUGGET, ((int) (Math.random() * 5) + 2) * multiplier), new ItemDropObject(GemstoneType.TOPAZ, 3, gemDefault));
+                    List.of(new ItemDropObject(Material.GOLD_NUGGET, ((int) (Math.random() * 5) + 2) * multiplier), new ItemDropObject(GemstoneType.TOPAZ, 0.3, gemDefault));
             case EMERALD_ORE, DEEPSLATE_EMERALD_ORE ->
-                    List.of(new ItemDropObject(Material.EMERALD, multiplier), new ItemDropObject(GemstoneType.JASPER, 2, gemDefault));
+                    List.of(new ItemDropObject(Material.EMERALD, multiplier), new ItemDropObject(GemstoneType.JASPER, 0.2, gemDefault));
             case NETHER_QUARTZ_ORE ->
-                    List.of(new ItemDropObject(Material.QUARTZ, multiplier), new ItemDropObject(GemstoneType.OPAL, 4, gemDefault));
+                    List.of(new ItemDropObject(Material.QUARTZ, multiplier), new ItemDropObject(GemstoneType.OPAL, 0.4, gemDefault));
             case SMALL_AMETHYST_BUD, MEDIUM_AMETHYST_BUD, LARGE_AMETHYST_BUD, AMETHYST_CLUSTER ->
-                    List.of(new ItemDropObject(Material.AMETHYST_SHARD, 4 * multiplier), new ItemDropObject(GemstoneType.AMETHYST, 2, gemDefault));
+                    List.of(new ItemDropObject(Material.AMETHYST_SHARD, 4 * multiplier), new ItemDropObject(GemstoneType.AMETHYST, 0.2, gemDefault));
             case BUDDING_AMETHYST ->
-                    List.of(new ItemDropObject(Material.AMETHYST_BLOCK, multiplier), new ItemDropObject(GemstoneType.AMETHYST, 4, gemDefault));
+                    List.of(new ItemDropObject(Material.AMETHYST_BLOCK, multiplier), new ItemDropObject(GemstoneType.AMETHYST, 0.4, gemDefault));
         };
     }
 
