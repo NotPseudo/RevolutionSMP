@@ -7,6 +7,8 @@ import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfoDataType;
 import me.notpseudo.revolutionsmp.listeners.HarvestingListeners;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -66,8 +68,6 @@ public class CollectionUtils implements Listener {
         addPlayerDrop.runTaskLater(RevolutionSMP.getPlugin(), 20);
     }
 
-
-
     @EventHandler
     public void onBlockDrop(BlockDropItemEvent event) {
         if (HarvestingListeners.getPlacedLocationList(event.getBlock()).removeDropLocation(event.getBlock().getLocation())) {
@@ -104,7 +104,12 @@ public class CollectionUtils implements Listener {
         CollectionsHolder holder = player.getPersistentDataContainer().get(collectionsKey, new CollectionsDataType());
         if (holder == null) {
             holder = new CollectionsHolder(player.getUniqueId());
-            player.getPersistentDataContainer().set(collectionsKey, new CollectionsDataType(), holder);
+            updatePlayerCollections(player, holder);
+        }
+        if (holder.getPlayer() == null) {
+            holder = new CollectionsHolder(player.getUniqueId());
+            updatePlayerCollections(player, holder);
+            player.sendMessage(Component.text("There was a slight issue while processing your Collections. If you notice any issues, please contact a staff member", NamedTextColor.YELLOW));
         }
         return holder;
     }

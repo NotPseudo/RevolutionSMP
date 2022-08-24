@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 
 public class EnchantmentTableMenu extends Menu {
 
-    private static final List<EnchantmentType> tableEnchants = Stream.of(EnchantmentType.values()).filter(e -> !e.isUltimate()).toList();
+    private static final List<EnchantmentType> tableEnchants = Stream.of(EnchantmentType.values()).filter(EnchantmentType::showInEnchantTable).toList();
 
     private int firstShown;
     private int lastShown;

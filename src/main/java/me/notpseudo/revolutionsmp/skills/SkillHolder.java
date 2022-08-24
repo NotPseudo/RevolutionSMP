@@ -3,6 +3,8 @@ package me.notpseudo.revolutionsmp.skills;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
 import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,13 +17,25 @@ public class SkillHolder implements Serializable {
     private UUID player;
     private ArrayList<SkillObject> skills;
 
+    /**
+     * Default constructor that doesn't have a known player
+     * <b>Should only be used in a PersistentDataType catching an InvalidClassException</b>
+     */
+    public SkillHolder() {
+        player = null;
+        skills = new ArrayList<>();
+        for (SkillType skillType : SkillType.values()) {
+            skills.add(new SkillObject(this, skillType));
+        }
+    }
+
     public SkillHolder(UUID player) {
         this.player = player;
         skills = new ArrayList<>();
         for (SkillType skillType : SkillType.values()) {
             skills.add(new SkillObject(this, skillType));
         }
-       SkillUtils.updatePlayerSkills(Bukkit.getPlayer(player), this);
+        SkillUtils.updatePlayerSkills(Bukkit.getPlayer(player), this);
     }
 
     public UUID getPlayer() {
@@ -56,18 +70,19 @@ public class SkillHolder implements Serializable {
         }
         return false;
     }
-     public void addExp(ExpDropObject exp) {
+
+    public void addExp(ExpDropObject exp) {
         SkillObject skill = getSkill(exp.getType());
         skill.addXp(exp);
         Player owner = Bukkit.getPlayer(player);
         if (owner != null) {
             StatsListeners.showExpGainBar(owner, exp, skill.getPercent());
         }
-         SkillUtils.updatePlayerSkills(Bukkit.getPlayer(player), this);
-     }
+        SkillUtils.updatePlayerSkills(Bukkit.getPlayer(player), this);
+    }
 
     @NotNull
-    public WeaponStats getEventWeapon(IncreaseType type) {
+    public WeaponStats getEventWeapon(LivingEntity target, IncreaseType type) {
         WeaponStats event = WeaponStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
             event = WeaponStats.createMult();
@@ -83,7 +98,7 @@ public class SkillHolder implements Serializable {
     }
 
     @NotNull
-    public ArmorStats getEventArmor(IncreaseType type) {
+    public ArmorStats getEventArmor(LivingEntity damager, IncreaseType type) {
         ArmorStats event = ArmorStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
             event = ArmorStats.createMult();
@@ -99,7 +114,7 @@ public class SkillHolder implements Serializable {
     }
 
     @NotNull
-    public AbilityStats getEventAbility(IncreaseType type) {
+    public AbilityStats getEventAbility(LivingEntity target, IncreaseType type) {
         AbilityStats event = AbilityStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
             event = AbilityStats.createMult();
@@ -131,7 +146,7 @@ public class SkillHolder implements Serializable {
     }
 
     @NotNull
-    public MiningStats getEventMining(IncreaseType type) {
+    public MiningStats getEventMining(Block block, IncreaseType type) {
         MiningStats event = MiningStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
             event = MiningStats.createMult();
@@ -147,7 +162,7 @@ public class SkillHolder implements Serializable {
     }
 
     @NotNull
-    public GatheringStats getEventGathering(IncreaseType type) {
+    public GatheringStats getEventGathering(Block block, IncreaseType type) {
         GatheringStats event = GatheringStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
             event = GatheringStats.createMult();
@@ -163,7 +178,7 @@ public class SkillHolder implements Serializable {
     }
 
     @NotNull
-    public LuckStats getEventLuck(IncreaseType type) {
+    public LuckStats getEventLuck(LivingEntity target, IncreaseType type) {
         LuckStats event = LuckStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
             event = LuckStats.createMult();

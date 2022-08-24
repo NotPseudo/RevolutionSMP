@@ -21,6 +21,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.InvalidClassException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -113,7 +114,12 @@ public class SkillUtils implements Listener {
         SkillHolder holder = player.getPersistentDataContainer().get(skillKey, new SkillsDataType());
         if (holder == null) {
             holder = new SkillHolder(player.getUniqueId());
-            player.getPersistentDataContainer().set(skillKey, new SkillsDataType(), holder);
+           updatePlayerSkills(player, holder);
+        }
+        if (holder.getPlayer() == null) {
+            holder = new SkillHolder(player.getUniqueId());
+            updatePlayerSkills(player, holder);
+            player.sendMessage(Component.text("There was a slight issue while processing your Skills. If you notice any issues, please contact a staff member", NamedTextColor.YELLOW));
         }
         return holder;
     }

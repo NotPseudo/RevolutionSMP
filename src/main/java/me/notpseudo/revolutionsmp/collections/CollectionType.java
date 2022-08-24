@@ -560,7 +560,7 @@ public enum CollectionType {
             return List.of(Material.ACACIA_LOG,Material.ACACIA_WOOD, Material.STRIPPED_ACACIA_LOG);
         }
     },
-    BITCH_WOOD {
+    BIRCH_WOOD {
         @Override
         public SkillType getCategory() {
             return SkillType.FORAGING;

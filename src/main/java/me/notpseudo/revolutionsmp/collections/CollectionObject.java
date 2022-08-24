@@ -30,7 +30,7 @@ public class CollectionObject implements Serializable, Comparable<CollectionObje
         customMaterials = new ArrayList<>(type.getCustomMaterials());
         totalCollected = 0;
         currentCollected = 0;
-        itemsForNextLevel = 0;
+        itemsForNextLevel = CollectionUtils.getCountForNextLevel(TYPE, 1);
         level = 0;
         recalculate();
     }

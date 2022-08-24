@@ -4,10 +4,7 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
+import java.io.*;
 
 public class CollectionsDataType implements PersistentDataType<byte[], CollectionsHolder> {
     @Override
@@ -31,10 +28,15 @@ public class CollectionsDataType implements PersistentDataType<byte[], Collectio
             InputStream is = new ByteArrayInputStream(primitive);
             ObjectInputStream o = new ObjectInputStream(is);
             return (CollectionsHolder) o.readObject();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        } catch (IOException exception) {
+            if (exception instanceof InvalidClassException) {
+                return new CollectionsHolder();
+            }
+            exception.printStackTrace();
         }
-        return null;
+        return new CollectionsHolder();
     }
 
 }

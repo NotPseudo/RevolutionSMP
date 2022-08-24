@@ -146,6 +146,10 @@ public enum EnchantmentType {
             return 0;
         }
 
+        public boolean showInEnchantTable() {
+            return false;
+        }
+
         @Override
         public List<ItemType> getItemTypes() {
             return List.of(ItemType.SWORD);
@@ -766,6 +770,11 @@ public enum EnchantmentType {
         }
 
         @Override
+        public boolean showInEnchantTable() {
+            return false;
+        }
+
+        @Override
         public List<ItemType> getItemTypes() {
             return List.of(ItemType.SWORD);
         }
@@ -914,11 +923,21 @@ public enum EnchantmentType {
         public List<ItemType> getItemTypes() {
             return List.of(ItemType.HELMET, ItemType.CHESTPLATE, ItemType.LEGGINGS, ItemType.BOOTS);
         }
+
+        @Override
+        public boolean isUltimate() {
+            return true;
+        }
     },
     GROWTH {
         @Override
         public List<ItemType> getItemTypes() {
             return List.of(ItemType.HELMET, ItemType.CHESTPLATE, ItemType.LEGGINGS, ItemType.BOOTS);
+        }
+
+        @Override
+        public int getMaxLevel() {
+            return 7;
         }
 
         @Override
@@ -930,6 +949,11 @@ public enum EnchantmentType {
         @Override
         public List<ItemType> getItemTypes() {
             return List.of(ItemType.HELMET, ItemType.CHESTPLATE, ItemType.LEGGINGS, ItemType.BOOTS);
+        }
+
+        @Override
+        public int getMaxLevel() {
+            return 7;
         }
 
         @Override
@@ -1127,6 +1151,10 @@ public enum EnchantmentType {
 
     public boolean isUltimate() {
         return false;
+    }
+
+    public boolean showInEnchantTable() {
+        return !isUltimate();
     }
 
     public int getExpLevelsNeeded(int level) {

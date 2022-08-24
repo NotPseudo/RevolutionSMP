@@ -325,7 +325,7 @@ public class StatsListeners implements Listener {
             healthColor = NamedTextColor.GOLD;
         }
         player.sendActionBar(Component.text(Math.round(currentHealth + currentAbsorption) + "/" + Math.round(maxHealth) + "❤     ", healthColor)
-                .append(Component.text(ItemEditor.getStatString(expDrop.getValue()) + " " + ItemEditor.getStringFromEnum(expDrop.getType()) + " (" + String.format("%.2f", percent) + "%)     ", NamedTextColor.DARK_AQUA))
+                .append(Component.text(ItemEditor.getStatString(expDrop.getValue()) + " " + ItemEditor.getStringFromEnum(expDrop.getType()) + " (" + String.format("%.2f", percent * 100) + "%)     ", NamedTextColor.DARK_AQUA))
                 .append(Component.text(Math.round(mana) + "/" + Math.round(intelligence) + "✎ Mana", NamedTextColor.AQUA)));
         showSkillXP.add(player.getUniqueId());
         BukkitRunnable remove = new BukkitRunnable() {
@@ -358,10 +358,7 @@ public class StatsListeners implements Listener {
         }
         SkillUtils.updatePlayerSkills(player, skills);
         CollectionsHolder collections = CollectionUtils.getCollectionHolder(player);
-        for (CollectionType collection : CollectionType.values()) {
-            collections.addCollection(collection);
-        }
-        CollectionUtils.updatePlayerCollections(player, collections);
+        collections.addAllTypes();
     }
 
     /**
@@ -506,14 +503,11 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static WeaponStats getEventWeaponStats(Player damager, LivingEntity target, IncreaseType type) {
-        WeaponStats eventWeapon = WeaponStats.createZero();
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            eventWeapon = WeaponStats.createMult();
-        }
+        WeaponStats eventWeapon = SkillUtils.getHolder(damager).getEventWeapon(target, type);
         for (ItemInfo info : getInfos(damager)) {
             if (info.getReforge() != null && info.getRarity() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    eventWeapon.multiply(info.getReforge().getEventWeapon(info.getRarity(), damager, target, type));
+                    eventWeapon.multiply(info.getReforge().getEventWeapon(info.getRarity(), damager, target, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     eventWeapon.combine(info.getReforge().getEventWeapon(info.getRarity(), damager, target, type));
                 }
@@ -521,7 +515,7 @@ public class StatsListeners implements Listener {
             if (info.getEnchantmentsHolder() != null) {
                 for (EnchantmentObject enchant : info.getEnchantmentsHolder().getEnchants()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        eventWeapon.multiply(enchant.getEventWeapon(damager, target, type));
+                        eventWeapon.multiply(enchant.getEventWeapon(damager, target, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         eventWeapon.combine(enchant.getEventWeapon(damager, target, type));
                     }
@@ -530,7 +524,7 @@ public class StatsListeners implements Listener {
             if (info.getAbilitiesHolder() != null) {
                 for (AbilityObject ability : info.getAbilitiesHolder().getAbilities()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        eventWeapon.multiply(ability.getEventWeapon(damager, target, type));
+                        eventWeapon.multiply(ability.getEventWeapon(damager, target, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         eventWeapon.combine(ability.getEventWeapon(damager, target, type));
                     }
@@ -538,7 +532,7 @@ public class StatsListeners implements Listener {
             }
             if (info.getExtraInfo() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    eventWeapon.multiply(info.getExtraInfo().getEventWeapon(damager, target, type));
+                    eventWeapon.multiply(info.getExtraInfo().getEventWeapon(damager, target, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     eventWeapon.combine(info.getExtraInfo().getEventWeapon(damager, target, type));
                 }
@@ -549,14 +543,11 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static ArmorStats getEventArmorStats(LivingEntity damager, Player target, IncreaseType type) {
-        ArmorStats eventArmor = ArmorStats.createZero();
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            eventArmor = ArmorStats.createMult();
-        }
+        ArmorStats eventArmor = SkillUtils.getHolder(target).getEventArmor(damager, type);
         for (ItemInfo info : getInfos(damager)) {
             if (info.getReforge() != null && info.getRarity() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    eventArmor.multiply(info.getReforge().getEventArmor(info.getRarity(), damager, target, type));
+                    eventArmor.multiply(info.getReforge().getEventArmor(info.getRarity(), damager, target, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     eventArmor.combine(info.getReforge().getEventArmor(info.getRarity(), damager, target, type));
                 }
@@ -564,7 +555,7 @@ public class StatsListeners implements Listener {
             if (info.getEnchantmentsHolder() != null) {
                 for (EnchantmentObject enchant : info.getEnchantmentsHolder().getEnchants()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        eventArmor.multiply(enchant.getEventArmor(damager, target, type));
+                        eventArmor.multiply(enchant.getEventArmor(damager, target, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         eventArmor.combine(enchant.getEventArmor(damager, target, type));
                     }
@@ -573,7 +564,7 @@ public class StatsListeners implements Listener {
             if (info.getAbilitiesHolder() != null) {
                 for (AbilityObject ability : info.getAbilitiesHolder().getAbilities()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        eventArmor.multiply(ability.getEventArmor(damager, target, type));
+                        eventArmor.multiply(ability.getEventArmor(damager, target, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         eventArmor.combine(ability.getEventArmor(damager, target, type));
                     }
@@ -581,7 +572,7 @@ public class StatsListeners implements Listener {
             }
             if (info.getExtraInfo() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    eventArmor.multiply(info.getExtraInfo().getEventArmor(damager, target, type));
+                    eventArmor.multiply(info.getExtraInfo().getEventArmor(damager, target, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     eventArmor.combine(info.getExtraInfo().getEventArmor(damager, target, type));
                 }
@@ -592,14 +583,11 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static AbilityStats getEventAbilityStats(Player damager, LivingEntity target, IncreaseType type) {
-        AbilityStats eventAbility = AbilityStats.createZero();
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            eventAbility = AbilityStats.createMult();
-        }
+        AbilityStats eventAbility = SkillUtils.getHolder(damager).getEventAbility(target, type);
         for (ItemInfo info : getInfos(damager)) {
             if (info.getReforge() != null && info.getRarity() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    eventAbility.multiply(info.getReforge().getEventAbility(info.getRarity(), damager, target, type));
+                    eventAbility.multiply(info.getReforge().getEventAbility(info.getRarity(), damager, target, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     eventAbility.combine(info.getReforge().getEventAbility(info.getRarity(), damager, target, type));
                 }
@@ -607,7 +595,7 @@ public class StatsListeners implements Listener {
             if (info.getEnchantmentsHolder() != null) {
                 for (EnchantmentObject enchant : info.getEnchantmentsHolder().getEnchants()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        eventAbility.multiply(enchant.getEventAbility(damager, target, type));
+                        eventAbility.multiply(enchant.getEventAbility(damager, target, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         eventAbility.combine(enchant.getEventAbility(damager, target, type));
                     }
@@ -616,7 +604,7 @@ public class StatsListeners implements Listener {
             if (info.getAbilitiesHolder() != null) {
                 for (AbilityObject ability : info.getAbilitiesHolder().getAbilities()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        eventAbility.multiply(ability.getEventAbility(damager, target, type));
+                        eventAbility.multiply(ability.getEventAbility(damager, target, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         eventAbility.combine(ability.getEventAbility(damager, target, type));
                     }
@@ -624,7 +612,7 @@ public class StatsListeners implements Listener {
             }
             if (info.getExtraInfo() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    eventAbility.multiply(info.getExtraInfo().getEventWeapon(damager, target, type));
+                    eventAbility.multiply(info.getExtraInfo().getEventWeapon(damager, target, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     eventAbility.combine(info.getExtraInfo().getEventWeapon(damager, target, type));
                 }
@@ -635,14 +623,11 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static FishingStats getEventFishing(Player fisher, IncreaseType type) {
-        FishingStats eventFishing = FishingStats.createZero();
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            eventFishing = FishingStats.createMult();
-        }
+        FishingStats eventFishing = SkillUtils.getHolder(fisher).getEventFishing(type);
         for (ItemInfo info : getInfos(fisher)) {
             if (info.getReforge() != null && info.getRarity() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    eventFishing.multiply(info.getReforge().getEventFishing(info.getRarity(), fisher, type));
+                    eventFishing.multiply(info.getReforge().getEventFishing(info.getRarity(), fisher, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     eventFishing.combine(info.getReforge().getEventFishing(info.getRarity(), fisher, type));
                 }
@@ -650,7 +635,7 @@ public class StatsListeners implements Listener {
             if (info.getEnchantmentsHolder() != null) {
                 for (EnchantmentObject enchant : info.getEnchantmentsHolder().getEnchants()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        eventFishing.multiply(enchant.getEventFishing(fisher, type));
+                        eventFishing.multiply(enchant.getEventFishing(fisher, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         eventFishing.combine(enchant.getEventFishing(fisher, type));
                     }
@@ -659,7 +644,7 @@ public class StatsListeners implements Listener {
             if (info.getAbilitiesHolder() != null) {
                 for (AbilityObject ability : info.getAbilitiesHolder().getAbilities()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        eventFishing.multiply(ability.getEventFishing(fisher, type));
+                        eventFishing.multiply(ability.getEventFishing(fisher, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         eventFishing.combine(ability.getEventFishing(fisher, type));
                     }
@@ -667,7 +652,7 @@ public class StatsListeners implements Listener {
             }
             if (info.getExtraInfo() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    eventFishing.multiply(info.getExtraInfo().getEventFishing(fisher, type));
+                    eventFishing.multiply(info.getExtraInfo().getEventFishing(fisher, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     eventFishing.combine(info.getExtraInfo().getEventFishing(fisher, type));
                 }
@@ -678,14 +663,11 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static MiningStats getEventMining(Player miner, Block block, IncreaseType type) {
-        MiningStats eventMining = MiningStats.createZero();
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            eventMining = new MiningStats(1, 1, 1);
-        }
+        MiningStats eventMining = SkillUtils.getHolder(miner).getEventMining(block, type);
         for (ItemInfo info : getInfos(miner)) {
             if (info.getReforge() != null && info.getRarity() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    eventMining.multiply(info.getReforge().getEventMining(info.getRarity(), miner, block, type));
+                    eventMining.multiply(info.getReforge().getEventMining(info.getRarity(), miner, block, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     eventMining.combine(info.getReforge().getEventMining(info.getRarity(), miner, block, type));
                 }
@@ -693,7 +675,7 @@ public class StatsListeners implements Listener {
             if (info.getEnchantmentsHolder() != null) {
                 for (EnchantmentObject enchant : info.getEnchantmentsHolder().getEnchants()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        eventMining.multiply(enchant.getEventMining(miner, block, type));
+                        eventMining.multiply(enchant.getEventMining(miner, block, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         eventMining.combine(enchant.getEventMining(miner, block, type));
                     }
@@ -702,7 +684,7 @@ public class StatsListeners implements Listener {
             if (info.getAbilitiesHolder() != null) {
                 for (AbilityObject ability : info.getAbilitiesHolder().getAbilities()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        eventMining.multiply(ability.getEventMining(miner, block, type));
+                        eventMining.multiply(ability.getEventMining(miner, block, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         eventMining.combine(ability.getEventMining(miner, block, type));
                     }
@@ -710,7 +692,7 @@ public class StatsListeners implements Listener {
             }
             if (info.getExtraInfo() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    eventMining.multiply(info.getExtraInfo().getEventMining(miner, block, type));
+                    eventMining.multiply(info.getExtraInfo().getEventMining(miner, block, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     eventMining.combine(info.getExtraInfo().getEventMining(miner, block, type));
                 }
@@ -721,14 +703,11 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static GatheringStats getEventGathering(Player miner, Block block, IncreaseType type) {
-        GatheringStats eventGathering = GatheringStats.createZero();
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            eventGathering = GatheringStats.createMult();
-        }
+        GatheringStats eventGathering = SkillUtils.getHolder(miner).getEventGathering(block, type);
         for (ItemInfo info : getInfos(miner)) {
             if (info.getReforge() != null && info.getRarity() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    eventGathering.multiply(info.getReforge().getEventGathering(info.getRarity(), miner, block, type));
+                    eventGathering.multiply(info.getReforge().getEventGathering(info.getRarity(), miner, block, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     eventGathering.combine(info.getReforge().getEventGathering(info.getRarity(), miner, block, type));
                 }
@@ -736,7 +715,7 @@ public class StatsListeners implements Listener {
             if (info.getEnchantmentsHolder() != null) {
                 for (EnchantmentObject enchant : info.getEnchantmentsHolder().getEnchants()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        eventGathering.multiply(enchant.getEventGathering(miner, block, type));
+                        eventGathering.multiply(enchant.getEventGathering(miner, block, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         eventGathering.combine(enchant.getEventGathering(miner, block, type));
                     }
@@ -745,7 +724,7 @@ public class StatsListeners implements Listener {
             if (info.getAbilitiesHolder() != null) {
                 for (AbilityObject ability : info.getAbilitiesHolder().getAbilities()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        eventGathering.multiply(ability.getEventGathering(miner, block, type));
+                        eventGathering.multiply(ability.getEventGathering(miner, block, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         eventGathering.combine(ability.getEventGathering(miner, block, type));
                     }
@@ -753,7 +732,7 @@ public class StatsListeners implements Listener {
             }
             if (info.getExtraInfo() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    eventGathering.multiply(info.getExtraInfo().getEventGathering(miner, block, type));
+                    eventGathering.multiply(info.getExtraInfo().getEventGathering(miner, block, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     eventGathering.combine(info.getExtraInfo().getEventGathering(miner, block, type));
                 }
@@ -764,14 +743,11 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static LuckStats getEventLuck(Player player, LivingEntity target, IncreaseType type) {
-        LuckStats eventLuck = LuckStats.createZero();
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            eventLuck = LuckStats.createMult();
-        }
+        LuckStats eventLuck = SkillUtils.getHolder(player).getEventLuck(target, type);
         for (ItemInfo info : getInfos(player)) {
             if (info.getReforge() != null && info.getRarity() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    eventLuck.multiply(info.getReforge().getEventLuck(info.getRarity(), player, target, type));
+                    eventLuck.multiply(info.getReforge().getEventLuck(info.getRarity(), player, target, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     eventLuck.combine(info.getReforge().getEventLuck(info.getRarity(), player, target, type));
                 }
@@ -779,7 +755,7 @@ public class StatsListeners implements Listener {
             if (info.getEnchantmentsHolder() != null) {
                 for (EnchantmentObject enchant : info.getEnchantmentsHolder().getEnchants()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        eventLuck.multiply(enchant.getEventLuck(player, target, type));
+                        eventLuck.multiply(enchant.getEventLuck(player, target, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         eventLuck.combine(enchant.getEventLuck(player, target, type));
                     }
@@ -788,7 +764,7 @@ public class StatsListeners implements Listener {
             if (info.getAbilitiesHolder() != null) {
                 for (AbilityObject ability : info.getAbilitiesHolder().getAbilities()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        eventLuck.multiply(ability.getEventLuck(player, target, type));
+                        eventLuck.multiply(ability.getEventLuck(player, target, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         eventLuck.combine(ability.getEventLuck(player, target, type));
                     }
@@ -796,7 +772,7 @@ public class StatsListeners implements Listener {
             }
             if (info.getExtraInfo() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    eventLuck.multiply(info.getExtraInfo().getEventLuck(player, target, type));
+                    eventLuck.multiply(info.getExtraInfo().getEventLuck(player, target, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     eventLuck.combine(info.getExtraInfo().getEventLuck(player, target, type));
                 }
@@ -807,14 +783,11 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static WeaponStats getBonusWeapon(Player player, IncreaseType type) {
-        WeaponStats bonusWeapon = WeaponStats.createZero();
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            bonusWeapon = WeaponStats.createMult();
-        }
+        WeaponStats bonusWeapon = SkillUtils.getHolder(player).getBonusWeapon(type);
         for (ItemInfo info : getInfos(player)) {
             if (info.getReforge() != null && info.getRarity() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    bonusWeapon.multiply(info.getReforge().getBonusWeapon(info.getRarity(), player, type));
+                    bonusWeapon.multiply(info.getReforge().getBonusWeapon(info.getRarity(), player, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     bonusWeapon.combine(info.getReforge().getBonusWeapon(info.getRarity(), player, type));
                 }
@@ -822,7 +795,7 @@ public class StatsListeners implements Listener {
             if (info.getEnchantmentsHolder() != null) {
                 for (EnchantmentObject enchant : info.getEnchantmentsHolder().getEnchants()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        bonusWeapon.multiply(enchant.getBonusWeapon(player, type));
+                        bonusWeapon.multiply(enchant.getBonusWeapon(player, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         bonusWeapon.combine(enchant.getBonusWeapon(player, type));
                     }
@@ -831,7 +804,7 @@ public class StatsListeners implements Listener {
             if (info.getAbilitiesHolder() != null) {
                 for (AbilityObject ability : info.getAbilitiesHolder().getAbilities()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        bonusWeapon.multiply(ability.getBonusWeapon(player, type));
+                        bonusWeapon.multiply(ability.getBonusWeapon(player, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         bonusWeapon.combine(ability.getBonusWeapon(player, type));
                     }
@@ -839,7 +812,7 @@ public class StatsListeners implements Listener {
             }
             if (info.getExtraInfo() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    bonusWeapon.multiply(info.getExtraInfo().getBonusWeapon(player, type));
+                    bonusWeapon.multiply(info.getExtraInfo().getBonusWeapon(player, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     bonusWeapon.combine(info.getExtraInfo().getBonusWeapon(player, type));
                 }
@@ -850,14 +823,11 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static ArmorStats getBonusArmor(Player player, IncreaseType type) {
-        ArmorStats bonusArmor = ArmorStats.createZero();
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            bonusArmor = ArmorStats.createMult();
-        }
+        ArmorStats bonusArmor = SkillUtils.getHolder(player).getBonusArmor(type);
         for (ItemInfo info : getInfos(player)) {
             if (info.getReforge() != null && info.getRarity() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    bonusArmor.multiply(info.getReforge().getBonusArmor(info.getRarity(), player, type));
+                    bonusArmor.multiply(info.getReforge().getBonusArmor(info.getRarity(), player, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     bonusArmor.combine(info.getReforge().getBonusArmor(info.getRarity(), player, type));
                 }
@@ -865,7 +835,7 @@ public class StatsListeners implements Listener {
             if (info.getEnchantmentsHolder() != null) {
                 for (EnchantmentObject enchant : info.getEnchantmentsHolder().getEnchants()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        bonusArmor.multiply(enchant.getBonusArmor(player, type));
+                        bonusArmor.multiply(enchant.getBonusArmor(player, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         bonusArmor.combine(enchant.getBonusArmor(player, type));
                     }
@@ -874,7 +844,7 @@ public class StatsListeners implements Listener {
             if (info.getAbilitiesHolder() != null) {
                 for (AbilityObject ability : info.getAbilitiesHolder().getAbilities()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        bonusArmor.multiply(ability.getBonusArmor(player, type));
+                        bonusArmor.multiply(ability.getBonusArmor(player, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         bonusArmor.combine(ability.getBonusArmor(player, type));
                     }
@@ -882,7 +852,7 @@ public class StatsListeners implements Listener {
             }
             if (info.getExtraInfo() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    bonusArmor.multiply(info.getExtraInfo().getBonusArmor(player, type));
+                    bonusArmor.multiply(info.getExtraInfo().getBonusArmor(player, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     bonusArmor.combine(info.getExtraInfo().getBonusArmor(player, type));
                 }
@@ -893,14 +863,11 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static AbilityStats getBonusAbility(Player player, IncreaseType type) {
-        AbilityStats bonusAbility = AbilityStats.createZero();
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            bonusAbility = AbilityStats.createMult();
-        }
+        AbilityStats bonusAbility = SkillUtils.getHolder(player).getBonusAbility(type);
         for (ItemInfo info : getInfos(player)) {
             if (info.getReforge() != null && info.getRarity() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    bonusAbility.multiply(info.getReforge().getBonusAbility(info.getRarity(), player, type));
+                    bonusAbility.multiply(info.getReforge().getBonusAbility(info.getRarity(), player, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     bonusAbility.combine(info.getReforge().getBonusAbility(info.getRarity(), player, type));
                 }
@@ -908,7 +875,7 @@ public class StatsListeners implements Listener {
             if (info.getEnchantmentsHolder() != null) {
                 for (EnchantmentObject enchant : info.getEnchantmentsHolder().getEnchants()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        bonusAbility.multiply(enchant.getBonusAbility(player, type));
+                        bonusAbility.multiply(enchant.getBonusAbility(player, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         bonusAbility.combine(enchant.getBonusAbility(player, type));
                     }
@@ -917,7 +884,7 @@ public class StatsListeners implements Listener {
             if (info.getAbilitiesHolder() != null) {
                 for (AbilityObject ability : info.getAbilitiesHolder().getAbilities()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        bonusAbility.multiply(ability.getBonusAbility(player, type));
+                        bonusAbility.multiply(ability.getBonusAbility(player, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         bonusAbility.combine(ability.getBonusAbility(player, type));
                     }
@@ -925,7 +892,7 @@ public class StatsListeners implements Listener {
             }
             if (info.getExtraInfo() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    bonusAbility.multiply(info.getExtraInfo().getBonusAbility(player, type));
+                    bonusAbility.multiply(info.getExtraInfo().getBonusAbility(player, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     bonusAbility.combine(info.getExtraInfo().getBonusAbility(player, type));
                 }
@@ -936,14 +903,11 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static FishingStats getBonusFishing(Player player, IncreaseType type) {
-        FishingStats bonusFishing = FishingStats.createZero();
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            bonusFishing = FishingStats.createMult();
-        }
+        FishingStats bonusFishing = SkillUtils.getHolder(player).getBonusFishing(type);
         for (ItemInfo info : getInfos(player)) {
             if (info.getReforge() != null && info.getRarity() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    bonusFishing.multiply(info.getReforge().getBonusFishing(info.getRarity(), player, type));
+                    bonusFishing.multiply(info.getReforge().getBonusFishing(info.getRarity(), player, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     bonusFishing.combine(info.getReforge().getBonusFishing(info.getRarity(), player, type));
                 }
@@ -951,7 +915,7 @@ public class StatsListeners implements Listener {
             if (info.getEnchantmentsHolder() != null) {
                 for (EnchantmentObject enchant : info.getEnchantmentsHolder().getEnchants()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        bonusFishing.multiply(enchant.getBonusFishing(player, type));
+                        bonusFishing.multiply(enchant.getBonusFishing(player, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         bonusFishing.combine(enchant.getBonusFishing(player, type));
                     }
@@ -960,7 +924,7 @@ public class StatsListeners implements Listener {
             if (info.getAbilitiesHolder() != null) {
                 for (AbilityObject ability : info.getAbilitiesHolder().getAbilities()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        bonusFishing.multiply(ability.getBonusFishing(player, type));
+                        bonusFishing.multiply(ability.getBonusFishing(player, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         bonusFishing.combine(ability.getBonusFishing(player, type));
                     }
@@ -968,7 +932,7 @@ public class StatsListeners implements Listener {
             }
             if (info.getExtraInfo() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    bonusFishing.multiply(info.getExtraInfo().getBonusFishing(player, type));
+                    bonusFishing.multiply(info.getExtraInfo().getBonusFishing(player, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     bonusFishing.combine(info.getExtraInfo().getBonusFishing(player, type));
                 }
@@ -979,14 +943,11 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static MiningStats getBonusMining(Player player, IncreaseType type) {
-        MiningStats bonusMining = MiningStats.createZero();
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            bonusMining = MiningStats.createMult();
-        }
+        MiningStats bonusMining = SkillUtils.getHolder(player).getBonusMining(type);
         for (ItemInfo info : getInfos(player)) {
             if (info.getReforge() != null && info.getRarity() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    bonusMining.multiply(info.getReforge().getBonusMining(info.getRarity(), player, type));
+                    bonusMining.multiply(info.getReforge().getBonusMining(info.getRarity(), player, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     bonusMining.combine(info.getReforge().getBonusMining(info.getRarity(), player, type));
                 }
@@ -994,7 +955,7 @@ public class StatsListeners implements Listener {
             if (info.getEnchantmentsHolder() != null) {
                 for (EnchantmentObject enchant : info.getEnchantmentsHolder().getEnchants()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        bonusMining.multiply(enchant.getBonusMining(player, type));
+                        bonusMining.multiply(enchant.getBonusMining(player, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         bonusMining.combine(enchant.getBonusMining(player, type));
                     }
@@ -1003,7 +964,7 @@ public class StatsListeners implements Listener {
             if (info.getAbilitiesHolder() != null) {
                 for (AbilityObject ability : info.getAbilitiesHolder().getAbilities()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        bonusMining.multiply(ability.getBonusMining(player, type));
+                        bonusMining.multiply(ability.getBonusMining(player, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         bonusMining.combine(ability.getBonusMining(player, type));
                     }
@@ -1011,7 +972,7 @@ public class StatsListeners implements Listener {
             }
             if (info.getExtraInfo() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    bonusMining.multiply(info.getExtraInfo().getBonusMining(player, type));
+                    bonusMining.multiply(info.getExtraInfo().getBonusMining(player, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     bonusMining.combine(info.getExtraInfo().getBonusMining(player, type));
                 }
@@ -1022,14 +983,11 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static GatheringStats getBonusGathering(Player player, IncreaseType type) {
-        GatheringStats bonusGathering = GatheringStats.createZero();
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            bonusGathering = GatheringStats.createMult();
-        }
+        GatheringStats bonusGathering = SkillUtils.getHolder(player).getBonusGathering(type);
         for (ItemInfo info : getInfos(player)) {
             if (info.getReforge() != null && info.getRarity() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    bonusGathering.multiply(info.getReforge().getBonusGathering(info.getRarity(), player, type));
+                    bonusGathering.multiply(info.getReforge().getBonusGathering(info.getRarity(), player, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     bonusGathering.combine(info.getReforge().getBonusGathering(info.getRarity(), player, type));
                 }
@@ -1037,7 +995,7 @@ public class StatsListeners implements Listener {
             if (info.getEnchantmentsHolder() != null) {
                 for (EnchantmentObject enchant : info.getEnchantmentsHolder().getEnchants()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        bonusGathering.multiply(enchant.getBonusGathering(player, type));
+                        bonusGathering.multiply(enchant.getBonusGathering(player, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         bonusGathering.combine(enchant.getBonusGathering(player, type));
                     }
@@ -1046,7 +1004,7 @@ public class StatsListeners implements Listener {
             if (info.getAbilitiesHolder() != null) {
                 for (AbilityObject ability : info.getAbilitiesHolder().getAbilities()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        bonusGathering.multiply(ability.getBonusGathering(player, type));
+                        bonusGathering.multiply(ability.getBonusGathering(player, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         bonusGathering.combine(ability.getBonusGathering(player, type));
                     }
@@ -1054,7 +1012,7 @@ public class StatsListeners implements Listener {
             }
             if (info.getExtraInfo() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    bonusGathering.multiply(info.getExtraInfo().getBonusGathering(player, type));
+                    bonusGathering.multiply(info.getExtraInfo().getBonusGathering(player, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     bonusGathering.combine(info.getExtraInfo().getBonusGathering(player, type));
                 }
@@ -1065,14 +1023,11 @@ public class StatsListeners implements Listener {
 
     @NotNull
     public static LuckStats getBonusLuck(Player player, IncreaseType type) {
-        LuckStats bonusLuck = LuckStats.createZero();
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            bonusLuck = LuckStats.createMult();
-        }
+        LuckStats bonusLuck = SkillUtils.getHolder(player).getBonusLuck(type);
         for (ItemInfo info : getInfos(player)) {
             if (info.getReforge() != null && info.getRarity() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    bonusLuck.multiply(info.getReforge().getBonusLuck(info.getRarity(), player, type));
+                    bonusLuck.multiply(info.getReforge().getBonusLuck(info.getRarity(), player, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     bonusLuck.combine(info.getReforge().getBonusLuck(info.getRarity(), player, type));
                 }
@@ -1080,7 +1035,7 @@ public class StatsListeners implements Listener {
             if (info.getEnchantmentsHolder() != null) {
                 for (EnchantmentObject enchant : info.getEnchantmentsHolder().getEnchants()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        bonusLuck.multiply(enchant.getBonusLuck(player, type));
+                        bonusLuck.multiply(enchant.getBonusLuck(player, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         bonusLuck.combine(enchant.getBonusLuck(player, type));
                     }
@@ -1089,7 +1044,7 @@ public class StatsListeners implements Listener {
             if (info.getAbilitiesHolder() != null) {
                 for (AbilityObject ability : info.getAbilitiesHolder().getAbilities()) {
                     if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                        bonusLuck.multiply(ability.getBonusLuck(player, type));
+                        bonusLuck.multiply(ability.getBonusLuck(player, IncreaseType.MULTIPLICATIVE_PERCENT));
                     } else {
                         bonusLuck.combine(ability.getBonusLuck(player, type));
                     }
@@ -1097,7 +1052,7 @@ public class StatsListeners implements Listener {
             }
             if (info.getExtraInfo() != null) {
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                    bonusLuck.multiply(info.getExtraInfo().getBonusLuck(player, type));
+                    bonusLuck.multiply(info.getExtraInfo().getBonusLuck(player, IncreaseType.MULTIPLICATIVE_PERCENT));
                 } else {
                     bonusLuck.combine(info.getExtraInfo().getBonusLuck(player, type));
                 }

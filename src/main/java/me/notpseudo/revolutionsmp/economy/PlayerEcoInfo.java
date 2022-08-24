@@ -11,6 +11,12 @@ public class PlayerEcoInfo implements Serializable {
     private double purse;
     private double bank;
 
+    public PlayerEcoInfo() {
+        player = null;
+        purse = 0;
+        bank = 0;
+    }
+
     public PlayerEcoInfo(UUID player) {
         this.player = player;
         purse = 0;

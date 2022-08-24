@@ -1,6 +1,8 @@
 package me.notpseudo.revolutionsmp.menus;
 
+import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.collections.CollectionObject;
+import me.notpseudo.revolutionsmp.collections.CollectionType;
 import me.notpseudo.revolutionsmp.collections.CollectionUtils;
 import me.notpseudo.revolutionsmp.collections.CollectionsHolder;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
@@ -10,10 +12,15 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class CollectionTypeMenu extends Menu {
 
@@ -52,12 +59,12 @@ public class CollectionTypeMenu extends Menu {
         topMeta.lore(getTotalCollectionProgress(holder, category));
         top.setItemMeta(topMeta);
         inventory.setItem(4, makeMenuType(top, null));
-
-        ArrayList<CollectionObject> collections = holder.getCollectionsFromCategory(category);
+        List<CollectionObject> collections = holder.getCollectionsFromCategory(category);
+        Collections.sort(collections);
         for (int i = 0; i < 28; i++) {
-            int row = 1 + i / 7, rowIndex = i % 7 + 1;
+            int row = (i / 7) + 1, rowIndex = i % 7 + 1;
             if (i >= collections.size()) {
-                inventory.setItem(row * 9 + rowIndex, null);
+                inventory.setItem(row * 9 + rowIndex, makeMenuGlass(new ItemStack(Material.GRAY_STAINED_GLASS_PANE)));
             } else {
                 CollectionObject collection = collections.get(i);
                 ItemStack item = new ItemStack(Material.GRAY_DYE);
@@ -83,5 +90,4 @@ public class CollectionTypeMenu extends Menu {
         addBackType(MenuType.COLLECTIONS);
         addCloseButton();
     }
-
 }

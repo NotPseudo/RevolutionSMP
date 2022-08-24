@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -15,13 +16,18 @@ public class CollectionsHolder implements Serializable {
     private final UUID player;
     private ArrayList<CollectionObject> collections;
 
+    public CollectionsHolder() {
+        player = null;
+        collections = new ArrayList<>();
+        addAllTypes();
+        // reorder();
+    }
+
     public CollectionsHolder(UUID player) {
         this.player = player;
         collections = new ArrayList<>();
-        for (CollectionType type : CollectionType.values()) {
-            collections.add(new CollectionObject(this, type));
-        }
-        reorder();
+        addAllTypes();
+        // reorder();
         CollectionUtils.updatePlayerCollections(Bukkit.getPlayer(player), this);
     }
 
@@ -43,24 +49,25 @@ public class CollectionsHolder implements Serializable {
     }
 
     public void addCollection(CollectionType type) {
-        if (!contains(type)) {
-            collections.add(new CollectionObject(this, type));
-            reorder();
-            CollectionUtils.updatePlayerCollections(Bukkit.getPlayer(player), this);
-        }
+        getCollection(type);
+        CollectionUtils.updatePlayerCollections(Bukkit.getPlayer(player), this);
     }
 
-    public boolean contains(CollectionType type) {
-        for (CollectionObject collection : collections) {
-            if (collection.getType() == type) {
-                return true;
-            }
+    public void addAllTypes() {
+        for (CollectionType type : CollectionType.values()) {
+            getCollection(type);
         }
-        return false;
+        CollectionUtils.updatePlayerCollections(Bukkit.getPlayer(player), this);
     }
 
     public ArrayList<CollectionObject> getCollectionsFromCategory(SkillType category) {
-        return new ArrayList<>(collections.stream().filter(c -> c.getType().getCategory() == category).toList());
+        ArrayList<CollectionObject> matching = new ArrayList<>();
+        for (CollectionObject collection : collections) {
+            if (collection.getCategory() == category) {
+                matching.add(collection);
+            }
+        }
+        return matching;
     }
 
     public void reorder() {
@@ -99,9 +106,9 @@ public class CollectionsHolder implements Serializable {
         if (category == null) {
             total = CollectionType.values().length;
         } else {
-            total = getCollectionsFromCategory(category).size();
+            total = Arrays.stream(CollectionType.values()).filter(c -> c.getCategory() == category).toList().size();
         }
-        return getCollectionsUnlocked(category) / total;
+        return (double) getCollectionsUnlocked(category) / total;
     }
 
     public int getCollectionsMaxed(@Nullable SkillType category) {
@@ -125,9 +132,9 @@ public class CollectionsHolder implements Serializable {
         if (category == null) {
             total = CollectionType.values().length;
         } else {
-            total = getCollectionsFromCategory(category).size();
+            total = Arrays.stream(CollectionType.values()).filter(c -> c.getCategory() == category).toList().size();
         }
-        return getCollectionsMaxed(category) / total;
+        return (double) getCollectionsMaxed(category) / total;
     }
 
 }

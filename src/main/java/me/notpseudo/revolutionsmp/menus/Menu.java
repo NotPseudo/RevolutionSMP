@@ -201,21 +201,8 @@ public abstract class Menu implements InventoryHolder {
         return inventory;
     }
 
-    public String getProgressString(double percent) {
-        int green = (int) percent * 20;
-        StringBuilder bar = new StringBuilder();
-        for (int i = 0; i < 20; i++) {
-            if (i < green) {
-                bar.append(ChatColor.GREEN + "-");
-            } else {
-                bar.append(ChatColor.WHITE + "-");
-            }
-        }
-        return bar.toString();
-    }
-
     public String getFilledProgressString(double percent) {
-        int green = (int) percent * 20;
+        int green = (int) (percent * 20);
         StringBuilder bar = new StringBuilder();
         for (int i = 0; i < green; i++) {
             bar.append("-");
@@ -224,7 +211,7 @@ public abstract class Menu implements InventoryHolder {
     }
 
     public String getEmptyProgressString(double percent) {
-        int green = (int) percent * 20;
+        int green = (int) (percent * 20);
         StringBuilder bar = new StringBuilder();
         for (int i = green; i < 20; i++) {
             bar.append("-");
@@ -270,7 +257,7 @@ public abstract class Menu implements InventoryHolder {
 
     public List<Component> getCollectionProgressList(CollectionObject collection) {
         ArrayList<Component> lore = new ArrayList<>();
-        lore.add(Component.text("Progress to Level " + collection.getLevel() + 1 + ": ", NamedTextColor.GRAY).append(Component.text(Math.round(collection.getPercent() * 100) + "%", NamedTextColor.YELLOW)).decoration(TextDecoration.ITALIC, false));
+        lore.add(Component.text("Progress to Level " + (collection.getLevel() + 1) + ": ", NamedTextColor.GRAY).append(Component.text(Math.round(collection.getPercent() * 100) + "%", NamedTextColor.YELLOW)).decoration(TextDecoration.ITALIC, false));
         lore.add(Component.text(getFilledProgressString(collection.getPercent()), NamedTextColor.GREEN).append(Component.text(getEmptyProgressString(collection.getPercent()), NamedTextColor.WHITE)).append(Component.text(" " + collection.getCurrentCollected(), NamedTextColor.YELLOW)).append(Component.text("/", NamedTextColor.GOLD)).append(Component.text(collection.getItemsForNextLevel(), NamedTextColor.YELLOW)).decoration(TextDecoration.ITALIC, false));
         lore.add(Component.empty());
         lore.add(Component.text("Level " + collection.getLevel() + " Rewards: ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));

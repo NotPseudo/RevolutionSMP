@@ -38,6 +38,11 @@ public class EcoUtils implements Listener {
             info = new PlayerEcoInfo(player.getUniqueId());
             updatePlayerEco(player, info);
         }
+        if (info.getPlayer() == null) {
+            info = new PlayerEcoInfo(player.getUniqueId());
+            updatePlayerEco(player, info);
+            player.sendMessage(Component.text("There was a slight issue while processing your Bank and Purse. If you notice any issues, please contact a staff member", NamedTextColor.YELLOW));
+        }
         return info;
     }
 
