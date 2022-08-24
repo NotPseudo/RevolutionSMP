@@ -60,6 +60,10 @@ public class PlacedLocationList implements Serializable {
         return null;
     }
 
+    public boolean isPlayerPlaced(Location location) {
+        return getPlacedFromLocation(location) != null;
+    }
+
     public CustomOreLocation getCustomOreFromLocation(Location location) {
         for (CustomOreLocation customOre : customOreLocations) {
             if (customOre.equals(location)) {
@@ -69,10 +73,13 @@ public class PlacedLocationList implements Serializable {
         return null;
     }
 
+    public boolean isCustomOre(Location location) {
+        return getCustomOreFromLocation(location) != null;
+    }
+
     public boolean addPlacedLocation(Location location) {
         if (!containsPlaced(location)) {
             placedLocations.add(new PlacedLocation(location));
-
             location.getWorld().getPersistentDataContainer().set(HarvestingListeners.getWorldPlacedKey(), new PlacedLocationListDataType(), this);
             return true;
         }
@@ -95,6 +102,13 @@ public class PlacedLocationList implements Serializable {
                 placedLocations.remove(placedLocation);
                 locationsWithDrops.add(new PlacedLocation(location));
                 location.getWorld().getPersistentDataContainer().set(HarvestingListeners.getWorldPlacedKey(), new PlacedLocationListDataType(), this);
+                BukkitRunnable remove = new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        HarvestingListeners.getPlacedLocationList(location.getBlock()).removeDropLocation(location);
+                    }
+                };
+                remove.runTaskLater(RevolutionSMP.getPlugin(), 60);
                 return true;
             }
         }

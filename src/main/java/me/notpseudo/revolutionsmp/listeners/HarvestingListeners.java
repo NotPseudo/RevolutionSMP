@@ -201,19 +201,21 @@ public class HarvestingListeners implements Listener {
 
     @EventHandler
     public void onOreBreak(BlockBreakEvent event) {
-        PlacedLocationList locations = getPlacedLocationList(event.getBlock());
-        CustomOreLocation customOre = locations.getCustomOreFromLocation(event.getBlock().getLocation());
-        boolean isCustom = removeOreLocation(event), playerPlaced = removePlacedLocation(event);
-        CustomMiningUtils.removeBreakingBlock(event.getBlock().getLocation());
-        Player player = event.getPlayer();
         Block block = event.getBlock();
+        PlacedLocationList locations = getPlacedLocationList(block);
+        CustomOreLocation customOre = locations.getCustomOreFromLocation(block.getLocation());
+        boolean isCustom = locations.isCustomOre(block.getLocation()), playerPlaced = removePlacedLocation(event);
+        CustomMiningUtils.removeBreakingBlock(block.getLocation());
+        Player player = event.getPlayer();
         if (player.getGameMode() == GameMode.CREATIVE) {
+            removeOreLocation(event);
             return;
         }
         int breakingPower = 0;
         ItemInfo mainHand = ItemEditor.getMainHandInfo(player);
         if (mainHand != null) {
             if (mainHand.getEnchantmentsHolder() != null && mainHand.getEnchantmentsHolder().containsEnchant(EnchantmentType.SILK_TOUCH)) {
+                removeOreLocation(event);
                 return;
             }
             if (mainHand.getMiningStats() != null) {
@@ -249,8 +251,10 @@ public class HarvestingListeners implements Listener {
                     } else {
                         event.setDropItems(true);
                     }
+                    removeOreLocation(event);
                     return;
                 }
+                removeOreLocation(event);
                 return;
             }
             exp = getXp(block.getType());
@@ -265,6 +269,7 @@ public class HarvestingListeners implements Listener {
         }
         if (breakingPower < breakingPowerNeeded) {
             event.setDropItems(false);
+            removeOreLocation(event);
             return;
         }
         event.setDropItems(false);
@@ -283,6 +288,7 @@ public class HarvestingListeners implements Listener {
         if (!playerPlaced) {
             SkillUtils.addBreakingXpToPlayer(player, SkillType.MINING, block, exp);
         }
+        removeOreLocation(event);
         if (replaceBlock != null) {
             Material finalReplaceBlock = replaceBlock.get((int) (Math.random() * replaceBlock.size()));
             if (breakingPower >= getBreakingPower(finalReplaceBlock)) {

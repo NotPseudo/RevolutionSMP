@@ -2,7 +2,6 @@ package me.notpseudo.revolutionsmp.specialiteminfo;
 
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
-import me.notpseudo.revolutionsmp.skills.ExpDropObject;
 import me.notpseudo.revolutionsmp.skills.SkillType;
 import net.kyori.adventure.text.Component;
 import org.bukkit.block.Block;
@@ -143,18 +142,12 @@ public class SpecialItemInfo implements Serializable {
         return LuckStats.createZero();
     }
 
-    public ExpDropObject getCombatEventExpBoost(SkillType type, IncreaseType inc, LivingEntity target) {
-        if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new ExpDropObject(type, 1);
-        }
-        return new ExpDropObject(type, 0);
+    public WisdomStats getCombatWisdom(LivingEntity target) {
+        return WisdomStats.createZero();
     }
 
-    public ExpDropObject getBreakEventExpBoost(SkillType type, IncreaseType inc, Block block) {
-        if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new ExpDropObject(type, 1);
-        }
-        return new ExpDropObject(type, 0);
+    public WisdomStats getBreakingWisdom(Block block) {
+        return WisdomStats.createZero();
     }
 
     public void update(UUID uuid) {

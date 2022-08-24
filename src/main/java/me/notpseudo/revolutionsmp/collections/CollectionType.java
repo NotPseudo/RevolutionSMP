@@ -773,7 +773,7 @@ public enum CollectionType {
         message.add(Component.empty());
         message.add(Component.text(" REWARDS", NamedTextColor.GREEN, TextDecoration.BOLD));
         for (ItemID item : getLevelRecipeRewards(level)) {
-            message.add(Component.text("  " + item.getDefaultName(), item.getDefaultRarity().getRarityColor()).append(Component.text(" Recipe", NamedTextColor.GRAY)));
+            message.add(Component.text("  " + item.getName(), item.getDefaultRarity().getRarityColor()).append(Component.text(" Recipe", NamedTextColor.GRAY)));
         }
         message.add(Component.text("------------------------------", NamedTextColor.YELLOW, TextDecoration.BOLD));
         return message;

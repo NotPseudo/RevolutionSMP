@@ -175,11 +175,8 @@ public class AbilitiesUtil {
         if(getNumPassableBlocksAbove(location, 10) < 5) {
             return;
         }
-        PlayerStats playerStats = player.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
-        if(playerStats == null) {
-            playerStats = new PlayerStats();
-        }
-        playerStats.setManaRegenRate(playerStats.getManaRegenRate() * 0.1);
+        PlayerStats playerStats = StatsListeners.getPlayerStats(player);
+        playerStats.setStatValue(StatType.MANA_REGEN, playerStats.getStatValue(StatType.MANA_REGEN) * 0.1);
         Material[] materials = new Material[]{Material.PURPLE_CONCRETE, Material.PURPLE_STAINED_GLASS, Material.OBSIDIAN};
         Location finalLocation = location;
         Particles.gravityStormParticles(location, 8, materials, 16, 3);
@@ -202,8 +199,8 @@ public class AbilitiesUtil {
         BukkitRunnable redoMana = new BukkitRunnable() {
             @Override
             public void run() {
-                PlayerStats playerStats = player.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
-                playerStats.setManaRegenRate(playerStats.getManaRegenRate() * 10);
+                PlayerStats playerStats = StatsListeners.getPlayerStats(player);
+                playerStats.setStatValue(StatType.MANA_REGEN, playerStats.getStatValue(StatType.MANA_REGEN) * 10);
 
             }
         };
@@ -235,10 +232,7 @@ public class AbilitiesUtil {
     }
 
     public static boolean hasEnoughMana(Player player, AbilityObject ability) {
-        PlayerStats playerStats = player.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
-        if (playerStats == null) {
-            playerStats = new PlayerStats();
-        }
+        PlayerStats playerStats = StatsListeners.getPlayerStats(player);
         return playerStats.getMana() - ability.getManaCost() >= 0;
     }
 

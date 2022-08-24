@@ -21,7 +21,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.InvalidClassException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -86,18 +85,14 @@ public class SkillUtils implements Listener {
     }
 
     public static void addCombatXpToPlayer(Player player, SkillType type, LivingEntity target, double exp) {
-        ExpDropObject add = StatsListeners.getCombatXpBoost(player, type, target, IncreaseType.INCREASE),
-                addPercent = StatsListeners.getCombatXpBoost(player, type, target, IncreaseType.ADDITIVE_PERCENT),
-                mult = StatsListeners.getCombatXpBoost(player, type, target, IncreaseType.MULTIPLICATIVE_PERCENT);
-        double finalExp = (exp + add.getValue()) * (1 + (addPercent.getValue() / 100)) * mult.getValue();
+        double boost = StatsListeners.getCombatWisdomStat(type, player, target);
+        double finalExp = exp * (1 + (boost / 100));
         getHolder(player).addExp(new ExpDropObject(type, finalExp));
     }
 
     public static void addBreakingXpToPlayer(Player player, SkillType type, Block block, double exp) {
-        ExpDropObject add = StatsListeners.getBreakXpBoost(player, type, block, IncreaseType.INCREASE),
-                addPercent = StatsListeners.getBreakXpBoost(player, type, block, IncreaseType.ADDITIVE_PERCENT),
-                mult = StatsListeners.getBreakXpBoost(player, type, block, IncreaseType.MULTIPLICATIVE_PERCENT);
-        double finalExp = (exp + add.getValue()) * (1 + (addPercent.getValue() / 100)) * mult.getValue();
+        double boost = StatsListeners.getBreakWisdomStat(type, player, block);
+        double finalExp = exp * (1 + (boost / 100));
         getHolder(player).addExp(new ExpDropObject(type, finalExp));
     }
 

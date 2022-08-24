@@ -17,21 +17,15 @@ public class WisdomStats extends StatHolder implements Serializable {
 
     @Override
     public void addStatObject(StatObject newStat) {
-        if (containsType(newStat.getType())) {
-            return;
-        }
-        if (newStat.getType().getStatCategory() != StatCategory.WISDOM) {
-            return;
-        }
-        super.getStats().add(newStat);
-    }
-
-    public static WisdomStats createMult() {
-        return new WisdomStats(1, 1, 1, 1, 1, 1, 1);
+        super.addStatObject(newStat);
     }
 
     public static WisdomStats createZero() {
         return new WisdomStats(0, 0, 0, 0, 0, 0, 0);
+    }
+
+    public static WisdomStats createMult() {
+        return new WisdomStats(1, 1, 1, 1, 1 ,1, 1);
     }
 
 }

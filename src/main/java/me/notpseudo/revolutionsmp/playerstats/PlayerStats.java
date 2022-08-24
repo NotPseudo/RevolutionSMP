@@ -8,8 +8,6 @@ import java.io.Serializable;
 public class PlayerStats extends BaseEntityStats implements Serializable {
 
     private double mana;
-    private double healthRegenRate;
-    private double manaRegenRate;
     private double absorption;
     private AbilityStats abilityStats;
     private FishingStats fishingStats;
@@ -22,12 +20,14 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
     private GatheringStats gatheringStatsMult;
     private LuckStats luckStatsMult;
 
+    private WisdomStats wisdomStats;
+
+    private RegenStats regenStats;
+
     public PlayerStats() {
         super(100, 0, 100, 0, 30, 50, 0, 0);
         abilityStats = new AbilityStats(0, 100);
         mana = 100;
-        healthRegenRate = 1;
-        manaRegenRate = 1;
         absorption = 0;
         fishingStats = new FishingStats(20, 0);
         miningStats = new MiningStats(0, 0, 0);
@@ -38,6 +38,8 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
         miningStatsMult = MiningStats.createMult();
         gatheringStatsMult = GatheringStats.createMult();
         luckStatsMult = LuckStats.createMult();
+        wisdomStats = WisdomStats.createZero();
+        regenStats = new RegenStats(100, 100, 100, 100);
     }
 
     public double getMana() {
@@ -46,22 +48,6 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
 
     public void setMana(double mana) {
         this.mana = mana;
-    }
-
-    public double getHealthRegenRate() {
-        return healthRegenRate;
-    }
-
-    public void setHealthRegenRate(double healthRegenRate) {
-        this.healthRegenRate = healthRegenRate;
-    }
-
-    public double getManaRegenRate() {
-        return manaRegenRate;
-    }
-
-    public void setManaRegenRate(double manaRegenRate) {
-        this.manaRegenRate = manaRegenRate;
     }
 
     public double getAbsorption() {
@@ -81,6 +67,8 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
             case MINING -> miningStats.getStatValue(type);
             case GATHERING -> gatheringStats.getStatValue(type);
             case LUCK -> luckStats.getStatValue(type);
+            case WISDOM -> wisdomStats.getStatValue(type);
+            case REGEN -> regenStats.getStatValue(type);
         };
     }
 
@@ -93,6 +81,8 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
             case MINING -> miningStats.setStatValue(type, value);
             case GATHERING -> gatheringStats.setStatValue(type, value);
             case LUCK -> luckStats.setStatValue(type, value);
+            case WISDOM -> wisdomStats.setStatValue(type, value);
+            case REGEN -> regenStats.setStatValue(type, value);
         }
     }
 
@@ -105,6 +95,7 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
             case MINING -> miningStatsMult.getStatValue(type);
             case GATHERING -> gatheringStatsMult.getStatValue(type);
             case LUCK -> luckStatsMult.getStatValue(type);
+            default -> 1;
         };
     }
 
@@ -117,6 +108,7 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
             case MINING -> miningStatsMult.setStatValue(type, value);
             case GATHERING -> gatheringStatsMult.setStatValue(type, value);
             case LUCK -> luckStatsMult.setStatValue(type, value);
+            case WISDOM -> wisdomStats.setStatValue(type, value);
         }
     }
 

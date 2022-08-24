@@ -2,10 +2,7 @@ package me.notpseudo.revolutionsmp.specialiteminfo;
 
 import me.notpseudo.revolutionsmp.collections.*;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
-import me.notpseudo.revolutionsmp.itemstats.GatheringStats;
-import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
-import me.notpseudo.revolutionsmp.itemstats.StatType;
-import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
+import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.skills.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -162,17 +159,11 @@ public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
     }
 
     @Override
-    public ExpDropObject getBreakEventExpBoost(SkillType type, IncreaseType inc, Block block) {
-        if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new ExpDropObject(type, 1);
-        }
-        if (type != SkillType.FARMING) {
-            new ExpDropObject(type, 0);
-        }
+    public WisdomStats getBreakingWisdom(Block block) {
         if (!(vanillaMaterials.contains(block.getType()))) {
-            return new ExpDropObject(type, 0);
+            return WisdomStats.createZero();
         }
-        return new ExpDropObject(SkillType.FARMING, getXpBoost());
+        return new WisdomStats(0, 0, 0, getXpBoost(), 0, 0, 0);
     }
 
     @Override

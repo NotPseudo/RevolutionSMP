@@ -9,13 +9,19 @@ import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.mining.GemstoneSlotType;
 import me.notpseudo.revolutionsmp.mining.GemstoneType;
 import me.notpseudo.revolutionsmp.mining.GemstoneUtils;
+import me.notpseudo.revolutionsmp.skills.ExpDropObject;
+import me.notpseudo.revolutionsmp.skills.SkillType;
 import me.notpseudo.revolutionsmp.specialiteminfo.FarmingToolInfo;
 import me.notpseudo.revolutionsmp.specialiteminfo.GemstoneObject;
 import me.notpseudo.revolutionsmp.specialiteminfo.SpecialItemInfo;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -3432,7 +3438,7 @@ public enum ItemID {
     },
     ASPECT_OF_THE_END {
         @Override
-        public String getDefaultName() {
+        public String getName() {
             return "Aspect of the End";
         }
 
@@ -3510,7 +3516,7 @@ public enum ItemID {
     },
     NODAMAGE {
         @Override
-        public String getDefaultName() {
+        public String getName() {
             return "Sticky Stick";
         }
 
@@ -3536,7 +3542,7 @@ public enum ItemID {
     },
     EVERYTHING {
         @Override
-        public String getDefaultName() {
+        public String getName() {
             return "All Stats Drill";
         }
 
@@ -3693,7 +3699,7 @@ public enum ItemID {
     },
     NECRONS_HANDLE {
         @Override
-        public String getDefaultName() {
+        public String getName() {
             return "Necron's Handle";
         }
 
@@ -3715,7 +3721,7 @@ public enum ItemID {
     },
     NECRONS_LADDER {
         @Override
-        public String getDefaultName() {
+        public String getName() {
             return "Necron's Ladder";
         }
 
@@ -3791,7 +3797,7 @@ public enum ItemID {
     };
 
     // Gets default stats for specific item
-    public String getDefaultName() {
+    public String getName() {
         return ItemEditor.getStringFromEnum(this);
     }
 
@@ -3801,34 +3807,6 @@ public enum ItemID {
 
     public Rarity getDefaultRarity() {
         return Rarity.COMMON;
-    }
-
-    public WeaponStats getDefaultWeaponStats() {
-        return new WeaponStats(0, 0, 0, 0, 0, 0);
-    }
-
-    public ArmorStats getDefaultArmorStats() {
-        return new ArmorStats(0, 0, 0, 0);
-    }
-
-    public AbilityStats getDefaultAbilityStats() {
-        return new AbilityStats(0, 0);
-    }
-
-    public FishingStats getDefaultFishingStats() {
-        return new FishingStats(0, 0);
-    }
-
-    public MiningStats getDefaultMiningStats() {
-        return new MiningStats(0, 0, 0);
-    }
-
-    public GatheringStats getDefaultGatheringStats() {
-        return new GatheringStats(0, 0);
-    }
-
-    public LuckStats getDefaultLuckStats() {
-        return new LuckStats(0, 0);
     }
 
     public GemstoneSlotType[] getGemstoneSlots() {
@@ -3880,6 +3858,165 @@ public enum ItemID {
 
     public CustomRecipe getRecipe() {
         return null;
+    }
+
+    /*
+    Default stats that apply on the item
+     */
+
+    public WeaponStats getDefaultWeaponStats() {
+        return new WeaponStats(0, 0, 0, 0, 0, 0);
+    }
+
+    public ArmorStats getDefaultArmorStats() {
+        return new ArmorStats(0, 0, 0, 0);
+    }
+
+    public AbilityStats getDefaultAbilityStats() {
+        return new AbilityStats(0, 0);
+    }
+
+    public FishingStats getDefaultFishingStats() {
+        return new FishingStats(0, 0);
+    }
+
+    public MiningStats getDefaultMiningStats() {
+        return new MiningStats(0, 0, 0);
+    }
+
+    public GatheringStats getDefaultGatheringStats() {
+        return new GatheringStats(0, 0);
+    }
+
+    public LuckStats getDefaultLuckStats() {
+        return new LuckStats(0, 0);
+    }
+
+
+    /*
+    Boosts that don't apply on the default item but buff players
+     */
+
+    @NotNull
+    public WeaponStats getEventWeapon(Player damager, LivingEntity target, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return WeaponStats.createMult();
+        }
+        return WeaponStats.createZero();
+    }
+
+    @NotNull
+    public ArmorStats getEventArmor(LivingEntity damager, Player target, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return ArmorStats.createMult();
+        }
+        return ArmorStats.createZero();
+    }
+
+    @NotNull
+    public AbilityStats getEventAbility(Player damager, LivingEntity target, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return AbilityStats.createMult();
+        }
+        return AbilityStats.createZero();
+    }
+
+    @NotNull
+    public FishingStats getEventFishing(Player fisher, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return FishingStats.createMult();
+        }
+        return FishingStats.createZero();
+    }
+
+    @NotNull
+    public MiningStats getEventMining(Player miner, Block block, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return MiningStats.createMult();
+        }
+        return MiningStats.createZero();
+    }
+
+    @NotNull
+    public GatheringStats getEventGathering(Player harvester, Block block, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return GatheringStats.createMult();
+        }
+        return GatheringStats.createZero();
+    }
+
+    @NotNull
+    public LuckStats getEventLuck(Player attacker, LivingEntity target, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return LuckStats.createMult();
+        }
+        return LuckStats.createZero();
+    }
+
+    @NotNull
+    public WeaponStats getBonusWeapon(Player player, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return WeaponStats.createMult();
+        }
+        return WeaponStats.createZero();
+    }
+
+    @NotNull
+    public ArmorStats getBonusArmor(Player player, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return ArmorStats.createMult();
+        }
+        return ArmorStats.createZero();
+    }
+
+    @NotNull
+    public AbilityStats getBonusAbility(Player player, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return AbilityStats.createMult();
+        }
+        return AbilityStats.createZero();
+    }
+
+    @NotNull
+    public FishingStats getBonusFishing(Player fisher, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return FishingStats.createMult();
+        }
+        return FishingStats.createZero();
+    }
+
+    @NotNull
+    public MiningStats getBonusMining(Player miner, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return MiningStats.createMult();
+        }
+        return MiningStats.createZero();
+    }
+
+    @NotNull
+    public GatheringStats getBonusGathering(Player harvester, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return GatheringStats.createMult();
+        }
+        return GatheringStats.createZero();
+    }
+
+    @NotNull
+    public LuckStats getBonusLuck(Player attacker, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return LuckStats.createMult();
+        }
+        return LuckStats.createZero();
+    }
+
+    @NotNull
+    public WisdomStats getCombatWisdom(Player player, LivingEntity target) {
+        return WisdomStats.createZero();
+    }
+
+    @NotNull
+    public WisdomStats getBreakingWisdom(Player player, Block block) {
+        return WisdomStats.createZero();
     }
 
 }

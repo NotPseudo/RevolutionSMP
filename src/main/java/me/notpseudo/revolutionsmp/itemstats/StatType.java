@@ -438,7 +438,7 @@ public enum StatType {
 
         @Override
         public StatCategory getStatCategory() {
-            return StatCategory.BOOSTER;
+            return StatCategory.REGEN;
         }
     },
     VITALITY {
@@ -454,7 +454,7 @@ public enum StatType {
 
         @Override
         public StatCategory getStatCategory() {
-            return StatCategory.BOOSTER;
+            return StatCategory.REGEN;
         }
     },
     MENDING {
@@ -470,10 +470,10 @@ public enum StatType {
 
         @Override
         public StatCategory getStatCategory() {
-            return StatCategory.BOOSTER;
+            return StatCategory.REGEN;
         }
     },
-    MAMA_REGEN {
+    MANA_REGEN {
         @Override
         public String getSymbol() {
             return "✒";
@@ -486,34 +486,7 @@ public enum StatType {
 
         @Override
         public StatCategory getStatCategory() {
-            return StatCategory.BOOSTER;
-        }
-    },
-    FORTITUDE {
-        @Override
-        public String getSymbol() {
-            return "⛰";
-        }
-
-        @Override
-        public NamedTextColor getColor() {
-            return NamedTextColor.GREEN;
-        }
-
-        @Override
-        public StatCategory getStatCategory() {
-            return StatCategory.BOOSTER;
-        }
-    },
-    ROBUST {
-        @Override
-        public String getSymbol() {
-            return "✊";
-        }
-
-        @Override
-        public StatCategory getStatCategory() {
-            return StatCategory.BOOSTER;
+            return StatCategory.REGEN;
         }
     }
     ;

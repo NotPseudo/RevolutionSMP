@@ -1,6 +1,7 @@
 package me.notpseudo.revolutionsmp.skills;
 
 import me.notpseudo.revolutionsmp.items.ItemEditor;
+import me.notpseudo.revolutionsmp.itemstats.StatType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -29,6 +30,14 @@ public enum SkillType {
 
     public int getMaxLevel() {
         return 50;
+    }
+
+    public StatType getExpBooster() {
+        try {
+            return StatType.valueOf(this + "_WISDOM");
+        } catch (IllegalArgumentException exception) {
+            return null;
+        }
     }
 
     public List<Component> getLevelUpMessage(int level) {

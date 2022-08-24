@@ -25,7 +25,7 @@ public class GiveCommand implements CommandExecutor {
                     if (args[0].equalsIgnoreCase("all")) {
                         for(ItemID id : ItemID.values()) {
                             if(player.getInventory().addItem(id.getItem()).size() > 0) {
-                                player.sendMessage(Component.text(id.getDefaultName(), id.getDefaultRarity().getRarityColor()).append(Component.text(" could not be added to the inventory!", NamedTextColor.RED)));
+                                player.sendMessage(Component.text(id.getName(), id.getDefaultRarity().getRarityColor()).append(Component.text(" could not be added to the inventory!", NamedTextColor.RED)));
                             }
                         }
                         return true;
