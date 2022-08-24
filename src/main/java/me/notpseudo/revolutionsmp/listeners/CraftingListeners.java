@@ -52,7 +52,9 @@ public class CraftingListeners implements Listener {
             result.setItemMeta(meta);
             info = ItemEditor.getInfo(result);
         }
-        Preconditions.checkArgument(info != null);
+        if (info == null) {
+            return;
+        }
         double xp = switch (info.getRarity()) {
             default -> 10;
             case UNCOMMON -> 50;

@@ -444,6 +444,10 @@ public class HealthListeners implements Listener {
                     }
                 }
             }
+            MobInfo mobInfo = MobListeners.getMobInfo(target);
+            if (mobInfo != null) {
+                mobInfo.addAttacker(player, finalDamage);
+            }
         }
         if (target instanceof Player player) {
             remainDamage = calculateDamageAfterAbsorption(finalDamage, player);
@@ -466,6 +470,12 @@ public class HealthListeners implements Listener {
      */
     private void ferocityAttack(LivingEntity damager, LivingEntity target, double damage, double ferocity, boolean critical) {
         int hits = HarvestingListeners.getAddedTimes(ferocity);
+        if (damager instanceof Player player) {
+            MobInfo mobInfo = MobListeners.getMobInfo(target);
+            if (mobInfo != null) {
+                mobInfo.addAttacker(player, damage);
+            }
+        }
         final int[] count = {0};
         BukkitRunnable feroHit = new BukkitRunnable() {
             @Override
@@ -582,6 +592,10 @@ public class HealthListeners implements Listener {
         if (target instanceof Mob mob && mob.getTarget() == null) {
             mob.setTarget(player);
         }
+        MobInfo mobInfo = MobListeners.getMobInfo(target);
+        if (mobInfo != null) {
+            mobInfo.addAttacker(player, damage);
+        }
         Bukkit.getServer().getPluginManager().callEvent(new EntityDamageEvent(target, EntityDamageEvent.DamageCause.MAGIC, damage));
     }
 
@@ -590,6 +604,10 @@ public class HealthListeners implements Listener {
     }
 
     public static void playerTrueDamageEntity(Player attacker, LivingEntity target, double amount) {
+        MobInfo mobInfo = MobListeners.getMobInfo(target);
+        if (mobInfo != null) {
+            mobInfo.addAttacker(attacker, amount);
+        }
         Bukkit.getServer().getPluginManager().callEvent(new EntityDamageEvent(target, EntityDamageEvent.DamageCause.SUICIDE, amount));
     }
 

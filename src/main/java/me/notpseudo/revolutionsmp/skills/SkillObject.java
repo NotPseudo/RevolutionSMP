@@ -1,6 +1,8 @@
 package me.notpseudo.revolutionsmp.skills;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.io.Serializable;
@@ -22,6 +24,12 @@ public class SkillObject implements Serializable {
         xpForNextLevel = SkillUtils.getXpForNextLevel(TYPE, 1);
         level = 0;
         recalculate();
+    }
+
+    public SkillObject(SkillType type, int level) {
+        TYPE = type;
+        this.level = level;
+        holder = null;
     }
 
     public SkillType getType() {
@@ -88,7 +96,10 @@ public class SkillObject implements Serializable {
     }
 
     private void sendLevelUpMessage(Player player) {
-
+        player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+        for (Component line : TYPE.getLevelUpMessage((int) level)) {
+            player.sendMessage(line);
+        }
     }
 
 }

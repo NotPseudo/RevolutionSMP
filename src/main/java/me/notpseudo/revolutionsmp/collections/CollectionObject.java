@@ -1,9 +1,13 @@
 package me.notpseudo.revolutionsmp.collections;
 
+import me.notpseudo.revolutionsmp.customcrafting.CustomCraftingUtils;
+import me.notpseudo.revolutionsmp.customcrafting.PlayerRecipeInfo;
 import me.notpseudo.revolutionsmp.items.ItemID;
 import me.notpseudo.revolutionsmp.skills.SkillType;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -113,7 +117,17 @@ public class CollectionObject implements Serializable, Comparable<CollectionObje
     }
 
     private void sendLevelUpMessage(Player player) {
-
+        player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+        for (Component line : TYPE.getLevelUpMessage(level)) {
+            player.sendMessage(line);
+        }
+        PlayerRecipeInfo info = CustomCraftingUtils.getRecipeInfo(player);
+        for (ItemID item : TYPE.getLevelRecipeRewards(level)) {
+            if (item.getRecipe() != null) {
+                info.unlockNewRecipe(item.getRecipe());
+            }
+        }
+        CustomCraftingUtils.updateRecipeInfo(player, info);
     }
 
     @Override

@@ -1,7 +1,11 @@
 package me.notpseudo.revolutionsmp.collections;
 
+import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.items.ItemID;
 import me.notpseudo.revolutionsmp.skills.SkillType;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
@@ -741,6 +745,9 @@ public enum CollectionType {
         }
     };
 
+    public String getName() {
+        return ItemEditor.getStringFromEnum(this);
+    }
     public SkillType getCategory() {
         return null;
     }
@@ -751,6 +758,25 @@ public enum CollectionType {
 
     public List<ItemID> getCustomMaterials() {
         return new ArrayList<>(0);
+    }
+
+    public List<ItemID> getLevelRecipeRewards(int level) {
+        return new ArrayList<>(0);
+    }
+
+    public List<Component> getLevelUpMessage(int level) {
+        ArrayList<Component> message = new ArrayList<>();
+        message.add(Component.text("------------------------------", NamedTextColor.YELLOW, TextDecoration.BOLD));
+        message.add(Component.text(" COLLECTION LEVEL UP", NamedTextColor.GOLD, TextDecoration.BOLD));
+        message.add(Component.empty());
+        message.add(Component.text(" " + getName(), NamedTextColor.YELLOW).append(Component.text(" " + (level - 1) + "➡", NamedTextColor.DARK_GRAY)).append(Component.text(level, NamedTextColor.YELLOW)));
+        message.add(Component.empty());
+        message.add(Component.text(" REWARDS", NamedTextColor.GREEN, TextDecoration.BOLD));
+        for (ItemID item : getLevelRecipeRewards(level)) {
+            message.add(Component.text("  " + item.getDefaultName(), item.getDefaultRarity().getRarityColor()).append(Component.text(" Recipe", NamedTextColor.GRAY)));
+        }
+        message.add(Component.text("------------------------------", NamedTextColor.YELLOW, TextDecoration.BOLD));
+        return message;
     }
 
     public int getMaxLevel() {

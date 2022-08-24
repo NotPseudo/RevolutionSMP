@@ -39,7 +39,11 @@ public class SkillUtils implements Listener {
     }
 
     public static double getXpForNextLevel(SkillType type, int nextLevel) {
-        return switch ((nextLevel - 1) / 5) {
+        int multiplier = 1;
+        if (type == SkillType.BUILDING) {
+            multiplier = 2;
+        }
+        return multiplier * switch ((nextLevel - 1) / 5) {
             case 0 -> 500 * nextLevel;
             case 1 -> -2500 + 1000 * nextLevel;
             case 2 -> -17500 + 2500 * nextLevel;

@@ -1,6 +1,10 @@
 package me.notpseudo.revolutionsmp.mobstats;
 
+import me.notpseudo.revolutionsmp.listeners.MobListeners;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import java.io.Serializable;
@@ -94,6 +98,10 @@ public class MobInfo extends BaseEntityStats implements Serializable {
             attackers.put(player.getUniqueId(), attackers.get(player.getUniqueId()) + damage);
         } else {
             attackers.put(player.getUniqueId(), damage);
+        }
+        Entity holding = Bukkit.getEntity(holder);
+        if (holding instanceof LivingEntity living) {
+            MobListeners.updateMobInfo(living, this);
         }
     }
 

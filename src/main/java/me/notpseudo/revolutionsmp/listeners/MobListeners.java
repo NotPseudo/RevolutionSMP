@@ -244,4 +244,8 @@ public class MobListeners implements Listener {
         return mobInfo;
     }
 
+    public static void updateMobInfo(LivingEntity entity, MobInfo info) {
+        entity.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), info);
+    }
+
 }

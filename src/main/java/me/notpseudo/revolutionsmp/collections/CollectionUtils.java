@@ -40,6 +40,10 @@ public class CollectionUtils implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
+    public static NamespacedKey getPlayerDropKey() {
+        return playerDroppedKey;
+    }
+
     public static void updatePlayerCollections(Player player, CollectionsHolder holder) {
         if (player == null) {
             return;
@@ -69,15 +73,6 @@ public class CollectionUtils implements Listener {
     }
 
     @EventHandler
-    public void onBlockDrop(BlockDropItemEvent event) {
-        if (HarvestingListeners.getPlacedLocationList(event.getBlock()).removeDropLocation(event.getBlock().getLocation())) {
-            for (Item item : event.getItems()) {
-                item.getPersistentDataContainer().set(playerDroppedKey, new UUIDDataType(), event.getPlayer().getUniqueId());
-            }
-        }
-    }
-
-    @EventHandler
     public void onEntityPickup(EntityPickupItemEvent event) {
         if (!(event.getEntity() instanceof Player player)) {
             return;
@@ -85,7 +80,11 @@ public class CollectionUtils implements Listener {
         if (event.getItem().getPersistentDataContainer().get(playerDroppedKey, new UUIDDataType()) != null) {
             return;
         }
-        handleCollection(event.getItem().getItemStack(), player);
+        ItemStack drop = event.getItem().getItemStack();
+        if (drop.getItemMeta().getPersistentDataContainer().get(playerDroppedKey, new UUIDDataType()) != null) {
+            return;
+        }
+        handleCollection(drop, player);
     }
 
     @EventHandler
@@ -151,7 +150,7 @@ public class CollectionUtils implements Listener {
         if (type == null) {
             return;
         }
-        getCollectionHolder(player).addCollectionAmount(type, count);
+        getCollectionHolder(player).addCollectionAmount(type, item.getAmount() * count);
     }
 
     public static NamespacedKey getCollectionsKey() {

@@ -3,6 +3,8 @@ package me.notpseudo.revolutionsmp.listeners;
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import io.papermc.paper.event.block.BlockBreakBlockEvent;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.collections.CollectionUtils;
+import me.notpseudo.revolutionsmp.collections.UUIDDataType;
 import me.notpseudo.revolutionsmp.drops.ItemDropObject;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentType;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
@@ -22,6 +24,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.type.CaveVinesPlant;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -497,6 +500,15 @@ public class HarvestingListeners implements Listener {
     @EventHandler
     public void onPistonRetract(BlockPistonRetractEvent event) {
         updatePistonPlaced(event.getDirection(), event.getBlocks(), event);
+    }
+
+    @EventHandler
+    public void onBlockDrop(BlockDropItemEvent event) {
+        if (getPlacedLocationList(event.getBlock()).removeDropLocation(event.getBlock().getLocation())) {
+            for (Item item : event.getItems()) {
+                item.getPersistentDataContainer().set(CollectionUtils.getPlayerDropKey(), new UUIDDataType(), event.getPlayer().getUniqueId());
+            }
+        }
     }
 
     private void updatePistonPlaced(BlockFace direction, List<Block> blocks, BlockPistonEvent event) {

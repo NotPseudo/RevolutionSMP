@@ -184,6 +184,12 @@ public enum StatType {
         public boolean isPercentage() {
             return true;
         }
+
+        @Override
+        public String getSymbol() {
+            return "☂";
+        }
+
         @Override
         public StatCategory getStatCategory() {
             return StatCategory.FISHING;
@@ -311,7 +317,206 @@ public enum StatType {
         public StatCategory getStatCategory() {
             return StatCategory.LUCK;
         }
-    };
+    },
+    COMBAT_WISDOM {
+        @Override
+        public String getSymbol() {
+            return "☯";
+        }
+
+        @Override
+        public NamedTextColor getColor() {
+            return NamedTextColor.DARK_AQUA;
+        }
+
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.WISDOM;
+        }
+    },
+    MINING_WISDOM {
+        @Override
+        public String getSymbol() {
+            return "☯";
+        }
+
+        @Override
+        public NamedTextColor getColor() {
+            return NamedTextColor.DARK_AQUA;
+        }
+
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.WISDOM;
+        }
+    },
+    FORAGING_WISDOM {
+        @Override
+        public String getSymbol() {
+            return "☯";
+        }
+
+        @Override
+        public NamedTextColor getColor() {
+            return NamedTextColor.DARK_AQUA;
+        }
+
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.WISDOM;
+        }
+    },
+    FARMING_WISDOM {
+        @Override
+        public String getSymbol() {
+            return "☯";
+        }
+
+        @Override
+        public NamedTextColor getColor() {
+            return NamedTextColor.DARK_AQUA;
+        }
+
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.WISDOM;
+        }
+    },
+    FISHING_WISDOM {
+        @Override
+        public String getSymbol() {
+            return "☯";
+        }
+
+        @Override
+        public NamedTextColor getColor() {
+            return NamedTextColor.DARK_AQUA;
+        }
+
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.WISDOM;
+        }
+    },
+    ALCHEMY_WISDOM {
+        @Override
+        public String getSymbol() {
+            return "☯";
+        }
+
+        @Override
+        public NamedTextColor getColor() {
+            return NamedTextColor.DARK_AQUA;
+        }
+
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.WISDOM;
+        }
+    },
+    ENCHANTING_WISDOM {
+        @Override
+        public String getSymbol() {
+            return "☯";
+        }
+
+        @Override
+        public NamedTextColor getColor() {
+            return NamedTextColor.DARK_AQUA;
+        }
+
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.WISDOM;
+        }
+    },
+    HEALTH_REGEN {
+        @Override
+        public String getSymbol() {
+            return "❣";
+        }
+
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.BOOSTER;
+        }
+    },
+    VITALITY {
+        @Override
+        public String getSymbol() {
+            return "♨";
+        }
+
+        @Override
+        public NamedTextColor getColor() {
+            return NamedTextColor.DARK_RED;
+        }
+
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.BOOSTER;
+        }
+    },
+    MENDING {
+        @Override
+        public String getSymbol() {
+            return "☄";
+        }
+
+        @Override
+        public NamedTextColor getColor() {
+            return NamedTextColor.GREEN;
+        }
+
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.BOOSTER;
+        }
+    },
+    MAMA_REGEN {
+        @Override
+        public String getSymbol() {
+            return "✒";
+        }
+
+        @Override
+        public NamedTextColor getColor() {
+            return NamedTextColor.AQUA;
+        }
+
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.BOOSTER;
+        }
+    },
+    FORTITUDE {
+        @Override
+        public String getSymbol() {
+            return "⛰";
+        }
+
+        @Override
+        public NamedTextColor getColor() {
+            return NamedTextColor.GREEN;
+        }
+
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.BOOSTER;
+        }
+    },
+    ROBUST {
+        @Override
+        public String getSymbol() {
+            return "✊";
+        }
+
+        @Override
+        public StatCategory getStatCategory() {
+            return StatCategory.BOOSTER;
+        }
+    }
+    ;
 
     public String getName() {
         return ItemEditor.getStringFromEnum(this);

@@ -283,6 +283,11 @@ public enum ItemID {
         }
 
         @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
+
+        @Override
         public Material getMaterial() {
             return Material.DIAMOND_PICKAXE;
         }
@@ -303,6 +308,10 @@ public enum ItemID {
             return ItemType.PICKAXE;
         }
 
+        @Override
+        public Rarity getDefaultRarity() {
+            return Rarity.UNCOMMON;
+        }
         @Override
         public Material getMaterial() {
             return Material.NETHERITE_PICKAXE;

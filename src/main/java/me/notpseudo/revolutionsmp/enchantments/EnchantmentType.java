@@ -958,7 +958,8 @@ public enum EnchantmentType {
 
         @Override
         public ArmorStats getApplyArmorStats(int level) {
-            return new ArmorStats(0, level * 3, 0);
+            int mult = level < 6 ? 4 : 5;
+            return new ArmorStats(0, level * mult, 0);
         }
     },
     SILK_TOUCH {

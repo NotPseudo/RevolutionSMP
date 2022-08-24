@@ -25,6 +25,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Creature;
@@ -336,6 +337,9 @@ public class StatsListeners implements Listener {
         };
         remove.runTaskLater(RevolutionSMP.getPlugin(), 30);
         showActionBar(player);
+        if (expDrop.getType() != SkillType.BUILDING) {
+            player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.2f, 1f);
+        }
     }
 
     /**

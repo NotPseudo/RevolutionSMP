@@ -8,6 +8,8 @@ public enum StatCategory {
     FISHING,
     MINING,
     GATHERING,
-    LUCK;
+    LUCK,
+    WISDOM,
+    BOOSTER;
 
 }
