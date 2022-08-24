@@ -381,12 +381,7 @@ public class GemstoneUtils {
     }
 
     public static ItemStack createGemstone(GemstoneType type, Rarity rarity) {
-        ItemStack item = ItemEditor.createItem(ItemID.GEMSTONE);
-        ItemInfo info = ItemEditor.getInfo(item);
-        GemstoneObject gemInfo = (GemstoneObject) info.getExtraInfo();
-        gemInfo.setGem(type);
-        gemInfo.setQuality(rarity);
-        return ItemEditor.updateItemInfo(item, info);
+        return createGemstone(type, rarity, 1);
     }
 
     public static ItemStack createGemstone(GemstoneType type, Rarity rarity, int count) {
@@ -418,10 +413,7 @@ public class GemstoneUtils {
         if (info.getExtraInfo() == null) {
             return false;
         }
-        if (!(info.getExtraInfo() instanceof GemstoneObject)) {
-            return false;
-        }
-        return true;
+        return info.getExtraInfo() instanceof GemstoneObject;
     }
 
     public static boolean isGemstone(ItemDropObject itemDrop) {
