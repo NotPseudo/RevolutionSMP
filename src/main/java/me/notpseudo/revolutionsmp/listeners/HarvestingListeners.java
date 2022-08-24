@@ -287,7 +287,7 @@ public class HarvestingListeners implements Listener {
                     @Override
                     public void run() {
                         block.setType(finalReplaceBlock);
-                        event.getPlayer().sendMessage(Component.text("Purified! You have uncovered the true material of this block. A ", NamedTextColor.WHITE)
+                        event.getPlayer().sendMessage(Component.text("PURIFIED! You have uncovered the true material of this block. A ", NamedTextColor.WHITE)
                                 .append(Component.text(ItemEditor.getStringFromEnum(finalReplaceBlock), NamedTextColor.AQUA))
                                 .append(Component.text(" has spawned", NamedTextColor.WHITE)));
                     }
@@ -302,9 +302,9 @@ public class HarvestingListeners implements Listener {
                     @Override
                     public void run() {
                         createCustomBlock(customType, block.getLocation());
-                        event.getPlayer().sendMessage(Component.text("Purified! You have uncovered the true material of this block. A ", NamedTextColor.WHITE)
+                        event.getPlayer().sendMessage(Component.text("PURIFIED! You have uncovered the true material of this block. A ", NamedTextColor.WHITE)
                                 .append(Component.text(ItemEditor.getStringFromEnum(customType), NamedTextColor.AQUA))
-                                .append(Component.text(" has spawned", NamedTextColor.WHITE)));
+                                .append(Component.text(" block has spawned", NamedTextColor.WHITE)));
                     }
                 };
                 run.runTaskLater(plugin, 3);
