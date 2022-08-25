@@ -22,7 +22,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class VenemousEnchantmentObject extends EnchantmentObject implements ActionEnchantment, Listener {
+public class VenemousEnchantmentObject extends EnchantmentObject implements ActionEnchantment {
 
     private static final NamespacedKey mobKey = MobListeners.getMobKey();
     private static final NamespacedKey playerKey = StatsListeners.getPlayerStatsKey();
@@ -88,11 +88,6 @@ public class VenemousEnchantmentObject extends EnchantmentObject implements Acti
             }
         };
         venemous.runTaskTimer(RevolutionSMP.getPlugin(), 0, 20);
-    }
-
-    @EventHandler
-    public void onDeath(EntityDeathEvent event) {
-        super.getAttacked().remove(event.getEntity().getUniqueId());
     }
 
 }

@@ -10,6 +10,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ComplexLivingEntity;
@@ -19,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -85,19 +87,47 @@ public class SkillUtils implements Listener {
     }
 
     public static void addCombatXpToPlayer(Player player, SkillType type, LivingEntity target, double exp) {
+        if (player.getGameMode() == GameMode.CREATIVE) {
+            return;
+        }
         double boost = StatsListeners.getCombatWisdomStat(type, player, target);
         double finalExp = exp * (1 + (boost / 100));
         getHolder(player).addExp(new ExpDropObject(type, finalExp));
     }
 
     public static void addBreakingXpToPlayer(Player player, SkillType type, Block block, double exp) {
+        if (player.getGameMode() == GameMode.CREATIVE) {
+            return;
+        }
         double boost = StatsListeners.getBreakWisdomStat(type, player, block);
         double finalExp = exp * (1 + (boost / 100));
         getHolder(player).addExp(new ExpDropObject(type, finalExp));
     }
 
-    public static void addBuildingXpToPlayer(Player player, double exp) {
-        getHolder(player).addExp(new ExpDropObject(SkillType.BUILDING, exp));
+    public static void addRegularXP(SkillType type, Player player, double exp) {
+        if (player.getGameMode() == GameMode.CREATIVE) {
+            return;
+        }
+        double boost = StatsListeners.getRegularWisdomStat(type, player);
+        double finalExp = exp * (1 + (boost / 100));
+        getHolder(player).addExp(new ExpDropObject(type, finalExp));
+    }
+
+    public static void handleCraftingXP(Player player, ItemStack result) {
+        ItemInfo info = ItemEditor.getInfo(result);
+        if (info == null) {
+            return;
+        }
+        double xp = switch (info.getRarity()) {
+            default -> 10;
+            case UNCOMMON -> 50;
+            case RARE -> 100;
+            case EPIC -> 500;
+            case LEGENDARY -> 1000;
+            case MYTHIC -> 1500;
+            case DIVINE, SPECIAL -> 2500;
+        };
+        SkillUtils.addRegularXP(SkillType.BUILDING, player, xp * result.getAmount());
     }
 
     public static double getTotalXpForMaxLevel(SkillType type) {
@@ -162,6 +192,9 @@ public class SkillUtils implements Listener {
                 lore.add(Component.text(ItemEditor.getStatString(ability.getStatValue(StatType.ABILITY_DAMAGE)) + " ", NamedTextColor.GREEN).append(StatType.ABILITY_DAMAGE.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
                 lore.add(Component.text(ItemEditor.getStatString(ability.getStatValue(StatType.INTELLIGENCE)) + " ", NamedTextColor.GREEN).append(StatType.INTELLIGENCE.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
                 break;
+            case BUILDING:
+                lore.add(Component.text(ItemEditor.getStatString(armor.getStatValue(StatType.HEALTH)) + " ", NamedTextColor.GREEN).append(StatType.HEALTH.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
+                break;
         }
         return lore;
     }
@@ -189,8 +222,9 @@ public class SkillUtils implements Listener {
             return ArmorStats.createZero();
         }
         return switch (skill.getType()) {
-            case FARMING, FISHING -> new ArmorStats(2 * (int) skill.getLevel(), 0, 0, 0);
-            case MINING -> new ArmorStats(0, (int) skill.getLevel(), 0, 0);
+            case FARMING, FISHING -> new ArmorStats(2 * (int) skill.getLevel(), 0, 0);
+            case BUILDING -> new ArmorStats((int) skill.getLevel(), 0, 0);
+            case MINING -> new ArmorStats(0, (int) skill.getLevel(), 0);
             default -> ArmorStats.createZero();
         };
     }

@@ -21,16 +21,28 @@ public enum ItemType {
 
     },
     AXE {
-
+        @Override
+        public boolean allowPotatoBooks() {
+            return false;
+        }
     },
     PICKAXE {
-
+        @Override
+        public boolean allowPotatoBooks() {
+            return false;
+        }
     },
     HOE {
-
+        @Override
+        public boolean allowPotatoBooks() {
+            return false;
+        }
     },
     SHOVEL {
-
+        @Override
+        public boolean allowPotatoBooks() {
+            return false;
+        }
     },
     FISHING_ROD {
 
@@ -48,10 +60,25 @@ public enum ItemType {
         public boolean allowEnchants() {
             return false;
         }
+
+        @Override
+        public boolean allowPotatoBooks() {
+            return false;
+        }
+
+        @Override
+        public boolean allowRecomb() {
+            return false;
+        }
     },
     ACCESSORY {
         @Override
         public boolean allowEnchants() {
+            return false;
+        }
+
+        @Override
+        public boolean allowPotatoBooks() {
             return false;
         }
     },
@@ -65,6 +92,16 @@ public enum ItemType {
         public boolean allowEnchants() {
             return false;
         }
+
+        @Override
+        public boolean allowPotatoBooks() {
+            return false;
+        }
+
+        @Override
+        public boolean allowAnvil() {
+            return false;
+        }
     },
     VANILLA_ITEM {
         @Override
@@ -76,10 +113,30 @@ public enum ItemType {
         public boolean allowEnchants() {
             return false;
         }
+
+        @Override
+        public boolean allowPotatoBooks() {
+            return false;
+        }
+
+        @Override
+        public boolean allowAnvil() {
+            return false;
+        }
+
+        @Override
+        public boolean allowRecomb() {
+            return false;
+        }
     },
     WAND {
         @Override
         public boolean allowReforge() {
+            return false;
+        }
+
+        @Override
+        public boolean allowPotatoBooks() {
             return false;
         }
     },
@@ -91,6 +148,11 @@ public enum ItemType {
 
         @Override
         public boolean allowEnchants() {
+            return false;
+        }
+
+        @Override
+        public boolean allowPotatoBooks() {
             return false;
         }
     },
@@ -117,6 +179,18 @@ public enum ItemType {
     }
 
     public boolean allowReforge() {
+        return true;
+    }
+
+    public boolean allowPotatoBooks() {
+        return true;
+    }
+
+    public boolean allowAnvil() {
+        return true;
+    }
+
+    public boolean allowRecomb() {
         return true;
     }
 

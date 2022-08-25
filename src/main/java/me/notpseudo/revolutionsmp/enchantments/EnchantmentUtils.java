@@ -89,7 +89,7 @@ public class EnchantmentUtils {
         return book;
     }
 
-    private static int getExpFromLevel(int level) {
+    public static int getExpFromLevel(int level) {
         if (level > 30) {
             return (int) (4.5 * level * level - 162.5 * level + 2220);
         }
@@ -99,7 +99,7 @@ public class EnchantmentUtils {
         return level * level + 6 * level;
     }
 
-    private static double getLevelFromExp(long exp) {
+    public static double getLevelFromExp(long exp) {
         if (exp > 1395) {
             return (Math.sqrt(72 * exp - 54215) + 325) / 18;
         }

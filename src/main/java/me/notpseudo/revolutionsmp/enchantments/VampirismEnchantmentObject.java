@@ -13,14 +13,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class VampirismEnchantmentObject extends EnchantmentObject implements ActionEnchantment, Listener {
+public class VampirismEnchantmentObject extends EnchantmentObject implements ActionEnchantment {
 
     private static int testNum = 0;
     private int level;
 
     public VampirismEnchantmentObject() {
         super(EnchantmentType.VAMPIRISM);
-        Bukkit.getPluginManager().registerEvents(this, RevolutionSMP.getPlugin());
         level = super.getLevel();
         testNum = 0;
     }
@@ -34,11 +33,7 @@ public class VampirismEnchantmentObject extends EnchantmentObject implements Act
 
     @Override
     public void action(LivingEntity damager, LivingEntity target, double damage, boolean critical, double showDamage) {
-        damager.sendMessage("Vampirism action Method Called");
-        testNum++;
-        damager.sendMessage("Test Num: " + testNum);
-        damager.sendMessage("Subclass Level: " + level);
-        damager.sendMessage("Superclass Level: " + super.getLevel());
+
     }
 
     @Override
@@ -50,32 +45,6 @@ public class VampirismEnchantmentObject extends EnchantmentObject implements Act
             return new WeaponStats(25 * level, 0, 0, 0, 0, 0);
         }
         return WeaponStats.createZero();
-    }
-
-    @EventHandler
-    public void onHit(EntityDamageByEntityEvent event) {
-        if(!(event.getDamager() instanceof Player player)) {
-            return;
-        }
-        if(player.getInventory().getItemInMainHand().getItemMeta() == null) {
-            return;
-        }
-        ItemMeta meta = player.getInventory().getItemInMainHand().getItemMeta();
-        if(meta == null) {
-            return;
-        }
-        ItemInfo itemInfo = meta.getPersistentDataContainer().get(ItemEditor.getItemKey(), new ItemInfoDataType());
-        if(itemInfo == null) {
-            return;
-        }
-        EnchantmentsHolder holder = itemInfo.getEnchantmentsHolder();
-        if(holder == null) {
-            return;
-        }
-        if(holder.getEnchants().contains(this)) {
-            testNum++;
-            player.sendMessage(ChatColor.GREEN + "Hit recognized test num is now: " + testNum);
-        }
     }
 
 }

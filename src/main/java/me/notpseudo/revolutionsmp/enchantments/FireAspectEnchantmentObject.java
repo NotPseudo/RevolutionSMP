@@ -13,7 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class FireAspectEnchantmentObject extends EnchantmentObject implements ActionEnchantment, Listener {
+public class FireAspectEnchantmentObject extends EnchantmentObject implements ActionEnchantment {
 
 
     public FireAspectEnchantmentObject() {
@@ -57,11 +57,6 @@ public class FireAspectEnchantmentObject extends EnchantmentObject implements Ac
         };
         fireDamage.runTaskTimer(RevolutionSMP.getPlugin(), 0, 20);
 
-    }
-
-    @EventHandler
-    public void onDeath(EntityDeathEvent event) {
-        //burning.remove(event.getEntity());
     }
 
 }

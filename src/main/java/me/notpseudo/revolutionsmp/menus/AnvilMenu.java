@@ -19,15 +19,15 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 
-public class AdvancedReforgeMenu extends Menu {
+public class AnvilMenu extends Menu {
 
-    public AdvancedReforgeMenu(Player player) {
+    public AnvilMenu(Player player) {
         super(player);
     }
 
     @Override
     public Component getTitle() {
-        return Component.text("Advanced Reforge");
+        return Component.text("Custom Anvil");
     }
 
     @Override
@@ -46,18 +46,18 @@ public class AdvancedReforgeMenu extends Menu {
         inventory.setItem(33, null);
         setBlock();
 
-        ItemStack reforge = new ItemStack(Material.ANVIL);
-        ItemMeta reforgeMeta = reforge.getItemMeta();
-        reforgeMeta.displayName(Component.text("Reforge Item", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
-        reforgeMeta.lore(List.of(
-                Component.text("Place an item to reforge on the left", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
+        ItemStack combine = new ItemStack(Material.ANVIL);
+        ItemMeta combineMeta = combine.getItemMeta();
+        combineMeta.displayName(Component.text("Anvil", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
+        combineMeta.lore(List.of(
+                Component.text("Place an item to upgrade on the left", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
                 Component.empty(),
-                Component.text("Place a Reforge Stone on the right", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
+                Component.text("Place an item to sacrifice on the right", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
                 Component.empty(),
-                Component.text("Click the anvil to apply the reforge", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false)
+                Component.text("Click the anvil to combine the items", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false)
         ));
-        reforge.setItemMeta(reforgeMeta);
-        inventory.setItem(22, makeMenuAction(reforge, MenuAction.REFORGE));
+        combine.setItemMeta(combineMeta);
+        inventory.setItem(22, makeMenuAction(combine, MenuAction.COMBINE));
 
         addBackType(MenuType.MAIN);
         addCloseButton();
@@ -101,8 +101,8 @@ public class AdvancedReforgeMenu extends Menu {
             menuItem.getType().getNext(player).open();
             return;
         }
-        if (menuItem.getAction() == MenuAction.REFORGE) {
-            if (reforge()) {
+        if (menuItem.getAction() == MenuAction.COMBINE) {
+            if (combine()) {
                 player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
             } else {
                 player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1F, 0.5F);
@@ -110,7 +110,7 @@ public class AdvancedReforgeMenu extends Menu {
         }
     }
 
-    private boolean reforge() {
+    private boolean combine() {
         if (!checkBoth()) {
             return false;
         }
@@ -134,13 +134,12 @@ public class AdvancedReforgeMenu extends Menu {
             setBlock();
             return false;
         }
-        if (!(rightInfo.getExtraInfo() instanceof ReforgeStoneInfo reforgeInfo)) {
+        if (rightInfo == null) {
             setRight(Material.RED_STAINED_GLASS_PANE);
             setBlock();
             return false;
         }
-        Reforge reforge = reforgeInfo.getReforge();
-        if (!(reforge.getItemTypes().contains(leftInfo.getItemType()))) {
+        if (!leftInfo.canCombine(rightInfo)) {
             setLeft(Material.RED_STAINED_GLASS_PANE);
             setRight(Material.RED_STAINED_GLASS_PANE);
             setBlock();
@@ -154,7 +153,6 @@ public class AdvancedReforgeMenu extends Menu {
             setBlock();
             return false;
         }
-        infoClone.setReforge(reforge);
         ItemMeta meta = itemClone.getItemMeta();
         meta.getPersistentDataContainer().set(ItemEditor.getItemKey(), new ItemInfoDataType(), infoClone);
         ItemEditor.updateLore(meta);
@@ -169,11 +167,11 @@ public class AdvancedReforgeMenu extends Menu {
         ItemMeta blockMeta = block.getItemMeta();
         blockMeta.displayName(Component.text("Valid Items Required", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
         block.lore(List.of(
-                Component.text("Place an item to reforge on the left", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
+                Component.text("Place an item to upgrade on the left", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
                 Component.empty(),
-                Component.text("Place a Reforge Stone on the right", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
+                Component.text("Place an item to sacrifice on the right", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
                 Component.empty(),
-                Component.text("Click the anvil below to apply the reforge", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false)
+                Component.text("Click the anvil below to combine", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
         ));
         block.setItemMeta(blockMeta);
         inventory.setItem(23, makeMenuType(block, null));
@@ -190,7 +188,7 @@ public class AdvancedReforgeMenu extends Menu {
             setLeft(Material.RED_STAINED_GLASS_PANE);
             return false;
         }
-        if (!info.getItemType().allowReforge()) {
+        if (!info.getItemType().allowAnvil()) {
             setLeft(Material.RED_STAINED_GLASS_PANE);
             return false;
         }
@@ -209,7 +207,7 @@ public class AdvancedReforgeMenu extends Menu {
             setRight(Material.RED_STAINED_GLASS_PANE);
             return false;
         }
-        if (!(info.getExtraInfo() instanceof ReforgeStoneInfo)) {
+        if (!info.getItemType().allowAnvil()) {
             setRight(Material.RED_STAINED_GLASS_PANE);
             return false;
         }

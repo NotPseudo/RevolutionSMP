@@ -1183,7 +1183,7 @@ public enum ItemID {
     HOT_POTATO_BOOK {
         @Override
         public Material getMaterial() {
-            return Material.WRITTEN_BOOK;
+            return Material.BOOK;
         }
 
         @Override
@@ -3163,7 +3163,12 @@ public enum ItemID {
             return recipe;
         }
     },
-
+    RECOMBOBULATOR_3000 {
+        @Override
+        public Material getMaterial() {
+            return Material.PLAYER_HEAD;
+        }
+    },
     STORM_CHESTPLATE {
         @Override
         public ItemType getItemType() {
@@ -4016,6 +4021,11 @@ public enum ItemID {
 
     @NotNull
     public WisdomStats getBreakingWisdom(Player player, Block block) {
+        return WisdomStats.createZero();
+    }
+
+    @NotNull
+    public WisdomStats getRegularWisdom(Player player) {
         return WisdomStats.createZero();
     }
 

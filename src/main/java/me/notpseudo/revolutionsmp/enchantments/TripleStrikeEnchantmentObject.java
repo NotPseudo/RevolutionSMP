@@ -8,7 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 
-public class TripleStrikeEnchantmentObject extends EnchantmentObject implements Listener {
+public class TripleStrikeEnchantmentObject extends EnchantmentObject {
 
     public TripleStrikeEnchantmentObject() {
         super(EnchantmentType.TRIPLE_STRIKE);
@@ -42,10 +42,5 @@ public class TripleStrikeEnchantmentObject extends EnchantmentObject implements 
         return new StatObject(StatType.DAMAGE, super.getLevel() * 10);
     }
     */
-
-    @EventHandler
-    public void onDeath(EntityDeathEvent event) {
-        super.getAttacked().remove(event.getEntity().getUniqueId());
-    }
 
 }

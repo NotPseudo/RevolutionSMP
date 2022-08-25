@@ -1,6 +1,7 @@
 package me.notpseudo.revolutionsmp.enchantments;
 
 import me.notpseudo.revolutionsmp.items.ItemEditor;
+import me.notpseudo.revolutionsmp.items.ItemID;
 import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
@@ -15,6 +16,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -123,7 +125,7 @@ public enum EnchantmentType {
 
         @Override
         public List<ItemType> getItemTypes() {
-            return List.of(ItemType.SWORD);
+            return List.of(ItemType.SWORD, ItemType.BOW);
         }
     },
     DRAGON_HUNTER {
@@ -152,7 +154,7 @@ public enum EnchantmentType {
 
         @Override
         public List<ItemType> getItemTypes() {
-            return List.of(ItemType.SWORD);
+            return List.of(ItemType.SWORD, ItemType.BOW);
         }
     },
     ENDER_SLAYER {
@@ -345,7 +347,7 @@ public enum EnchantmentType {
 
         @Override
         public List<ItemType> getItemTypes() {
-            return List.of(ItemType.SWORD);
+            return List.of(ItemType.SWORD, ItemType.BOW);
         }
     },
     KNOCKBACK {
@@ -583,7 +585,7 @@ public enum EnchantmentType {
 
         @Override
         public List<ItemType> getItemTypes() {
-            return List.of(ItemType.SWORD);
+            return List.of(ItemType.SWORD, ItemType.BOW);
         }
     },
     SYPHON {
@@ -776,7 +778,27 @@ public enum EnchantmentType {
 
         @Override
         public List<ItemType> getItemTypes() {
-            return List.of(ItemType.SWORD);
+            return List.of(ItemType.SWORD, ItemType.BOW);
+        }
+    },
+    POWER {
+        @Override
+        public WeaponStats getApplyWeaponStats(int level) {
+            return switch (level) {
+                case 1, 2, 3, 4, 5 -> new WeaponStats(8 * level, 0, 0, 0, 0, 0);
+                case 6 -> new WeaponStats(50, 0, 0, 0, 0, 0);
+                default -> new WeaponStats(level * 10 - 5, 0, 0, 0, 0, 0);
+            };
+        }
+
+        @Override
+        public int getMaxLevel() {
+            return 7;
+        }
+
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.BOW);
         }
     },
     COMBO {
@@ -962,10 +984,239 @@ public enum EnchantmentType {
             return new ArmorStats(0, level * mult, 0);
         }
     },
+    AQUA_AFFINITY {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.HELMET);
+        }
+
+        @Override
+        public Enchantment getVanillaEnchantment(ItemID id) {
+            return Enchantment.WATER_WORKER;
+        }
+    },
+    BIG_BRAIN {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.HELMET);
+        }
+
+        @Override
+        public AbilityStats getApplyAbilityStats(int level) {
+            return new AbilityStats(0, level * 5);
+        }
+
+        @Override
+        public int getMinLevel() {
+            return 3;
+        }
+
+        @Override
+        public boolean showInEnchantTable() {
+            return false;
+        }
+    },
+    RESPIRATION {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.HELMET);
+        }
+
+        @Override
+        public Enchantment getVanillaEnchantment(ItemID id) {
+            return Enchantment.OXYGEN;
+        }
+    },
+    REJUVENATE {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.HELMET, ItemType.CHESTPLATE, ItemType.LEGGINGS, ItemType.BOOTS);
+        }
+
+        @Override
+        public RegenStats getApplyRegenStats(int level) {
+            return new RegenStats(level * 2, 0, 0, 0);
+        }
+
+        @Override
+        public boolean showInEnchantTable() {
+            return false;
+        }
+    },
+    TRUE_PROTECTION {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.CHESTPLATE);
+        }
+
+        @Override
+        public ArmorStats getApplyArmorStats(int level) {
+            return new ArmorStats(0, 0, 0, level * 5);
+        }
+
+        @Override
+        public int getMaxLevel() {
+            return 1;
+        }
+
+        @Override
+        public boolean showInEnchantTable() {
+            return false;
+        }
+    },
+    SMARTY_PANTS {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.LEGGINGS);
+        }
+
+        @Override
+        public AbilityStats getApplyAbilityStats(int level) {
+            return new AbilityStats(0, level * 5);
+        }
+
+        @Override
+        public boolean showInEnchantTable() {
+            return false;
+        }
+    },
+    DEPTH_STRIDER {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.BOOTS);
+        }
+
+        @Override
+        public Enchantment getVanillaEnchantment(ItemID id) {
+            return Enchantment.DEPTH_STRIDER;
+        }
+    },
+    FROST_WALKER {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.BOOTS);
+        }
+
+        @Override
+        public int getMaxLevel() {
+            return 2;
+        }
+
+        @Override
+        public Enchantment getVanillaEnchantment(ItemID id) {
+            return Enchantment.FROST_WALKER;
+        }
+    },
+    SUGAR_RUSH {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.BOOTS);
+        }
+
+        @Override
+        public ArmorStats getApplyArmorStats(int level) {
+            return new ArmorStats(0, 0, level * 2);
+        }
+
+        @Override
+        public int getMaxLevel() {
+            return 3;
+        }
+
+        @Override
+        public boolean showInEnchantTable() {
+            return false;
+        }
+    },
+    FORTUNE {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.PICKAXE, ItemType.DRILL);
+        }
+
+        @Override
+        public MiningStats getApplyMiningStats(int level) {
+            return switch (level) {
+                case 1, 2, 3 -> new MiningStats(0, level * 10, 0, 0);
+                default -> new MiningStats(0, level * 10 + 5, 0, 0);
+            };
+        }
+
+        @Override
+        public int getMaxLevel() {
+            return 4;
+        }
+
+        @Override
+        public int getEnchTableMax() {
+            return 3;
+        }
+    },
+    PRISTINE {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.PICKAXE, ItemType.DRILL);
+        }
+
+        @Override
+        public MiningStats getApplyMiningStats(int level) {
+            return new MiningStats(0, 0, level);
+        }
+
+        @Override
+        public boolean showInEnchantTable() {
+            return false;
+        }
+    },
     SILK_TOUCH {
         @Override
         public List<ItemType> getItemTypes() {
             return List.of(ItemType.AXE, ItemType.PICKAXE, ItemType.HOE, ItemType.SHOVEL);
+        }
+
+        @Override
+        public Enchantment getVanillaEnchantment(ItemID id) {
+            return Enchantment.SILK_TOUCH;
+        }
+    },
+    EFFICIENCY {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.AXE, ItemType.PICKAXE, ItemType.DRILL, ItemType.HOE, ItemType.SHOVEL);
+        }
+
+        @Override
+        public MiningStats getApplyMiningStats(int level) {
+            return new MiningStats(10 + level * 20, 0, 0);
+        }
+
+        @Override
+        public int getMaxLevel() {
+            return 10;
+        }
+
+        @Override
+        public Enchantment getVanillaEnchantment(ItemID id) {
+            if (id.getItemType() == ItemType.PICKAXE || id.getItemType() == ItemType.DRILL) {
+                return null;
+            }
+            return Enchantment.DIG_SPEED;
+        }
+    },
+    HARVESTING {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.HOE);
+        }
+
+        @Override
+        public GatheringStats getApplyGatheringStats(int level) {
+            return new GatheringStats(12.5 * level, 0);
+        }
+
+        @Override
+        public int getMaxLevel() {
+            return 6;
         }
     },
     LURE {
@@ -1009,6 +1260,10 @@ public enum EnchantmentType {
     }
 
     public LuckStats getApplyLuckStats(int level) {
+        return null;
+    }
+
+    public RegenStats getApplyRegenStats(int level) {
         return null;
     }
 
@@ -1129,7 +1384,7 @@ public enum EnchantmentType {
     }
 
     public int getEnchTableMax() {
-        return 5;
+        return Math.min(5, getMaxLevel());
     }
 
     public int getMaxLevel() {
@@ -1179,6 +1434,10 @@ public enum EnchantmentType {
 
     public ArrayList<Component> getEnchantLore(int level) {
         return new ArrayList<>();
+    }
+
+    public Enchantment getVanillaEnchantment(ItemID id) {
+        return null;
     }
 
 }

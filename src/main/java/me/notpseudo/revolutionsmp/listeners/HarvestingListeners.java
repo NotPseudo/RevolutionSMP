@@ -24,6 +24,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.type.CaveVinesPlant;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -212,14 +213,21 @@ public class HarvestingListeners implements Listener {
             return;
         }
         int breakingPower = 0;
-        ItemInfo mainHand = ItemEditor.getMainHandInfo(player);
-        if (mainHand != null) {
-            if (mainHand.getEnchantmentsHolder() != null && mainHand.getEnchantmentsHolder().containsEnchant(EnchantmentType.SILK_TOUCH)) {
+        ItemStack mainHand = player.getInventory().getItemInMainHand();
+        if (mainHand != null && mainHand.getType() != Material.AIR) {
+            if (mainHand.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
                 removeOreLocation(event);
                 return;
             }
-            if (mainHand.getMiningStats() != null) {
-                breakingPower = (int) mainHand.getMiningStats().getStatValue(StatType.BREAKING_POWER);
+        }
+        ItemInfo mainHandInfo = ItemEditor.getInfo(mainHand);
+        if (mainHandInfo != null) {
+            if (mainHandInfo.getEnchantmentsHolder() != null && mainHandInfo.getEnchantmentsHolder().containsEnchant(EnchantmentType.SILK_TOUCH)) {
+                removeOreLocation(event);
+                return;
+            }
+            if (mainHandInfo.getMiningStats() != null) {
+                breakingPower = (int) mainHandInfo.getMiningStats().getStatValue(StatType.BREAKING_POWER);
             }
         }
         List<ItemDropObject> drops;

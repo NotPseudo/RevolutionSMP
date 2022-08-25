@@ -303,6 +303,23 @@ public class ItemInfo implements Serializable {
         recalculate();
     }
 
+    public boolean canCombine(@NotNull ItemInfo other) {
+        if (other.itemID == ItemID.HOT_POTATO_BOOK) {
+            return itemType.allowPotatoBooks() && getPotatoBooks() < 10;
+        }
+        if (other.itemID == ItemID.FUMING_POTATO_BOOK) {
+            return itemType.allowPotatoBooks() && getPotatoBooks() < 15;
+        }
+        if (other.itemID == ItemID.RECOMBOBULATOR_3000) {
+            return itemType.allowRecomb() && !isRecomb();
+        }
+        return false;
+    }
+
+    public void combine(ItemInfo other) {
+
+    }
+
     public void upgradeFrom(ItemInfo older) {
         potatoBooks = older.potatoBooks;
         reforge = older.reforge;
@@ -1042,6 +1059,19 @@ public class ItemInfo implements Serializable {
         WisdomStats breaking = itemID.getBreakingWisdom(player, block);
         if (extraInfo != null) {
             breaking.combine(extraInfo.getBreakingWisdom(block));
+        }
+        return breaking;
+    }
+
+    @NotNull
+    public WisdomStats getRegularWisdom() {
+        if (itemID == null) {
+            return WisdomStats.createZero();
+        }
+        Player player = Bukkit.getPlayer(owner);
+        WisdomStats breaking = itemID.getRegularWisdom(player);
+        if (extraInfo != null) {
+            breaking.combine(extraInfo.getRegularWisdom());
         }
         return breaking;
     }

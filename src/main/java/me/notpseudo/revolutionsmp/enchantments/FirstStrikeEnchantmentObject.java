@@ -8,7 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 
-public class FirstStrikeEnchantmentObject extends EnchantmentObject implements Listener {
+public class FirstStrikeEnchantmentObject extends EnchantmentObject {
 
     public FirstStrikeEnchantmentObject() {
         super(EnchantmentType.FIRST_STRIKE);
@@ -30,11 +30,6 @@ public class FirstStrikeEnchantmentObject extends EnchantmentObject implements L
             return new WeaponStats(25 * super.getLevel(), 0, 0, 0, 0, 0);
         }
         return WeaponStats.createZero();
-    }
-
-    @EventHandler
-    public void onDeath(EntityDeathEvent event) {
-        super.getAttacked().remove(event.getEntity().getUniqueId());
     }
 
 }

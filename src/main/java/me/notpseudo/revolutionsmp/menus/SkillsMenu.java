@@ -114,12 +114,23 @@ public class SkillsMenu extends Menu {
         ItemMeta alchemyMeta = alchemy.getItemMeta();
         alchemyMeta.displayName(Component.text("Alchemy", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
         List<Component> alchemyLore = new ArrayList<>();
-        alchemyLore.add(Component.text("Brew potions to earn alchemy XP!", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+        alchemyLore.add(Component.text("Brew potions to earn Alchemy XP!", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
         alchemyLore.add(Component.empty());
         alchemyLore.addAll(getProgressList(holder.getSkill(SkillType.ALCHEMY)));
         alchemyMeta.lore(alchemyLore);
         alchemy.setItemMeta(alchemyMeta);
         inventory.setItem(25, makeMenuType(alchemy, null));
+
+        ItemStack building = new ItemStack(Material.CRAFTING_TABLE);
+        ItemMeta buildingMeta = building.getItemMeta();
+        buildingMeta.displayName(Component.text("Building", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
+        List<Component> buildLore = new ArrayList<>();
+        buildLore.add(Component.text("Build structures and craft items to earn Building XP!", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+        buildLore.add(Component.empty());
+        buildLore.addAll(getProgressList(holder.getSkill(SkillType.BUILDING)));
+        buildingMeta.lore(buildLore);
+        building.setItemMeta(buildingMeta);
+        inventory.setItem(31, makeMenuType(building, null));
 
         addBackType(MenuType.MAIN);
 

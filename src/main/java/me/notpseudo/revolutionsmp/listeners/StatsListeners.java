@@ -30,6 +30,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -82,10 +83,15 @@ public class StatsListeners implements Listener {
             // Every 20 game ticks, update player stats, regenerate health and mana, show action bar with info
             for (Player player : Bukkit.getOnlinePlayers().stream().filter(p -> !p.isDead()).toList()) {
                 updateStats(player);
-                naturalRegen(player);
+                naturalRegenMana(player);
                 showActionBar(player);
             }
         }, 20, 20);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
+            for (Player player : Bukkit.getOnlinePlayers().stream().filter(p -> !p.isDead()).toList()) {
+               naturalRegenHealth(player);
+            }
+        }, 20, 40);
     }
 
     /**
@@ -214,29 +220,28 @@ public class StatsListeners implements Listener {
      *
      * @param player The Player to regenerate health and mana for
      */
-    public static void naturalRegen(Player player) {
+    public static void naturalRegenMana(Player player) {
         PlayerStats playerStats = getPlayerStats(player);
-        double currentHealth = playerStats.getStatValue(StatType.HEALTH), maxHealth = playerStats.getMaxHealth(), intelligence = playerStats.getStatValue(StatType.INTELLIGENCE), mana = playerStats.getMana();
-        if (!player.isDead() && player.getFoodLevel() >= 17) {
-            if (currentHealth != maxHealth) {
-                // If the Player is not dead and their current Health is not already full
-                // Amount of Health to add is (0.75 + 0.5% of max Health) rounded up to the nearest tenth
-                double addHealth = (Math.ceil((0.75 + (maxHealth * 0.005)) * 10) / 10) * playerStats.getStatValue(StatType.HEALTH_REGEN);
-                // If adding the amount to add will exceed the max Health, it will just regenerate up to the max Health
-                // Adds the amount to add to the Player's current Health
-                double finalHealth = Math.min((currentHealth + addHealth), maxHealth);
-                playerStats.setStatValue(StatType.HEALTH, finalHealth);
-                player.setHealth(Math.min(finalHealth, (finalHealth / maxHealth) * 2048));
-            }
-        }
+        double intelligence = playerStats.getStatValue(StatType.INTELLIGENCE), mana = playerStats.getMana();
         if (mana != intelligence) {
             // If current Mana is not already full
             // Amount of Mana to add is 2% of max Mana
-            double addMana = intelligence * 0.02 * playerStats.getStatValue(StatType.MANA_REGEN);
+            double addMana = intelligence * 0.02 * (playerStats.getStatValue(StatType.MANA_REGEN) / 100);
             double finalMana = (Math.min(mana + addMana, intelligence));
             playerStats.setMana(finalMana);
         }
         updatePlayerStats(player, playerStats);
+    }
+
+    public static void naturalRegenHealth(Player player) {
+        PlayerStats playerStats = getPlayerStats(player);
+        double currentHealth = playerStats.getStatValue(StatType.HEALTH), maxHealth = playerStats.getMaxHealth();
+        if (!player.isDead() && player.getFoodLevel() >= 17) {
+            if (currentHealth != maxHealth) {
+                double addHealth = Math.ceil(((1.5 + (maxHealth * 0.01)) * 10) / 10) * (playerStats.getStatValue(StatType.HEALTH_REGEN) / 100);
+                Bukkit.getPluginManager().callEvent(new EntityRegainHealthEvent(player, addHealth, EntityRegainHealthEvent.RegainReason.CUSTOM));
+            }
+        }
     }
 
     /**
@@ -720,6 +725,19 @@ public class StatsListeners implements Listener {
         WisdomStats wisdom = WisdomStats.createZero();
         for (ItemInfo info : getInfos(player)) {
             wisdom.combine(info.getBreakingWisdom(block));
+        }
+        return boost + wisdom.getStatValue(booster);
+    }
+
+    public static double getRegularWisdomStat(SkillType type, Player player) {
+        StatType booster = type.getExpBooster();
+        if (booster == null) {
+            return 0;
+        }
+        double boost = getPlayerStats(player).getStatValue(booster);
+        WisdomStats wisdom = WisdomStats.createZero();
+        for (ItemInfo info : getInfos(player)) {
+            wisdom.combine(info.getRegularWisdom());
         }
         return boost + wisdom.getStatValue(booster);
     }

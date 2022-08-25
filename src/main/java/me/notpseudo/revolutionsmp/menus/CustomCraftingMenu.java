@@ -7,7 +7,11 @@ import me.notpseudo.revolutionsmp.customcrafting.PlayerRecipeInfo;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
+import me.notpseudo.revolutionsmp.skills.SkillType;
+import me.notpseudo.revolutionsmp.skills.SkillUtils;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,6 +19,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
@@ -33,7 +38,9 @@ public class CustomCraftingMenu extends Menu {
 
     public CustomCraftingMenu(Player player) {
         super(player);
-        resetRecipe();
+        result = null;
+        shownRecipe = null;
+        amountsNeeded = null;
     }
 
     @Override
@@ -50,6 +57,7 @@ public class CustomCraftingMenu extends Menu {
     public void setItems() {
         fillGlass();
         setOpenSlots();
+        resetRecipe();
         addCloseButton();
         addBackType(MenuType.MAIN);
     }
@@ -71,6 +79,7 @@ public class CustomCraftingMenu extends Menu {
             checkGrid();
             return;
         }
+
         MenuItem menuItem = event.getCurrentItem().getItemMeta().getPersistentDataContainer().get(MenuUtils.getMenuKey(), new MenuItemDataType());
         if (menuItem == null) {
             checkGrid();
@@ -128,6 +137,7 @@ public class CustomCraftingMenu extends Menu {
                 newResult.setAmount(newAmount);
                 newResult.editMeta(m -> m.getPersistentDataContainer().remove(MenuUtils.getMenuKey()));
                 player.setItemOnCursor(newResult);
+                SkillUtils.handleCraftingXP(player, result);
             } else {
                 return;
             }
@@ -137,8 +147,8 @@ public class CustomCraftingMenu extends Menu {
             if (player.getInventory().addItem(add).size() > 0) {
                 return;
             }
+            SkillUtils.handleCraftingXP(player, result);
         }
-        inventory.setItem(23, null);
         for (Integer index : amountsNeeded.keySet()) {
             ItemStack itemAtIndex = inventory.getItem(index);
             if (itemAtIndex == null) {
@@ -152,7 +162,6 @@ public class CustomCraftingMenu extends Menu {
                 inventory.setItem(index, itemAtIndex);
             }
         }
-        resetRecipe();
         checkGrid();
     }
 
@@ -166,6 +175,9 @@ public class CustomCraftingMenu extends Menu {
                         new ItemStack[] {inventory.getItem(19), middle, inventory.getItem(21)},
                         new ItemStack[] {inventory.getItem(28), inventory.getItem(29), inventory.getItem(30)}
                 };
+                if (shownRecipe != null && shownRecipe.matches(grid)) {
+                    return;
+                }
                 Map<Integer, ItemStack> gridMap = new HashMap<>();
                 for (int index : gridSlots) {
                     if (inventory.getItem(index) != null) {
@@ -176,6 +188,7 @@ public class CustomCraftingMenu extends Menu {
                     if (recipe.matches(grid)) {
                         PlayerRecipeInfo info = CustomCraftingUtils.getRecipeInfo(player);
                         if (!(info.hasUnlocked(recipe) || player.getGameMode() == GameMode.CREATIVE)) {
+                            resetRecipe();
                             return;
                         }
                         shownRecipe = recipe;
@@ -190,7 +203,6 @@ public class CustomCraftingMenu extends Menu {
                         return;
                     }
                 }
-                inventory.setItem(23, null);
                 resetRecipe();
             }
         };
@@ -201,6 +213,13 @@ public class CustomCraftingMenu extends Menu {
         shownRecipe = null;
         result = null;
         amountsNeeded = null;
+
+        ItemStack block = new ItemStack(Material.BARRIER);
+        ItemMeta blockMeta = block.getItemMeta();
+        blockMeta.displayName(Component.text("Recipe Required", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
+        blockMeta.lore(List.of(Component.text("Form a valid recipe to the left", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)));
+        block.setItemMeta(blockMeta);
+        inventory.setItem(23, makeMenuType(block, null));
     }
 
     private boolean testItem(ItemStack first, ItemStack other) {

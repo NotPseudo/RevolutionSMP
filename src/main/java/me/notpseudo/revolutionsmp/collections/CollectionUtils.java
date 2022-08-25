@@ -184,4 +184,11 @@ public class CollectionUtils implements Listener {
         return 1;
     }
 
+    public static boolean isAlreadyCollected(ItemStack item) {
+        if (item == null || item.getType() == Material.AIR) {
+            return false;
+        }
+        return item.getItemMeta().getPersistentDataContainer().get(playerDroppedKey, new UUIDDataType()) != null;
+    }
+
 }

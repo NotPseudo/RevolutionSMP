@@ -142,11 +142,18 @@ public class SpecialItemInfo implements Serializable {
         return LuckStats.createZero();
     }
 
+    @NotNull
     public WisdomStats getCombatWisdom(LivingEntity target) {
         return WisdomStats.createZero();
     }
 
+    @NotNull
     public WisdomStats getBreakingWisdom(Block block) {
+        return WisdomStats.createZero();
+    }
+
+    @NotNull
+    public WisdomStats getRegularWisdom() {
         return WisdomStats.createZero();
     }
 

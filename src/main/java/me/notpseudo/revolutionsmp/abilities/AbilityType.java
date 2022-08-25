@@ -180,7 +180,7 @@ public enum AbilityType {
         @Override
         public @NotNull ArmorStats getEventArmor(LivingEntity damager, Player target, IncreaseType inc) {
             if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                if (witherShieldCooldownList.contains(damager.getUniqueId())) {
+                if (witherShieldCooldownList.contains(target.getUniqueId())) {
                     return new ArmorStats(0.9, 1, 1, 1);
                 }
                 return ArmorStats.createMult();

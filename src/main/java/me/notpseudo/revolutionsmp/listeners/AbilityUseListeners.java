@@ -3,18 +3,24 @@ package me.notpseudo.revolutionsmp.listeners;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.abilities.AbilityObject;
 import me.notpseudo.revolutionsmp.abilities.AbilityUseType;
+import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.AbilitiesHolder;
+import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfoDataType;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStatsDataType;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
+import org.bukkit.block.Container;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 // Methods that run to simulate Abilities
 public class AbilityUseListeners implements Listener {
@@ -28,10 +34,22 @@ public class AbilityUseListeners implements Listener {
 
     @EventHandler
     public void onRightClick(PlayerInteractEvent event) {
-        if (!event.hasItem()) return;
-        if (!event.getItem().hasItemMeta()) return;
-        if (!event.getItem().getItemMeta().getPersistentDataContainer().has(itemKey, new ItemInfoDataType())) {
+        ItemStack item = event.getItem();
+        if (item == null || item.getType() == Material.AIR) {
             return;
+        }
+        ItemInfo info = ItemEditor.getInfo(item);
+        if (info == null) {
+            return;
+        }
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            Block block = event.getClickedBlock();
+            if (block != null && block.getState() instanceof Container) {
+                return;
+            }
+        }
+        if (!(info.getItemType() == ItemType.VANILLA_ITEM)) {
+            event.setCancelled(true);
         }
         Player player = event.getPlayer();
         AbilitiesHolder abilitiesHolder = event.getItem().getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType()).getAbilitiesHolder();

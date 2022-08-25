@@ -20,7 +20,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class LethalityEnchantmentObject extends EnchantmentObject implements ActionEnchantment, Listener {
+public class LethalityEnchantmentObject extends EnchantmentObject implements ActionEnchantment {
 
     private static final NamespacedKey mobKey = MobListeners.getMobKey();
     private static final NamespacedKey playerKey = StatsListeners.getPlayerStatsKey();
@@ -109,11 +109,6 @@ public class LethalityEnchantmentObject extends EnchantmentObject implements Act
             };
             mobLethality.runTaskLater(RevolutionSMP.getPlugin(), 80);
         }
-    }
-
-    @EventHandler
-    public void onDeath(EntityDeathEvent event) {
-        super.getAttacked().remove(event.getEntity().getUniqueId());
     }
 
 }

@@ -1,6 +1,8 @@
 package me.notpseudo.revolutionsmp.commands;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.items.ItemEditor;
+import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
 import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
 import me.notpseudo.revolutionsmp.listeners.HarvestingListeners;
 import me.notpseudo.revolutionsmp.mining.PlacedLocationList;
@@ -19,11 +21,11 @@ public class ParticleTestCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player player) {
-            PlacedLocationList locationList = HarvestingListeners.getPlacedLocationList(player.getLocation().getBlock());
-            player.sendMessage(locationList.getOreLocations().size() + " custom ore locations");
-            for (CustomOreLocation oreLocation : locationList.getOreLocations()) {
-                player.sendMessage(oreLocation.getType() + " at X: " + oreLocation.getX() + ", Y: " + oreLocation.getY() + ", Z: " + oreLocation.getZ());
+            ItemInfo info = ItemEditor.getInfo(player.getInventory().getItemInMainHand());
+            if (info == null) {
+                return true;
             }
+            player.sendMessage("Owner: " + info.getOwner());
         }
         return true;
     }

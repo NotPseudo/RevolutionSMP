@@ -7,9 +7,12 @@ import me.notpseudo.revolutionsmp.enchantments.EnchantmentUtils;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.itemstats.EnchantmentsHolder;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
+import me.notpseudo.revolutionsmp.skills.SkillType;
+import me.notpseudo.revolutionsmp.skills.SkillUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -125,9 +128,19 @@ public class EnchantmentTableMenu extends Menu {
                 return;
             }
             EnchantmentObject enchant = menuItem.getEnchant();
+            if (enchant == null) {
+                return;
+            }
+            int levelNeeded = enchant.getType().getExpLevelsNeeded(enchant.getLevel());
+            if (!(player.getLevel() >= levelNeeded || player.getGameMode() == GameMode.CREATIVE)) {
+                player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1F, 0.5F);
+                return;
+            }
             itemInfo.addEnchant(enchant);
             ItemEditor.updateItemInfo(itemToEnchant, itemInfo);
+            player.giveExpLevels(-1 * levelNeeded);
             player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
+            SkillUtils.addRegularXP(SkillType.ENCHANTING, player, EnchantmentUtils.getExpFromLevel(levelNeeded));
             setItems();
         }
         if (menuItem.getAction() == MenuAction.REMOVE_ENCHANT) {
@@ -140,6 +153,11 @@ public class EnchantmentTableMenu extends Menu {
             }
             EnchantmentObject enchant = menuItem.getEnchant();
             if (enchant == null) {
+                return;
+            }
+            int levelNeeded = enchant.getType().getExpLevelsNeeded(enchant.getLevel());
+            if (!(player.getLevel() >= levelNeeded || player.getGameMode() == GameMode.CREATIVE)) {
+                player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1F, 0.5F);
                 return;
             }
             itemInfo.removeEnchant(enchant.getType());

@@ -405,6 +405,12 @@ public class ItemEditor {
                     lore.add(Component.text(str).decoration(TextDecoration.ITALIC, false));
                     enchantCount++;
                 }
+                for (EnchantmentObject enchant : enchantmentsHolder.getEnchants()) {
+                    Enchantment vanilla = enchant.getType().getVanillaEnchantment(itemInfo.getItemID());
+                    if (vanilla != null) {
+                        meta.addEnchant(vanilla, Math.min(enchant.getLevel(), vanilla.getMaxLevel()), true);
+                    }
+                }
                 if (enchantCount > 0) {
                     lore.add(Component.empty());
                 }
@@ -462,9 +468,15 @@ public class ItemEditor {
             if (itemInfo.getVanillaMaterial() != item.getType()) {
                 item.setType(itemInfo.getVanillaMaterial());
             }
-            if (!newOwner.equals(itemInfo.getOwner())) {
-                itemInfo.setOwner(newOwner);
+            if (!(itemInfo.getItemType() == ItemType.VANILLA_ITEM || itemInfo.getItemType() == ItemType.ITEM)) {
+                if (itemInfo.getOwner() == null) {
+                    itemInfo.setOwner(newOwner);
+                }
+                if (!newOwner.equals(itemInfo.getOwner())) {
+                    itemInfo.setOwner(newOwner);
+                }
             }
+            meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), itemInfo);
             updateLore(meta);
             item.setItemMeta(meta);
         } else {

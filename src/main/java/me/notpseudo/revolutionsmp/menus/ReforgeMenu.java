@@ -118,7 +118,7 @@ public class ReforgeMenu extends Menu {
             if (reforge()) {
                 player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
             } else {
-                player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1F, 0.5F);
+                player.playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 1F, 0.5F);
                 player.sendMessage(Component.text("This item could not be reforged!", NamedTextColor.RED));
             }
         }
