@@ -305,4 +305,36 @@ public class SkillHolder implements Serializable {
         return bonus;
     }
 
+    @NotNull
+    public RegenStats getBonusRegen(IncreaseType type) {
+        RegenStats bonus = RegenStats.createZero();
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            bonus = RegenStats.createMult();
+        }
+        for (SkillObject skill : skills) {
+            if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+                bonus.multiply(SkillUtils.getBonusRegen(skill, type));
+            } else {
+                bonus.combine(SkillUtils.getBonusRegen(skill, type));
+            }
+        }
+        return bonus;
+    }
+
+    @NotNull
+    public WisdomStats getBonusWisdom(IncreaseType type) {
+        WisdomStats bonus = WisdomStats.createZero();
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            bonus = WisdomStats.createMult();
+        }
+        for (SkillObject skill : skills) {
+            if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+                bonus.multiply(SkillUtils.getBonusWisdom(skill, type));
+            } else {
+                bonus.combine(SkillUtils.getBonusWisdom(skill, type));
+            }
+        }
+        return bonus;
+    }
+
 }

@@ -110,6 +110,14 @@ public class EnchantmentObject implements Serializable, Comparable<EnchantmentOb
         return type.getBonusLuck(player, level, inc);
     }
 
+    public RegenStats getBonusRegen(Player player, IncreaseType inc) {
+        return type.getBonusRegen(player, level, inc);
+    }
+
+    public WisdomStats getBonusWisdom(Player player, IncreaseType inc) {
+        return type.getBonusWisdom(player, level, inc);
+    }
+
     public WeaponStats getEventWeapon(Player damager, LivingEntity target, IncreaseType inc) {
         return type.getEventWeapon(damager, target, level, inc);
     }

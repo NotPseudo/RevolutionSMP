@@ -48,8 +48,8 @@ public class AbilityUseListeners implements Listener {
                 return;
             }
         }
-        if (!(info.getItemType() == ItemType.VANILLA_ITEM)) {
-            event.setCancelled(true);
+        if (info.getItemType() == ItemType.VANILLA_ITEM) {
+            return;
         }
         Player player = event.getPlayer();
         AbilitiesHolder abilitiesHolder = event.getItem().getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType()).getAbilitiesHolder();
@@ -67,7 +67,6 @@ public class AbilityUseListeners implements Listener {
             useType = AbilityUseType.LEFT_CLICK;
         }
         if(useType != null) {
-            PlayerStats playerStats = player.getPersistentDataContainer().get(playerKey, new PlayerStatsDataType());
             for(AbilityObject ability : abilitiesHolder.getAbilities()) {
                 if(ability.getAbilityType().getAbilityUseType() == useType) {
                     if(ability.canUse(player)) {

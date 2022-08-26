@@ -15,16 +15,15 @@ public enum ItemType {
 
     },
     SWORD {
-
     },
     BOW {
-
     },
     AXE {
         @Override
         public boolean allowPotatoBooks() {
             return false;
         }
+
     },
     PICKAXE {
         @Override
@@ -45,10 +44,8 @@ public enum ItemType {
         }
     },
     FISHING_ROD {
-
     },
     FISHING_WEAPON {
-
     },
     ITEM {
         @Override
@@ -68,6 +65,10 @@ public enum ItemType {
 
         @Override
         public boolean allowRecomb() {
+            return false;
+        }
+
+        public boolean canInteract() {
             return false;
         }
     },
@@ -128,6 +129,11 @@ public enum ItemType {
         public boolean allowRecomb() {
             return false;
         }
+
+        @Override
+        public boolean canPlace() {
+            return true;
+        }
     },
     WAND {
         @Override
@@ -160,10 +166,8 @@ public enum ItemType {
 
     },
     GAUNTLET {
-
     },
     LONGSWORD {
-
     };
 
     public String getName() {
@@ -192,6 +196,14 @@ public enum ItemType {
 
     public boolean allowRecomb() {
         return true;
+    }
+
+    public boolean canInteract() {
+        return true;
+    }
+
+    public boolean canPlace() {
+        return false;
     }
 
 }

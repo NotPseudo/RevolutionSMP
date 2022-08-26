@@ -1,5 +1,6 @@
 package me.notpseudo.revolutionsmp.abilities;
 
+import me.notpseudo.revolutionsmp.itemstats.AbilitiesHolder;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -9,8 +10,8 @@ import java.util.List;
 
 public class ShadowWarpObject extends AbilityObject {
 
-    public ShadowWarpObject() {
-        super(AbilityType.SHADOW_WARP);
+    public ShadowWarpObject(AbilitiesHolder holder) {
+        super(holder, AbilityType.SHADOW_WARP);
     }
 
     @Override

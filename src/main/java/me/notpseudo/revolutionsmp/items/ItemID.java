@@ -9,8 +9,6 @@ import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.mining.GemstoneSlotType;
 import me.notpseudo.revolutionsmp.mining.GemstoneType;
 import me.notpseudo.revolutionsmp.mining.GemstoneUtils;
-import me.notpseudo.revolutionsmp.skills.ExpDropObject;
-import me.notpseudo.revolutionsmp.skills.SkillType;
 import me.notpseudo.revolutionsmp.specialiteminfo.FarmingToolInfo;
 import me.notpseudo.revolutionsmp.specialiteminfo.GemstoneObject;
 import me.notpseudo.revolutionsmp.specialiteminfo.SpecialItemInfo;
@@ -318,6 +316,7 @@ public enum ItemID {
         public Rarity getDefaultRarity() {
             return Rarity.UNCOMMON;
         }
+
         @Override
         public Material getMaterial() {
             return Material.NETHERITE_PICKAXE;
@@ -1208,7 +1207,7 @@ public enum ItemID {
     FUMING_POTATO_BOOK {
         @Override
         public Material getMaterial() {
-            return Material.WRITTEN_BOOK;
+            return Material.BOOK;
         }
 
         @Override
@@ -3870,31 +3869,39 @@ public enum ItemID {
      */
 
     public WeaponStats getDefaultWeaponStats() {
-        return new WeaponStats(0, 0, 0, 0, 0, 0);
+        return WeaponStats.createZero();
     }
 
     public ArmorStats getDefaultArmorStats() {
-        return new ArmorStats(0, 0, 0, 0);
+        return ArmorStats.createZero();
     }
 
     public AbilityStats getDefaultAbilityStats() {
-        return new AbilityStats(0, 0);
+        return AbilityStats.createZero();
     }
 
     public FishingStats getDefaultFishingStats() {
-        return new FishingStats(0, 0);
+        return FishingStats.createZero();
     }
 
     public MiningStats getDefaultMiningStats() {
-        return new MiningStats(0, 0, 0);
+        return MiningStats.createZero();
     }
 
     public GatheringStats getDefaultGatheringStats() {
-        return new GatheringStats(0, 0);
+        return GatheringStats.createZero();
     }
 
     public LuckStats getDefaultLuckStats() {
-        return new LuckStats(0, 0);
+        return LuckStats.createZero();
+    }
+
+    public RegenStats getDefaultRegenStats() {
+        return RegenStats.createZero();
+    }
+
+    public WisdomStats getDefaultWisdomStats() {
+        return WisdomStats.createZero();
     }
 
 
@@ -4012,6 +4019,22 @@ public enum ItemID {
             return LuckStats.createMult();
         }
         return LuckStats.createZero();
+    }
+
+    @NotNull
+    public RegenStats getBonusRegen(Player player, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return RegenStats.createMult();
+        }
+        return RegenStats.createZero();
+    }
+
+    @NotNull
+    public WisdomStats getBonusWisdom(Player player, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return WisdomStats.createMult();
+        }
+        return WisdomStats.createZero();
     }
 
     @NotNull

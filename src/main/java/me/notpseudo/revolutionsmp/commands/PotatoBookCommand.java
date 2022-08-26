@@ -20,31 +20,33 @@ public class PotatoBookCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (sender instanceof Player player) {
-            if (player.isOp()) {
-                int books;
-                ItemStack item = player.getInventory().getItemInMainHand();
-                if (args[0].toLowerCase().equals("add")) {
-                    try {
-                        books = Integer.parseInt(args[1]);
-                    } catch (NumberFormatException exception) {
-                        books = 1;
-                    }
-                    ItemEditor.addHotPotatoBook(item, books);
-                } else if(args[0].toLowerCase().equals("set")) {
-                    try {
-                        books = Integer.parseInt(args[1]);
-                    } catch (NumberFormatException exception) {
-                        player.sendMessage(Component.text("Invalid number for books", NamedTextColor.RED));
-                        return false;
-                    }
-                    ItemEditor.setHotPotatoBook(item, books);
-                } else {
-                    player.sendMessage(Component.text("Missing arguments", NamedTextColor.RED));
-                    return false;
-                }
-                player.sendMessage(Component.text("Applied books!", NamedTextColor.GREEN));
+            if (!player.isOp()) {
+                player.sendMessage(Component.text("You do not have permission to use this command", NamedTextColor.RED));
                 return true;
             }
+            int books;
+            ItemStack item = player.getInventory().getItemInMainHand();
+            if (args[0].toLowerCase().equals("add")) {
+                try {
+                    books = Integer.parseInt(args[1]);
+                } catch (NumberFormatException exception) {
+                    books = 1;
+                }
+                ItemEditor.addPotatoBook(item, books);
+            } else if (args[0].toLowerCase().equals("set")) {
+                try {
+                    books = Integer.parseInt(args[1]);
+                } catch (NumberFormatException exception) {
+                    player.sendMessage(Component.text("Invalid number for books", NamedTextColor.RED));
+                    return false;
+                }
+                ItemEditor.setPotatoBooks(item, books);
+            } else {
+                player.sendMessage(Component.text("Missing arguments", NamedTextColor.RED));
+                return false;
+            }
+            player.sendMessage(Component.text("Applied books!", NamedTextColor.GREEN));
+            return true;
         }
         return true;
     }

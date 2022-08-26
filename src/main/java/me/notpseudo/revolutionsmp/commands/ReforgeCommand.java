@@ -21,19 +21,21 @@ public class ReforgeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (sender instanceof Player player) {
-            if (player.isOp()) {
-                String reforgeString = args[0].toUpperCase();
-                try {
-                    Reforge reforge = Reforge.valueOf(reforgeString);
-                    ItemEditor.reforge(player.getInventory().getItemInMainHand(), reforge);
-                    player.sendMessage(Component.text("Reforge successful!", NamedTextColor.GREEN));
-                    return true;
-                } catch (IllegalArgumentException exception) {
-                    player.sendMessage(Component.text("This reforge could not be found. Check your spelling", NamedTextColor.RED));
-                    return false;
-                }
-
+            if (!player.isOp()) {
+                player.sendMessage(Component.text("You do not have permission to use this command", NamedTextColor.RED));
+                return true;
             }
+            String reforgeString = args[0].toUpperCase();
+            try {
+                Reforge reforge = Reforge.valueOf(reforgeString);
+                ItemEditor.reforge(player.getInventory().getItemInMainHand(), reforge);
+                player.sendMessage(Component.text("Reforge successful!", NamedTextColor.GREEN));
+                return true;
+            } catch (IllegalArgumentException exception) {
+                player.sendMessage(Component.text("This reforge could not be found. Check your spelling", NamedTextColor.RED));
+                return false;
+            }
+
         }
         return true;
     }

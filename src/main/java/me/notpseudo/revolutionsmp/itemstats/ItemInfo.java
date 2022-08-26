@@ -5,9 +5,6 @@ import me.notpseudo.revolutionsmp.abilities.AbilityType;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentType;
 import me.notpseudo.revolutionsmp.items.*;
-import me.notpseudo.revolutionsmp.skills.ExpDropObject;
-import me.notpseudo.revolutionsmp.skills.SkillType;
-import me.notpseudo.revolutionsmp.skills.SkillUtils;
 import me.notpseudo.revolutionsmp.specialiteminfo.SpecialItemInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -28,7 +25,6 @@ public class ItemInfo implements Serializable {
     private Rarity rarity;
     private boolean recomb;
     private Reforge reforge;
-    private int potatoBooks;
     private WeaponStats weaponStats;
     private ArmorStats armorStats;
     private AbilityStats abilityStats;
@@ -36,9 +32,12 @@ public class ItemInfo implements Serializable {
     private MiningStats miningStats;
     private GatheringStats gatheringStats;
     private LuckStats luckStats;
+    private RegenStats regenStats;
+    private WisdomStats wisdomStats;
     private GemstonesHolder gemstonesHolder;
     private EnchantmentsHolder enchantmentsHolder;
     private AbilitiesHolder abilitiesHolder;
+    private ModifierInfo modifiers;
     private SpecialItemInfo extraInfo;
     private Material vanillaMaterial;
     private String texture;
@@ -47,7 +46,6 @@ public class ItemInfo implements Serializable {
     public ItemInfo(ItemID itemID) {
         this.itemID = itemID;
         this.recomb = false;
-        this.potatoBooks = 0;
         this.reforge = null;
         name = itemID.getName();
         rarity = itemID.getDefaultRarity();
@@ -59,6 +57,9 @@ public class ItemInfo implements Serializable {
         miningStats = itemID.getDefaultMiningStats();
         gatheringStats = itemID.getDefaultGatheringStats();
         luckStats = itemID.getDefaultLuckStats();
+        regenStats = itemID.getDefaultRegenStats();
+        wisdomStats = itemID.getDefaultWisdomStats();
+        modifiers = new ModifierInfo(this);
         if (itemID.getGemstoneSlots() != null) {
             gemstonesHolder = new GemstonesHolder(this, itemID.getGemstoneSlots());
         }
@@ -76,10 +77,9 @@ public class ItemInfo implements Serializable {
 
     public ItemInfo(Material material) {
         recomb = false;
-        potatoBooks = 0;
         reforge = null;
         try {
-            ItemID itemId = ItemID.valueOf(material.toString());
+            itemID = ItemID.valueOf(material.toString());
             name = itemID.getName();
             rarity = itemID.getDefaultRarity();
             itemType = itemID.getItemType();
@@ -90,6 +90,9 @@ public class ItemInfo implements Serializable {
             miningStats = itemID.getDefaultMiningStats();
             gatheringStats = itemID.getDefaultGatheringStats();
             luckStats = itemID.getDefaultLuckStats();
+            regenStats = itemID.getDefaultRegenStats();
+            wisdomStats = itemID.getDefaultWisdomStats();
+            modifiers = new ModifierInfo(this);
             if (itemID.getGemstoneSlots() != null) {
                 gemstonesHolder = new GemstonesHolder(this, itemID.getGemstoneSlots());
             }
@@ -116,13 +119,16 @@ public class ItemInfo implements Serializable {
                 rarity = Rarity.COMMON;
             }
             itemType = ItemType.VANILLA_ITEM;
-            weaponStats = new WeaponStats(0, 0, 0, 0, 0, 0);
-            armorStats = new ArmorStats(0, 0, 0);
-            abilityStats = new AbilityStats(0, 0);
-            fishingStats = new FishingStats(0, 0);
-            miningStats = new MiningStats(0, 0, 0);
-            gatheringStats = new GatheringStats(0, 0);
-            luckStats = new LuckStats(0, 0);
+            weaponStats = WeaponStats.createZero();
+            armorStats = ArmorStats.createZero();
+            abilityStats = AbilityStats.createZero();
+            fishingStats = FishingStats.createZero();
+            miningStats = MiningStats.createZero();
+            gatheringStats = GatheringStats.createZero();
+            luckStats = LuckStats.createZero();
+            regenStats = RegenStats.createZero();
+            wisdomStats = WisdomStats.createZero();
+            modifiers = null;
             gemstonesHolder = null;
             enchantmentsHolder = null;
             abilitiesHolder = null;
@@ -172,15 +178,6 @@ public class ItemInfo implements Serializable {
         }
     }
 
-    public int getPotatoBooks() {
-        return potatoBooks;
-    }
-
-    public void setPotatoBooks(int potatoBooks) {
-        this.potatoBooks = potatoBooks;
-        recalculate();
-    }
-
     public ItemID getItemID() {
         return itemID;
     }
@@ -194,18 +191,8 @@ public class ItemInfo implements Serializable {
         return gemstonesHolder;
     }
 
-    public void setGemstonesHolder(GemstonesHolder gemstonesHolder) {
-        this.gemstonesHolder = gemstonesHolder;
-        recalculate();
-    }
-
     public EnchantmentsHolder getEnchantmentsHolder() {
         return enchantmentsHolder;
-    }
-
-    public void setEnchantmentsHolder(EnchantmentsHolder enchantmentsHolder) {
-        this.enchantmentsHolder = enchantmentsHolder;
-        recalculate();
     }
 
     public void addEnchant(EnchantmentObject enchant) {
@@ -229,6 +216,10 @@ public class ItemInfo implements Serializable {
     public void setAbilitiesHolder(AbilitiesHolder abilitiesHolder) {
         this.abilitiesHolder = abilitiesHolder;
         recalculate();
+    }
+
+    public ModifierInfo getModifiers() {
+        return modifiers;
     }
 
     public SpecialItemInfo getExtraInfo() {
@@ -282,7 +273,7 @@ public class ItemInfo implements Serializable {
     }
 
     public void copy(ItemInfo older) {
-        potatoBooks = older.potatoBooks;
+        modifiers = older.modifiers;
         reforge = older.reforge;
         if (older.recomb) {
             recomb();
@@ -305,23 +296,66 @@ public class ItemInfo implements Serializable {
 
     public boolean canCombine(@NotNull ItemInfo other) {
         if (other.itemID == ItemID.HOT_POTATO_BOOK) {
-            return itemType.allowPotatoBooks() && getPotatoBooks() < 10;
+            return itemType.allowPotatoBooks() && modifiers.getTotalPotatoBooks() < 10;
         }
         if (other.itemID == ItemID.FUMING_POTATO_BOOK) {
-            return itemType.allowPotatoBooks() && getPotatoBooks() < 15;
+            return itemType.allowPotatoBooks() && modifiers.getTotalPotatoBooks() < 15;
         }
         if (other.itemID == ItemID.RECOMBOBULATOR_3000) {
             return itemType.allowRecomb() && !isRecomb();
         }
-        return false;
+        if (other.itemID == ItemID.ENCHANTED_BOOK) {
+            return itemType.allowEnchants() || itemID == ItemID.ENCHANTED_BOOK;
+        }
+        return itemID == other.itemID;
     }
 
-    public void combine(ItemInfo other) {
-
+    public boolean combine(ItemInfo other) {
+        if (!canCombine(other)) {
+            return false;
+        }
+        if (other.itemID == ItemID.HOT_POTATO_BOOK) {
+            return modifiers.addHotPotatoBook();
+        }
+        if (other.itemID == ItemID.FUMING_POTATO_BOOK) {
+            return modifiers.addFumingPotatoBook();
+        }
+        if (other.itemID == ItemID.RECOMBOBULATOR_3000) {
+            recomb();
+            return true;
+        }
+        if (other.itemID == ItemID.ENCHANTED_BOOK) {
+            if (enchantmentsHolder == null) {
+                return false;
+            }
+            enchantmentsHolder.combine(other.enchantmentsHolder);
+            recalculate();
+            return true;
+        }
+        if (other.recomb) {
+            recomb = true;
+        }
+        if (reforge == null) {
+            reforge = other.reforge;
+        }
+        if (modifiers != null) {
+            modifiers.combine(other.modifiers);
+        }
+        if (enchantmentsHolder != null) {
+            enchantmentsHolder.combine(other.enchantmentsHolder);
+        }
+        if (abilitiesHolder != null) {
+            abilitiesHolder.combine(other.abilitiesHolder);
+        }
+        if (gemstonesHolder != null) {
+            gemstonesHolder.combine(other.gemstonesHolder);
+        }
+        recalculate();
+        return true;
     }
 
     public void upgradeFrom(ItemInfo older) {
-        potatoBooks = older.potatoBooks;
+        modifiers.combine(older.modifiers);
         reforge = older.reforge;
         if (older.recomb) {
             recomb();
@@ -352,6 +386,8 @@ public class ItemInfo implements Serializable {
             miningStats = itemID.getDefaultMiningStats();
             gatheringStats = itemID.getDefaultGatheringStats();
             luckStats = itemID.getDefaultLuckStats();
+            regenStats = itemID.getDefaultRegenStats();
+            wisdomStats = itemID.getDefaultWisdomStats();
         }
         if (reforge != null) {
             weaponStats.combine(reforge.getWeaponStats(rarity, owner));
@@ -361,16 +397,21 @@ public class ItemInfo implements Serializable {
             miningStats.combine(reforge.getMiningStats(rarity, owner));
             gatheringStats.combine(reforge.getGatheringStats(rarity, owner));
             luckStats.combine(reforge.getLuckStats(rarity, owner));
+            regenStats.combine(reforge.getRegenStats(rarity, owner));
+            wisdomStats.combine(reforge.getWisdomStats(rarity, owner));
         }
         if (enchantmentsHolder != null && itemType != ItemType.ITEM) {
             for (EnchantmentObject enchant : enchantmentsHolder.getEnchants()) {
-                weaponStats.combine(enchant.getType().getApplyWeaponStats(enchant.getLevel()));
-                armorStats.combine(enchant.getType().getApplyArmorStats(enchant.getLevel()));
-                abilityStats.combine(enchant.getType().getApplyAbilityStats(enchant.getLevel()));
-                fishingStats.combine(enchant.getType().getApplyFishingStats(enchant.getLevel()));
-                miningStats.combine(enchant.getType().getApplyMiningStats(enchant.getLevel()));
-                gatheringStats.combine(enchant.getType().getApplyGatheringStats(enchant.getLevel()));
-                luckStats.combine(enchant.getType().getApplyLuckStats(enchant.getLevel()));
+                int level = enchant.getLevel();
+                weaponStats.combine(enchant.getType().getApplyWeaponStats(level));
+                armorStats.combine(enchant.getType().getApplyArmorStats(level));
+                abilityStats.combine(enchant.getType().getApplyAbilityStats(level));
+                fishingStats.combine(enchant.getType().getApplyFishingStats(level));
+                miningStats.combine(enchant.getType().getApplyMiningStats(level));
+                gatheringStats.combine(enchant.getType().getApplyGatheringStats(level));
+                luckStats.combine(enchant.getType().getApplyLuckStats(level));
+                regenStats.combine(enchant.getType().getApplyRegenStats(level));
+                wisdomStats.combine(enchant.getType().getApplyWisdomStats(level));
             }
         }
         if (gemstonesHolder != null) {
@@ -381,17 +422,22 @@ public class ItemInfo implements Serializable {
             miningStats.combine(gemstonesHolder.getGemMining(rarity));
             gatheringStats.combine(gemstonesHolder.getGemGathering(rarity));
             luckStats.combine(gemstonesHolder.getGemLLuck(rarity));
+            regenStats.combine(gemstonesHolder.getGemRegen(rarity));
+            wisdomStats.combine(gemstonesHolder.getGemWisdom(rarity));
         }
         if (abilitiesHolder != null) {
             abilitiesHolder.reorganize();
         }
-        if (ItemEditor.isWeapon(this)) {
-            weaponStats.setStatValue(StatType.DAMAGE, weaponStats.getStatValue(StatType.DAMAGE) + potatoBooks * 2);
-            weaponStats.setStatValue(StatType.STRENGTH, weaponStats.getStatValue(StatType.STRENGTH) + potatoBooks * 2);
-        }
-        if (ItemEditor.isArmor(this)) {
-            armorStats.setStatValue(StatType.HEALTH, armorStats.getStatValue(StatType.HEALTH) + potatoBooks * 4);
-            armorStats.setStatValue(StatType.DEFENSE, armorStats.getStatValue(StatType.DEFENSE) + potatoBooks * 2);
+        if (modifiers != null) {
+            weaponStats.combine(modifiers.getWeaponStats());
+            armorStats.combine(modifiers.getArmorStats());
+            abilityStats.combine(modifiers.getArmorStats());
+            fishingStats.combine(modifiers.getFishingStats());
+            miningStats.combine(modifiers.getMiningStats());
+            gatheringStats.combine(modifiers.getGatheringStats());
+            luckStats.combine(modifiers.getLuckStats());
+            regenStats.combine(modifiers.getRegenStats());
+            wisdomStats.combine(modifiers.getWisdomStats());
         }
     }
 
@@ -399,32 +445,49 @@ public class ItemInfo implements Serializable {
     Default stats that are stored on the item
      */
 
+    @NotNull
     public WeaponStats getWeaponStats() {
         return weaponStats;
     }
 
+    @NotNull
     public ArmorStats getArmorStats() {
         return armorStats;
     }
 
+    @NotNull
     public AbilityStats getAbilityStats() {
         return abilityStats;
     }
 
+    @NotNull
     public FishingStats getFishingStats() {
         return fishingStats;
     }
 
+    @NotNull
     public MiningStats getMiningStats() {
         return miningStats;
     }
 
+    @NotNull
     public GatheringStats getGatheringStats() {
         return gatheringStats;
     }
 
+    @NotNull
     public LuckStats getLuckStats() {
         return luckStats;
+    }
+
+    @NotNull
+    public RegenStats getRegenStats() {
+        return regenStats;
+    }
+
+    @NotNull
+    public WisdomStats getWisdomStats() {
+        return wisdomStats;
     }
 
     /*
@@ -730,6 +793,92 @@ public class ItemInfo implements Serializable {
             }
         }
         return bonusLuck;
+    }
+
+    @NotNull
+    public RegenStats getBonusRegen(IncreaseType type) {
+        Player player = Bukkit.getPlayer(owner);
+        RegenStats bonusRegen = itemID.getBonusRegen(player, type);
+        if (reforge != null && rarity != null) {
+            RegenStats reforgeStats = reforge.getBonusRegen(rarity, player, type);
+            if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+                bonusRegen.multiply(reforgeStats);
+            } else {
+                bonusRegen.combine(reforgeStats);
+            }
+        }
+        if (enchantmentsHolder != null) {
+            for (EnchantmentObject enchant : enchantmentsHolder.getEnchants()) {
+                RegenStats enchantStat = enchant.getBonusRegen(player, type);
+                if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+                    bonusRegen.multiply(enchantStat);
+                } else {
+                    bonusRegen.combine(enchantStat);
+                }
+            }
+        }
+        if (abilitiesHolder != null) {
+            for (AbilityObject ability : abilitiesHolder.getAbilities()) {
+                RegenStats abilityStat = ability.getBonusRegen(player, type);
+                if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+                    bonusRegen.multiply(abilityStat);
+                } else {
+                    bonusRegen.combine(abilityStat);
+                }
+            }
+        }
+        if (extraInfo != null) {
+            RegenStats extraStats = extraInfo.getBonusRegen(player, type);
+            if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+                bonusRegen.multiply(extraStats);
+            } else {
+                bonusRegen.combine(extraStats);
+            }
+        }
+        return bonusRegen;
+    }
+
+    @NotNull
+    public WisdomStats getBonusWisdom(IncreaseType type) {
+        Player player = Bukkit.getPlayer(owner);
+        WisdomStats bonusRegen = itemID.getBonusWisdom(player, type);
+        if (reforge != null && rarity != null) {
+            WisdomStats reforgeStats = reforge.getBonusWisdom(rarity, player, type);
+            if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+                bonusRegen.multiply(reforgeStats);
+            } else {
+                bonusRegen.combine(reforgeStats);
+            }
+        }
+        if (enchantmentsHolder != null) {
+            for (EnchantmentObject enchant : enchantmentsHolder.getEnchants()) {
+                WisdomStats enchantStat = enchant.getBonusWisdom(player, type);
+                if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+                    bonusRegen.multiply(enchantStat);
+                } else {
+                    bonusRegen.combine(enchantStat);
+                }
+            }
+        }
+        if (abilitiesHolder != null) {
+            for (AbilityObject ability : abilitiesHolder.getAbilities()) {
+                WisdomStats abilityStat = ability.getBonusWisdom(player, type);
+                if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+                    bonusRegen.multiply(abilityStat);
+                } else {
+                    bonusRegen.combine(abilityStat);
+                }
+            }
+        }
+        if (extraInfo != null) {
+            WisdomStats extraStats = extraInfo.getBonusWisdom(player, type);
+            if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+                bonusRegen.multiply(extraStats);
+            } else {
+                bonusRegen.combine(extraStats);
+            }
+        }
+        return bonusRegen;
     }
 
     /*

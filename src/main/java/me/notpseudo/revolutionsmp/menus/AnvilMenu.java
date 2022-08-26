@@ -114,12 +114,14 @@ public class AnvilMenu extends Menu {
         if (!checkBoth()) {
             return false;
         }
-        ItemStack result = inventory.getItem(33);
-        if (result != null) {
-            result.editMeta(m -> m.getPersistentDataContainer().remove(MenuUtils.getMenuKey()));
-            inventory.setItem(29, null);
-            inventory.setItem(33, null);
+        ItemStack result = inventory.getItem(13);
+        if (result == null) {
+            return false;
         }
+        result.editMeta(m -> m.getPersistentDataContainer().remove(MenuUtils.getMenuKey()));
+        inventory.setItem(29, null);
+        inventory.setItem(33, null);
+        checkBoth();
         return true;
     }
 
@@ -153,10 +155,10 @@ public class AnvilMenu extends Menu {
             setBlock();
             return false;
         }
-        ItemMeta meta = itemClone.getItemMeta();
-        meta.getPersistentDataContainer().set(ItemEditor.getItemKey(), new ItemInfoDataType(), infoClone);
-        ItemEditor.updateLore(meta);
-        itemClone.setItemMeta(meta);
+        if (!infoClone.combine(rightInfo)) {
+            return false;
+        }
+        ItemEditor.updateItemInfo(itemClone, infoClone);
         inventory.setItem(13, makeMenuType(itemClone, null));
         setBottomRow(Material.LIME_STAINED_GLASS_PANE);
         return true;
@@ -174,7 +176,7 @@ public class AnvilMenu extends Menu {
                 Component.text("Click the anvil below to combine", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
         ));
         block.setItemMeta(blockMeta);
-        inventory.setItem(23, makeMenuType(block, null));
+        inventory.setItem(13, makeMenuType(block, null));
     }
 
     private boolean checkLeft() {
@@ -199,6 +201,10 @@ public class AnvilMenu extends Menu {
     private boolean checkRight() {
         ItemStack right = inventory.getItem(33);
         if (right == null || right.getType() == Material.AIR) {
+            setRight(Material.RED_STAINED_GLASS_PANE);
+            return false;
+        }
+        if (right.getAmount() > 1) {
             setRight(Material.RED_STAINED_GLASS_PANE);
             return false;
         }
@@ -229,7 +235,7 @@ public class AnvilMenu extends Menu {
 
     private void setBottomRow(Material material) {
         for (int i = 45; i < 54; i++) {
-            if (i != 49) {
+            if (i != 49 && i != 48) {
                 inventory.setItem(i, makeMenuGlass(new ItemStack(material)));
             }
         }

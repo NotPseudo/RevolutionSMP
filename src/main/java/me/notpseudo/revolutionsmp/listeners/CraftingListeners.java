@@ -46,9 +46,15 @@ public class CraftingListeners implements Listener {
     @EventHandler
     public void onPlace(BlockPlaceEvent event) {
         ItemInfo info = ItemEditor.getInfo(event.getItemInHand());
-        if (!(info == null || info.getItemType() == ItemType.VANILLA_ITEM)) {
-            event.setCancelled(true);
-            return;
+        if (info != null) {
+            ItemType type = info.getItemType();
+            if (type == ItemType.AXE || type == ItemType.SHOVEL || type == ItemType.HOE) {
+                return;
+            }
+            if (!info.getItemType().canPlace()) {
+                event.setCancelled(true);
+                return;
+            }
         }
         SkillUtils.addRegularXP(SkillType.BUILDING, event.getPlayer(), 10);
     }

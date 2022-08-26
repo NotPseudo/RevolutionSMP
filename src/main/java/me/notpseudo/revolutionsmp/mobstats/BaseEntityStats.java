@@ -70,6 +70,14 @@ public class BaseEntityStats implements Serializable {
         this.maxHealth = maxHealth;
     }
 
+    public void setHealthStats(ArmorStats armor) {
+        healthStats = armor;
+    }
+
+    public void setDamageStats(WeaponStats weapon) {
+        damageStats = weapon;
+    }
+
     public double getStatValue(StatType type) {
         return switch (type.getStatCategory()) {
             case COMBAT -> damageStats.getStatValue(type);
@@ -92,7 +100,6 @@ public class BaseEntityStats implements Serializable {
             default -> 1;
         };
     }
-
     public void setStatMultValue(StatType type, double value) {
         switch (type.getStatCategory()) {
             case COMBAT -> damageStatsMult.setStatValue(type, value);
@@ -107,18 +114,21 @@ public class BaseEntityStats implements Serializable {
      * @param level         The level of the mob used to correctly set stats
      */
     public void updateStats(CustomMobType customMobType, int level) {
-        MobCategory mobCategory = customMobType.getMobBehavior();
-        int increase = 0;
+        double multiplier = 1;
         if (customMobType.getMobBehavior() != MobCategory.SEA_CREATURE) {
-            increase = level - mobCategory.getLowestLevel();
+            int low = customMobType.getMinLevel(), high = customMobType.getMaxLevel();
+            int range = high - low;
+            double average = low + high / 2.0;
+            multiplier = ((level - average) / range) + 1;
         }
-        maxHealth = customMobType.getHealth() + (increase * customMobType.getHealth() / 10);
-        double damage = customMobType.getDamage() + (increase * customMobType.getDamage() / 10);
-        double defense = customMobType.getDefense() + (increase * customMobType.getDefense() / (100 / 7.5));
-        double speed = customMobType.getSpeed() + (increase * customMobType.getSpeed() / 50);
-        double strength = customMobType.getStrength() + (increase * customMobType.getStrength() / 10);
-        double critChance = customMobType.getCritChance() + (increase * customMobType.getCritChance() / 20);
-        double critDamage = customMobType.getCritDamage() + (increase * customMobType.getCritDamage() / 10);
+        double difference = multiplier - 1;
+        maxHealth = customMobType.getHealth() * multiplier;
+        double damage = customMobType.getDamage() * multiplier;
+        double defense = customMobType.getDefense() * (1 + difference * 0.75);
+        double speed = customMobType.getSpeed() * (1 + difference * 0.2);
+        double strength = customMobType.getStrength() * multiplier;
+        double critChance = customMobType.getCritChance() * (1 + difference * 0.75);
+        double critDamage = customMobType.getCritDamage() * multiplier;
         healthStats = new ArmorStats(maxHealth, defense, speed);
         damageStats = new WeaponStats(damage, strength, critChance, critDamage, 0, 0);
         healthStatsMult = ArmorStats.createMult();

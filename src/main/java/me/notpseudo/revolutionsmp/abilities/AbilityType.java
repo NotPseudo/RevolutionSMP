@@ -23,8 +23,8 @@ public enum AbilityType {
         }
 
         @Override
-        public AbilityObject createObject() {
-            return new InstantTransmissionObject();
+        public AbilityObject createObject(AbilitiesHolder holder) {
+            return new InstantTransmissionObject(holder);
         }
     },
     WITHER_IMPACT {
@@ -72,8 +72,8 @@ public enum AbilityType {
         }
 
         @Override
-        public AbilityObject createObject() {
-            return new WitherImpactObject();
+        public AbilityObject createObject(AbilitiesHolder holder) {
+            return new WitherImpactObject(holder);
         }
 
         @Override
@@ -178,14 +178,14 @@ public enum AbilityType {
         }
 
         @Override
-        public @NotNull ArmorStats getEventArmor(LivingEntity damager, Player target, IncreaseType inc) {
+        public ArmorStats getEventArmor(LivingEntity damager, Player target, IncreaseType inc) {
             if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 if (witherShieldCooldownList.contains(target.getUniqueId())) {
                     return new ArmorStats(0.9, 1, 1, 1);
                 }
-                return ArmorStats.createMult();
+                return null;
             }
-            return ArmorStats.createZero();
+            return null;
         }
 
         @Override
@@ -255,14 +255,15 @@ public enum AbilityType {
         }
 
         @Override
-        public AbilityObject createObject() {
-            return new ShadowWarpObject();
+        public AbilityObject createObject(AbilitiesHolder holder) {
+            return new ShadowWarpObject(holder);
         }
 
     },
     GRAVITY_STORM {
 
         private static ArrayList<UUID> gravityStormCooldownList = new ArrayList<>();
+
         @Override
         public void use(Player player) {
             AbilitiesUtil.gravityStorm(player);
@@ -369,120 +370,72 @@ public enum AbilityType {
         return AbilityUseType.RIGHT_CLICK;
     }
 
-    public AbilityObject createObject() {
-        return new AbilityObject(this);
+    public AbilityObject createObject(AbilitiesHolder holder) {
+        return new AbilityObject(holder, this);
     }
 
-    @NotNull
     public WeaponStats getEventWeapon(Player damager, LivingEntity target, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return WeaponStats.createMult();
-        }
-        return WeaponStats.createZero();
+        return null;
     }
 
-    @NotNull
     public ArmorStats getEventArmor(LivingEntity damager, Player target, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return ArmorStats.createMult();
-        }
-        return ArmorStats.createZero();
+        return null;
     }
 
-    @NotNull
     public AbilityStats getEventAbility(Player damager, LivingEntity target, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return AbilityStats.createMult();
-        }
-        return AbilityStats.createZero();
+        return null;
     }
 
-    @NotNull
     public FishingStats getEventFishing(Player fisher, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return FishingStats.createMult();
-        }
-        return FishingStats.createZero();
+        return null;
     }
 
-    @NotNull
     public MiningStats getEventMining(Player miner, Block block, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return MiningStats.createMult();
-        }
-        return MiningStats.createZero();
+        return null;
     }
 
-    @NotNull
     public GatheringStats getEventGathering(Player harvester, Block block, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return GatheringStats.createMult();
-        }
-        return GatheringStats.createZero();
+        return null;
     }
 
-    @NotNull
     public LuckStats getEventLuck(Player attacker, LivingEntity target, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return LuckStats.createMult();
-        }
-        return LuckStats.createZero();
+        return null;
     }
 
-    @NotNull
     public WeaponStats getBonusWeapon(Player player, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return WeaponStats.createMult();
-        }
-        return WeaponStats.createZero();
+        return null;
     }
 
-    @NotNull
     public ArmorStats getBonusArmor(Player player, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return ArmorStats.createMult();
-        }
-        return ArmorStats.createZero();
+        return null;
     }
 
-    @NotNull
     public AbilityStats getBonusAbility(Player player, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return AbilityStats.createMult();
-        }
-        return AbilityStats.createZero();
+        return null;
     }
 
-    @NotNull
     public FishingStats getBonusFishing(Player fisher, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return FishingStats.createMult();
-        }
-        return FishingStats.createZero();
+        return null;
     }
 
-    @NotNull
     public MiningStats getBonusMining(Player miner, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return MiningStats.createMult();
-        }
-        return MiningStats.createZero();
+        return null;
     }
 
-    @NotNull
     public GatheringStats getBonusGathering(Player harvester, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return GatheringStats.createMult();
-        }
-        return GatheringStats.createZero();
+        return null;
     }
 
-    @NotNull
     public LuckStats getBonusLuck(Player attacker, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return LuckStats.createMult();
-        }
-        return LuckStats.createZero();
+        return null;
+    }
+
+    public RegenStats getBonusRegen(Player attacker, IncreaseType type) {
+        return null;
+    }
+
+    public WisdomStats getBonusWisdom(Player attacker, IncreaseType type) {
+        return null;
     }
 
 }

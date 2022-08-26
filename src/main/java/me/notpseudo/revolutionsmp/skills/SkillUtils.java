@@ -1,5 +1,6 @@
 package me.notpseudo.revolutionsmp.skills;
 
+import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.itemstats.*;
@@ -13,10 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
-import org.bukkit.entity.ComplexLivingEntity;
-import org.bukkit.entity.Creature;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -77,6 +75,14 @@ public class SkillUtils implements Listener {
                 addCombatXpToPlayer(player, baseDrop.getType(), event.getEntity(), baseDrop.getValue());
             }
         }
+    }
+
+    @EventHandler
+    public void onExpPickUp(PlayerPickupExperienceEvent event) {
+        int level = (int) getHolder(event.getPlayer()).getSkill(SkillType.ENCHANTING).getLevel();
+        ExperienceOrb orb = event.getExperienceOrb();
+        int finalExp = (int) (orb.getExperience() * (1 + (level * .04)));
+        orb.setExperience(finalExp);
     }
 
     public static void updatePlayerSkills(Player player, SkillHolder holder) {
@@ -295,6 +301,32 @@ public class SkillUtils implements Listener {
         }
         return switch (skill.getType()) {
             default -> LuckStats.createZero();
+        };
+    }
+
+    @NotNull
+    public static RegenStats getBonusRegen(SkillObject skill, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return RegenStats.createMult();
+        }
+        if (type == IncreaseType.ADDITIVE_PERCENT) {
+            return RegenStats.createZero();
+        }
+        return switch (skill.getType()) {
+            default -> RegenStats.createZero();
+        };
+    }
+
+    @NotNull
+    public static WisdomStats getBonusWisdom(SkillObject skill, IncreaseType type) {
+        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+            return WisdomStats.createMult();
+        }
+        if (type == IncreaseType.ADDITIVE_PERCENT) {
+            return WisdomStats.createZero();
+        }
+        return switch (skill.getType()) {
+            default -> WisdomStats.createZero();
         };
     }
 

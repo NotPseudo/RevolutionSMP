@@ -22,13 +22,15 @@ public class MoneyCommand implements CommandExecutor {
         if (!(sender instanceof Player player)) {
             return true;
         }
+
         PlayerEcoInfo info = EcoUtils.getEcoInfo(player);
         if (args.length < 3) {
             player.sendMessage(Component.text("Your purse: ", NamedTextColor.GRAY).append(Component.text(info.getPurse(), NamedTextColor.GOLD)));
             player.sendMessage(Component.text("Your bank: ", NamedTextColor.GRAY).append(Component.text(info.getBank(), NamedTextColor.GOLD)));
             return true;
         }
-        if (!(player.isOp())) {
+        if (!player.isOp()) {
+            player.sendMessage(Component.text("You do not have permission to use this command", NamedTextColor.RED));
             return true;
         }
         String type = args[0];

@@ -72,6 +72,12 @@ public enum MenuType {
             return new EnchantmentTableMenu(player);
         }
     },
+    ANVIL {
+        @Override
+        public Menu getNext(Player player) {
+            return new AnvilMenu(player);
+        }
+    },
     MONEY {
         @Override
         public Menu getNext(Player player) {

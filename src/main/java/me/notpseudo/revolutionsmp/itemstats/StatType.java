@@ -11,11 +11,21 @@ public enum StatType {
         public String getSymbol() {
             return "❁";
         }
+
+        @Override
+        public NamedTextColor getItemDisplayColor() {
+            return NamedTextColor.RED;
+        }
     },
     STRENGTH {
         @Override
         public String getSymbol() {
             return "❁";
+        }
+
+        @Override
+        public NamedTextColor getItemDisplayColor() {
+            return NamedTextColor.RED;
         }
     },
     CRIT_CHANCE {
@@ -26,6 +36,11 @@ public enum StatType {
         @Override
         public NamedTextColor getColor() {
             return NamedTextColor.BLUE;
+        }
+
+        @Override
+        public NamedTextColor getItemDisplayColor() {
+            return NamedTextColor.RED;
         }
         @Override
         public boolean isPercentage() {
@@ -41,6 +56,11 @@ public enum StatType {
         public NamedTextColor getColor() {
             return NamedTextColor.BLUE;
         }
+
+        @Override
+        public NamedTextColor getItemDisplayColor() {
+            return NamedTextColor.RED;
+        }
         @Override
         public boolean isPercentage() {
             return true;
@@ -54,6 +74,11 @@ public enum StatType {
         @Override
         public NamedTextColor getColor() {
             return NamedTextColor.YELLOW;
+        }
+
+        @Override
+        public NamedTextColor getItemDisplayColor() {
+            return NamedTextColor.RED;
         }
         @Override
         public boolean isPercentage() {
@@ -156,6 +181,11 @@ public enum StatType {
         public boolean isPercentage() {
             return true;
         }
+
+        @Override
+        public NamedTextColor getItemDisplayColor() {
+            return NamedTextColor.RED;
+        }
         @Override
         public StatCategory getStatCategory() {
             return StatCategory.INTELLIGENCE;
@@ -169,6 +199,11 @@ public enum StatType {
         @Override
         public NamedTextColor getColor() {
             return NamedTextColor.DARK_AQUA;
+        }
+
+        @Override
+        public NamedTextColor getItemDisplayColor() {
+            return NamedTextColor.RED;
         }
         @Override
         public boolean isPercentage() {
@@ -509,6 +544,10 @@ public enum StatType {
 
     public NamedTextColor getColor() {
         return NamedTextColor.RED;
+    }
+
+    public NamedTextColor getItemDisplayColor() {
+        return NamedTextColor.GREEN;
     }
 
     public StatCategory getStatCategory() {

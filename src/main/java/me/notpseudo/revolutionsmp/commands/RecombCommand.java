@@ -20,10 +20,13 @@ public class RecombCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (sender instanceof Player player) {
-            if (player.isOp()) {
-                ItemEditor.recombobulate(player.getInventory().getItemInMainHand());
-                player.sendMessage(Component.text("Recombobulated successfully", NamedTextColor.GREEN));
+            if (!player.isOp()) {
+                player.sendMessage(Component.text("You do not have permission to use this command", NamedTextColor.RED));
+                return true;
             }
+            ItemEditor.recombobulate(player.getInventory().getItemInMainHand());
+            player.sendMessage(Component.text("Recombobulated successfully", NamedTextColor.GREEN));
+
         }
         return true;
     }

@@ -27,12 +27,10 @@ public class FishingListeners implements Listener {
     @EventHandler
     public void onFish(PlayerFishEvent event) {
         Player player = event.getPlayer();
-        player.sendMessage(Component.text("Fishing Event State: " + ItemEditor.getStringFromEnum(event.getState()), NamedTextColor.GREEN));
         PlayerStats playerStats = StatsListeners.getPlayerStats(player);
         FishingStats add = StatsListeners.getEventFishing(player, IncreaseType.INCREASE),
                 addPercent = StatsListeners.getEventFishing(player, IncreaseType.ADDITIVE_PERCENT),
                 mult = StatsListeners.getEventFishing(player, IncreaseType.MULTIPLICATIVE_PERCENT);
-
         if (event.getState() == PlayerFishEvent.State.FISHING) {
             double fishingSpeed = (playerStats.getStatValue(StatType.FISHING_SPEED) + add.getStatValue(StatType.FISHING_SPEED)) *
                     (1 + (addPercent.getStatValue(StatType.FISHING_SPEED) / 100)) *

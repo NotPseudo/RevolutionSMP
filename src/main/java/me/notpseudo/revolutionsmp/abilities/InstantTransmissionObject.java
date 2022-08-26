@@ -1,8 +1,8 @@
 package me.notpseudo.revolutionsmp.abilities;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
-import me.notpseudo.revolutionsmp.itemstats.ArmorStats;
-import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
+import me.notpseudo.revolutionsmp.items.ItemEditor;
+import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -17,23 +17,21 @@ import java.util.UUID;
 public class InstantTransmissionObject extends AbilityObject {
 
     private static ArrayList<UUID> speedUsed = new ArrayList<>();
-    private int tuners;
 
-    public InstantTransmissionObject() {
-        super(AbilityType.INSTANT_TRANSMISSION);
-        tuners = 0;
-    }
-
-    public int getTuners() {
-        return tuners;
-    }
-
-    public void setTuners(int tuners) {
-        this.tuners = tuners;
+    public InstantTransmissionObject(AbilitiesHolder holder) {
+        super(holder, AbilityType.INSTANT_TRANSMISSION);
     }
 
     @Override
     public void use(Player player) {
+        int tuners = 0;
+        ItemInfo info = HOLDER.getHolder();
+        if (info != null) {
+            ModifierInfo modifier = info.getModifiers();
+            if (modifier != null) {
+                tuners = modifier.getTransmissionTuners();
+            }
+        }
         AbilitiesUtil.teleportWithSound(player, 8 + tuners * 2);
         takeMana(player);
         if(speedUsed.contains(player.getUniqueId())) {
@@ -55,6 +53,14 @@ public class InstantTransmissionObject extends AbilityObject {
     public ArrayList<Component> getText() {
         ArrayList<Component> lines = new ArrayList<>(super.getText());
         lines.remove(lines.size() - 1);
+        int tuners = 0;
+        ItemInfo info = HOLDER.getHolder();
+        if (info != null) {
+            ModifierInfo modifier = info.getModifiers();
+            if (modifier != null) {
+                tuners = modifier.getTransmissionTuners();
+            }
+        }
         lines.add(Component.text("Teleport ", NamedTextColor.GRAY).append(Component.text(8 + tuners * 2 + " blocks ", NamedTextColor.GREEN)).append(Component.text("ahead of", NamedTextColor.GRAY)).decoration(TextDecoration.ITALIC, false));
         lines.add(Component.text("you and gain ", NamedTextColor.GRAY).append(Component.text("+50 ", NamedTextColor.GREEN)).append(Component.text("✦ Speed", NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false));
         lines.add(Component.text("for ", NamedTextColor.GRAY).append(Component.text("3 seconds", NamedTextColor.GREEN)).append(Component.text(".", NamedTextColor.GRAY)).decoration(TextDecoration.ITALIC, false));
@@ -63,13 +69,13 @@ public class InstantTransmissionObject extends AbilityObject {
     }
 
     @Override
-    public @NotNull ArmorStats getBonusArmor(Player player, IncreaseType inc) {
+    public ArmorStats getBonusArmor(Player player, IncreaseType inc) {
         if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return ArmorStats.createMult();
+            return null;
         }
         if (inc != IncreaseType.INCREASE && speedUsed.contains(player.getUniqueId())) {
             return new ArmorStats(0, 0, 50);
         }
-        return ArmorStats.createZero();
+        return null;
     }
 }

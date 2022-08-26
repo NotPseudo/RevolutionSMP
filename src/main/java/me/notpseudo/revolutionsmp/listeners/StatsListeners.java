@@ -121,6 +121,8 @@ public class StatsListeners implements Listener {
         MiningStats miningStats = MiningStats.createZero();
         GatheringStats gatheringStats = GatheringStats.createZero();
         LuckStats luckStats = LuckStats.createZero();
+        RegenStats regenStats = new RegenStats(100, 100, 100, 100);
+        WisdomStats wisdomStats = WisdomStats.createZero();
         for (ItemInfo info : getInfos(player)) {
             damageStats.combine(info.getWeaponStats());
             healthStats.combine(info.getArmorStats());
@@ -129,6 +131,8 @@ public class StatsListeners implements Listener {
             miningStats.combine(info.getMiningStats());
             gatheringStats.combine(info.getGatheringStats());
             luckStats.combine(info.getLuckStats());
+            regenStats.combine(info.getRegenStats());
+            wisdomStats.combine(info.getWisdomStats());
         }
         damageStats.combine(getBonusWeapon(player, IncreaseType.INCREASE));
         healthStats.combine(getBonusArmor(player, IncreaseType.INCREASE));
@@ -137,6 +141,8 @@ public class StatsListeners implements Listener {
         miningStats.combine(getBonusMining(player, IncreaseType.INCREASE));
         gatheringStats.combine(getBonusGathering(player, IncreaseType.INCREASE));
         luckStats.combine(getBonusLuck(player, IncreaseType.INCREASE));
+        regenStats.combine(getBonusRegen(player, IncreaseType.INCREASE));
+        wisdomStats.combine(getBonusWisdom(player, IncreaseType.INCREASE));
         damageStats.additivePercent(getBonusWeapon(player, IncreaseType.ADDITIVE_PERCENT));
         healthStats.additivePercent(getBonusArmor(player, IncreaseType.ADDITIVE_PERCENT));
         abilityStats.additivePercent(getBonusAbility(player, IncreaseType.ADDITIVE_PERCENT));
@@ -144,6 +150,7 @@ public class StatsListeners implements Listener {
         miningStats.additivePercent(getBonusMining(player, IncreaseType.ADDITIVE_PERCENT));
         gatheringStats.additivePercent(getBonusGathering(player, IncreaseType.ADDITIVE_PERCENT));
         luckStats.additivePercent(getBonusLuck(player, IncreaseType.ADDITIVE_PERCENT));
+        regenStats.combine(getBonusRegen(player, IncreaseType.ADDITIVE_PERCENT));
         damageStats.multiply(getBonusWeapon(player, IncreaseType.MULTIPLICATIVE_PERCENT));
         healthStats.multiply(getBonusArmor(player, IncreaseType.MULTIPLICATIVE_PERCENT));
         abilityStats.multiply(getBonusAbility(player, IncreaseType.MULTIPLICATIVE_PERCENT));
@@ -151,6 +158,7 @@ public class StatsListeners implements Listener {
         miningStats.multiply(getBonusMining(player, IncreaseType.MULTIPLICATIVE_PERCENT));
         gatheringStats.multiply(getBonusGathering(player, IncreaseType.MULTIPLICATIVE_PERCENT));
         luckStats.multiply(getBonusLuck(player, IncreaseType.MULTIPLICATIVE_PERCENT));
+        regenStats.multiply(getBonusRegen(player, IncreaseType.MULTIPLICATIVE_PERCENT));
         PlayerStats playerStats = getPlayerStats(player);
         player.setHealthScale(40);
         // Adjusts Player's Health to new max Health by keeping the same percentage
@@ -160,21 +168,17 @@ public class StatsListeners implements Listener {
         double healthPercent = playerStats.getStatValue(StatType.HEALTH) / playerStats.getMaxHealth();
         playerStats.setMaxHealth(healthStats.getStatValue(StatType.HEALTH));
         player.setAbsorptionAmount(Math.min(playerStats.getAbsorption(), 40));
-        playerStats.setStatValue(StatType.HEALTH, healthPercent * healthStats.getStatValue(StatType.HEALTH));
-        player.setHealth(Math.min(2048, playerStats.getStatValue(StatType.HEALTH)));
-        playerStats.setStatValue(StatType.DEFENSE, healthStats.getStatValue(StatType.DEFENSE));
-        playerStats.setStatValue(StatType.TRUE_DEFENSE, healthStats.getStatValue(StatType.TRUE_DEFENSE));
-        playerStats.setStatValue(StatType.SPEED, healthStats.getStatValue(StatType.SPEED));
-        playerStats.setStatValue(StatType.STRENGTH, damageStats.getStatValue(StatType.STRENGTH));
-        playerStats.setStatValue(StatType.CRIT_CHANCE, damageStats.getStatValue(StatType.CRIT_CHANCE));
-        playerStats.setStatValue(StatType.CRIT_DAMAGE, damageStats.getStatValue(StatType.CRIT_DAMAGE));
-        playerStats.setStatValue(StatType.ATTACK_SPEED, damageStats.getStatValue(StatType.ATTACK_SPEED));
-        playerStats.setStatValue(StatType.FEROCITY, damageStats.getStatValue(StatType.FEROCITY));
+        healthStats.setStatValue(StatType.HEALTH_REGEN, healthPercent * healthStats.getStatValue(StatType.HEALTH));
+        player.setHealth(Math.min(2048, healthStats.getStatValue(StatType.HEALTH)));
+        playerStats.setHealthStats(healthStats);
+        playerStats.setDamageStats(damageStats);
         playerStats.setAbilityStats(abilityStats);
         playerStats.setFishingStats(fishingStats);
         playerStats.setMiningStats(miningStats);
         playerStats.setGatheringStats(gatheringStats);
         playerStats.setLuckStats(luckStats);
+        playerStats.setRegenStats(regenStats);
+        playerStats.setWisdomStats(wisdomStats);
         player.setWalkSpeed(Math.min(1f, (float) (healthStats.getStatValue(StatType.SPEED) / 500)));
         player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4 * (1 + (damageStats.getStatValue(StatType.ATTACK_SPEED) / 100)));
         updatePlayerStats(player, playerStats);
@@ -437,12 +441,6 @@ public class StatsListeners implements Listener {
                 equippedItems.add(equipment.getItemInMainHand());
             }
         }
-        if (equipment.getItemInOffHand().getType() != Material.AIR) {
-            ItemInfo offHandInfo = equipment.getItemInOffHand().getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
-            if (offHandInfo != null && !ItemEditor.isArmor(offHandInfo)) {
-                equippedItems.add(equipment.getItemInOffHand());
-            }
-        }
         return equippedItems;
     }
 
@@ -472,12 +470,6 @@ public class StatsListeners implements Listener {
         if (player.getInventory().getItemInMainHand().getType() != Material.AIR) {
             ItemInfo mainHandInfo = player.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
             if (mainHandInfo != null && !ItemEditor.isArmor(mainHandInfo)) {
-                equippedItems.add(player.getInventory().getItemInMainHand());
-            }
-        }
-        if (player.getInventory().getItemInOffHand().getType() != Material.AIR) {
-            ItemInfo offHandInfo = player.getInventory().getItemInOffHand().getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
-            if (offHandInfo != null && !ItemEditor.isArmor(offHandInfo)) {
                 equippedItems.add(player.getInventory().getItemInMainHand());
             }
         }
@@ -694,6 +686,34 @@ public class StatsListeners implements Listener {
         LuckStats bonusLuck = SkillUtils.getHolder(player).getBonusLuck(type);
         for (ItemInfo info : getInfos(player)) {
             LuckStats infoStats = info.getBonusLuck(type);
+            if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+                bonusLuck.multiply(infoStats);
+            } else {
+                bonusLuck.combine(infoStats);
+            }
+        }
+        return bonusLuck;
+    }
+
+    @NotNull
+    public static RegenStats getBonusRegen(Player player, IncreaseType type) {
+        RegenStats bonusLuck = SkillUtils.getHolder(player).getBonusRegen(type);
+        for (ItemInfo info : getInfos(player)) {
+            LuckStats infoStats = info.getBonusLuck(type);
+            if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
+                bonusLuck.multiply(infoStats);
+            } else {
+                bonusLuck.combine(infoStats);
+            }
+        }
+        return bonusLuck;
+    }
+
+    @NotNull
+    public static WisdomStats getBonusWisdom(Player player, IncreaseType type) {
+        WisdomStats bonusLuck = SkillUtils.getHolder(player).getBonusWisdom(type);
+        for (ItemInfo info : getInfos(player)) {
+            WisdomStats infoStats = info.getBonusWisdom(type);
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 bonusLuck.multiply(infoStats);
             } else {

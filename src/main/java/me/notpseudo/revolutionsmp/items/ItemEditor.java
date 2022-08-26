@@ -82,6 +82,8 @@ public class ItemEditor {
             MiningStats miningStats = itemInfo.getMiningStats();
             GatheringStats gatheringStats = itemInfo.getGatheringStats();
             LuckStats luckStats = itemInfo.getLuckStats();
+            RegenStats regenStats = itemInfo.getRegenStats();
+            WisdomStats wisdomStats = itemInfo.getWisdomStats();
             EnchantmentsHolder enchantmentsHolder = itemInfo.getEnchantmentsHolder();
             AbilitiesHolder abilitiesHolder = itemInfo.getAbilitiesHolder();
             List<Component> lore = new ArrayList<>();
@@ -90,35 +92,55 @@ public class ItemEditor {
                     health = null, defense = null, speed = null, trueDefense = null,
                     abilityDamage = null, intelligence = null,
                     seaCreatureChance = null, fishingTimeDecrease = null,
-                    miningSpeed = null, miningFortune = null, pristine = null, breakingPower = null,
+                    miningSpeed = null, miningFortune = null, pristine = null, breakingPower = null, purity = null,
                     farmingFortune = null, foragingFortune = null,
-                    magicFind = null, petLuck = null, gemstoneSlots = null,
+                    magicFind = null, petLuck = null,
+                    combatWisdom = null, miningWisdom = null, foragingWisdom = null, farmingWisdom = null, fishingWisdom = null, alchemyWisdom = null, enchantingWisdom = null,
+                    healthRegen = null, vitality = null, mending = null, manaRegen = null,
+                    gemstoneSlots = null,
                     canBeReforged = null;
-            Component potatoDamage = Component.empty(), potatoStrength = Component.empty(), potatoHealth = Component.empty(), potatoDefense = Component.empty();
+            Component potatoDamage = Component.empty(), potatoStrength = Component.empty(), potatoHealth = Component.empty(), potatoDefense = Component.empty(),
+                    artOfWar = Component.empty(), woodSingularity = Component.empty(), farmingForDummies = Component.empty();
             Component reforgeDamage = Component.empty(), reforgeStrength = Component.empty(), reforgeCritChance = Component.empty(), reforgeCritDamage = Component.empty(), reforgeAttackSpeed = Component.empty(), reforgeFerocity = Component.empty(),
                     reforgeHealth = Component.empty(), reforgeDefense = Component.empty(), reforgeSpeed = Component.empty(), reforgeTrueDefense = Component.empty(),
                     reforgeAbilityDamage = Component.empty(), reforgeIntelligence = Component.empty(),
                     reforgeSeaCreatureChance = Component.empty(),
-                    reforgeMiningSpeed = Component.empty(), reforgeMiningFortune = Component.empty(), reforgePristine = Component.empty(),
+                    reforgeMiningSpeed = Component.empty(), reforgeMiningFortune = Component.empty(), reforgePristine = Component.empty(), reforgePurity = Component.empty(),
                     reforgeFarmingFortune = Component.empty(), reforgeForagingFortune = Component.empty(),
                     reforgeMagicFind = Component.empty(), reforgePetLuck = Component.empty();
             Component gemStrength = Component.empty(), gemHealth = Component.empty(), gemDef = Component.empty(), gemTrueDef = Component.empty(),
                     gemIntel = Component.empty(), gemMineSpeed = Component.empty(), gemMineFortune = Component.empty(), gemPristine = Component.empty();
-            String rarityName = itemInfo.getRarity().name();
-            String itemType = itemInfo.getItemType().name();
+            String rarityName = itemInfo.getRarity().getName().toUpperCase();
+            String itemType = itemInfo.getItemType().getName().toUpperCase();
             NamedTextColor rarityColor = itemInfo.getRarity().getRarityColor();
             if (itemInfo.isRecomb()) {
                 rarity = Component.text("S ", rarityColor, TextDecoration.OBFUSCATED, TextDecoration.BOLD).append(Component.text(rarityName + " " + itemType, rarityColor, TextDecoration.BOLD).decoration(TextDecoration.OBFUSCATED, false).append(Component.text(" S", rarityColor, TextDecoration.OBFUSCATED, TextDecoration.BOLD)));
             } else {
                 rarity = Component.text(rarityName + " " + itemType).color(rarityColor).decoration(TextDecoration.BOLD, true);
             }
-            if (itemInfo.getPotatoBooks() != 0) {
-                if (isArmor(itemInfo)) {
-                    potatoHealth = getBracketComponent(itemInfo.getPotatoBooks() * 4, NamedTextColor.YELLOW);
-                    potatoDefense = getBracketComponent(itemInfo.getPotatoBooks() * 2, NamedTextColor.YELLOW);
-                } else if (isWeapon(itemInfo)) {
-                    potatoDamage = getBracketComponent(itemInfo.getPotatoBooks() * 2, NamedTextColor.YELLOW);
-                    potatoStrength = getBracketComponent(itemInfo.getPotatoBooks() * 2, NamedTextColor.YELLOW);
+            ModifierInfo mod = itemInfo.getModifiers();
+            if (mod != null) {
+                int potatoBooks = mod.getTotalPotatoBooks();
+                if (potatoBooks != 0) {
+                    if (isArmor(itemInfo)) {
+                        potatoHealth = getBracketComponent(potatoBooks * 4, NamedTextColor.YELLOW);
+                        potatoDefense = getBracketComponent(potatoBooks * 2, NamedTextColor.YELLOW);
+                    } else if (isWeapon(itemInfo)) {
+                        potatoDamage = getBracketComponent(potatoBooks * 2, NamedTextColor.YELLOW);
+                        potatoStrength = getBracketComponent(potatoBooks * 2, NamedTextColor.YELLOW);
+                    }
+                }
+                int art = mod.getArtOfWar();
+                if (art > 0) {
+                    artOfWar = Component.text("[" + art * 5 + "] ", NamedTextColor.GOLD);
+                }
+                int wood = mod.getWoodSingularity();
+                if (wood > 0) {
+                    woodSingularity = getBracketComponent(wood * 100, NamedTextColor.YELLOW);
+                }
+                int farming = mod.getFarmingForDummies();
+                if (farming > 0) {
+                    farmingForDummies = getBracketComponent(farming, NamedTextColor.YELLOW);
                 }
             }
             String reforgeName = "";
@@ -225,86 +247,72 @@ public class ItemEditor {
                     gemPristine = getBracketComponent(gemMining.getStatObject(StatType.PRISTINE), NamedTextColor.LIGHT_PURPLE);
                 }
             }
-            name = Component.text(reforgeName + itemInfo.getName()).color(itemInfo.getRarity().getRarityColor()); // The displayed name of the item is Reforge + Item Name
-            if (weaponStats != null) {
-                if (weaponStats.getStatValue(StatType.DAMAGE) != 0) {
-                    damage = Component.text("Damage: ", NamedTextColor.GRAY).append(Component.text(getStatString(weaponStats.getStatObject(StatType.DAMAGE)), NamedTextColor.RED)).append(potatoDamage).append(reforgeDamage);
-                }
-                if (weaponStats.getStatValue(StatType.STRENGTH) != 0) {
-                    strength = Component.text("Strength: ", NamedTextColor.GRAY).append(Component.text(getStatString(weaponStats.getStatObject(StatType.STRENGTH)), NamedTextColor.RED)).append(potatoStrength).append(reforgeStrength).append(gemStrength);
-                }
-                if (weaponStats.getStatValue(StatType.CRIT_CHANCE) != 0) {
-                    critChance = Component.text("Crit Chance: ", NamedTextColor.GRAY).append(Component.text(getStatString(weaponStats.getStatObject(StatType.CRIT_CHANCE)), NamedTextColor.RED)).append(reforgeCritChance);
-                }
-                if (weaponStats.getStatValue(StatType.CRIT_DAMAGE) != 0) {
-                    critDamage = Component.text("Crit Damage: ", NamedTextColor.GRAY).append(Component.text(getStatString(weaponStats.getStatObject(StatType.CRIT_DAMAGE)), NamedTextColor.RED)).append(reforgeCritDamage);
-                }
-                if (weaponStats.getStatValue(StatType.ATTACK_SPEED) != 0) {
-                    attackSpeed = Component.text("Bonus Attack Speed: ", NamedTextColor.GRAY).append(Component.text(getStatString(weaponStats.getStatObject(StatType.ATTACK_SPEED)), NamedTextColor.RED)).append(reforgeAttackSpeed);
-                }
-                if (weaponStats.getStatValue(StatType.FEROCITY) != 0) {
-                    ferocity = Component.text("Ferocity: ", NamedTextColor.GRAY).append(Component.text(getStatString(weaponStats.getStatObject(StatType.FEROCITY)), NamedTextColor.GREEN)).append(reforgeFerocity);
-                }
+            name = Component.text(reforgeName + itemInfo.getName()).color(itemInfo.getRarity().getRarityColor());
+            if (weaponStats.getStatValue(StatType.DAMAGE) != 0) {
+                damage = getBaseStatComponent(weaponStats.getStatObject(StatType.DAMAGE)).append(potatoDamage).append(reforgeDamage);
             }
-            if (armorStats != null) {
-                if (armorStats.getStatValue(StatType.HEALTH) != 0) {
-                    health = Component.text("Health: ", NamedTextColor.GRAY).append(Component.text(getStatString(armorStats.getStatObject(StatType.HEALTH)), NamedTextColor.GREEN)).append(potatoHealth).append(reforgeHealth).append(gemHealth);
-                }
-                if (armorStats.getStatValue(StatType.DEFENSE) != 0) {
-                    defense = Component.text("Defense: ", NamedTextColor.GRAY).append(Component.text(getStatString(armorStats.getStatObject(StatType.DEFENSE)), NamedTextColor.GREEN)).append(potatoDefense).append(reforgeDefense).append(gemDef);
-                }
-                if (armorStats.getStatValue(StatType.SPEED) != 0) {
-                    speed = Component.text("Speed: ", NamedTextColor.GRAY).append(Component.text(getStatString(armorStats.getStatObject(StatType.SPEED)), NamedTextColor.GREEN)).append(reforgeSpeed);
-                }
-                if (armorStats.getStatValue(StatType.TRUE_DEFENSE) != 0) {
-                    trueDefense = Component.text("True Defense: ", NamedTextColor.GRAY).append(Component.text(getStatString(armorStats.getStatObject(StatType.TRUE_DEFENSE)), NamedTextColor.GREEN)).append(reforgeTrueDefense).append(gemTrueDef);
-                }
+            if (weaponStats.getStatValue(StatType.STRENGTH) != 0) {
+                strength = getBaseStatComponent(weaponStats.getStatObject(StatType.STRENGTH)).append(potatoStrength).append(reforgeStrength).append(gemStrength);
             }
-            if (abilityStats != null) {
-                if (abilityStats.getStatValue(StatType.ABILITY_DAMAGE) != 0) {
-                    abilityDamage = Component.text("Ability Damage: ", NamedTextColor.GRAY).append(Component.text(getStatString(abilityStats.getStatObject(StatType.ABILITY_DAMAGE)), NamedTextColor.RED)).append(reforgeAbilityDamage);
-                }
-                if (abilityStats.getStatValue(StatType.INTELLIGENCE) != 0) {
-                    intelligence = Component.text("Intelligence: ", NamedTextColor.GRAY).append(Component.text(getStatString(abilityStats.getStatObject(StatType.INTELLIGENCE)), NamedTextColor.GREEN)).append(reforgeIntelligence).append(gemIntel);
-                }
+            if (weaponStats.getStatValue(StatType.CRIT_CHANCE) != 0) {
+                critChance = getBaseStatComponent(weaponStats.getStatObject(StatType.CRIT_CHANCE)).append(reforgeCritChance);
             }
-            if (fishingStats != null) {
-                if (fishingStats.getStatValue(StatType.SEA_CREATURE_CHANCE) != 0) {
-                    seaCreatureChance = Component.text("Sea Creature Chance: ", NamedTextColor.GRAY).append(Component.text(getStatString(fishingStats.getStatObject(StatType.SEA_CREATURE_CHANCE)), NamedTextColor.RED)).append(reforgeSeaCreatureChance);
-                }
-                if (fishingStats.getStatValue(StatType.FISHING_SPEED) != 0) {
-                    fishingTimeDecrease = Component.text("Increases fishing speed by ", NamedTextColor.GRAY).append(Component.text(getStatString(fishingStats.getStatObject(StatType.FISHING_SPEED)), NamedTextColor.BLUE));
-                }
+            if (weaponStats.getStatValue(StatType.CRIT_DAMAGE) != 0) {
+                critDamage = getBaseStatComponent(weaponStats.getStatObject(StatType.CRIT_DAMAGE)).append(reforgeCritDamage);
             }
-            if (miningStats != null) {
-                if (miningStats.getStatValue(StatType.MINING_SPEED) != 0) {
-                    miningSpeed = Component.text("Mining Speed: ", NamedTextColor.GRAY).append(Component.text(getStatString(miningStats.getStatObject(StatType.MINING_SPEED)), NamedTextColor.GREEN)).append(reforgeMiningSpeed).append(gemMineSpeed);
-                }
-                if (miningStats.getStatValue(StatType.MINING_FORTUNE) != 0) {
-                    miningFortune = Component.text("Mining Fortune: ", NamedTextColor.GRAY).append(Component.text(getStatString(miningStats.getStatObject(StatType.MINING_FORTUNE)), NamedTextColor.GREEN)).append(reforgeMiningFortune).append(gemMineFortune);
-                }
-                if (miningStats.getStatValue(StatType.PRISTINE) != 0) {
-                    pristine = Component.text("Pristine: ", NamedTextColor.GRAY).append(Component.text(getStatString(miningStats.getStatObject(StatType.PRISTINE)), NamedTextColor.GREEN)).append(reforgePristine).append(gemPristine);
-                }
-                if (miningStats.getStatValue(StatType.BREAKING_POWER) != 0) {
-                    breakingPower = Component.text("Breaking Power " + (int) miningStats.getStatValue(StatType.BREAKING_POWER), NamedTextColor.DARK_GRAY);
-                }
+            if (weaponStats.getStatValue(StatType.ATTACK_SPEED) != 0) {
+                attackSpeed = getBaseStatComponent(weaponStats.getStatObject(StatType.ATTACK_SPEED)).append(reforgeAttackSpeed);
             }
-            if (gatheringStats != null) {
-                if (gatheringStats.getStatValue(StatType.FARMING_FORTUNE) != 0) {
-                    farmingFortune = Component.text("Farming Fortune: ", NamedTextColor.GRAY).append(Component.text(getStatString(gatheringStats.getStatObject(StatType.FARMING_FORTUNE)), NamedTextColor.GREEN)).append(reforgeFarmingFortune);
-                }
-                if (gatheringStats.getStatValue(StatType.FORAGING_FORTUNE) != 0) {
-                    foragingFortune = Component.text("Foraging Fortune: ", NamedTextColor.GRAY).append(Component.text(getStatString(gatheringStats.getStatObject(StatType.FORAGING_FORTUNE)), NamedTextColor.GREEN)).append(reforgeForagingFortune);
-                }
+            if (weaponStats.getStatValue(StatType.FEROCITY) != 0) {
+                ferocity = getBaseStatComponent(weaponStats.getStatObject(StatType.FEROCITY)).append(reforgeFerocity);
             }
-            if (luckStats != null) {
-                if (luckStats.getStatValue(StatType.MAGIC_FIND) != 0) {
-                    magicFind = Component.text("Magic Find: ", NamedTextColor.GRAY).append(Component.text(getStatString(luckStats.getStatObject(StatType.MAGIC_FIND)), NamedTextColor.GREEN)).append(reforgeMagicFind);
-                }
-                if (luckStats.getStatValue(StatType.PET_LUCK) != 0) {
-                    petLuck = Component.text("Pet Luck: ", NamedTextColor.GRAY).append(Component.text(getStatString(luckStats.getStatObject(StatType.PET_LUCK)), NamedTextColor.GREEN)).append(reforgePetLuck);
-                }
+            if (armorStats.getStatValue(StatType.HEALTH) != 0) {
+                health = getBaseStatComponent(armorStats.getStatObject(StatType.HEALTH)).append(potatoHealth).append(reforgeHealth).append(gemHealth);
+            }
+            if (armorStats.getStatValue(StatType.DEFENSE) != 0) {
+                defense = getBaseStatComponent(armorStats.getStatObject(StatType.DEFENSE)).append(potatoDefense).append(reforgeDefense).append(gemDef);
+            }
+            if (armorStats.getStatValue(StatType.SPEED) != 0) {
+                speed = getBaseStatComponent(armorStats.getStatObject(StatType.SPEED)).append(reforgeSpeed);
+            }
+            if (armorStats.getStatValue(StatType.TRUE_DEFENSE) != 0) {
+                trueDefense = getBaseStatComponent(armorStats.getStatObject(StatType.TRUE_DEFENSE)).append(reforgeTrueDefense).append(gemTrueDef);
+            }
+            if (abilityStats.getStatValue(StatType.ABILITY_DAMAGE) != 0) {
+                abilityDamage = getBaseStatComponent(abilityStats.getStatObject(StatType.ABILITY_DAMAGE)).append(reforgeAbilityDamage);
+            }
+            if (abilityStats.getStatValue(StatType.INTELLIGENCE) != 0) {
+                intelligence = getBaseStatComponent(abilityStats.getStatObject(StatType.INTELLIGENCE)).append(reforgeIntelligence).append(gemIntel);
+            }
+            if (fishingStats.getStatValue(StatType.SEA_CREATURE_CHANCE) != 0) {
+                seaCreatureChance = getBaseStatComponent(fishingStats.getStatObject(StatType.SEA_CREATURE_CHANCE)).append(reforgeSeaCreatureChance);
+            }
+            if (fishingStats.getStatValue(StatType.FISHING_SPEED) != 0) {
+                fishingTimeDecrease = Component.text("Increases fishing speed by ", NamedTextColor.GRAY).append(Component.text(getStatString(fishingStats.getStatObject(StatType.FISHING_SPEED)), NamedTextColor.BLUE));
+            }
+            if (miningStats.getStatValue(StatType.MINING_SPEED) != 0) {
+                miningSpeed = getBaseStatComponent(miningStats.getStatObject(StatType.MINING_SPEED)).append(reforgeMiningSpeed).append(gemMineSpeed);
+            }
+            if (miningStats.getStatValue(StatType.MINING_FORTUNE) != 0) {
+                miningFortune = getBaseStatComponent(miningStats.getStatObject(StatType.MINING_FORTUNE)).append(reforgeMiningFortune).append(gemMineFortune);
+            }
+            if (miningStats.getStatValue(StatType.PRISTINE) != 0) {
+                pristine = getBaseStatComponent(miningStats.getStatObject(StatType.PRISTINE)).append(reforgePristine).append(gemPristine);
+            }
+            if (miningStats.getStatValue(StatType.BREAKING_POWER) != 0) {
+                breakingPower = Component.text("Breaking Power " + (int) miningStats.getStatValue(StatType.BREAKING_POWER), NamedTextColor.DARK_GRAY);
+            }
+            if (gatheringStats.getStatValue(StatType.FARMING_FORTUNE) != 0) {
+                farmingFortune = getBaseStatComponent(gatheringStats.getStatObject(StatType.FARMING_FORTUNE)).append(reforgeFarmingFortune);
+            }
+            if (gatheringStats.getStatValue(StatType.FORAGING_FORTUNE) != 0) {
+                foragingFortune = getBaseStatComponent(gatheringStats.getStatObject(StatType.FORAGING_FORTUNE)).append(reforgeForagingFortune);
+            }
+            if (luckStats.getStatValue(StatType.MAGIC_FIND) != 0) {
+                magicFind = getBaseStatComponent(luckStats.getStatObject(StatType.MAGIC_FIND)).append(reforgeMagicFind);
+            }
+            if (luckStats.getStatValue(StatType.PET_LUCK) != 0) {
+                petLuck = getBaseStatComponent(luckStats.getStatObject(StatType.PET_LUCK)).append(reforgePetLuck);
             }
             meta.displayName(name.decoration(TextDecoration.ITALIC, false));
             if (breakingPower != null) {
@@ -534,6 +542,12 @@ public class ItemEditor {
         return statString;
     }
 
+    public static Component getBaseStatComponent(StatObject stat) {
+        StatType type = stat.getType();
+        return Component.text(type.getName() + ": ", NamedTextColor.GRAY)
+                .append(Component.text(getStatString(stat), type.getItemDisplayColor()));
+    }
+
     private static Component getBracketComponent(StatObject stat, NamedTextColor color) {
         String statString = getStatString(stat);
         if (statString.equals("")) {
@@ -563,38 +577,28 @@ public class ItemEditor {
         }
     }
 
-    /**
-     * Adds a potato book to the Item held in the Player's main hand
-     *
-     * @param item The item to add the book to
-     */
-    public static void addHotPotatoBook(ItemStack item) {
+    public static void addPotatoBook(ItemStack item, int books) {
         ItemInfo itemInfo = getInfo(item);
         if (itemInfo == null) {
             return;
         }
-        int currentPotatoBooks = itemInfo.getPotatoBooks();
-        itemInfo.setPotatoBooks(currentPotatoBooks + 1);
-        updateItemInfo(item, itemInfo);
+        ModifierInfo mod = itemInfo.getModifiers();
+        if (mod != null) {
+            mod.addFumingPotatoBook();
+            updateItemInfo(item, itemInfo);
+        }
     }
 
-    public static void addHotPotatoBook(ItemStack item, int books) {
+    public static void setPotatoBooks(ItemStack item, int books) {
         ItemInfo itemInfo = getInfo(item);
         if (itemInfo == null) {
             return;
         }
-        int currentPotatoBooks = itemInfo.getPotatoBooks();
-        itemInfo.setPotatoBooks(currentPotatoBooks + books);
-        updateItemInfo(item, itemInfo);
-    }
-
-    public static void setHotPotatoBook(ItemStack item, int books) {
-        ItemInfo itemInfo = getInfo(item);
-        if (itemInfo == null) {
-            return;
+        ModifierInfo mod = itemInfo.getModifiers();
+        if (mod != null) {
+            mod.addFumingPotatoBook();
+            updateItemInfo(item, itemInfo);
         }
-        itemInfo.setPotatoBooks(books);
-        updateItemInfo(item, itemInfo);
     }
 
     /**
@@ -709,17 +713,12 @@ public class ItemEditor {
      */
     public static boolean isWeapon(ItemInfo itemInfo) {
         ItemType type = itemInfo.getItemType();
-        return type == ItemType.SWORD || type == ItemType.BOW || type == ItemType.FISHING_WEAPON || type == ItemType.LONGSWORD;
+        return type == ItemType.SWORD || type == ItemType.BOW || type == ItemType.FISHING_ROD || type == ItemType.FISHING_WEAPON || type == ItemType.GAUNTLET || type == ItemType.LONGSWORD;
     }
 
     @Nullable
     public static ItemInfo getMainHandInfo(Player player) {
         return getInfo(player.getInventory().getItemInMainHand());
-    }
-
-    @Nullable
-    public static ItemInfo getOffHandInfo(Player player) {
-        return getInfo(player.getInventory().getItemInOffHand());
     }
 
     @Nullable

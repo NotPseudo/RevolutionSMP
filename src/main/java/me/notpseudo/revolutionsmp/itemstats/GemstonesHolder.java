@@ -174,4 +174,24 @@ public class GemstonesHolder implements Serializable {
         return gemLuck;
     }
 
+    public RegenStats getGemRegen(Rarity rarity) {
+        RegenStats gemRegen = RegenStats.createZero();
+        for (GemstoneObject gem : gems) {
+            if (gem != null) {
+                gemRegen.combine(gem.getBonusRegen(rarity));
+            }
+        }
+        return gemRegen;
+    }
+
+    public WisdomStats getGemWisdom(Rarity rarity) {
+        WisdomStats gemWisdom = WisdomStats.createZero();
+        for (GemstoneObject gem : gems) {
+            if (gem != null) {
+                gemWisdom.combine(gem.getBonusWisdom(rarity));
+            }
+        }
+        return gemWisdom;
+    }
+
 }

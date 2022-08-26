@@ -89,33 +89,41 @@ public class MainMenu extends Menu {
         money.setItemMeta(moneyMeta);
         inventory.setItem(21, makeMenuType(money, MenuType.MONEY));
 
-        ItemStack reforge = new ItemStack(Material.ANVIL);
-        ItemMeta reforgeMeta = reforge.getItemMeta();
-        reforgeMeta.displayName(Component.text("Basic Reforge", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
-        reforgeMeta.lore(List.of(Component.text("Access the basic reforge menu", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)));
-        reforge.setItemMeta(reforgeMeta);
-        inventory.setItem(22, makeMenuType(reforge, MenuType.REFORGE));
-
-        ItemStack advReforge = new ItemStack(Material.ANVIL);
-        ItemMeta advancedMeta = advReforge.getItemMeta();
-        advancedMeta.displayName(Component.text("Advanced Reforge", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
-        advancedMeta.lore(List.of(Component.text("Access the advanced reforge menu", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)));
-        advReforge.setItemMeta(advancedMeta);
-        inventory.setItem(23, makeMenuType(advReforge, MenuType.ADVANCED_REFORGE));
+        ItemStack crafting = new ItemStack(Material.CRAFTING_TABLE);
+        ItemMeta craftingMeta = crafting.getItemMeta();
+        craftingMeta.displayName(Component.text("Custom Crafting Table", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
+        craftingMeta.lore(List.of(Component.text("Access the crafting table to make custom items", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)));
+        crafting.setItemMeta(craftingMeta);
+        inventory.setItem(22, makeMenuType(crafting, MenuType.CRAFTING));
 
         ItemStack enchant = new ItemStack(Material.ENCHANTING_TABLE);
         ItemMeta enchantMeta = enchant.getItemMeta();
         enchantMeta.displayName(Component.text("Enchantment Table", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
         enchantMeta.lore(List.of(Component.text("Access the enchantment table", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)));
         enchant.setItemMeta(enchantMeta);
-        inventory.setItem(24, makeMenuType(enchant, MenuType.ENCHANT));
+        inventory.setItem(23, makeMenuType(enchant, MenuType.ENCHANT));
 
-        ItemStack crafting = new ItemStack(Material.CRAFTING_TABLE);
-        ItemMeta craftingMeta = crafting.getItemMeta();
-        craftingMeta.displayName(Component.text("Custom Crafting Table", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
-        craftingMeta.lore(List.of(Component.text("Access the crafting table to make custom items", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)));
-        crafting.setItemMeta(craftingMeta);
-        inventory.setItem(25, makeMenuType(crafting, MenuType.CRAFTING));
+        ItemStack anvil = new ItemStack(Material.ANVIL);
+        ItemMeta anvilMeta = anvil.getItemMeta();
+        anvilMeta.displayName(Component.text("Anvil", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
+        anvilMeta.lore(List.of(Component.text("Access the anvil to combine", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
+                Component.text("and upgrade items", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)));
+        anvil.setItemMeta(anvilMeta);
+        inventory.setItem(24, makeMenuType(anvil, MenuType.ANVIL));
+
+        ItemStack reforge = new ItemStack(Material.ANVIL);
+        ItemMeta reforgeMeta = reforge.getItemMeta();
+        reforgeMeta.displayName(Component.text("Basic Reforge", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
+        reforgeMeta.lore(List.of(Component.text("Access the basic reforge menu", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)));
+        reforge.setItemMeta(reforgeMeta);
+        inventory.setItem(25, makeMenuType(reforge, MenuType.REFORGE));
+
+        ItemStack advReforge = new ItemStack(Material.ANVIL);
+        ItemMeta advancedMeta = advReforge.getItemMeta();
+        advancedMeta.displayName(Component.text("Advanced Reforge", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
+        advancedMeta.lore(List.of(Component.text("Access the advanced reforge menu", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)));
+        advReforge.setItemMeta(advancedMeta);
+        inventory.setItem(34, makeMenuType(advReforge, MenuType.ADVANCED_REFORGE));
 
         ItemStack builder = new ItemStack(Material.CRAFTING_TABLE, 1);
         ItemMeta builderMeta = builder.getItemMeta();

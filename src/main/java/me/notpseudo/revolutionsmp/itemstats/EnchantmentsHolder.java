@@ -29,13 +29,19 @@ public class EnchantmentsHolder implements Serializable {
         for (EnchantmentType incompatibleType : addEnchant.getType().getIncompatibleEnchants()) {
             removeEnchant(incompatibleType);
         }
+        if (addEnchant.getType() == EnchantmentType.CUSTOM_EFFICIENCY) {
+            ModifierInfo mod = HOLDER.getModifiers();
+            int silex = mod.getSilex();
+            addEnchant.setLevel(Math.min(10, addEnchant.getLevel() + silex));
+        }
         EnchantmentObject toAdd = getObjectForType(addEnchant.getType());
         if (toAdd != null) {
-            if (addEnchant.getLevel() > toAdd.getLevel()) {
+            int level = toAdd.getLevel(), enchLevel = toAdd.getType().getEnchTableMax();
+            if (addEnchant.getLevel() > level) {
                 toAdd.setLevel(addEnchant.getLevel());
-            } else if (addEnchant.getLevel() == toAdd.getLevel()) {
-                if (toAdd.getLevel() < toAdd.getType().getEnchTableMax()) {
-                    toAdd.setLevel(toAdd.getLevel() + 1);
+            } else if (addEnchant.getLevel() == level) {
+                if ((level < enchLevel || level > enchLevel) && level < toAdd.getType().getMaxLevel()) {
+                    toAdd.setLevel(level + 1);
                 }
             }
         } else {

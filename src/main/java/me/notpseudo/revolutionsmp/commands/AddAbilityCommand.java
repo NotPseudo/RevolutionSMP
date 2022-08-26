@@ -22,6 +22,10 @@ public class AddAbilityCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player player) {
+            if (!player.isOp()) {
+                player.sendMessage(Component.text("You do not have permission to use this command", NamedTextColor.RED));
+                return true;
+            }
             AbilityType type;
             if (args.length >= 1) {
                 try {

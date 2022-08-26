@@ -205,14 +205,20 @@ public class GemstoneObject extends SpecialItemInfo {
         return MiningStats.createZero();
     }
 
-    @NotNull
     public GatheringStats getBonusGathering(Rarity itemRarity) {
-        return GatheringStats.createZero();
+        return null;
     }
 
-    @NotNull
     public LuckStats getBonusLuck(Rarity itemRarity) {
-        return LuckStats.createZero();
+        return null;
+    }
+
+    public RegenStats getBonusRegen(Rarity itemRarity) {
+        return null;
+    }
+
+    public WisdomStats getBonusWisdom(Rarity itemRarity) {
+        return null;
     }
 
 }

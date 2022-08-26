@@ -33,13 +33,13 @@ public class AbilitiesHolder implements Serializable {
 
     public void addAbility(AbilityType type) {
         if(!containsAbility(type)) {
-            abilities.add(type.createObject());
+            abilities.add(type.createObject(this));
         }
         int totalWitherScrollAbilityCount = (int) Arrays.stream(AbilityType.values()).filter(AbilityType::isWitherScrollAbility).count() - 1;
         int heldWitherScrollAbilities = (int) abilities.stream().filter(heldType -> heldType.getAbilityType().isWitherScrollAbility()).count();
         if(heldWitherScrollAbilities == totalWitherScrollAbilityCount || containsAbility(AbilityType.WITHER_IMPACT)) {
             abilities.removeIf(remove -> remove.getAbilityType().isWitherScrollAbility());
-            abilities.add(AbilityType.WITHER_IMPACT.createObject());
+            abilities.add(AbilityType.WITHER_IMPACT.createObject(this));
         }
     }
 

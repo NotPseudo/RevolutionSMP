@@ -114,12 +114,13 @@ public class AdvancedReforgeMenu extends Menu {
         if (!checkBoth()) {
             return false;
         }
-        ItemStack result = inventory.getItem(33);
-        if (result != null) {
-            result.editMeta(m -> m.getPersistentDataContainer().remove(MenuUtils.getMenuKey()));
-            inventory.setItem(29, null);
-            inventory.setItem(33, null);
+        ItemStack result = inventory.getItem(13);
+        if (result == null) {
+            return false;
         }
+        result.editMeta(m -> m.getPersistentDataContainer().remove(MenuUtils.getMenuKey()));
+        inventory.setItem(29, null);
+        inventory.setItem(33, null);
         return true;
     }
 
@@ -176,7 +177,7 @@ public class AdvancedReforgeMenu extends Menu {
                 Component.text("Click the anvil below to apply the reforge", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false)
         ));
         block.setItemMeta(blockMeta);
-        inventory.setItem(23, makeMenuType(block, null));
+        inventory.setItem(13, makeMenuType(block, null));
     }
 
     private boolean checkLeft() {
@@ -231,7 +232,7 @@ public class AdvancedReforgeMenu extends Menu {
 
     private void setBottomRow(Material material) {
         for (int i = 45; i < 54; i++) {
-            if (i != 49) {
+            if (i != 49 && i != 48) {
                 inventory.setItem(i, makeMenuGlass(new ItemStack(material)));
             }
         }

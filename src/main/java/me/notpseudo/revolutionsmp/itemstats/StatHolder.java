@@ -1,5 +1,8 @@
 package me.notpseudo.revolutionsmp.itemstats;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +86,7 @@ public class StatHolder implements Serializable {
         }
     }
 
-    public void additivePercent(StatHolder other) {
+    public void additivePercent(@Nullable StatHolder other) {
         if (other == null) {
             return;
         }
@@ -92,7 +95,7 @@ public class StatHolder implements Serializable {
         }
     }
 
-    public void multiply(StatHolder other) {
+    public void multiply(@Nullable StatHolder other) {
         if (other == null) {
             return;
         }

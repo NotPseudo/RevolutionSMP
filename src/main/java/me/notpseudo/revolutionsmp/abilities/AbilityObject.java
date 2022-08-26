@@ -19,11 +19,13 @@ import java.util.ArrayList;
 
 public class AbilityObject implements Serializable {
 
+    protected final AbilitiesHolder HOLDER;
     private final AbilityType abilityType;
     private double manaCost;
     private double cooldown;
 
-    public AbilityObject(AbilityType abilityType) {
+    public AbilityObject(AbilitiesHolder holder, AbilityType abilityType) {
+        HOLDER = holder;
         this.abilityType = abilityType;
         manaCost = abilityType.getManaCost();
         cooldown = abilityType.getCooldown();
@@ -99,72 +101,66 @@ public class AbilityObject implements Serializable {
         StatsListeners.showAbilityActionBar(player, abilityType, actualCost);
     }
 
-    @NotNull
     public WeaponStats getBonusWeapon(Player player, IncreaseType inc) {
         return abilityType.getBonusWeapon(player, inc);
     }
 
-    @NotNull
     public ArmorStats getBonusArmor(Player player, IncreaseType inc) {
         return abilityType.getBonusArmor(player, inc);
     }
 
-    @NotNull
     public AbilityStats getBonusAbility(Player player, IncreaseType inc) {
         return abilityType.getBonusAbility(player, inc);
     }
 
-    @NotNull
     public FishingStats getBonusFishing(Player fisher, IncreaseType inc) {
         return abilityType.getBonusFishing(fisher, inc);
     }
 
-    @NotNull
     public MiningStats getBonusMining(Player miner, IncreaseType inc) {
         return abilityType.getBonusMining(miner, inc);
     }
 
-    @NotNull
     public GatheringStats getBonusGathering(Player harvester, IncreaseType inc) {
         return abilityType.getBonusGathering(harvester, inc);
     }
 
-    @NotNull
     public LuckStats getBonusLuck(Player player, IncreaseType inc) {
         return abilityType.getBonusLuck(player, inc);
     }
 
-    @NotNull
+    public RegenStats getBonusRegen(Player player, IncreaseType inc) {
+        return abilityType.getBonusRegen(player, inc);
+    }
+
+    public WisdomStats getBonusWisdom(Player player, IncreaseType inc) {
+        return abilityType.getBonusWisdom(player, inc);
+    }
+
     public WeaponStats getEventWeapon(Player damager, LivingEntity target, IncreaseType inc) {
         return abilityType.getEventWeapon(damager, target, inc);
     }
 
-    @NotNull
     public ArmorStats getEventArmor(LivingEntity damager, Player target, IncreaseType inc) {
         return abilityType.getEventArmor(damager, target, inc);
     }
 
-    @NotNull
     public AbilityStats getEventAbility(Player damager, LivingEntity target, IncreaseType inc) {
         return abilityType.getEventAbility(damager, target, inc);
     }
 
-    @NotNull
     public FishingStats getEventFishing(Player fisher, IncreaseType inc) {
         return abilityType.getEventFishing(fisher, inc);
     }
 
-    @NotNull
     public MiningStats getEventMining(Player miner, Block block, IncreaseType inc) {
         return abilityType.getEventMining(miner, block, inc);
     }
 
-    @NotNull
     public GatheringStats getEventGathering(Player harvester, Block block, IncreaseType inc) {
         return abilityType.getEventGathering(harvester, block, inc);
     }
 
-    @NotNull
     public LuckStats getEventLuck(Player player, LivingEntity target, IncreaseType inc) {
         return abilityType.getEventLuck(player, target, inc);
     }

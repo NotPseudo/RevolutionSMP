@@ -131,4 +131,13 @@ public class PlayerStats extends BaseEntityStats implements Serializable {
     public void setLuckStats(LuckStats luckStats) {
         this.luckStats = luckStats;
     }
+
+    public void setRegenStats(RegenStats regenStats) {
+        this.regenStats = regenStats;
+    }
+
+    public void setWisdomStats(WisdomStats wisdomStats) {
+        this.wisdomStats = wisdomStats;
+    }
+
 }

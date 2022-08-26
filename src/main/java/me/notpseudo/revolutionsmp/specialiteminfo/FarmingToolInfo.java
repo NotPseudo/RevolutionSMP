@@ -144,15 +144,15 @@ public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
     }
 
     @Override
-    public @NotNull GatheringStats getEventGathering(Player harvester, Block block, IncreaseType inc) {
+    public GatheringStats getEventGathering(Player harvester, Block block, IncreaseType inc) {
         if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return new GatheringStats(1, 1);
+                return null;
         }
         if (!hasMaterial(block.getType())) {
-            return new GatheringStats(0, 0);
+                return null;
         }
         if (inc != IncreaseType.INCREASE) {
-            return new GatheringStats(0, 0);
+            return null;
         }
         int addAmount = getBaseAddPercent() + logarithmicCounter() + collectionAnalysis(harvester) + knowledgeOfTheLand(harvester);
         return new GatheringStats(addAmount, 0);
@@ -171,7 +171,7 @@ public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
         String cropName = ItemEditor.getStringFromEnum(collectionType);
         ArrayList<Component> specialLore = new ArrayList<>();
         specialLore.add(Component.text("Harvest ", NamedTextColor.GRAY).append(Component.text("+" + getBaseAddPercent() + "% " + cropName, NamedTextColor.GREEN)));
-        specialLore.add(Component.text("Gain ", NamedTextColor.GRAY).append(Component.text("+" + getXpBoost() + "% ", NamedTextColor.GREEN)).append(Component.text("Farming Exp", NamedTextColor.GRAY)));
+        specialLore.add(Component.text("Gain ", NamedTextColor.GRAY).append(Component.text("+" + getXpBoost() + " ", NamedTextColor.GREEN)).append(StatType.FARMING_WISDOM.getNameWithSymbol()));
         specialLore.add(Component.text("Counter: ", NamedTextColor.GRAY).append(Component.text((int) (counter) + " " + cropName, NamedTextColor.YELLOW)));
         specialLore.add(Component.empty());
         if (craftTier >= 2) {

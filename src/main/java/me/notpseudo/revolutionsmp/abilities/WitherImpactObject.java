@@ -1,5 +1,6 @@
 package me.notpseudo.revolutionsmp.abilities;
 
+import me.notpseudo.revolutionsmp.itemstats.AbilitiesHolder;
 import me.notpseudo.revolutionsmp.itemstats.ArmorStats;
 import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
 import org.bukkit.entity.LivingEntity;
@@ -10,8 +11,8 @@ import java.util.UUID;
 
 public class WitherImpactObject extends AbilityObject {
 
-    public WitherImpactObject() {
-        super(AbilityType.WITHER_IMPACT);
+    public WitherImpactObject(AbilitiesHolder holder) {
+        super(holder, AbilityType.WITHER_IMPACT);
     }
 
     @Override

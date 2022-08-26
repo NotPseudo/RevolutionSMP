@@ -28,15 +28,15 @@ public enum EnchantmentType {
 
     BANE_OF_ARTHROPODS {
         @Override
-        public @NotNull WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                return WeaponStats.createMult();
+                return null;
             }
             if (type != IncreaseType.ADDITIVE_PERCENT) {
-                return WeaponStats.createZero();
+                return null;
             }
             if (!(target.getType() == EntityType.SPIDER || target.getType() == EntityType.CAVE_SPIDER || target.getType() == EntityType.SILVERFISH || target.getType() == EntityType.ENDERMITE)) {
-                return WeaponStats.createZero();
+                return null;
             }
             return switch (level) {
                 case 1, 2, 3, 4 -> new WeaponStats(level * 10, 0, 0, 0, 0, 0);
@@ -100,15 +100,15 @@ public enum EnchantmentType {
     },
     CUBISM {
         @Override
-        public @NotNull WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                return WeaponStats.createMult();
+                return null;
             }
             if (type != IncreaseType.ADDITIVE_PERCENT) {
-                return WeaponStats.createZero();
+                return null;
             }
             if (!(target.getType() == EntityType.CREEPER || target.getType() == EntityType.SLIME || target.getType() == EntityType.MAGMA_CUBE)) {
-                return WeaponStats.createZero();
+                return null;
             }
             return switch (level) {
                 case 1, 2, 3, 4 -> new WeaponStats(level * 10, 0, 0, 0, 0, 0);
@@ -130,15 +130,15 @@ public enum EnchantmentType {
     },
     DRAGON_HUNTER {
         @Override
-        public @NotNull WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                return WeaponStats.createMult();
+                return null;
             }
             if (type != IncreaseType.ADDITIVE_PERCENT) {
-                return WeaponStats.createZero();
+                return null;
             }
             if (target.getType() != EntityType.ENDER_DRAGON) {
-                return WeaponStats.createZero();
+                return null;
             }
             return new WeaponStats(level * 8, 0, 0, 0, 0, 0);
         }
@@ -159,15 +159,15 @@ public enum EnchantmentType {
     },
     ENDER_SLAYER {
         @Override
-        public @NotNull WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                return WeaponStats.createMult();
+                return null;
             }
             if (type != IncreaseType.ADDITIVE_PERCENT) {
-                return WeaponStats.createZero();
+                return null;
             }
             if (!(target.getType() == EntityType.ENDER_DRAGON || target.getType() == EntityType.ENDERMAN || target.getType() == EntityType.ENDERMITE)) {
-                return WeaponStats.createZero();
+                return null;
             }
             return switch (level) {
                 case 1, 2, 3, 4 -> new WeaponStats(level * 15, 0, 0, 0, 0, 0);
@@ -188,12 +188,12 @@ public enum EnchantmentType {
     },
     EXECUTE {
         @Override
-        public @NotNull WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                return WeaponStats.createMult();
+                return null;
             }
             if (type != IncreaseType.ADDITIVE_PERCENT) {
-                return WeaponStats.createZero();
+                return null;
             }
             BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
             if (target instanceof Player player) {
@@ -287,12 +287,12 @@ public enum EnchantmentType {
     },
     GIANT_KILLER {
         @Override
-        public @NotNull WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                return WeaponStats.createMult();
+                return null;
             }
             if (type != IncreaseType.ADDITIVE_PERCENT) {
-                return WeaponStats.createZero();
+                return null;
             }
             BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType()), damagerStats = damager.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
             int morePercent;
@@ -322,15 +322,15 @@ public enum EnchantmentType {
     },
     IMPALING {
         @Override
-        public @NotNull WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                return WeaponStats.createMult();
+                return null;
             }
             if (type != IncreaseType.ADDITIVE_PERCENT) {
-                return WeaponStats.createZero();
+                return null;
             }
             if (!(target.getType() == EntityType.GUARDIAN || target.getType() == EntityType.SQUID || target.getType() == EntityType.GLOW_SQUID || target.getType() == EntityType.ELDER_GUARDIAN)) {
-                return WeaponStats.createZero();
+                return null;
             }
             return new WeaponStats(level * 25, 0, 0, 0, 0, 0);
         }
@@ -442,6 +442,11 @@ public enum EnchantmentType {
         }
 
         @Override
+        public boolean showInEnchantTable() {
+            return false;
+        }
+
+        @Override
         public List<ItemType> getItemTypes() {
             return List.of(ItemType.SWORD);
         }
@@ -458,12 +463,12 @@ public enum EnchantmentType {
     },
     PROSECUTE {
         @Override
-        public @NotNull WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                return WeaponStats.createMult();
+                return null;
             }
             if (type != IncreaseType.ADDITIVE_PERCENT) {
-                return WeaponStats.createZero();
+                return null;
             }
             BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
             if (target instanceof Player player) {
@@ -506,12 +511,12 @@ public enum EnchantmentType {
     },
     SHARPNESS {
         @Override
-        public @NotNull WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                return WeaponStats.createMult();
+                return null;
             }
             if (type != IncreaseType.ADDITIVE_PERCENT) {
-                return WeaponStats.createZero();
+                return null;
             }
             return switch (level) {
                 case 1, 2, 3, 4 -> new WeaponStats(level * 5, 0, 0, 0, 0, 0);
@@ -534,15 +539,15 @@ public enum EnchantmentType {
     },
     SMITE {
         @Override
-        public @NotNull WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                return WeaponStats.createMult();
+                return null;
             }
             if (type != IncreaseType.ADDITIVE_PERCENT) {
-                return WeaponStats.createZero();
+                return null;
             }
             if (target.getCategory() != EntityCategory.UNDEAD) {
-                return WeaponStats.createZero();
+                return null;
             }
             return switch (level) {
                 case 1, 2, 3, 4 -> new WeaponStats(level * 10, 0, 0, 0, 0, 0);
@@ -565,15 +570,15 @@ public enum EnchantmentType {
     },
     SMOLDERING {
         @Override
-        public @NotNull WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                return WeaponStats.createMult();
+                return null;
             }
             if (type != IncreaseType.ADDITIVE_PERCENT) {
-                return WeaponStats.createZero();
+                return null;
             }
             if (target.getType() != EntityType.BLAZE) {
-                return WeaponStats.createZero();
+                return null;
             }
             return new WeaponStats(level * 3, 0, 0, 0, 0, 0);
         }
@@ -653,12 +658,12 @@ public enum EnchantmentType {
     },
     TITAN_KILLER {
         @Override
-        public @NotNull WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                return WeaponStats.createMult();
+                return null;
             }
             if (type != IncreaseType.ADDITIVE_PERCENT) {
-                return WeaponStats.createZero();
+                return null;
             }
             BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
             if (target instanceof Player player) {
@@ -845,12 +850,12 @@ public enum EnchantmentType {
     },
     ONE_FOR_ALL {
         @Override
-        public @NotNull WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                return WeaponStats.createMult();
+                return null;
             }
             if (type != IncreaseType.ADDITIVE_PERCENT) {
-                return WeaponStats.createZero();
+                return null;
             }
             return new WeaponStats(level * 500, 0, 0, 0, 0, 0);
         }
@@ -893,12 +898,12 @@ public enum EnchantmentType {
     },
     SWARM {
         @Override
-        public @NotNull WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                return WeaponStats.createMult();
+                return null;
             }
             if (type != IncreaseType.ADDITIVE_PERCENT) {
-                return WeaponStats.createZero();
+                return null;
             }
             Collection<LivingEntity> enemies = damager.getLocation().getNearbyLivingEntities(10).stream()
                     .filter(c -> c instanceof Creature && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()) != null
@@ -988,6 +993,11 @@ public enum EnchantmentType {
         @Override
         public List<ItemType> getItemTypes() {
             return List.of(ItemType.HELMET);
+        }
+
+        @Override
+        public int getMaxLevel() {
+            return 1;
         }
 
         @Override
@@ -1087,6 +1097,11 @@ public enum EnchantmentType {
         }
 
         @Override
+        public int getMaxLevel() {
+            return 3;
+        }
+
+        @Override
         public Enchantment getVanillaEnchantment(ItemID id) {
             return Enchantment.DEPTH_STRIDER;
         }
@@ -1175,6 +1190,11 @@ public enum EnchantmentType {
         }
 
         @Override
+        public int getMaxLevel() {
+            return 1;
+        }
+
+        @Override
         public Enchantment getVanillaEnchantment(ItemID id) {
             return Enchantment.SILK_TOUCH;
         }
@@ -1182,12 +1202,7 @@ public enum EnchantmentType {
     EFFICIENCY {
         @Override
         public List<ItemType> getItemTypes() {
-            return List.of(ItemType.AXE, ItemType.PICKAXE, ItemType.DRILL, ItemType.HOE, ItemType.SHOVEL);
-        }
-
-        @Override
-        public MiningStats getApplyMiningStats(int level) {
-            return new MiningStats(10 + level * 20, 0, 0);
+            return List.of(ItemType.AXE, ItemType.HOE, ItemType.SHOVEL);
         }
 
         @Override
@@ -1202,6 +1217,28 @@ public enum EnchantmentType {
             }
             return Enchantment.DIG_SPEED;
         }
+    },
+    CUSTOM_EFFICIENCY {
+        @Override
+        public String getName() {
+            return "Efficiency";
+        }
+
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.PICKAXE, ItemType.DRILL);
+        }
+
+        @Override
+        public MiningStats getApplyMiningStats(int level) {
+            return new MiningStats(10 + level * 20, 0, 0);
+        }
+
+        @Override
+        public int getMaxLevel() {
+            return 10;
+        }
+
     },
     HARVESTING {
         @Override
@@ -1267,116 +1304,72 @@ public enum EnchantmentType {
         return null;
     }
 
-    @NotNull
+    public RegenStats getApplyWisdomStats(int level) {
+        return null;
+    }
+
     public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return WeaponStats.createMult();
-        }
-        return WeaponStats.createZero();
+        return null;
     }
 
-    @NotNull
     public ArmorStats getEventArmor(LivingEntity damager, Player target, int level, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return ArmorStats.createMult();
-        }
-        return ArmorStats.createZero();
+        return null;
     }
 
-    @NotNull
     public AbilityStats getEventAbility(Player damager, LivingEntity target, int level, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return AbilityStats.createMult();
-        }
-        return AbilityStats.createZero();
+        return null;
     }
 
-    @NotNull
     public FishingStats getEventFishing(Player fisher, int level, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return FishingStats.createMult();
-        }
-        return FishingStats.createZero();
+        return null;
     }
 
-    @NotNull
     public MiningStats getEventMining(Player miner, Block block, int level, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return MiningStats.createMult();
-        }
-        return MiningStats.createZero();
+        return null;
     }
 
-    @NotNull
     public GatheringStats getEventGathering(Player harvester, Block block, int level, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return GatheringStats.createMult();
-        }
-        return GatheringStats.createZero();
+        return null;
     }
 
-    @NotNull
     public LuckStats getEventLuck(Player attacker, LivingEntity target, int level, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return LuckStats.createMult();
-        }
-        return LuckStats.createZero();
+        return null;
     }
 
-    @NotNull
     public WeaponStats getBonusWeapon(Player player, int level, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return WeaponStats.createMult();
-        }
-        return WeaponStats.createZero();
+        return null;
     }
 
-    @NotNull
     public ArmorStats getBonusArmor(Player player, int level, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return ArmorStats.createMult();
-        }
-        return ArmorStats.createZero();
+        return null;
     }
 
-    @NotNull
     public AbilityStats getBonusAbility(Player player, int level, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return AbilityStats.createMult();
-        }
-        return AbilityStats.createZero();
+        return null;
     }
 
-    @NotNull
     public FishingStats getBonusFishing(Player fisher, int level, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return FishingStats.createMult();
-        }
-        return FishingStats.createZero();
+        return null;
     }
 
-    @NotNull
     public MiningStats getBonusMining(Player miner, int level, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return MiningStats.createMult();
-        }
-        return MiningStats.createZero();
+        return null;
     }
 
-    @NotNull
     public GatheringStats getBonusGathering(Player harvester, int level, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return GatheringStats.createMult();
-        }
-        return GatheringStats.createZero();
+        return null;
     }
 
-    @NotNull
     public LuckStats getBonusLuck(Player attacker, int level, IncreaseType type) {
-        if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-            return LuckStats.createMult();
-        }
-        return LuckStats.createZero();
+        return null;
+    }
+
+    public RegenStats getBonusRegen(Player attacker, int level, IncreaseType type) {
+        return null;
+    }
+
+    public WisdomStats getBonusWisdom(Player attacker, int level, IncreaseType type) {
+        return null;
     }
 
     public int getMinLevel() {

@@ -23,6 +23,10 @@ public class CreateCustomOreCommand implements CommandExecutor {
         if (!(sender instanceof Player player)) {
             return true;
         }
+        if (!player.isOp()) {
+            player.sendMessage(Component.text("You do not have permission to use this command", NamedTextColor.RED));
+            return true;
+        }
         if (args.length < 1) {
             return false;
         }

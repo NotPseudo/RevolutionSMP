@@ -20,27 +20,29 @@ public class GiveCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (sender instanceof Player player) {
-            if (player.isOp()) {
-                if (args.length > 0) {
-                    if (args[0].equalsIgnoreCase("all")) {
-                        for(ItemID id : ItemID.values()) {
-                            if(player.getInventory().addItem(id.getItem()).size() > 0) {
-                                player.sendMessage(Component.text(id.getName(), id.getDefaultRarity().getRarityColor()).append(Component.text(" could not be added to the inventory!", NamedTextColor.RED)));
-                            }
+            if (!player.isOp()) {
+                player.sendMessage(Component.text("You do not have permission to use this command", NamedTextColor.RED));
+                return true;
+            }
+            if (args.length > 0) {
+                if (args[0].equalsIgnoreCase("all")) {
+                    for (ItemID id : ItemID.values()) {
+                        if (player.getInventory().addItem(id.getItem()).size() > 0) {
+                            player.sendMessage(Component.text(id.getName(), id.getDefaultRarity().getRarityColor()).append(Component.text(" could not be added to the inventory!", NamedTextColor.RED)));
                         }
-                        return true;
                     }
-                    String id = args[0].toUpperCase();
-                    try {
-                        player.getInventory().addItem(ItemID.valueOf(id).getItem());
-                    } catch (IllegalArgumentException exception) {
-                        player.sendMessage(Component.text("This ItemID could not be found. Check your spelling", NamedTextColor.RED));
-                        return true;
-                    }
-                } else {
-                    player.sendMessage(Component.text("Missing arguments!", NamedTextColor.RED));
-                    return false;
+                    return true;
                 }
+                String id = args[0].toUpperCase();
+                try {
+                    player.getInventory().addItem(ItemID.valueOf(id).getItem());
+                } catch (IllegalArgumentException exception) {
+                    player.sendMessage(Component.text("This ItemID could not be found. Check your spelling", NamedTextColor.RED));
+                    return true;
+                }
+            } else {
+                player.sendMessage(Component.text("Missing arguments!", NamedTextColor.RED));
+                return false;
             }
         }
         return true;
