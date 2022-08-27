@@ -254,7 +254,10 @@ public enum Reforge {
             };
         }
 
-
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
+        }
     },
     FABLED {
         @Override
@@ -301,6 +304,11 @@ public enum Reforge {
             lore.add(Component.text("15% ", NamedTextColor.GREEN).append(Component.text("extra damage", NamedTextColor.GRAY)));
             return lore;
         }
+
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
+        }
     },
     SUSPICIOUS {
         @Override
@@ -343,6 +351,11 @@ public enum Reforge {
             }
             return new WeaponStats(15, 0, 0, 0, 0, 0);
         }
+
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
+        }
     },
     WITHERED {
         @Override
@@ -379,6 +392,11 @@ public enum Reforge {
             return List.of(Component.text("Grants ", NamedTextColor.GRAY).append(Component.text("+1 ", NamedTextColor.GREEN))
                     .append(StatType.STRENGTH.getNameWithSymbol()).append(Component.text("per ", NamedTextColor.GRAY))
                     .append(Component.text("Abyss ", NamedTextColor.DARK_RED)).append(Component.text("level", NamedTextColor.GRAY)));
+        }
+
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
         }
     },
     BULKY {
@@ -633,7 +651,10 @@ public enum Reforge {
             };
         }
 
-
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
+        }
     },
     SPIRITUAL {
         @Override
@@ -654,7 +675,10 @@ public enum Reforge {
             };
         }
 
-
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
+        }
     },
     HEADSTRONG {
         @Override
@@ -991,6 +1015,11 @@ public enum Reforge {
                 case MYTHIC, SPECIAL, DIVINE -> new FishingStats(1, 0);
             };
         }
+
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
+        }
     },
     PERFECT {
         @Override
@@ -1031,6 +1060,11 @@ public enum Reforge {
             }
             return new ArmorStats(0, 2, 0);
         }
+
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
+        }
     },
     REINFORCED {
         @Override
@@ -1048,6 +1082,11 @@ public enum Reforge {
                 case LEGENDARY -> new ArmorStats(0, 80, 0);
                 case MYTHIC, SPECIAL, DIVINE -> new ArmorStats(0, 110, 0);
             };
+        }
+
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
         }
     },
     RENOWNED {
@@ -1160,6 +1199,11 @@ public enum Reforge {
             }
             return null;
         }
+
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
+        }
     },
     SPIKED {
         @Override
@@ -1204,6 +1248,11 @@ public enum Reforge {
                 case MYTHIC, SPECIAL -> new AbilityStats(0, 12);
                 case DIVINE -> new AbilityStats(0, 14);
             };
+        }
+
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
         }
     },
     HYPER {
@@ -1252,6 +1301,11 @@ public enum Reforge {
             };
         }
 
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
+        }
+
     },
     JADED {
         @Override
@@ -1270,6 +1324,11 @@ public enum Reforge {
                 case MYTHIC -> new MiningStats(60, 30, 0);
                 case DIVINE, SPECIAL -> new MiningStats(75, 35, 0);
             };
+        }
+
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
         }
     },
     CUBIC {
@@ -1325,6 +1384,11 @@ public enum Reforge {
             }
             return new ArmorStats(0.98, 1, 1);
         }
+
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
+        }
     },
     NECROTIC {
         @Override
@@ -1345,6 +1409,11 @@ public enum Reforge {
                 case DIVINE -> new AbilityStats(0, 250);
             };
         }
+
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
+        }
     },
     EMPOWERED {
         @Override
@@ -1362,6 +1431,11 @@ public enum Reforge {
                 case LEGENDARY -> new ArmorStats(35, 35, 0);
                 case MYTHIC, SPECIAL, DIVINE -> new ArmorStats(50, 50, 0);
             };
+        }
+
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
         }
     },
     ANCIENT {
@@ -1420,6 +1494,11 @@ public enum Reforge {
                     .append(StatType.CRIT_DAMAGE.getNameWithSymbol()).append(Component.text("per ", NamedTextColor.GRAY))
                     .append(Component.text("Abyss ", NamedTextColor.DARK_RED)).append(Component.text("level", NamedTextColor.GRAY)));
         }
+
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
+        }
     },
     UNDEAD {
         @Override
@@ -1470,6 +1549,11 @@ public enum Reforge {
                 return null;
             }
             return new ArmorStats(0.98, 1, 1);
+        }
+
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
         }
     },
     LOVING {
@@ -1522,6 +1606,11 @@ public enum Reforge {
             }
             return null;
         }
+
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
+        }
     },
     RIDICULOUS {
         @Override
@@ -1552,6 +1641,11 @@ public enum Reforge {
                 case MYTHIC, SPECIAL, DIVINE -> new ArmorStats(50, 50, 0);
             };
         }
+
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
+        }
     },
     ARMORTEST {
         @Override
@@ -1573,6 +1667,11 @@ public enum Reforge {
         public @NotNull AbilityStats getAbilityStats(Rarity rarity, UUID player) {
             return new AbilityStats(100, 500);
         }
+
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
+        }
     },
     WEAPONTEST {
         @Override
@@ -1585,10 +1684,14 @@ public enum Reforge {
             return new WeaponStats(100, 100, 100, 100, 100, 100);
         }
 
-
         @Override
         public @NotNull AbilityStats getAbilityStats(Rarity rarity, UUID player) {
             return new AbilityStats(100, 500);
+        }
+
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
         }
     },
     FEROTEST {
@@ -1602,7 +1705,10 @@ public enum Reforge {
             return new WeaponStats(0, 5, 25, 5, 0, 100);
         }
 
-
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
+        }
     },
     NODAMAGE {
         @Override
@@ -1614,11 +1720,21 @@ public enum Reforge {
         public @NotNull WeaponStats getWeaponStats(Rarity rarity, UUID player) {
             return new WeaponStats(0, 10, 30, 5, 20, 5);
         }
+
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
+        }
     },
     BLESSED {
         @Override
         public List<ItemType> getItemTypes() {
             return List.of(ItemType.AXE, ItemType.HOE);
+        }
+
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
         }
     };
 
@@ -1633,7 +1749,7 @@ public enum Reforge {
         return false;
     }
 
-    public ItemStack getReforgeStone() {
+    public ItemID getReforgeStone() {
         return null;
     }
 

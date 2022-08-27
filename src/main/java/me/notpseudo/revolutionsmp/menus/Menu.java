@@ -5,6 +5,9 @@ import me.notpseudo.revolutionsmp.collections.CollectionObject;
 import me.notpseudo.revolutionsmp.collections.CollectionType;
 import me.notpseudo.revolutionsmp.collections.CollectionsHolder;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
+import me.notpseudo.revolutionsmp.itemstats.StatType;
+import me.notpseudo.revolutionsmp.listeners.StatsListeners;
+import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
 import me.notpseudo.revolutionsmp.skills.SkillObject;
 import me.notpseudo.revolutionsmp.skills.SkillType;
 import me.notpseudo.revolutionsmp.skills.SkillUtils;
@@ -26,9 +29,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 public abstract class Menu implements InventoryHolder {
@@ -201,7 +202,7 @@ public abstract class Menu implements InventoryHolder {
         return inventory;
     }
 
-    public String getFilledProgressString(double percent) {
+    public static String getFilledProgressString(double percent) {
         int green = (int) (percent * 20);
         StringBuilder bar = new StringBuilder();
         for (int i = 0; i < green; i++) {
@@ -210,7 +211,7 @@ public abstract class Menu implements InventoryHolder {
         return bar.toString();
     }
 
-    public String getEmptyProgressString(double percent) {
+    public static String getEmptyProgressString(double percent) {
         int green = (int) (percent * 20);
         StringBuilder bar = new StringBuilder();
         for (int i = green; i < 20; i++) {
@@ -219,7 +220,7 @@ public abstract class Menu implements InventoryHolder {
         return bar.toString();
     }
 
-    public List<Component> getProgressList(SkillObject skill) {
+    public static List<Component> getProgressList(SkillObject skill) {
         ArrayList<Component> lore = new ArrayList<>();
         lore.add(Component.text("Progress to Level " + (int) (skill.getLevel() + 1) + ": ", NamedTextColor.GRAY).append(Component.text(Math.round(skill.getPercent() * 100) + "%", NamedTextColor.YELLOW)).decoration(TextDecoration.ITALIC, false));
         lore.add(Component.text(getFilledProgressString(skill.getPercent()), NamedTextColor.GREEN).append(Component.text(getEmptyProgressString(skill.getPercent()), NamedTextColor.WHITE)).append(Component.text(" " + skill.getCurrentXP(), NamedTextColor.YELLOW)).append(Component.text("/", NamedTextColor.GOLD)).append(Component.text(skill.getXpForNextLevel(), NamedTextColor.YELLOW)).decoration(TextDecoration.ITALIC, false));
@@ -228,7 +229,7 @@ public abstract class Menu implements InventoryHolder {
         return lore;
     }
 
-    public List<Component> getTotalCollectionProgress(CollectionsHolder holder, SkillType type) {
+    public static List<Component> getTotalCollectionProgress(CollectionsHolder holder, SkillType type) {
         ArrayList<Component> lore = new ArrayList<>();
         if (type == null) {
             lore.add(Component.text("View your Collections progression", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
@@ -255,13 +256,23 @@ public abstract class Menu implements InventoryHolder {
         return lore;
     }
 
-    public List<Component> getCollectionProgressList(CollectionObject collection) {
+    public static List<Component> getCollectionProgressList(CollectionObject collection) {
         ArrayList<Component> lore = new ArrayList<>();
         lore.add(Component.text("Progress to Level " + (collection.getLevel() + 1) + ": ", NamedTextColor.GRAY).append(Component.text(Math.round(collection.getPercent() * 100) + "%", NamedTextColor.YELLOW)).decoration(TextDecoration.ITALIC, false));
         lore.add(Component.text(getFilledProgressString(collection.getPercent()), NamedTextColor.GREEN).append(Component.text(getEmptyProgressString(collection.getPercent()), NamedTextColor.WHITE)).append(Component.text(" " + collection.getCurrentCollected(), NamedTextColor.YELLOW)).append(Component.text("/", NamedTextColor.GOLD)).append(Component.text(collection.getItemsForNextLevel(), NamedTextColor.YELLOW)).decoration(TextDecoration.ITALIC, false));
         lore.add(Component.empty());
         lore.add(Component.text("Level " + collection.getLevel() + " Rewards: ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
         return lore;
+    }
+
+    public static Map<StatType, Component> getStatComponents(Player player) {
+        HashMap<StatType, Component> lines = new HashMap<>();
+        PlayerStats stats = StatsListeners.getPlayerStats(player);
+        for (StatType type : StatType.values()) {
+            Component line = type.getNameWithSymbol().append(Component.text(" " + stats.getStatValue(type), NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false);
+            lines.put(type, line);
+        }
+        return lines;
     }
 
 }

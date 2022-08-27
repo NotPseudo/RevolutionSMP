@@ -4,6 +4,11 @@ import me.notpseudo.revolutionsmp.items.ItemEditor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
 public enum StatType {
 
     DAMAGE {
@@ -293,6 +298,11 @@ public enum StatType {
         }
 
         @Override
+        public NamedTextColor getColor() {
+            return NamedTextColor.GREEN;
+        }
+
+        @Override
         public String getSymbol() {
             return "Ⓟ";
         }
@@ -552,6 +562,18 @@ public enum StatType {
 
     public StatCategory getStatCategory() {
         return StatCategory.COMBAT;
+    }
+
+    private static final Set<StatType> showRegular;
+
+    static {
+        showRegular = new LinkedHashSet<>(List.of(values()));
+        showRegular.remove(MANA);
+        showRegular.remove(FISHING_SPEED);
+        showRegular.remove(BREAKING_POWER);
+    }
+    public static Set<StatType> getRegularShownTypes() {
+        return showRegular;
     }
 
 }

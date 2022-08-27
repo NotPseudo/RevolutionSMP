@@ -104,7 +104,8 @@ public class GemstonesHolder implements Serializable {
         return Component.text(line.toString());
     }
 
-    public WeaponStats getGemWeapon(Rarity rarity) {
+    public WeaponStats getGemWeapon() {
+        Rarity rarity = holder.getRarity();
         WeaponStats gemWeapon = new WeaponStats(0, 0, 0, 0, 0, 0);
         for (GemstoneObject gem : gems) {
             if (gem != null) {
@@ -114,7 +115,8 @@ public class GemstonesHolder implements Serializable {
         return gemWeapon;
     }
 
-    public ArmorStats getGemArmor(Rarity rarity) {
+    public ArmorStats getGemArmor() {
+        Rarity rarity = holder.getRarity();
         ArmorStats gemArmor = new ArmorStats(0, 0, 0);
         for (GemstoneObject gem : gems) {
             if (gem != null) {
@@ -124,7 +126,8 @@ public class GemstonesHolder implements Serializable {
         return gemArmor;
     }
 
-    public AbilityStats getGemAbility(Rarity rarity) {
+    public AbilityStats getGemAbility() {
+        Rarity rarity = holder.getRarity();
         AbilityStats gemAbility = new AbilityStats(0, 0);
         for (GemstoneObject gem : gems) {
             if (gem != null) {
@@ -134,7 +137,8 @@ public class GemstonesHolder implements Serializable {
         return gemAbility;
     }
 
-    public MiningStats getGemMining(Rarity rarity) {
+    public MiningStats getGemMining() {
+        Rarity rarity = holder.getRarity();
         MiningStats gemMining = new MiningStats(0, 0, 0);
         for (GemstoneObject gem : gems) {
             if (gem != null) {
@@ -144,7 +148,8 @@ public class GemstonesHolder implements Serializable {
         return gemMining;
     }
 
-    public GatheringStats getGemGathering(Rarity rarity) {
+    public GatheringStats getGemGathering() {
+        Rarity rarity = holder.getRarity();
         GatheringStats gemGathering = new GatheringStats(0, 0);
         for (GemstoneObject gem : gems) {
             if (gem != null) {
@@ -154,7 +159,8 @@ public class GemstonesHolder implements Serializable {
         return gemGathering;
     }
 
-    public FishingStats getGemFishing(Rarity rarity) {
+    public FishingStats getGemFishing() {
+        Rarity rarity = holder.getRarity();
         FishingStats gemFishing = new FishingStats(0, 0);
         for (GemstoneObject gem : gems) {
             if (gem != null) {
@@ -164,7 +170,8 @@ public class GemstonesHolder implements Serializable {
         return gemFishing;
     }
 
-    public LuckStats getGemLLuck(Rarity rarity) {
+    public LuckStats getGemLuck() {
+        Rarity rarity = holder.getRarity();
         LuckStats gemLuck = new LuckStats(0, 0);
         for (GemstoneObject gem : gems) {
             if (gem != null) {
@@ -174,7 +181,8 @@ public class GemstonesHolder implements Serializable {
         return gemLuck;
     }
 
-    public RegenStats getGemRegen(Rarity rarity) {
+    public RegenStats getGemRegen() {
+        Rarity rarity = holder.getRarity();
         RegenStats gemRegen = RegenStats.createZero();
         for (GemstoneObject gem : gems) {
             if (gem != null) {
@@ -184,7 +192,8 @@ public class GemstonesHolder implements Serializable {
         return gemRegen;
     }
 
-    public WisdomStats getGemWisdom(Rarity rarity) {
+    public WisdomStats getGemWisdom() {
+        Rarity rarity = holder.getRarity();
         WisdomStats gemWisdom = WisdomStats.createZero();
         for (GemstoneObject gem : gems) {
             if (gem != null) {

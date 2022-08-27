@@ -17,6 +17,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -71,10 +73,14 @@ public class ReforgeMenu extends Menu {
             return false;
         }
         ItemInfo info = ItemEditor.getInfo(item);
-        if (info == null || info.getItemType() == ItemType.VANILLA_ITEM) {
+        if (info == null || !info.getItemType().allowReforge()) {
             return false;
         }
-        List<Reforge> matches = NO_STONE.stream().filter(r -> r.getItemTypes().contains(info.getItemType())).toList();
+        ArrayList<Reforge> matches = new ArrayList<>(NO_STONE.stream().filter(r -> r.getItemTypes().contains(info.getItemType())).toList());
+        Reforge oldReforge = info.getReforge();
+        if (oldReforge != null) {
+            matches.remove(oldReforge);
+        }
         if (matches.size() < 1) {
             return false;
         }

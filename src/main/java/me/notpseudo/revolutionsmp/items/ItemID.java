@@ -3798,6 +3798,12 @@ public enum ItemID {
         public Material getMaterial() {
             return Material.ENCHANTED_BOOK;
         }
+    },
+    TEMP_REFORGE_STONE {
+        @Override
+        public Material getMaterial() {
+            return Material.PLAYER_HEAD;
+        }
     };
 
     // Gets default stats for specific item

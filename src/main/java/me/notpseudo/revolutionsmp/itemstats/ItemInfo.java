@@ -415,15 +415,15 @@ public class ItemInfo implements Serializable {
             }
         }
         if (gemstonesHolder != null) {
-            weaponStats.combine(gemstonesHolder.getGemWeapon(rarity));
-            armorStats.combine(gemstonesHolder.getGemArmor(rarity));
-            abilityStats.combine(gemstonesHolder.getGemAbility(rarity));
-            fishingStats.combine(gemstonesHolder.getGemFishing(rarity));
-            miningStats.combine(gemstonesHolder.getGemMining(rarity));
-            gatheringStats.combine(gemstonesHolder.getGemGathering(rarity));
-            luckStats.combine(gemstonesHolder.getGemLLuck(rarity));
-            regenStats.combine(gemstonesHolder.getGemRegen(rarity));
-            wisdomStats.combine(gemstonesHolder.getGemWisdom(rarity));
+            weaponStats.combine(gemstonesHolder.getGemWeapon());
+            armorStats.combine(gemstonesHolder.getGemArmor());
+            abilityStats.combine(gemstonesHolder.getGemAbility());
+            fishingStats.combine(gemstonesHolder.getGemFishing());
+            miningStats.combine(gemstonesHolder.getGemMining());
+            gatheringStats.combine(gemstonesHolder.getGemGathering());
+            luckStats.combine(gemstonesHolder.getGemLuck());
+            regenStats.combine(gemstonesHolder.getGemRegen());
+            wisdomStats.combine(gemstonesHolder.getGemWisdom());
         }
         if (abilitiesHolder != null) {
             abilitiesHolder.reorganize();
@@ -444,6 +444,34 @@ public class ItemInfo implements Serializable {
     /*
     Default stats that are stored on the item
      */
+
+    public double getStatValue(StatType type) {
+        return switch (type.getStatCategory()) {
+            case COMBAT -> weaponStats.getStatValue(type);
+            case ARMOR -> armorStats.getStatValue(type);
+            case INTELLIGENCE -> abilityStats.getStatValue(type);
+            case FISHING -> fishingStats.getStatValue(type);
+            case MINING -> miningStats.getStatValue(type);
+            case GATHERING -> gatheringStats.getStatValue(type);
+            case LUCK -> luckStats.getStatValue(type);
+            case WISDOM -> wisdomStats.getStatValue(type);
+            case REGEN -> regenStats.getStatValue(type);
+        };
+    }
+
+    public StatObject getStatObject(StatType type) {
+        return switch (type.getStatCategory()) {
+            case COMBAT -> weaponStats.getStatObject(type);
+            case ARMOR -> armorStats.getStatObject(type);
+            case INTELLIGENCE -> abilityStats.getStatObject(type);
+            case FISHING -> fishingStats.getStatObject(type);
+            case MINING -> miningStats.getStatObject(type);
+            case GATHERING -> gatheringStats.getStatObject(type);
+            case LUCK -> luckStats.getStatObject(type);
+            case WISDOM -> wisdomStats.getStatObject(type);
+            case REGEN -> regenStats.getStatObject(type);
+        };
+    }
 
     @NotNull
     public WeaponStats getWeaponStats() {

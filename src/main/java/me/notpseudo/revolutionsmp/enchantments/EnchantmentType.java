@@ -1408,8 +1408,8 @@ public enum EnchantmentType {
 
     public int getExpLevelsNeeded(int level) {
         return switch (level) {
-            case 1, 2, 3, 4, 5 -> level * 10;
-            default -> (level - 2) * 30;
+            case 1, 2, 3, 4, 5 -> level * 5;
+            default -> (level - 2) * 20;
         };
     }
 

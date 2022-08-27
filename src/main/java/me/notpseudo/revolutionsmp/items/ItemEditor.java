@@ -22,9 +22,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * This class holds mostly utility methods related to custom items
@@ -60,410 +58,131 @@ public class ItemEditor {
      */
     public static void updateLore(ItemMeta meta) {
         ItemInfo itemInfo = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
-        if (itemInfo != null) {
-            if (itemInfo.getItemType() == ItemType.VANILLA_ITEM) {
-                ArrayList<Component> lore = new ArrayList<>(List.of(Component.text(itemInfo.getRarity().name(), itemInfo.getRarity().getRarityColor()).decoration(TextDecoration.BOLD, true).decoration(TextDecoration.ITALIC, false)));
-                meta.lore(lore);
-                return;
-            }
-            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-            if (itemInfo.getItemID() != null && itemInfo.getItemID().isUnbreakable()) {
-                meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-                meta.setUnbreakable(true);
-            }
-            if (itemInfo.getItemID() != null && itemInfo.getItemID().isEnchantGlint()) {
-                meta.addEnchant(Enchantment.LUCK, 1, true);
-            }
-            WeaponStats weaponStats = itemInfo.getWeaponStats();
-            ArmorStats armorStats = itemInfo.getArmorStats();
-            AbilityStats abilityStats = itemInfo.getAbilityStats();
-            FishingStats fishingStats = itemInfo.getFishingStats();
-            MiningStats miningStats = itemInfo.getMiningStats();
-            GatheringStats gatheringStats = itemInfo.getGatheringStats();
-            LuckStats luckStats = itemInfo.getLuckStats();
-            RegenStats regenStats = itemInfo.getRegenStats();
-            WisdomStats wisdomStats = itemInfo.getWisdomStats();
-            EnchantmentsHolder enchantmentsHolder = itemInfo.getEnchantmentsHolder();
-            AbilitiesHolder abilitiesHolder = itemInfo.getAbilitiesHolder();
-            List<Component> lore = new ArrayList<>();
-            boolean hasBonus = false;
-            Component name, rarity, damage = null, strength = null, critChance = null, critDamage = null, attackSpeed = null, ferocity = null,
-                    health = null, defense = null, speed = null, trueDefense = null,
-                    abilityDamage = null, intelligence = null,
-                    seaCreatureChance = null, fishingTimeDecrease = null,
-                    miningSpeed = null, miningFortune = null, pristine = null, breakingPower = null, purity = null,
-                    farmingFortune = null, foragingFortune = null,
-                    magicFind = null, petLuck = null,
-                    combatWisdom = null, miningWisdom = null, foragingWisdom = null, farmingWisdom = null, fishingWisdom = null, alchemyWisdom = null, enchantingWisdom = null,
-                    healthRegen = null, vitality = null, mending = null, manaRegen = null,
-                    gemstoneSlots = null,
-                    canBeReforged = null;
-            Component potatoDamage = Component.empty(), potatoStrength = Component.empty(), potatoHealth = Component.empty(), potatoDefense = Component.empty(),
-                    artOfWar = Component.empty(), woodSingularity = Component.empty(), farmingForDummies = Component.empty();
-            Component reforgeDamage = Component.empty(), reforgeStrength = Component.empty(), reforgeCritChance = Component.empty(), reforgeCritDamage = Component.empty(), reforgeAttackSpeed = Component.empty(), reforgeFerocity = Component.empty(),
-                    reforgeHealth = Component.empty(), reforgeDefense = Component.empty(), reforgeSpeed = Component.empty(), reforgeTrueDefense = Component.empty(),
-                    reforgeAbilityDamage = Component.empty(), reforgeIntelligence = Component.empty(),
-                    reforgeSeaCreatureChance = Component.empty(),
-                    reforgeMiningSpeed = Component.empty(), reforgeMiningFortune = Component.empty(), reforgePristine = Component.empty(), reforgePurity = Component.empty(),
-                    reforgeFarmingFortune = Component.empty(), reforgeForagingFortune = Component.empty(),
-                    reforgeMagicFind = Component.empty(), reforgePetLuck = Component.empty();
-            Component gemStrength = Component.empty(), gemHealth = Component.empty(), gemDef = Component.empty(), gemTrueDef = Component.empty(),
-                    gemIntel = Component.empty(), gemMineSpeed = Component.empty(), gemMineFortune = Component.empty(), gemPristine = Component.empty();
-            String rarityName = itemInfo.getRarity().getName().toUpperCase();
-            String itemType = itemInfo.getItemType().getName().toUpperCase();
-            NamedTextColor rarityColor = itemInfo.getRarity().getRarityColor();
-            if (itemInfo.isRecomb()) {
-                rarity = Component.text("S ", rarityColor, TextDecoration.OBFUSCATED, TextDecoration.BOLD).append(Component.text(rarityName + " " + itemType, rarityColor, TextDecoration.BOLD).decoration(TextDecoration.OBFUSCATED, false).append(Component.text(" S", rarityColor, TextDecoration.OBFUSCATED, TextDecoration.BOLD)));
-            } else {
-                rarity = Component.text(rarityName + " " + itemType).color(rarityColor).decoration(TextDecoration.BOLD, true);
-            }
-            ModifierInfo mod = itemInfo.getModifiers();
-            if (mod != null) {
-                int potatoBooks = mod.getTotalPotatoBooks();
-                if (potatoBooks != 0) {
-                    if (isArmor(itemInfo)) {
-                        potatoHealth = getBracketComponent(potatoBooks * 4, NamedTextColor.YELLOW);
-                        potatoDefense = getBracketComponent(potatoBooks * 2, NamedTextColor.YELLOW);
-                    } else if (isWeapon(itemInfo)) {
-                        potatoDamage = getBracketComponent(potatoBooks * 2, NamedTextColor.YELLOW);
-                        potatoStrength = getBracketComponent(potatoBooks * 2, NamedTextColor.YELLOW);
-                    }
-                }
-                int art = mod.getArtOfWar();
-                if (art > 0) {
-                    artOfWar = Component.text("[" + art * 5 + "] ", NamedTextColor.GOLD);
-                }
-                int wood = mod.getWoodSingularity();
-                if (wood > 0) {
-                    woodSingularity = getBracketComponent(wood * 100, NamedTextColor.YELLOW);
-                }
-                int farming = mod.getFarmingForDummies();
-                if (farming > 0) {
-                    farmingForDummies = getBracketComponent(farming, NamedTextColor.YELLOW);
-                }
-            }
-            String reforgeName = "";
-            Reforge reforge = itemInfo.getReforge();
-            if (reforge != null) {
-                reforgeName = reforge.name().charAt(0) + reforge.name().substring(1).toLowerCase() + " ";
-                WeaponStats reforgeWeaponStats = reforge.getWeaponStats(itemInfo.getRarity(), itemInfo.getOwner());
-                ArmorStats reforgeArmorStats = reforge.getArmorStats(itemInfo.getRarity(), itemInfo.getOwner());
-                AbilityStats reforgeAbilityStats = reforge.getAbilityStats(itemInfo.getRarity(), itemInfo.getOwner());
-                FishingStats reforgeFishingStats = reforge.getFishingStats(itemInfo.getRarity(), itemInfo.getOwner());
-                MiningStats reforgeMiningStats = reforge.getMiningStats(itemInfo.getRarity(), itemInfo.getOwner());
-                GatheringStats reforgeGatheringStats = reforge.getGatheringStats(itemInfo.getRarity(), itemInfo.getOwner());
-                LuckStats reforgeLuckStats = reforge.getLuckStats(itemInfo.getRarity(), itemInfo.getOwner());
-                if (reforgeWeaponStats.getStatValue(StatType.DAMAGE) != 0) {
-                    reforgeDamage = getBracketComponent(reforgeWeaponStats.getStatObject(StatType.DAMAGE), NamedTextColor.BLUE);
-                }
-                if (reforgeWeaponStats.getStatValue(StatType.STRENGTH) != 0) {
-                    reforgeStrength = getBracketComponent(reforgeWeaponStats.getStatObject(StatType.STRENGTH), NamedTextColor.BLUE);
-                }
-                if (reforgeWeaponStats.getStatValue(StatType.CRIT_CHANCE) != 0) {
-                    reforgeCritChance = getBracketComponent(reforgeWeaponStats.getStatObject(StatType.CRIT_CHANCE), NamedTextColor.BLUE);
-                }
-                if (reforgeWeaponStats.getStatValue(StatType.CRIT_DAMAGE) != 0) {
-                    reforgeCritDamage = getBracketComponent(reforgeWeaponStats.getStatObject(StatType.CRIT_DAMAGE), NamedTextColor.BLUE);
-                }
-                if (reforgeWeaponStats.getStatValue(StatType.ATTACK_SPEED) != 0) {
-                    reforgeAttackSpeed = getBracketComponent(reforgeWeaponStats.getStatObject(StatType.ATTACK_SPEED), NamedTextColor.BLUE);
-                }
-                if (reforgeWeaponStats.getStatValue(StatType.FEROCITY) != 0) {
-                    reforgeFerocity = getBracketComponent(reforgeWeaponStats.getStatObject(StatType.FEROCITY), NamedTextColor.BLUE);
-                }
-                if (reforgeArmorStats.getStatValue(StatType.HEALTH) != 0) {
-                    reforgeHealth = getBracketComponent(reforgeArmorStats.getStatObject(StatType.HEALTH), NamedTextColor.BLUE);
-                }
-                if (reforgeArmorStats.getStatValue(StatType.DEFENSE) != 0) {
-                    reforgeDefense = getBracketComponent(reforgeArmorStats.getStatObject(StatType.DEFENSE), NamedTextColor.BLUE);
-                }
-                if (reforgeArmorStats.getStatValue(StatType.SPEED) != 0) {
-                    reforgeSpeed = getBracketComponent(reforgeArmorStats.getStatObject(StatType.SPEED), NamedTextColor.BLUE);
-                }
-                if (reforgeArmorStats.getStatValue(StatType.TRUE_DEFENSE) != 0) {
-                    reforgeTrueDefense = getBracketComponent(reforgeArmorStats.getStatObject(StatType.TRUE_DEFENSE), NamedTextColor.BLUE);
-                }
-                if (reforgeAbilityStats.getStatValue(StatType.ABILITY_DAMAGE) != 0) {
-                    reforgeAbilityDamage = getBracketComponent(reforgeAbilityStats.getStatObject(StatType.ABILITY_DAMAGE), NamedTextColor.BLUE);
-                }
-                if (reforgeAbilityStats.getStatValue(StatType.INTELLIGENCE) != 0) {
-                    reforgeIntelligence = getBracketComponent(reforgeAbilityStats.getStatObject(StatType.INTELLIGENCE), NamedTextColor.BLUE);
-                }
-                if (reforgeFishingStats.getStatValue(StatType.SEA_CREATURE_CHANCE) != 0) {
-                    reforgeSeaCreatureChance = getBracketComponent(reforgeFishingStats.getStatObject(StatType.SEA_CREATURE_CHANCE), NamedTextColor.BLUE);
-                }
-                if (reforgeMiningStats.getStatValue(StatType.MINING_SPEED) != 0) {
-                    reforgeMiningSpeed = getBracketComponent(reforgeMiningStats.getStatObject(StatType.MINING_SPEED), NamedTextColor.BLUE);
-                }
-                if (reforgeMiningStats.getStatValue(StatType.MINING_FORTUNE) != 0) {
-                    reforgeMiningFortune = getBracketComponent(reforgeMiningStats.getStatObject(StatType.MINING_FORTUNE), NamedTextColor.BLUE);
-                }
-                if (reforgeMiningStats.getStatValue(StatType.PRISTINE) != 0) {
-                    reforgePristine = getBracketComponent(reforgeMiningStats.getStatObject(StatType.PRISTINE), NamedTextColor.BLUE);
-                }
-                if (reforgeGatheringStats.getStatValue(StatType.FARMING_FORTUNE) != 0) {
-                    reforgeFarmingFortune = getBracketComponent(reforgeGatheringStats.getStatObject(StatType.FARMING_FORTUNE), NamedTextColor.BLUE);
-                }
-                if (reforgeGatheringStats.getStatValue(StatType.FORAGING_FORTUNE) != 0) {
-                    reforgeForagingFortune = getBracketComponent(reforgeGatheringStats.getStatObject(StatType.FORAGING_FORTUNE), NamedTextColor.BLUE);
-                }
-                if (reforgeLuckStats.getStatValue(StatType.MAGIC_FIND) != 0) {
-                    reforgeMagicFind = getBracketComponent(reforgeLuckStats.getStatObject(StatType.MAGIC_FIND), NamedTextColor.BLUE);
-                }
-                if (reforgeLuckStats.getStatValue(StatType.PET_LUCK) != 0) {
-                    reforgePetLuck = getBracketComponent(reforgeLuckStats.getStatObject(StatType.PET_LUCK), NamedTextColor.BLUE);
-                }
-                hasBonus = reforge.hasBonus();
-            } else {
-                canBeReforged = Component.text("This item can be reforged!", NamedTextColor.DARK_GRAY);
-            }
-            if (itemInfo.getGemstonesHolder() != null) {
-                GemstonesHolder gemHolder = itemInfo.getGemstonesHolder();
-                gemstoneSlots = gemHolder.getGemLineLore();
-                WeaponStats gemWeapon = gemHolder.getGemWeapon(itemInfo.getRarity());
-                ArmorStats gemArmor = gemHolder.getGemArmor(itemInfo.getRarity());
-                AbilityStats gemAbility = gemHolder.getGemAbility(itemInfo.getRarity());
-                MiningStats gemMining = gemHolder.getGemMining(itemInfo.getRarity());
-                if (gemWeapon.getStatValue(StatType.STRENGTH) != 0) {
-                    gemStrength = getBracketComponent(gemWeapon.getStatObject(StatType.STRENGTH), NamedTextColor.LIGHT_PURPLE);
-                }
-                if (gemArmor.getStatValue(StatType.HEALTH) != 0) {
-                    gemHealth = getBracketComponent(gemArmor.getStatObject(StatType.HEALTH), NamedTextColor.LIGHT_PURPLE);
-                }
-                if (gemArmor.getStatValue(StatType.DEFENSE) != 0) {
-                    gemDef = getBracketComponent(gemArmor.getStatObject(StatType.DEFENSE), NamedTextColor.LIGHT_PURPLE);
-                }
-                if (gemAbility.getStatValue(StatType.INTELLIGENCE) != 0) {
-                    gemIntel = getBracketComponent(gemAbility.getStatObject(StatType.INTELLIGENCE), NamedTextColor.LIGHT_PURPLE);
-                }
-                if (gemMining.getStatValue(StatType.MINING_SPEED) != 0) {
-                    gemMineSpeed = getBracketComponent(gemMining.getStatObject(StatType.MINING_SPEED), NamedTextColor.LIGHT_PURPLE);
-                }
-                if (gemMining.getStatValue(StatType.MINING_FORTUNE) != 0) {
-                    gemMineFortune = getBracketComponent(gemMining.getStatObject(StatType.MINING_FORTUNE), NamedTextColor.LIGHT_PURPLE);
-                }
-                if (gemMining.getStatValue(StatType.PRISTINE) != 0) {
-                    gemPristine = getBracketComponent(gemMining.getStatObject(StatType.PRISTINE), NamedTextColor.LIGHT_PURPLE);
-                }
-            }
-            name = Component.text(reforgeName + itemInfo.getName()).color(itemInfo.getRarity().getRarityColor());
-            if (weaponStats.getStatValue(StatType.DAMAGE) != 0) {
-                damage = getBaseStatComponent(weaponStats.getStatObject(StatType.DAMAGE)).append(potatoDamage).append(reforgeDamage);
-            }
-            if (weaponStats.getStatValue(StatType.STRENGTH) != 0) {
-                strength = getBaseStatComponent(weaponStats.getStatObject(StatType.STRENGTH)).append(potatoStrength).append(reforgeStrength).append(gemStrength);
-            }
-            if (weaponStats.getStatValue(StatType.CRIT_CHANCE) != 0) {
-                critChance = getBaseStatComponent(weaponStats.getStatObject(StatType.CRIT_CHANCE)).append(reforgeCritChance);
-            }
-            if (weaponStats.getStatValue(StatType.CRIT_DAMAGE) != 0) {
-                critDamage = getBaseStatComponent(weaponStats.getStatObject(StatType.CRIT_DAMAGE)).append(reforgeCritDamage);
-            }
-            if (weaponStats.getStatValue(StatType.ATTACK_SPEED) != 0) {
-                attackSpeed = getBaseStatComponent(weaponStats.getStatObject(StatType.ATTACK_SPEED)).append(reforgeAttackSpeed);
-            }
-            if (weaponStats.getStatValue(StatType.FEROCITY) != 0) {
-                ferocity = getBaseStatComponent(weaponStats.getStatObject(StatType.FEROCITY)).append(reforgeFerocity);
-            }
-            if (armorStats.getStatValue(StatType.HEALTH) != 0) {
-                health = getBaseStatComponent(armorStats.getStatObject(StatType.HEALTH)).append(potatoHealth).append(reforgeHealth).append(gemHealth);
-            }
-            if (armorStats.getStatValue(StatType.DEFENSE) != 0) {
-                defense = getBaseStatComponent(armorStats.getStatObject(StatType.DEFENSE)).append(potatoDefense).append(reforgeDefense).append(gemDef);
-            }
-            if (armorStats.getStatValue(StatType.SPEED) != 0) {
-                speed = getBaseStatComponent(armorStats.getStatObject(StatType.SPEED)).append(reforgeSpeed);
-            }
-            if (armorStats.getStatValue(StatType.TRUE_DEFENSE) != 0) {
-                trueDefense = getBaseStatComponent(armorStats.getStatObject(StatType.TRUE_DEFENSE)).append(reforgeTrueDefense).append(gemTrueDef);
-            }
-            if (abilityStats.getStatValue(StatType.ABILITY_DAMAGE) != 0) {
-                abilityDamage = getBaseStatComponent(abilityStats.getStatObject(StatType.ABILITY_DAMAGE)).append(reforgeAbilityDamage);
-            }
-            if (abilityStats.getStatValue(StatType.INTELLIGENCE) != 0) {
-                intelligence = getBaseStatComponent(abilityStats.getStatObject(StatType.INTELLIGENCE)).append(reforgeIntelligence).append(gemIntel);
-            }
-            if (fishingStats.getStatValue(StatType.SEA_CREATURE_CHANCE) != 0) {
-                seaCreatureChance = getBaseStatComponent(fishingStats.getStatObject(StatType.SEA_CREATURE_CHANCE)).append(reforgeSeaCreatureChance);
-            }
-            if (fishingStats.getStatValue(StatType.FISHING_SPEED) != 0) {
-                fishingTimeDecrease = Component.text("Increases fishing speed by ", NamedTextColor.GRAY).append(Component.text(getStatString(fishingStats.getStatObject(StatType.FISHING_SPEED)), NamedTextColor.BLUE));
-            }
-            if (miningStats.getStatValue(StatType.MINING_SPEED) != 0) {
-                miningSpeed = getBaseStatComponent(miningStats.getStatObject(StatType.MINING_SPEED)).append(reforgeMiningSpeed).append(gemMineSpeed);
-            }
-            if (miningStats.getStatValue(StatType.MINING_FORTUNE) != 0) {
-                miningFortune = getBaseStatComponent(miningStats.getStatObject(StatType.MINING_FORTUNE)).append(reforgeMiningFortune).append(gemMineFortune);
-            }
-            if (miningStats.getStatValue(StatType.PRISTINE) != 0) {
-                pristine = getBaseStatComponent(miningStats.getStatObject(StatType.PRISTINE)).append(reforgePristine).append(gemPristine);
-            }
-            if (miningStats.getStatValue(StatType.BREAKING_POWER) != 0) {
-                breakingPower = Component.text("Breaking Power " + (int) miningStats.getStatValue(StatType.BREAKING_POWER), NamedTextColor.DARK_GRAY);
-            }
-            if (gatheringStats.getStatValue(StatType.FARMING_FORTUNE) != 0) {
-                farmingFortune = getBaseStatComponent(gatheringStats.getStatObject(StatType.FARMING_FORTUNE)).append(reforgeFarmingFortune);
-            }
-            if (gatheringStats.getStatValue(StatType.FORAGING_FORTUNE) != 0) {
-                foragingFortune = getBaseStatComponent(gatheringStats.getStatObject(StatType.FORAGING_FORTUNE)).append(reforgeForagingFortune);
-            }
-            if (luckStats.getStatValue(StatType.MAGIC_FIND) != 0) {
-                magicFind = getBaseStatComponent(luckStats.getStatObject(StatType.MAGIC_FIND)).append(reforgeMagicFind);
-            }
-            if (luckStats.getStatValue(StatType.PET_LUCK) != 0) {
-                petLuck = getBaseStatComponent(luckStats.getStatObject(StatType.PET_LUCK)).append(reforgePetLuck);
-            }
-            meta.displayName(name.decoration(TextDecoration.ITALIC, false));
-            if (breakingPower != null) {
-                lore.add(breakingPower.decoration(TextDecoration.ITALIC, false));
-                lore.add(Component.empty());
-            }
-            int statLines = 0;
-            if (damage != null) {
-                lore.add(damage.decoration(TextDecoration.ITALIC, false));
-                statLines++;
-            }
-            if (strength != null) {
-                lore.add(strength.decoration(TextDecoration.ITALIC, false));
-                statLines++;
-            }
-            if (critChance != null) {
-                lore.add(critChance.decoration(TextDecoration.ITALIC, false));
-                statLines++;
-            }
-            if (critDamage != null) {
-                lore.add(critDamage.decoration(TextDecoration.ITALIC, false));
-                statLines++;
-            }
-            if (attackSpeed != null) {
-                lore.add(attackSpeed.decoration(TextDecoration.ITALIC, false));
-                statLines++;
-            }
-            if (abilityDamage != null) {
-                lore.add(abilityDamage.decoration(TextDecoration.ITALIC, false));
-                statLines++;
-            }
-            if (health != null) {
-                lore.add(health.decoration(TextDecoration.ITALIC, false));
-                statLines++;
-            }
-            if (defense != null) {
-                lore.add(defense.decoration(TextDecoration.ITALIC, false));
-                statLines++;
-            }
-            if (speed != null) {
-                lore.add(speed.decoration(TextDecoration.ITALIC, false));
-                statLines++;
-            }
-            if (intelligence != null) {
-                lore.add(intelligence.decoration(TextDecoration.ITALIC, false));
-                statLines++;
-            }
-            if (trueDefense != null) {
-                lore.add(trueDefense.decoration(TextDecoration.ITALIC, false));
-                statLines++;
-            }
-            if (seaCreatureChance != null) {
-                lore.add(seaCreatureChance.decoration(TextDecoration.ITALIC, false));
-                statLines++;
-            }
-            if (magicFind != null) {
-                lore.add(magicFind.decoration(TextDecoration.ITALIC, false));
-                statLines++;
-            }
-            if (petLuck != null) {
-                lore.add(petLuck.decoration(TextDecoration.ITALIC, false));
-                statLines++;
-            }
-            if (ferocity != null) {
-                lore.add(ferocity.decoration(TextDecoration.ITALIC, false));
-                statLines++;
-            }
-            if (miningSpeed != null) {
-                lore.add(miningSpeed.decoration(TextDecoration.ITALIC, false));
-                statLines++;
-            }
-            if (miningFortune != null) {
-                lore.add(miningFortune.decoration(TextDecoration.ITALIC, false));
-                statLines++;
-            }
-            if (pristine != null) {
-                lore.add(pristine.decoration(TextDecoration.ITALIC, false));
-                statLines++;
-            }
-            if (farmingFortune != null) {
-                lore.add(farmingFortune.decoration(TextDecoration.ITALIC, false));
-                statLines++;
-            }
-            if (foragingFortune != null) {
-                lore.add(foragingFortune.decoration(TextDecoration.ITALIC, false));
-                statLines++;
-            }
-            if (gemstoneSlots != null) {
-                lore.add(gemstoneSlots.decoration(TextDecoration.ITALIC, false));
-                statLines++;
-            }
-            if (statLines > 0) {
-                lore.add(Component.empty());
-            }
-            if (enchantmentsHolder != null) {
-                int enchantCount = 0;
-                for (String str : enchantmentsHolder.getEnchantmentsLore()) {
-                    lore.add(Component.text(str).decoration(TextDecoration.ITALIC, false));
-                    enchantCount++;
-                }
-                for (EnchantmentObject enchant : enchantmentsHolder.getEnchants()) {
-                    Enchantment vanilla = enchant.getType().getVanillaEnchantment(itemInfo.getItemID());
-                    if (vanilla != null) {
-                        meta.addEnchant(vanilla, Math.min(enchant.getLevel(), vanilla.getMaxLevel()), true);
-                    }
-                }
-                if (enchantCount > 0) {
-                    lore.add(Component.empty());
-                }
-            }
-            if (abilitiesHolder != null) {
-                int abilityCount = 0;
-                for (Component component : abilitiesHolder.getAbilitiesLore()) {
-                    lore.add(component.decoration(TextDecoration.ITALIC, false));
-                    abilityCount++;
-                }
-                if (abilityCount > 0) {
-                    lore.add(Component.empty());
-                }
-            }
-            if (fishingTimeDecrease != null) {
-                lore.add(fishingTimeDecrease.decoration(TextDecoration.ITALIC, false));
-                lore.add(Component.empty());
-            }
-            if (itemInfo.getExtraInfo() != null) {
-                int lines = 0;
-                for (Component line : itemInfo.getExtraInfo().getSpecialLore()) {
-                    lore.add(line.decoration(TextDecoration.ITALIC, false));
-                    lines++;
-                }
-                if (lines > 0) {
-                    lore.add(Component.empty());
-                }
-            }
-            if (hasBonus) {
-                lore.add(Component.text(getStringFromEnum(reforge) + " Bonus", NamedTextColor.BLUE).decoration(TextDecoration.ITALIC, false));
-                int lines = 0;
-                for (Component line : reforge.getBonusLore(itemInfo.getRarity())) {
-                    lore.add(line.decoration(TextDecoration.ITALIC, false));
-                    lines++;
-                }
-                if (lines > 0) {
-                    lore.add(Component.empty());
-                }
-            }
-            if (canBeReforged != null && itemInfo.getItemType().allowReforge()) {
-                lore.add(canBeReforged.decoration(TextDecoration.ITALIC, false));
-            }
-            lore.add(rarity.decoration(TextDecoration.ITALIC, false));
-            meta.lore(lore);
+        if (itemInfo == null) {
+            return;
         }
+        if (itemInfo.getItemType() == ItemType.VANILLA_ITEM) {
+            ArrayList<Component> lore = new ArrayList<>(List.of(Component.text(itemInfo.getRarity().name(), itemInfo.getRarity().getRarityColor()).decoration(TextDecoration.BOLD, true).decoration(TextDecoration.ITALIC, false)));
+            meta.lore(lore);
+            return;
+        }
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        ItemID id = itemInfo.getItemID();
+        if (id == null) {
+            return;
+        }
+        if (id.isUnbreakable()) {
+            meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+        }
+        if (id.isEnchantGlint()) {
+            meta.addEnchant(Enchantment.LUCK, 1, true);
+        }
+        List<Component> lore = new ArrayList<>();
+        boolean hasBonus = false;
+        Component name, rarity, fishingTimeDecrease = null, breakingPower = null,
+                gemstoneSlots = null,
+                canBeReforged = null;
+        Rarity itemRarity = itemInfo.getRarity();
+        ItemType itemType = itemInfo.getItemType();
+        NamedTextColor rarityColor = itemRarity.getRarityColor();
+        if (itemInfo.isRecomb()) {
+            rarity = Component.text("S ", rarityColor, TextDecoration.OBFUSCATED, TextDecoration.BOLD).append(Component.text(itemRarity.getName().toUpperCase() + " " + itemType.getName().toUpperCase(), rarityColor, TextDecoration.BOLD).decoration(TextDecoration.OBFUSCATED, false).append(Component.text(" S", rarityColor, TextDecoration.OBFUSCATED, TextDecoration.BOLD)));
+        } else {
+            rarity = Component.text(itemRarity.getName().toUpperCase() + " " + itemType.getName().toUpperCase()).color(rarityColor).decoration(TextDecoration.BOLD, true);
+        }
+        String reforgeName = "";
+        Reforge reforge = itemInfo.getReforge();
+        if (itemInfo.getGemstonesHolder() != null) {
+            gemstoneSlots = itemInfo.getGemstonesHolder().getGemLineLore();
+        }
+        List<Component> fullLines = getFullStatLines(itemInfo);
+        if (reforge != null) {
+            reforgeName = reforge.getName() + " ";
+            hasBonus = reforge.hasBonus();
+        } else {
+            canBeReforged = Component.text("This item can be reforged!", NamedTextColor.DARK_GRAY);
+        }
+        name = Component.text(reforgeName + itemInfo.getName()).color(rarityColor);
+        if (itemInfo.getStatValue(StatType.FISHING_SPEED) != 0) {
+            fishingTimeDecrease = Component.text("Increases fishing speed by ", NamedTextColor.GRAY).append(Component.text(getStatString(itemInfo.getStatObject(StatType.FISHING_SPEED)), NamedTextColor.BLUE));
+        }
+        if (itemInfo.getStatValue(StatType.BREAKING_POWER) != 0) {
+            breakingPower = Component.text("Breaking Power " + (int) itemInfo.getStatValue(StatType.BREAKING_POWER), NamedTextColor.DARK_GRAY);
+        }
+        meta.displayName(name.decoration(TextDecoration.ITALIC, false));
+        if (breakingPower != null) {
+            lore.add(breakingPower.decoration(TextDecoration.ITALIC, false));
+            lore.add(Component.empty());
+        }
+        int statLines = fullLines.size();
+        lore.addAll(fullLines);
+        if (gemstoneSlots != null) {
+            lore.add(gemstoneSlots.decoration(TextDecoration.ITALIC, false));
+            statLines++;
+        }
+        if (statLines > 0) {
+            lore.add(Component.empty());
+        }
+        EnchantmentsHolder enchantmentsHolder = itemInfo.getEnchantmentsHolder();
+        if (enchantmentsHolder != null) {
+            int enchantCount = 0;
+            for (String str : enchantmentsHolder.getEnchantmentsLore()) {
+                lore.add(Component.text(str).decoration(TextDecoration.ITALIC, false));
+                enchantCount++;
+            }
+            for (EnchantmentObject enchant : enchantmentsHolder.getEnchants()) {
+                Enchantment vanilla = enchant.getType().getVanillaEnchantment(itemInfo.getItemID());
+                if (vanilla != null) {
+                    meta.addEnchant(vanilla, Math.min(enchant.getLevel(), vanilla.getMaxLevel()), true);
+                }
+            }
+            if (enchantCount > 0) {
+                lore.add(Component.empty());
+            }
+        }
+        AbilitiesHolder abilitiesHolder = itemInfo.getAbilitiesHolder();
+        if (abilitiesHolder != null) {
+            int abilityCount = 0;
+            for (Component component : abilitiesHolder.getAbilitiesLore()) {
+                lore.add(component.decoration(TextDecoration.ITALIC, false));
+                abilityCount++;
+            }
+            if (abilityCount > 0) {
+                lore.add(Component.empty());
+            }
+        }
+        if (fishingTimeDecrease != null) {
+            lore.add(fishingTimeDecrease.decoration(TextDecoration.ITALIC, false));
+            lore.add(Component.empty());
+        }
+        if (itemInfo.getExtraInfo() != null) {
+            int lines = 0;
+            for (Component line : itemInfo.getExtraInfo().getSpecialLore()) {
+                lore.add(line.decoration(TextDecoration.ITALIC, false));
+                lines++;
+            }
+            if (lines > 0) {
+                lore.add(Component.empty());
+            }
+        }
+        if (hasBonus) {
+            lore.add(Component.text(getStringFromEnum(reforge) + " Bonus", NamedTextColor.BLUE).decoration(TextDecoration.ITALIC, false));
+            int lines = 0;
+            for (Component line : reforge.getBonusLore(itemInfo.getRarity())) {
+                lore.add(line.decoration(TextDecoration.ITALIC, false));
+                lines++;
+            }
+            if (lines > 0) {
+                lore.add(Component.empty());
+            }
+        }
+        if (canBeReforged != null && itemType.allowReforge()) {
+            lore.add(canBeReforged.decoration(TextDecoration.ITALIC, false));
+        }
+        lore.add(rarity.decoration(TextDecoration.ITALIC, false));
+        meta.lore(lore);
     }
 
     public static void updateItemOwner(ItemStack item, UUID newOwner) {
@@ -542,6 +261,181 @@ public class ItemEditor {
         return statString;
     }
 
+    public static Map<StatType, Component> getBaseStatLines(ItemInfo info) {
+        HashMap<StatType, Component> lines = new HashMap<>();
+        if (info == null) {
+            for (StatType type : StatType.values()) {
+                lines.put(type, Component.empty());
+            }
+            return lines;
+        }
+        for (StatType type : StatType.values()) {
+            StatObject object = info.getStatObject(type);
+            if (object != null && object.getValue() != 0) {
+                lines.put(type, getBaseStatComponent(object));
+            }
+        }
+        return lines;
+    }
+
+    public static Map<StatType, Component> getReforgeLines(ItemInfo info) {
+        HashMap<StatType, Component> lines = new HashMap<>();
+        if (info == null || info.getReforge() == null) {
+            for (StatType type : StatType.values()) {
+                lines.put(type, Component.empty());
+            }
+            return lines;
+        }
+        Reforge reforge = info.getReforge();
+        UUID owner = info.getOwner();
+        Rarity rarity = info.getRarity();
+        WeaponStats reforgeWeaponStats = reforge.getWeaponStats(rarity, owner);
+        ArmorStats reforgeArmorStats = reforge.getArmorStats(rarity, owner);
+        AbilityStats reforgeAbilityStats = reforge.getAbilityStats(rarity, owner);
+        FishingStats reforgeFishingStats = reforge.getFishingStats(rarity, owner);
+        MiningStats reforgeMiningStats = reforge.getMiningStats(rarity, owner);
+        GatheringStats reforgeGatheringStats = reforge.getGatheringStats(rarity, owner);
+        LuckStats reforgeLuckStats = reforge.getLuckStats(rarity, owner);
+        WisdomStats reforgeWisdomStats = reforge.getWisdomStats(rarity, owner);
+        RegenStats reforgeRegenStats = reforge.getRegenStats(rarity, owner);
+        for (StatType type : StatType.values()) {
+            StatObject object = switch (type.getStatCategory()) {
+                case COMBAT -> reforgeWeaponStats.getStatObject(type);
+                case ARMOR -> reforgeArmorStats.getStatObject(type);
+                case INTELLIGENCE -> reforgeAbilityStats.getStatObject(type);
+                case FISHING -> reforgeFishingStats.getStatObject(type);
+                case MINING -> reforgeMiningStats.getStatObject(type);
+                case GATHERING -> reforgeGatheringStats.getStatObject(type);
+                case LUCK -> reforgeLuckStats.getStatObject(type);
+                case WISDOM -> reforgeWisdomStats.getStatObject(type);
+                case REGEN -> reforgeRegenStats.getStatObject(type);
+            };
+            if (object != null && object.getValue() != 0) {
+                lines.put(type, getBracketComponent(object, NamedTextColor.BLUE));
+            } else {
+                lines.put(type, Component.empty());
+            }
+        }
+        return lines;
+    }
+
+    public static Map<StatType, Component> getModifierLines(ItemInfo info) {
+        HashMap<StatType, Component> lines = new HashMap<>();
+        if (info == null || info.getModifiers() == null) {
+            for (StatType type : StatType.values()) {
+                lines.put(type, Component.empty());
+            }
+            return lines;
+        }
+        ModifierInfo modifiers = info.getModifiers();
+        int potato = modifiers.getTotalPotatoBooks();
+        for (StatType type : StatType.values()) {
+            switch (type) {
+                default -> lines.put(type, Component.empty());
+                case DAMAGE -> {
+                    Component damage = Component.empty();
+                    if (potato > 0 && isWeapon(info)) {
+                        damage = getBracketComponent(potato * 2, NamedTextColor.YELLOW);
+                    }
+                    lines.put(StatType.DAMAGE, damage);
+                }
+                case DEFENSE -> {
+                    Component defense = Component.empty();
+                    if (potato > 0 && isArmor(info)) {
+                        defense = getBracketComponent(potato * 2, NamedTextColor.YELLOW);
+                    }
+                    lines.put(StatType.DEFENSE, defense);
+                }
+                case HEALTH -> {
+                    Component health = Component.empty();
+                    if (potato > 0 && isArmor(info)) {
+                        health = getBracketComponent(potato * 4, NamedTextColor.YELLOW);
+                    }
+                    lines.put(StatType.HEALTH, health);
+                }
+                case STRENGTH -> {
+                    int wood = modifiers.getWoodSingularity(), art = modifiers.getArtOfWar();
+                    Component potatoes = Component.empty(), woods = Component.empty(), arts = Component.empty();
+                    if (potato > 0 && isWeapon(info)) {
+                        potatoes = getBracketComponent(potato * 2, NamedTextColor.YELLOW);
+                    }
+                    if (wood > 0) {
+                        woods = getBracketComponent(wood * 100, NamedTextColor.YELLOW);
+                    }
+                    if (art > 0) {
+                        arts = Component.text(" [" + (art * 5) + "]", NamedTextColor.GOLD);
+                    }
+                    lines.put(StatType.STRENGTH, potatoes.append(woods).append(arts));
+                }
+                case FARMING_FORTUNE -> {
+                    Component farming = Component.empty();
+                    int farmings = modifiers.getFarmingForDummies();
+                    if (farmings > 0) {
+                        farming = getBracketComponent(farmings, NamedTextColor.YELLOW);
+                    }
+                    lines.put(StatType.FARMING_FORTUNE, farming);
+                }
+            }
+        }
+        return lines;
+    }
+
+    public static Map<StatType, Component> getGemstoneLines(ItemInfo info) {
+        HashMap<StatType, Component> lines = new HashMap<>();
+        if (info == null || info.getGemstonesHolder() == null) {
+            for (StatType type : StatType.values()) {
+                lines.put(type, Component.empty());
+            }
+            return lines;
+        }
+        GemstonesHolder holder = info.getGemstonesHolder();
+        WeaponStats gemWeapon = holder.getGemWeapon();
+        ArmorStats gemArmor = holder.getGemArmor();
+        AbilityStats gemAbility = holder.getGemAbility();
+        FishingStats gemFishing = holder.getGemFishing();
+        MiningStats gemMining = holder.getGemMining();
+        GatheringStats gemGathering = holder.getGemGathering();
+        LuckStats gemLuck = holder.getGemLuck();
+        WisdomStats gemWisdom = holder.getGemWisdom();
+        RegenStats gemRegen = holder.getGemRegen();
+        for (StatType type : StatType.values()) {
+            StatObject object = switch (type.getStatCategory()) {
+                case COMBAT -> gemWeapon.getStatObject(type);
+                case ARMOR -> gemArmor.getStatObject(type);
+                case INTELLIGENCE -> gemAbility.getStatObject(type);
+                case FISHING -> gemFishing.getStatObject(type);
+                case MINING -> gemMining.getStatObject(type);
+                case GATHERING -> gemGathering.getStatObject(type);
+                case LUCK -> gemLuck.getStatObject(type);
+                case WISDOM -> gemWisdom.getStatObject(type);
+                case REGEN -> gemRegen.getStatObject(type);
+            };
+            if (object != null && object.getValue() != 0) {
+                lines.put(type, getBracketComponent(object, NamedTextColor.BLUE));
+            } else {
+                lines.put(type, Component.empty());
+            }
+        }
+        return lines;
+    }
+
+    public static List<Component> getFullStatLines(ItemInfo info) {
+        Map<StatType, Component> base = getBaseStatLines(info);
+        Map<StatType, Component> modifier = getModifierLines(info);
+        Map<StatType, Component> reforge = getReforgeLines(info);
+        Map<StatType, Component> gem = getGemstoneLines(info);
+        ArrayList<Component> lines = new ArrayList<>();
+        for (StatType type : StatType.getRegularShownTypes()) {
+            Component start = base.get(type);
+            if (start == null) {
+                continue;
+            }
+            start = start.append(modifier.get(type)).append(reforge.get(type)).append(gem.get(type)).decoration(TextDecoration.ITALIC, false);
+            lines.add(start);
+        }
+        return lines;
+    }
+
     public static Component getBaseStatComponent(StatObject stat) {
         StatType type = stat.getType();
         return Component.text(type.getName() + ": ", NamedTextColor.GRAY)
@@ -553,7 +447,7 @@ public class ItemEditor {
         if (statString.equals("")) {
             return Component.text(" ");
         }
-        return Component.text(" (" + getStatString(stat) + ") ", color);
+        return Component.text(" (" + getStatString(stat) + ")", color);
     }
 
     private static Component getBracketComponent(double stat, NamedTextColor color) {
@@ -561,7 +455,7 @@ public class ItemEditor {
         if (statString.equals("")) {
             return Component.text(" ");
         }
-        return Component.text(" (" + getStatString(stat) + ") ", color);
+        return Component.text(" (" + getStatString(stat) + ")", color);
     }
 
     /**
@@ -653,6 +547,7 @@ public class ItemEditor {
 
     /**
      * Creates a new ItemStack and sets meta information based on an ItemID
+     *
      * @param itemID The ItemID to create a new item for
      * @return The ItemStack that represents the basic form of the ItemID
      */
@@ -708,6 +603,7 @@ public class ItemEditor {
 
     /**
      * Returns whether the item is a weapon
+     *
      * @param itemInfo The ItemInfo to check
      * @return true if the item is considered a weapon
      */
@@ -731,6 +627,7 @@ public class ItemEditor {
 
     /**
      * Gets a formatted String from an Enum value
+     *
      * @param value The Enum value to get the String from
      * @return The formatted String
      */
@@ -762,8 +659,9 @@ public class ItemEditor {
     /**
      * Method to format large numbers with suffixes
      * <p>
-     *     Taken from <a href="https://stackoverflow.com/a/9769590">...</a>
+     * Taken from <a href="https://stackoverflow.com/a/9769590">...</a>
      * </p>
+     *
      * @param number The number to format
      * @return The formatted String
      */
@@ -774,7 +672,7 @@ public class ItemEditor {
         int exp = (int) (Math.log(number) / Math.log(1000));
         return String.format("%.1f%c",
                 number / Math.pow(1000, exp),
-                "KMBqQ".charAt(exp-1));
+                "KMBqQ".charAt(exp - 1));
     }
 
 }

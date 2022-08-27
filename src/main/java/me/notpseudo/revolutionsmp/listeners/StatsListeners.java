@@ -89,7 +89,7 @@ public class StatsListeners implements Listener {
         }, 20, 20);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
             for (Player player : Bukkit.getOnlinePlayers().stream().filter(p -> !p.isDead()).toList()) {
-               naturalRegenHealth(player);
+                naturalRegenHealth(player);
             }
         }, 20, 40);
     }
@@ -467,11 +467,10 @@ public class StatsListeners implements Listener {
                 equippedItems.add(item);
             }
         }
-        if (player.getInventory().getItemInMainHand().getType() != Material.AIR) {
-            ItemInfo mainHandInfo = player.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
-            if (mainHandInfo != null && !ItemEditor.isArmor(mainHandInfo)) {
-                equippedItems.add(player.getInventory().getItemInMainHand());
-            }
+        ItemStack main = player.getInventory().getItemInMainHand();
+        ItemInfo mainHandInfo = ItemEditor.getInfo(main);
+        if (mainHandInfo != null && !ItemEditor.isArmor(mainHandInfo) && mainHandInfo.getItemType() != ItemType.VANILLA_ITEM) {
+            equippedItems.add(player.getInventory().getItemInMainHand());
         }
         return equippedItems;
     }
@@ -480,7 +479,7 @@ public class StatsListeners implements Listener {
     public static List<ItemInfo> getInfos(Player player) {
         ArrayList<ItemInfo> infos = new ArrayList<>();
         for (ItemStack item : getAllEquipped(player)) {
-            ItemInfo info = item.getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+            ItemInfo info = ItemEditor.getInfo(item);
             if (info != null && info.getItemType() != ItemType.VANILLA_ITEM) {
                 infos.add(info);
             }
