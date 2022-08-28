@@ -9,9 +9,7 @@ import me.notpseudo.revolutionsmp.itemstats.ItemInfoDataType;
 import me.notpseudo.revolutionsmp.listeners.HarvestingListeners;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,6 +17,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
@@ -27,6 +26,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Iterator;
 
 public class CollectionUtils implements Listener {
 
@@ -49,6 +50,33 @@ public class CollectionUtils implements Listener {
             return;
         }
         player.getPersistentDataContainer().set(collectionsKey, new CollectionsDataType(), holder);
+    }
+
+    public static void makePlayerDropped(Player player, Item item) {
+        if (item == null) {
+            return;
+        }
+        item.getPersistentDataContainer().set(playerDroppedKey, new UUIDDataType(), player.getUniqueId());
+    }
+
+    @EventHandler
+    public void onPlayerDeathItems(PlayerDeathEvent event) {
+        if (event.getKeepInventory()) {
+            return;
+        }
+        Player player = event.getPlayer();
+        World world = player.getWorld();
+        Location location = player.getLocation();
+        for (Iterator<ItemStack> iterator = event.getDrops().iterator(); iterator.hasNext(); ) {
+            ItemStack drop = iterator.next();
+            iterator.remove();
+            ItemInfo itemInfo = ItemEditor.getInfo(drop);
+            if (itemInfo != null && itemInfo.getItemType() != ItemType.VANILLA_ITEM) {
+                event.getItemsToKeep().add(drop);
+            } else {
+                makePlayerDropped(player, world.dropItem(location, drop));
+            }
+        }
     }
 
     @EventHandler

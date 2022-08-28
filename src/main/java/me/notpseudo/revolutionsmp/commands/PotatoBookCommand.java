@@ -24,16 +24,19 @@ public class PotatoBookCommand implements CommandExecutor {
                 player.sendMessage(Component.text("You do not have permission to use this command", NamedTextColor.RED));
                 return true;
             }
+            if (args.length < 2) {
+                return false;
+            }
             int books;
             ItemStack item = player.getInventory().getItemInMainHand();
-            if (args[0].toLowerCase().equals("add")) {
+            if (args[0].equalsIgnoreCase("add")) {
                 try {
                     books = Integer.parseInt(args[1]);
                 } catch (NumberFormatException exception) {
                     books = 1;
                 }
                 ItemEditor.addPotatoBook(item, books);
-            } else if (args[0].toLowerCase().equals("set")) {
+            } else if (args[0].equalsIgnoreCase("set")) {
                 try {
                     books = Integer.parseInt(args[1]);
                 } catch (NumberFormatException exception) {

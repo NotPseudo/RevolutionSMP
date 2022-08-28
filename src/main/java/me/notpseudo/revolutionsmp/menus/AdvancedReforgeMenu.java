@@ -121,17 +121,27 @@ public class AdvancedReforgeMenu extends Menu {
         result.editMeta(m -> m.getPersistentDataContainer().remove(MenuUtils.getMenuKey()));
         inventory.setItem(29, null);
         inventory.setItem(33, null);
+        checkBoth();
         return true;
     }
 
     private boolean checkBoth() {
-        if (!(checkLeft() && checkRight())) {
+        boolean leftCheck = checkLeft(), rightCheck = checkRight();
+        if (!(leftCheck && rightCheck)) {
+            if (!leftCheck) {
+                setLeft(Material.RED_STAINED_GLASS_PANE);
+            }
+            if (!rightCheck) {
+                setRight(Material.RED_STAINED_GLASS_PANE);
+            }
+            setBlock();
             return false;
         }
         ItemStack left = inventory.getItem(29), right = inventory.getItem(33);
         ItemInfo leftInfo = ItemEditor.getInfo(left), rightInfo = ItemEditor.getInfo(right);
         if (leftInfo == null) {
             setLeft(Material.RED_STAINED_GLASS_PANE);
+            setRight(Material.RED_STAINED_GLASS_PANE);
             setBlock();
             return false;
         }
@@ -166,6 +176,10 @@ public class AdvancedReforgeMenu extends Menu {
     }
 
     private void setBlock() {
+        ItemStack item = inventory.getItem(13);
+        if (!(item == null || MenuUtils.getMenuInfo(item) != null)) {
+            return;
+        }
         ItemStack block = new ItemStack(Material.BARRIER);
         ItemMeta blockMeta = block.getItemMeta();
         blockMeta.displayName(Component.text("Valid Items Required", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
@@ -183,16 +197,22 @@ public class AdvancedReforgeMenu extends Menu {
     private boolean checkLeft() {
         ItemStack left = inventory.getItem(29);
         if (left == null || left.getType() == Material.AIR) {
+            setBlock();
             setLeft(Material.RED_STAINED_GLASS_PANE);
+            setBottomRow(Material.RED_STAINED_GLASS_PANE);
             return false;
         }
         ItemInfo info = ItemEditor.getInfo(left);
         if (info == null) {
+            setBlock();
             setLeft(Material.RED_STAINED_GLASS_PANE);
+            setBottomRow(Material.RED_STAINED_GLASS_PANE);
             return false;
         }
         if (!info.getItemType().allowReforge()) {
+            setBlock();
             setLeft(Material.RED_STAINED_GLASS_PANE);
+            setBottomRow(Material.RED_STAINED_GLASS_PANE);
             return false;
         }
         setLeft(Material.LIME_STAINED_GLASS_PANE);
@@ -202,16 +222,22 @@ public class AdvancedReforgeMenu extends Menu {
     private boolean checkRight() {
         ItemStack right = inventory.getItem(33);
         if (right == null || right.getType() == Material.AIR) {
+            setBlock();
             setRight(Material.RED_STAINED_GLASS_PANE);
+            setBottomRow(Material.RED_STAINED_GLASS_PANE);
             return false;
         }
         ItemInfo info = ItemEditor.getInfo(right);
         if (info == null) {
+            setBlock();
             setRight(Material.RED_STAINED_GLASS_PANE);
+            setBottomRow(Material.RED_STAINED_GLASS_PANE);
             return false;
         }
         if (!(info.getExtraInfo() instanceof ReforgeStoneInfo)) {
+            setBlock();
             setRight(Material.RED_STAINED_GLASS_PANE);
+            setBottomRow(Material.RED_STAINED_GLASS_PANE);
             return false;
         }
         setRight(Material.LIME_STAINED_GLASS_PANE);

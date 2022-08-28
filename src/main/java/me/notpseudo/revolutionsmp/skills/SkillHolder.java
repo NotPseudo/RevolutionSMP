@@ -2,10 +2,12 @@ package me.notpseudo.revolutionsmp.skills;
 
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
+import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -82,32 +84,32 @@ public class SkillHolder implements Serializable {
     }
 
     @NotNull
-    public WeaponStats getEventWeapon(LivingEntity target, IncreaseType type) {
+    public WeaponStats getEventWeapon(LivingEntity target, EntityDamageEvent damageEvent, IncreaseType type) {
         WeaponStats event = WeaponStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
             event = WeaponStats.createMult();
         }
         for (SkillObject skill : skills) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                event.multiply(SkillUtils.getEventWeapon(skill, type));
+                event.multiply(SkillUtils.getEventWeapon(skill, damageEvent, type));
             } else {
-                event.combine(SkillUtils.getEventWeapon(skill, type));
+                event.combine(SkillUtils.getEventWeapon(skill, damageEvent, type));
             }
         }
         return event;
     }
 
     @NotNull
-    public ArmorStats getEventArmor(LivingEntity damager, IncreaseType type) {
+    public ArmorStats getEventArmor(LivingEntity damager, EntityDamageEvent damageEvent, IncreaseType type) {
         ArmorStats event = ArmorStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
             event = ArmorStats.createMult();
         }
         for (SkillObject skill : skills) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
-                event.multiply(SkillUtils.getEventArmor(skill, type));
+                event.multiply(SkillUtils.getEventArmor(skill, damageEvent, type));
             } else {
-                event.combine(SkillUtils.getEventArmor(skill, type));
+                event.combine(SkillUtils.getEventArmor(skill, damageEvent, type));
             }
         }
         return event;
@@ -146,7 +148,7 @@ public class SkillHolder implements Serializable {
     }
 
     @NotNull
-    public MiningStats getEventMining(Block block, IncreaseType type) {
+    public MiningStats getEventMining(Block block, CustomOreLocation ore, IncreaseType type) {
         MiningStats event = MiningStats.createZero();
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
             event = MiningStats.createMult();

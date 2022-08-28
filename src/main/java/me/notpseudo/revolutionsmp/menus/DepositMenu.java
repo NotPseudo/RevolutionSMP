@@ -60,6 +60,7 @@ public class DepositMenu extends Menu {
         depositHalf.setItemMeta(halfMeta);
         inventory.setItem(13, makeMenuAction(depositHalf, MenuAction.DEPOSIT_HALF));
 
+        /*
         ItemStack custom = new ItemStack(Material.ANVIL);
         ItemMeta customMeta = custom.getItemMeta();
         customMeta.displayName(Component.text("Custom amount", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
@@ -70,6 +71,7 @@ public class DepositMenu extends Menu {
                 ));
         custom.setItemMeta(customMeta);
         inventory.setItem(15, makeMenuType(custom, MenuType.CUSTOM_DEPOSIT));
+         */
 
         addBackType(31, MenuType.BANK);
     }
@@ -100,6 +102,9 @@ public class DepositMenu extends Menu {
                 next.open();
                 return;
             }
+        }
+        if (menuItem.getAction() == null) {
+            return;
         }
         PlayerEcoInfo info = EcoUtils.getEcoInfo(player);
         double amount = 0;

@@ -2,11 +2,13 @@ package me.notpseudo.revolutionsmp.specialiteminfo;
 
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
+import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
 import me.notpseudo.revolutionsmp.skills.SkillType;
 import net.kyori.adventure.text.Component;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -30,11 +32,11 @@ public class SpecialItemInfo implements Serializable {
         return holder.getOwner();
     }
 
-    public WeaponStats getEventWeapon(Player damager, LivingEntity target, IncreaseType type) {
+    public WeaponStats getEventWeapon(Player damager, LivingEntity target, EntityDamageEvent event, IncreaseType type) {
         return null;
     }
 
-    public ArmorStats getEventArmor(LivingEntity damager, Player target, IncreaseType type) {
+    public ArmorStats getEventArmor(LivingEntity damager, Player target, EntityDamageEvent event, IncreaseType type) {
         return null;
     }
 
@@ -46,7 +48,7 @@ public class SpecialItemInfo implements Serializable {
         return null;
     }
 
-    public MiningStats getEventMining(Player miner, Block block, IncreaseType type) {
+    public MiningStats getEventMining(Player miner, Block block, CustomOreLocation ore, IncreaseType type) {
         return null;
     }
 
@@ -98,7 +100,7 @@ public class SpecialItemInfo implements Serializable {
         return null;
     }
 
-    public WisdomStats getBreakingWisdom(Block block) {
+    public WisdomStats getBreakingWisdom(Block block, CustomOreLocation ore) {
         return null;
     }
 

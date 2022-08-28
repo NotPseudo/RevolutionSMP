@@ -5,12 +5,14 @@ import me.notpseudo.revolutionsmp.abilities.AbilityType;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentType;
 import me.notpseudo.revolutionsmp.items.*;
+import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
 import me.notpseudo.revolutionsmp.specialiteminfo.SpecialItemInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -213,9 +215,18 @@ public class ItemInfo implements Serializable {
         return abilitiesHolder;
     }
 
-    public void setAbilitiesHolder(AbilitiesHolder abilitiesHolder) {
-        this.abilitiesHolder = abilitiesHolder;
-        recalculate();
+    public void addAbility(AbilityType type) {
+        if (abilitiesHolder != null) {
+            abilitiesHolder.addAbility(type);
+            recalculate();
+        }
+    }
+
+    public void removeAbility(AbilityType type) {
+        if (abilitiesHolder != null) {
+            abilitiesHolder.removeAbility(type);
+            recalculate();
+        }
     }
 
     public ModifierInfo getModifiers() {
@@ -333,7 +344,7 @@ public class ItemInfo implements Serializable {
             return true;
         }
         if (other.recomb) {
-            recomb = true;
+            recomb();
         }
         if (reforge == null) {
             reforge = other.reforge;
@@ -914,11 +925,11 @@ public class ItemInfo implements Serializable {
      */
 
     @NotNull
-    public WeaponStats getEventWeaponStats(LivingEntity target, IncreaseType type) {
+    public WeaponStats getEventWeaponStats(LivingEntity target, EntityDamageEvent event, IncreaseType type) {
         Player player = Bukkit.getPlayer(owner);
-        WeaponStats eventWeapon = itemID.getEventWeapon(player, target, type);
+        WeaponStats eventWeapon = itemID.getEventWeapon(player, target, event, type);
         if (reforge != null && rarity != null) {
-            WeaponStats reforgeStats = reforge.getEventWeapon(rarity, player, target, type);
+            WeaponStats reforgeStats = reforge.getEventWeapon(rarity, player, target, event, type);
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 eventWeapon.multiply(reforgeStats);
             } else {
@@ -927,7 +938,7 @@ public class ItemInfo implements Serializable {
         }
         if (enchantmentsHolder != null) {
             for (EnchantmentObject enchant : enchantmentsHolder.getEnchants()) {
-                WeaponStats enchantStats = enchant.getEventWeapon(player, target, type);
+                WeaponStats enchantStats = enchant.getEventWeapon(player, target, event, type);
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                     eventWeapon.multiply(enchantStats);
                 } else {
@@ -937,7 +948,7 @@ public class ItemInfo implements Serializable {
         }
         if (abilitiesHolder != null) {
             for (AbilityObject ability : abilitiesHolder.getAbilities()) {
-                WeaponStats abilityStats = ability.getEventWeapon(player, target, type);
+                WeaponStats abilityStats = ability.getEventWeapon(player, target, event, type);
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                     eventWeapon.multiply(abilityStats);
                 } else {
@@ -946,7 +957,7 @@ public class ItemInfo implements Serializable {
             }
         }
         if (extraInfo != null) {
-            WeaponStats extraStats = extraInfo.getEventWeapon(player, target, type);
+            WeaponStats extraStats = extraInfo.getEventWeapon(player, target, event, type);
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 eventWeapon.multiply(extraStats);
             } else {
@@ -957,11 +968,11 @@ public class ItemInfo implements Serializable {
     }
 
     @NotNull
-    public ArmorStats getEventArmorStats(LivingEntity attacker, IncreaseType type) {
+    public ArmorStats getEventArmorStats(LivingEntity attacker, EntityDamageEvent event, IncreaseType type) {
         Player player = Bukkit.getPlayer(owner);
-        ArmorStats eventArmor = itemID.getEventArmor(attacker, player, type);
+        ArmorStats eventArmor = itemID.getEventArmor(attacker, player, event, type);
         if (reforge != null && rarity != null) {
-            ArmorStats reforgeStats = reforge.getEventArmor(rarity, attacker, player, type);
+            ArmorStats reforgeStats = reforge.getEventArmor(rarity, attacker, player, event, type);
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 eventArmor.multiply(reforgeStats);
             } else {
@@ -970,7 +981,7 @@ public class ItemInfo implements Serializable {
         }
         if (enchantmentsHolder != null) {
             for (EnchantmentObject enchant : enchantmentsHolder.getEnchants()) {
-                ArmorStats enchantStats = enchant.getEventArmor(attacker, player, type);
+                ArmorStats enchantStats = enchant.getEventArmor(attacker, player, event, type);
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                     eventArmor.multiply(enchantStats);
                 } else {
@@ -980,7 +991,7 @@ public class ItemInfo implements Serializable {
         }
         if (abilitiesHolder != null) {
             for (AbilityObject ability : abilitiesHolder.getAbilities()) {
-                ArmorStats abilityStats = ability.getEventArmor(attacker, player, type);
+                ArmorStats abilityStats = ability.getEventArmor(attacker, player, event, type);
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                     eventArmor.multiply(abilityStats);
                 } else {
@@ -989,7 +1000,7 @@ public class ItemInfo implements Serializable {
             }
         }
         if (extraInfo != null) {
-            ArmorStats extraStats = extraInfo.getEventArmor(attacker, player, type);
+            ArmorStats extraStats = extraInfo.getEventArmor(attacker, player, event, type);
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 eventArmor.multiply(extraStats);
             } else {
@@ -1086,11 +1097,11 @@ public class ItemInfo implements Serializable {
     }
 
     @NotNull
-    public MiningStats getEventMining(Block block, IncreaseType type) {
+    public MiningStats getEventMining(Block block, CustomOreLocation ore, IncreaseType type) {
         Player player = Bukkit.getPlayer(owner);
-        MiningStats eventMining = itemID.getEventMining(player, block, type);
+        MiningStats eventMining = itemID.getEventMining(player, block, ore, type);
         if (reforge != null && rarity != null) {
-            MiningStats reforgeStat = reforge.getEventMining(rarity, player, block, type);
+            MiningStats reforgeStat = reforge.getEventMining(rarity, player, block, ore, type);
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 eventMining.multiply(reforgeStat);
             } else {
@@ -1099,7 +1110,7 @@ public class ItemInfo implements Serializable {
         }
         if (enchantmentsHolder != null) {
             for (EnchantmentObject enchant : enchantmentsHolder.getEnchants()) {
-                MiningStats enchantStat = enchant.getEventMining(player, block, type);
+                MiningStats enchantStat = enchant.getEventMining(player, block, ore, type);
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                     eventMining.multiply(enchantStat);
                 } else {
@@ -1109,7 +1120,7 @@ public class ItemInfo implements Serializable {
         }
         if (abilitiesHolder != null) {
             for (AbilityObject ability : abilitiesHolder.getAbilities()) {
-                MiningStats abilityStat = ability.getEventMining(player, block, type);
+                MiningStats abilityStat = ability.getEventMining(player, block, ore, type);
                 if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                     eventMining.multiply(abilityStat);
                 } else {
@@ -1118,7 +1129,7 @@ public class ItemInfo implements Serializable {
             }
         }
         if (extraInfo != null) {
-            MiningStats extraStat = extraInfo.getEventMining(player, block, type);
+            MiningStats extraStat = extraInfo.getEventMining(player, block, ore, type);
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 eventMining.multiply(extraStat);
             } else {
@@ -1228,14 +1239,14 @@ public class ItemInfo implements Serializable {
     }
 
     @NotNull
-    public WisdomStats getBreakingWisdom(Block block) {
+    public WisdomStats getBreakingWisdom(Block block, CustomOreLocation ore) {
         if (itemID == null) {
             return WisdomStats.createZero();
         }
         Player player = Bukkit.getPlayer(owner);
-        WisdomStats breaking = itemID.getBreakingWisdom(player, block);
+        WisdomStats breaking = itemID.getBreakingWisdom(player, block, ore);
         if (extraInfo != null) {
-            breaking.combine(extraInfo.getBreakingWisdom(block));
+            breaking.combine(extraInfo.getBreakingWisdom(block, ore));
         }
         return breaking;
     }

@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.AnvilInventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -44,10 +45,10 @@ public class CustomWithdrawMenu extends Menu {
         leftMeta.lore(List.of(
                 Component.text("Enter an amount of coins in the top", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
                 Component.empty(),
-                Component.text("Click the right to withdraw the amount you wrote", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
+                Component.text("Click THIS AGAIN to withdraw the amount you wrote", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
         ));
         left.setItemMeta(leftMeta);
-        inventory.setItem(0, makeMenuType(left, null));
+        inventory.setItem(0, makeMenuAction(left, MenuAction.WITHDRAW_CUSTOM));
 
         /*
         ItemStack right = new ItemStack(Material.BOOK);
@@ -65,7 +66,11 @@ public class CustomWithdrawMenu extends Menu {
 
     @Override
     public void open() {
-        inventory = Bukkit.createInventory(this, InventoryType.ANVIL, getTitle());
+        InventoryView view = player.openAnvil(player.getLocation(), true);
+        if (view == null) {
+            return;
+        }
+        inventory = view.getTopInventory();
         setItems();
         player.openInventory(inventory);
     }
@@ -73,14 +78,20 @@ public class CustomWithdrawMenu extends Menu {
     @Override
     public void handleClick(InventoryClickEvent event) {
         if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) {
+            player.sendMessage("Click was null");
             return;
         }
         MenuItem menuItem = event.getCurrentItem().getItemMeta().getPersistentDataContainer().get(MenuUtils.getMenuKey(), new MenuItemDataType());
         if (menuItem == null) {
+            player.sendMessage("Menu was null");
             return;
         }
+        player.sendMessage("Set cancelled");
+        player.sendMessage("Action: " + menuItem.getAction());
         event.setCancelled(true);
-        if (menuItem.getType() == null) {
+        if (menuItem.getAction() == MenuAction.WITHDRAW_CUSTOM) {
+            player.sendMessage("Menu was withdraw");
+            withdrawCustom();
             return;
         }
         if (menuItem.getType() == MenuType.CLOSE) {
@@ -97,20 +108,14 @@ public class CustomWithdrawMenu extends Menu {
             Menu next = menuItem.getType().getNext(player);
             if (next != null) {
                 next.open();
-                return;
             }
-        }
-        if (menuItem.getAction() == MenuAction.WITHDRAW_CUSTOM) {
-            withdrawCustom();
         }
     }
 
     private void withdrawCustom() {
-        ItemStack paper = inventory.getItem(2);
-        if (paper == null || paper.getType() == Material.AIR) {
-            return;
-        }
+        player.sendMessage("Starting withdraw");
         if (inventory.getType() != InventoryType.ANVIL) {
+            player.sendMessage("Not an anvil");
             return;
         }
         AnvilInventory anvil = (AnvilInventory) inventory;

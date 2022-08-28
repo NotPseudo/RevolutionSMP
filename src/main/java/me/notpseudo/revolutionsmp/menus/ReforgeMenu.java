@@ -1,6 +1,8 @@
 package me.notpseudo.revolutionsmp.menus;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.economy.EcoUtils;
+import me.notpseudo.revolutionsmp.economy.PlayerEcoInfo;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.items.Reforge;
@@ -76,6 +78,20 @@ public class ReforgeMenu extends Menu {
         if (info == null || !info.getItemType().allowReforge()) {
             return false;
         }
+        int cost = switch (info.getRarity()) {
+            case COMMON -> 250;
+            case UNCOMMON -> 500;
+            case RARE -> 1000;
+            case EPIC -> 2500;
+            case LEGENDARY -> 5000;
+            case MYTHIC -> 10000;
+            case DIVINE -> 25000;
+            case SPECIAL -> 50000;
+        };
+        PlayerEcoInfo eco = EcoUtils.getEcoInfo(player);
+        if (eco.getPurse() < cost) {
+            return false;
+        }
         ArrayList<Reforge> matches = new ArrayList<>(NO_STONE.stream().filter(r -> r.getItemTypes().contains(info.getItemType())).toList());
         Reforge oldReforge = info.getReforge();
         if (oldReforge != null) {
@@ -90,6 +106,7 @@ public class ReforgeMenu extends Menu {
         meta.getPersistentDataContainer().set(ItemEditor.getItemKey(), new ItemInfoDataType(), info);
         ItemEditor.updateLore(meta);
         item.setItemMeta(meta);
+        eco.addPurse(-1 * cost);
         player.sendMessage(Component.text(info.getName() + " was reforged to " + reforge.getName(), NamedTextColor.GREEN));
         return true;
     }

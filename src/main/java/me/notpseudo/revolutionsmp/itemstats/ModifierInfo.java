@@ -11,8 +11,6 @@ import java.io.Serializable;
 public class ModifierInfo implements Serializable {
 
     private final ItemInfo HOLDER;
-    private int hotPotatoBooks;
-    private int fumingPotatoBooks;
     private int totalPotatoBooks;
     private int woodSingularity;
     private int artOfWar;
@@ -22,8 +20,6 @@ public class ModifierInfo implements Serializable {
 
     public ModifierInfo(ItemInfo info) {
         HOLDER = info;
-        hotPotatoBooks = 0;
-        fumingPotatoBooks = 0;
         totalPotatoBooks = 0;
         woodSingularity = 0;
         artOfWar = 0;
@@ -32,16 +28,11 @@ public class ModifierInfo implements Serializable {
         silex = 0;
     }
 
-    public int getHotPotatoBooks() {
-        return hotPotatoBooks;
-    }
-
     public boolean addHotPotatoBook() {
         if (!HOLDER.getItemType().allowPotatoBooks()) {
             return false;
         }
         if (totalPotatoBooks < 10) {
-            hotPotatoBooks++;
             totalPotatoBooks++;
             HOLDER.recalculate();
             return true;
@@ -49,16 +40,11 @@ public class ModifierInfo implements Serializable {
         return false;
     }
 
-    public int getFumingPotatoBooks() {
-        return fumingPotatoBooks;
-    }
-
     public boolean addFumingPotatoBook() {
         if (!HOLDER.getItemType().allowPotatoBooks()) {
             return false;
         }
         if (totalPotatoBooks < 15) {
-            fumingPotatoBooks++;
             totalPotatoBooks++;
             HOLDER.recalculate();
             return true;
@@ -75,7 +61,6 @@ public class ModifierInfo implements Serializable {
             return;
         }
         totalPotatoBooks = books;
-        fumingPotatoBooks = totalPotatoBooks - hotPotatoBooks;
         HOLDER.recalculate();
     }
 
@@ -107,7 +92,7 @@ public class ModifierInfo implements Serializable {
         return artOfWar;
     }
 
-    public boolean addWArtOfWar() {
+    public boolean addArtOfWar() {
         if (!ItemEditor.isWeapon(HOLDER)) {
             return false;
         }
@@ -188,9 +173,11 @@ public class ModifierInfo implements Serializable {
     }
 
     public void combine(ModifierInfo other) {
-        hotPotatoBooks = Math.min(10, hotPotatoBooks + other.hotPotatoBooks);
-        fumingPotatoBooks = Math.min(15 - hotPotatoBooks, fumingPotatoBooks + other.fumingPotatoBooks);
-        totalPotatoBooks = Math.min(15, hotPotatoBooks + fumingPotatoBooks);
+        if (totalPotatoBooks > 15 || other.totalPotatoBooks > 15) {
+            totalPotatoBooks += other.totalPotatoBooks;
+        } else {
+            totalPotatoBooks = Math.min(15, totalPotatoBooks + other.totalPotatoBooks);
+        }
         if (woodSingularity > 1 || other.woodSingularity > 1) {
             woodSingularity += other.woodSingularity;
         } else {

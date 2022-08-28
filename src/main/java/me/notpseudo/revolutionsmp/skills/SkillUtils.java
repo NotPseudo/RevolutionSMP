@@ -2,26 +2,32 @@ package me.notpseudo.revolutionsmp.skills;
 
 import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.collections.CollectionUtils;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
+import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.listeners.MobListeners;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
+import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
+import me.notpseudo.revolutionsmp.mobstats.CustomMobType;
 import me.notpseudo.revolutionsmp.mobstats.MobInfo;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -68,6 +74,10 @@ public class SkillUtils implements Listener {
         if (info == null) {
             return;
         }
+        CustomMobType type = info.getCustomMobType();
+        double exp = Math.max(event.getDroppedExp(), Math.max(1, type.getVanillaExp()));
+        exp *= type.getExpMult();
+        event.setDroppedExp((int) exp);
         ExpDropObject baseDrop = info.getCustomMobType().getExp(info.getLevel());
         for (UUID id : info.getAttackers().keySet()) {
             Player player = Bukkit.getPlayer(id);
@@ -75,6 +85,23 @@ public class SkillUtils implements Listener {
                 addCombatXpToPlayer(player, baseDrop.getType(), event.getEntity(), baseDrop.getValue());
             }
         }
+    }
+
+    @EventHandler
+    public void onPlayerDeathMessage(PlayerDeathEvent event) {
+        EntityDamageEvent damageEvent = event.getPlayer().getLastDamageCause();
+        if (!(damageEvent instanceof EntityDamageByEntityEvent damageEnt)) {
+            return;
+        }
+        Entity attacker = damageEnt.getDamager();
+        if (!(attacker instanceof LivingEntity living)) {
+            return;
+        }
+        MobInfo info = MobListeners.getMobInfo(living);
+        if (info == null) {
+            return;
+        }
+        event.deathMessage(Component.text(event.getPlayer().getName() + " was killed by " + info.getName()));
     }
 
     @EventHandler
@@ -101,11 +128,11 @@ public class SkillUtils implements Listener {
         getHolder(player).addExp(new ExpDropObject(type, finalExp));
     }
 
-    public static void addBreakingXpToPlayer(Player player, SkillType type, Block block, double exp) {
+    public static void addBreakingXpToPlayer(Player player, SkillType type, Block block, CustomOreLocation ore, double exp) {
         if (player.getGameMode() == GameMode.CREATIVE) {
             return;
         }
-        double boost = StatsListeners.getBreakWisdomStat(type, player, block);
+        double boost = StatsListeners.getBreakWisdomStat(type, player, block, ore);
         double finalExp = exp * (1 + (boost / 100));
         getHolder(player).addExp(new ExpDropObject(type, finalExp));
     }
@@ -149,7 +176,7 @@ public class SkillUtils implements Listener {
         SkillHolder holder = player.getPersistentDataContainer().get(skillKey, new SkillsDataType());
         if (holder == null) {
             holder = new SkillHolder(player.getUniqueId());
-           updatePlayerSkills(player, holder);
+            updatePlayerSkills(player, holder);
         }
         if (holder.getPlayer() == null) {
             holder = new SkillHolder(player.getUniqueId());
@@ -177,7 +204,7 @@ public class SkillUtils implements Listener {
                 lore.add(Component.text(ItemEditor.getStatString(armor.getStatValue(StatType.DEFENSE)) + " ", NamedTextColor.GREEN).append(StatType.DEFENSE.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
                 break;
             case COMBAT:
-                WeaponStats incDamage = SkillUtils.getEventWeapon(skill, IncreaseType.ADDITIVE_PERCENT);
+                WeaponStats incDamage = SkillUtils.getEventWeapon(skill, null, IncreaseType.ADDITIVE_PERCENT);
                 lore.add(Component.text(ItemEditor.getStatString(incDamage.getStatValue(StatType.DAMAGE)) + "% ", NamedTextColor.GREEN).append(StatType.DAMAGE.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
                 lore.add(Component.text(ItemEditor.getStatString(weapon.getStatValue(StatType.CRIT_CHANCE)) + " ", NamedTextColor.GREEN).append(StatType.CRIT_CHANCE.getNameWithSymbol()).decoration(TextDecoration.ITALIC, false));
                 break;
@@ -219,6 +246,7 @@ public class SkillUtils implements Listener {
             default -> WeaponStats.createZero();
         };
     }
+
     @NotNull
     public static ArmorStats getBonusArmor(SkillObject skill, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
@@ -331,7 +359,7 @@ public class SkillUtils implements Listener {
     }
 
     @NotNull
-    public static WeaponStats getEventWeapon(SkillObject skill, IncreaseType type) {
+    public static WeaponStats getEventWeapon(SkillObject skill, EntityDamageEvent event, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
             return WeaponStats.createMult();
         }
@@ -345,7 +373,7 @@ public class SkillUtils implements Listener {
     }
 
     @NotNull
-    public static ArmorStats getEventArmor(SkillObject skillObject, IncreaseType type) {
+    public static ArmorStats getEventArmor(SkillObject skillObject, EntityDamageEvent event, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
             return ArmorStats.createMult();
         }

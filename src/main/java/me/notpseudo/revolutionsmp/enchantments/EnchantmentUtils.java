@@ -1,21 +1,33 @@
 package me.notpseudo.revolutionsmp.enchantments;
 
+import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.items.ItemID;
 import me.notpseudo.revolutionsmp.itemstats.EnchantmentsHolder;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
+import me.notpseudo.revolutionsmp.itemstats.WeaponStats;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class EnchantmentUtils {
+public class EnchantmentUtils implements Listener {
 
     private static final NamespacedKey itemKey = ItemEditor.getItemKey();
+
+    public EnchantmentUtils(RevolutionSMP plugin) {
+        Bukkit.getPluginManager().registerEvents(this, plugin);
+    }
 
     public static ItemStack createEnchantedBook(EnchantmentType enchant) {
         return createEnchantedBook(enchant, enchant.getMinLevel());
@@ -110,6 +122,12 @@ public class EnchantmentUtils {
             return Math.sqrt(exp + 9) - 3;
         }
         return 0;
+    }
+
+    private static Map<Player, LivingEntity> firstStrike = new HashMap<>();
+
+    public static WeaponStats getFirstStrikeAdditivePercent(Player attacker, LivingEntity target, int level) {
+        return null;
     }
 
 }

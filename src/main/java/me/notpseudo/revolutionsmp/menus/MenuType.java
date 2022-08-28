@@ -1,6 +1,9 @@
 package me.notpseudo.revolutionsmp.menus;
 
+import me.notpseudo.revolutionsmp.collections.CollectionType;
+import me.notpseudo.revolutionsmp.collections.CollectionUtils;
 import me.notpseudo.revolutionsmp.skills.SkillType;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 public enum MenuType {
@@ -88,6 +91,11 @@ public enum MenuType {
         @Override
         public Menu getNext(Player player) {
             return new BankMenu(player);
+        }
+
+        @Override
+        public boolean meetsRequirement(Player player) {
+            return player.getGameMode() == GameMode.CREATIVE || CollectionUtils.getCollectionHolder(player).getCollection(CollectionType.EMERALD).getLevel() >= 1;
         }
     },
     DEPOSIT {

@@ -37,6 +37,11 @@ public enum MobCategory {
         public int getHighestLevel() {
             return 40;
         }
+
+        @Override
+        public double getExpMult() {
+            return 1.5;
+        }
     },
     HOSTILE {
         @Override
@@ -46,6 +51,11 @@ public enum MobCategory {
         @Override
         public int getHighestLevel() {
             return 40;
+        }
+
+        @Override
+        public double getExpMult() {
+            return 2;
         }
     },
     BOSS {
@@ -60,6 +70,11 @@ public enum MobCategory {
         @Override
         public int getHighestLevel() {
             return 100;
+        }
+
+        @Override
+        public double getExpMult() {
+            return 3;
         }
     },
     SEA_CREATURE {
@@ -80,6 +95,10 @@ public enum MobCategory {
     }
     public int getHighestLevel() {
         return 25;
+    }
+
+    public double getExpMult() {
+        return 1;
     }
 
 }

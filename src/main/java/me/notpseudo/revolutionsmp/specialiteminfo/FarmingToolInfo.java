@@ -3,6 +3,7 @@ package me.notpseudo.revolutionsmp.specialiteminfo;
 import me.notpseudo.revolutionsmp.collections.*;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.itemstats.*;
+import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
 import me.notpseudo.revolutionsmp.skills.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -159,7 +160,7 @@ public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
     }
 
     @Override
-    public WisdomStats getBreakingWisdom(Block block) {
+    public WisdomStats getBreakingWisdom(Block block, CustomOreLocation ore) {
         if (!(vanillaMaterials.contains(block.getType()))) {
             return WisdomStats.createZero();
         }

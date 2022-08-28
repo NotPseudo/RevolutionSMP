@@ -3,6 +3,7 @@ package me.notpseudo.revolutionsmp.abilities;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
+import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStatsDataType;
 import net.kyori.adventure.text.Component;
@@ -12,6 +13,7 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -137,12 +139,12 @@ public class AbilityObject implements Serializable {
         return abilityType.getBonusWisdom(player, inc);
     }
 
-    public WeaponStats getEventWeapon(Player damager, LivingEntity target, IncreaseType inc) {
-        return abilityType.getEventWeapon(damager, target, inc);
+    public WeaponStats getEventWeapon(Player damager, LivingEntity target, EntityDamageEvent event, IncreaseType inc) {
+        return abilityType.getEventWeapon(damager, target, event, inc);
     }
 
-    public ArmorStats getEventArmor(LivingEntity damager, Player target, IncreaseType inc) {
-        return abilityType.getEventArmor(damager, target, inc);
+    public ArmorStats getEventArmor(LivingEntity damager, Player target, EntityDamageEvent event, IncreaseType inc) {
+        return abilityType.getEventArmor(damager, target, event, inc);
     }
 
     public AbilityStats getEventAbility(Player damager, LivingEntity target, IncreaseType inc) {
@@ -153,8 +155,8 @@ public class AbilityObject implements Serializable {
         return abilityType.getEventFishing(fisher, inc);
     }
 
-    public MiningStats getEventMining(Player miner, Block block, IncreaseType inc) {
-        return abilityType.getEventMining(miner, block, inc);
+    public MiningStats getEventMining(Player miner, Block block, CustomOreLocation ore, IncreaseType inc) {
+        return abilityType.getEventMining(miner, block, ore, inc);
     }
 
     public GatheringStats getEventGathering(Player harvester, Block block, IncreaseType inc) {

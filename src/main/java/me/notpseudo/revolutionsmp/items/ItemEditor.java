@@ -478,7 +478,7 @@ public class ItemEditor {
         }
         ModifierInfo mod = itemInfo.getModifiers();
         if (mod != null) {
-            mod.addFumingPotatoBook();
+            mod.setTotalBooks(mod.getTotalPotatoBooks() + books);
             updateItemInfo(item, itemInfo);
         }
     }
@@ -490,7 +490,7 @@ public class ItemEditor {
         }
         ModifierInfo mod = itemInfo.getModifiers();
         if (mod != null) {
-            mod.addFumingPotatoBook();
+            mod.setTotalBooks(books);
             updateItemInfo(item, itemInfo);
         }
     }
@@ -536,12 +536,7 @@ public class ItemEditor {
         if (itemInfo == null) {
             return;
         }
-        AbilitiesHolder abilityHolder = itemInfo.getAbilitiesHolder();
-        if (abilityHolder == null) {
-            abilityHolder = new AbilitiesHolder(itemInfo);
-        }
-        abilityHolder.addAbility(type);
-        itemInfo.setAbilitiesHolder(abilityHolder);
+        itemInfo.addAbility(type);
         updateItemInfo(item, itemInfo);
     }
 

@@ -1,34 +1,39 @@
 package me.notpseudo.revolutionsmp.enchantments;
 
+import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.items.ItemID;
 import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
+import me.notpseudo.revolutionsmp.listeners.HealthListeners;
 import me.notpseudo.revolutionsmp.listeners.MobListeners;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
+import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
 import me.notpseudo.revolutionsmp.mobstats.BaseEntityStats;
 import me.notpseudo.revolutionsmp.mobstats.MobCategory;
 import me.notpseudo.revolutionsmp.mobstats.MobInfoDataType;
+import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public enum EnchantmentType {
 
     BANE_OF_ARTHROPODS {
         @Override
-        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, EntityDamageEvent event, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return null;
             }
@@ -54,6 +59,11 @@ public enum EnchantmentType {
         public List<ItemType> getItemTypes() {
             return List.of(ItemType.SWORD);
         }
+
+        @Override
+        public List<EnchantmentType> getIncompatibleEnchants() {
+            return List.of(SMITE, SHARPNESS);
+        }
     },
     CLEAVE {
         @Override
@@ -67,15 +77,32 @@ public enum EnchantmentType {
         }
 
         @Override
-        public EnchantmentObject createObject() {
-            return new CleaveEnchantmentObject();
+        public void playerAttackAction(EnchantmentObject enchant, Player attacker, LivingEntity target, double damage, boolean critical, EntityDamageEvent event) {
+            int level = enchant.getLevel();
+            double damagePercent, range = 3 + (0.3 * level);
+            switch (level) {
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                    damagePercent = 0.03 * level;
+                    break;
+                case 6:
+                    damagePercent = 0.2;
+                    break;
+                default:
+                    damagePercent = 0.4 * level;
+            }
+            Collection<LivingEntity> enemies = attacker.getLocation().getNearbyLivingEntities(range).stream()
+                    .filter(c -> MobListeners.getMobInfo(c) != null
+                            && MobListeners.getMobInfo(c).getMobBehavior() != MobCategory.TAMED
+                    ).toList();
+            for (LivingEntity enemy : enemies) {
+                enemy.damage(damagePercent * damage);
+                HealthListeners.showDamage(enemy, damagePercent * damage, false, ChatColor.GRAY);
+            }
         }
-
-        @Override
-        public EnchantmentObject createObject(int level) {
-            return new CleaveEnchantmentObject(level);
-        }
-
     },
     CRITICAL {
         @Override
@@ -100,7 +127,7 @@ public enum EnchantmentType {
     },
     CUBISM {
         @Override
-        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, EntityDamageEvent event, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return null;
             }
@@ -130,7 +157,7 @@ public enum EnchantmentType {
     },
     DRAGON_HUNTER {
         @Override
-        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, EntityDamageEvent event, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return null;
             }
@@ -159,7 +186,7 @@ public enum EnchantmentType {
     },
     ENDER_SLAYER {
         @Override
-        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, EntityDamageEvent event, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return null;
             }
@@ -188,14 +215,14 @@ public enum EnchantmentType {
     },
     EXECUTE {
         @Override
-        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, EntityDamageEvent event, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return null;
             }
             if (type != IncreaseType.ADDITIVE_PERCENT) {
                 return null;
             }
-            BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
+            BaseEntityStats targetStats = MobListeners.getMobInfo(target);
             if (target instanceof Player player) {
                 targetStats = StatsListeners.getPlayerStats(player);
             }
@@ -219,6 +246,11 @@ public enum EnchantmentType {
         @Override
         public List<ItemType> getItemTypes() {
             return List.of(ItemType.SWORD);
+        }
+
+        @Override
+        public List<EnchantmentType> getIncompatibleEnchants() {
+            return List.of(PROSECUTE);
         }
     },
     EXPERIENCE {
@@ -254,15 +286,27 @@ public enum EnchantmentType {
         }
 
         @Override
-        public EnchantmentObject createObject() {
-            return new FireAspectEnchantmentObject();
-        }
+        public void playerAttackAction(EnchantmentObject enchant, Player attacker, LivingEntity target, double damage, boolean critical, EntityDamageEvent event) {
+            int level = enchant.getLevel();
+            double damagePercent = 0.03 * level;
+            int finalSeconds = level == 1 ? 3 : 4;
+            BukkitRunnable fireDamage = new BukkitRunnable() {
+                int count = 1;
 
-        @Override
-        public EnchantmentObject createObject(int level) {
-            return new FireAspectEnchantmentObject(level);
+                @Override
+                public void run() {
+                    if (!target.isDead() && count <= finalSeconds) {
+                        target.setMaximumNoDamageTicks(0);
+                        target.setNoDamageTicks(0);
+                        new EntityDamageEvent(target, EntityDamageEvent.DamageCause.FIRE, damage * damagePercent).callEvent();
+                        count++;
+                    } else {
+                        this.cancel();
+                    }
+                }
+            };
+            fireDamage.runTaskTimer(RevolutionSMP.getPlugin(), 0, 20);
         }
-
     },
     FIRST_STRIKE {
         @Override
@@ -276,18 +320,13 @@ public enum EnchantmentType {
         }
 
         @Override
-        public EnchantmentObject createObject() {
-            return new FirstStrikeEnchantmentObject();
-        }
-
-        @Override
-        public EnchantmentObject createObject(int level) {
-            return new FirstStrikeEnchantmentObject(level);
+        public List<EnchantmentType> getIncompatibleEnchants() {
+            return List.of(TRIPLE_STRIKE);
         }
     },
     GIANT_KILLER {
         @Override
-        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, EntityDamageEvent event, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return null;
             }
@@ -319,10 +358,15 @@ public enum EnchantmentType {
         public List<ItemType> getItemTypes() {
             return List.of(ItemType.SWORD);
         }
+
+        @Override
+        public List<EnchantmentType> getIncompatibleEnchants() {
+            return List.of(TITAN_KILLER);
+        }
     },
     IMPALING {
         @Override
-        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, EntityDamageEvent event, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return null;
             }
@@ -362,6 +406,11 @@ public enum EnchantmentType {
         }
 
         @Override
+        public Enchantment getVanillaEnchantment(ItemID id) {
+            return Enchantment.KNOCKBACK;
+        }
+
+        @Override
         public List<ItemType> getItemTypes() {
             return List.of(ItemType.SWORD);
         }
@@ -376,16 +425,6 @@ public enum EnchantmentType {
         public List<ItemType> getItemTypes() {
             return List.of(ItemType.SWORD);
         }
-
-        @Override
-        public EnchantmentObject createObject() {
-            return new LethalityEnchantmentObject();
-        }
-
-        @Override
-        public EnchantmentObject createObject(int level) {
-            return new LethalityEnchantmentObject(level);
-        }
     },
     LIFE_STEAL {
         @Override
@@ -399,13 +438,15 @@ public enum EnchantmentType {
         }
 
         @Override
-        public EnchantmentObject createObject() {
-            return new LifeStealEnchantmentObject();
+        public List<EnchantmentType> getIncompatibleEnchants() {
+            return List.of(SYPHON, MANA_STEAL);
         }
 
         @Override
-        public EnchantmentObject createObject(int level) {
-            return new LifeStealEnchantmentObject(level);
+        public void playerAttackAction(EnchantmentObject enchant, Player attacker, LivingEntity target, double damage, boolean critical, EntityDamageEvent event) {
+            PlayerStats stats = StatsListeners.getPlayerStats(attacker);
+            double percent = enchant.getLevel() * 0.005, maxHealth = stats.getMaxHealth();
+            new EntityRegainHealthEvent(attacker, percent * maxHealth, EntityRegainHealthEvent.RegainReason.CUSTOM).callEvent();
         }
     },
     LOOTING {
@@ -452,18 +493,23 @@ public enum EnchantmentType {
         }
 
         @Override
-        public EnchantmentObject createObject() {
-            return new ManaStealEnchantmentObject();
+        public List<EnchantmentType> getIncompatibleEnchants() {
+            return List.of(SYPHON, LIFE_STEAL);
         }
 
         @Override
-        public EnchantmentObject createObject(int level) {
-            return new ManaStealEnchantmentObject(level);
+        public void playerAttackAction(EnchantmentObject enchant, Player attacker, LivingEntity target, double damage, boolean critical, EntityDamageEvent event) {
+            if (!critical) {
+                return;
+            }
+            PlayerStats stats = StatsListeners.getPlayerStats(attacker);
+            double percent = (0.001 + (enchant.getLevel() * 0.001)) * ((int) Math.min(1000, damage) / 100), maxHealth = stats.getMaxHealth();
+            new EntityRegainHealthEvent(attacker, percent * maxHealth, EntityRegainHealthEvent.RegainReason.CUSTOM).callEvent();
         }
     },
     PROSECUTE {
         @Override
-        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, EntityDamageEvent event, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return null;
             }
@@ -497,6 +543,11 @@ public enum EnchantmentType {
         public List<ItemType> getItemTypes() {
             return List.of(ItemType.SWORD);
         }
+
+        @Override
+        public List<EnchantmentType> getIncompatibleEnchants() {
+            return List.of(EXECUTE);
+        }
     },
     SCAVENGER {
         @Override
@@ -511,7 +562,7 @@ public enum EnchantmentType {
     },
     SHARPNESS {
         @Override
-        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, EntityDamageEvent event, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return null;
             }
@@ -536,10 +587,15 @@ public enum EnchantmentType {
         public List<ItemType> getItemTypes() {
             return List.of(ItemType.SWORD);
         }
+
+        @Override
+        public List<EnchantmentType> getIncompatibleEnchants() {
+            return List.of(SMITE, BANE_OF_ARTHROPODS);
+        }
     },
     SMITE {
         @Override
-        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, EntityDamageEvent event, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return null;
             }
@@ -567,10 +623,15 @@ public enum EnchantmentType {
         public List<ItemType> getItemTypes() {
             return List.of(ItemType.SWORD);
         }
+
+        @Override
+        public List<EnchantmentType> getIncompatibleEnchants() {
+            return List.of(SHARPNESS, BANE_OF_ARTHROPODS);
+        }
     },
     SMOLDERING {
         @Override
-        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, EntityDamageEvent event, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return null;
             }
@@ -605,13 +666,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public EnchantmentObject createObject() {
-            return new SyphonEnchantmentObject();
-        }
-
-        @Override
-        public EnchantmentObject createObject(int level) {
-            return new SyphonEnchantmentObject(level);
+        public List<EnchantmentType> getIncompatibleEnchants() {
+            return List.of(LIFE_STEAL, MANA_STEAL);
         }
     },
     THUNDERBOLT {
@@ -626,13 +682,37 @@ public enum EnchantmentType {
         }
 
         @Override
-        public EnchantmentObject createObject() {
-            return new ThunderboltEnchantmentObject();
+        public List<EnchantmentType> getIncompatibleEnchants() {
+            return List.of(THUNDERLORD);
         }
 
+        private static Map<Player, Integer> thunderbolt = new HashMap<>();
+
         @Override
-        public EnchantmentObject createObject(int level) {
-            return new ThunderboltEnchantmentObject(level);
+        public void playerAttackAction(EnchantmentObject enchant, Player attacker, LivingEntity target, double damage, boolean critical, EntityDamageEvent event) {
+            int current = 0;
+            if (thunderbolt.containsKey(attacker)) {
+                current = thunderbolt.get(attacker);
+            }
+            current++;
+            thunderbolt.put(attacker, current);
+            if (current >= 3) {
+                thunderbolt.put(attacker, 0);
+                int level = enchant.getLevel();
+                double damagePercent = switch (level) {
+                    case 1, 2, 3, 4, 5 -> level * 0.04;
+                    default -> (level - 1) * 0.05;
+                };
+                Collection<LivingEntity> enemies = attacker.getLocation().getNearbyLivingEntities(2).stream()
+                        .filter(c -> MobListeners.getMobInfo(c) != null
+                                && MobListeners.getMobInfo(c).getMobBehavior() != MobCategory.TAMED
+                        ).toList();
+                for (LivingEntity entity : enemies) {
+                    entity.getWorld().strikeLightningEffect(entity.getLocation());
+                    entity.damage(damagePercent * damage);
+                    HealthListeners.showDamage(entity, damagePercent * damage, false, ChatColor.YELLOW);
+                }
+            }
         }
     },
     THUNDERLORD {
@@ -647,18 +727,36 @@ public enum EnchantmentType {
         }
 
         @Override
-        public EnchantmentObject createObject() {
-            return new ThunderlordEnchantmentObject();
+        public List<EnchantmentType> getIncompatibleEnchants() {
+            return List.of(THUNDERBOLT);
         }
 
+        private static Map<Player, Integer> thunderlordHitCount = new HashMap<>();
+
         @Override
-        public EnchantmentObject createObject(int level) {
-            return new ThunderlordEnchantmentObject(level);
+        public void playerAttackAction(EnchantmentObject enchant, Player attacker, LivingEntity target, double damage, boolean critical, EntityDamageEvent event) {
+            int current = 0;
+            if (thunderlordHitCount.containsKey(attacker)) {
+                current = thunderlordHitCount.get(attacker);
+            }
+            current++;
+            thunderlordHitCount.put(attacker, current);
+            if (current >= 3) {
+                thunderlordHitCount.put(attacker, 0);
+                int level = enchant.getLevel();
+                double damagePercent = switch (level) {
+                    case 1, 2, 3, 4, 5 -> damagePercent = level * 0.08;
+                    default -> damagePercent = (level - 1) * 0.1;
+                };
+                target.getWorld().strikeLightningEffect(target.getLocation());
+                target.damage(damagePercent * damage);
+                HealthListeners.showDamage(target, damagePercent * damage, false, ChatColor.YELLOW);
+            }
         }
     },
     TITAN_KILLER {
         @Override
-        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, EntityDamageEvent event, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return null;
             }
@@ -691,6 +789,11 @@ public enum EnchantmentType {
         public List<ItemType> getItemTypes() {
             return List.of(ItemType.SWORD);
         }
+
+        @Override
+        public List<EnchantmentType> getIncompatibleEnchants() {
+            return List.of(GIANT_KILLER);
+        }
     },
     TRIPLE_STRIKE {
         @Override
@@ -704,13 +807,8 @@ public enum EnchantmentType {
         }
 
         @Override
-        public EnchantmentObject createObject() {
-            return new TripleStrikeEnchantmentObject();
-        }
-
-        @Override
-        public EnchantmentObject createObject(int level) {
-            return new TripleStrikeEnchantmentObject(level);
+        public List<EnchantmentType> getIncompatibleEnchants() {
+            return List.of(FIRST_STRIKE);
         }
     },
     VAMPIRISM {
@@ -722,16 +820,6 @@ public enum EnchantmentType {
         @Override
         public List<ItemType> getItemTypes() {
             return List.of(ItemType.SWORD);
-        }
-
-        @Override
-        public EnchantmentObject createObject() {
-            return new VampirismEnchantmentObject();
-        }
-
-        @Override
-        public EnchantmentObject createObject(int level) {
-            return new VampirismEnchantmentObject(level);
         }
     },
     VENEMOUS {
@@ -748,16 +836,6 @@ public enum EnchantmentType {
         @Override
         public List<ItemType> getItemTypes() {
             return List.of(ItemType.SWORD);
-        }
-
-        @Override
-        public EnchantmentObject createObject() {
-            return new VenemousEnchantmentObject();
-        }
-
-        @Override
-        public EnchantmentObject createObject(int level) {
-            return new VenemousEnchantmentObject(level);
         }
     },
     VICIOUS {
@@ -837,20 +915,10 @@ public enum EnchantmentType {
         public boolean isUltimate() {
             return true;
         }
-
-        @Override
-        public EnchantmentObject createObject() {
-            return new InfernoEnchantmentObject();
-        }
-
-        @Override
-        public EnchantmentObject createObject(int level) {
-            return new InfernoEnchantmentObject(level);
-        }
     },
     ONE_FOR_ALL {
         @Override
-        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, EntityDamageEvent event, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return null;
             }
@@ -898,7 +966,7 @@ public enum EnchantmentType {
     },
     SWARM {
         @Override
-        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, EntityDamageEvent event, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return null;
             }
@@ -1105,6 +1173,11 @@ public enum EnchantmentType {
         public Enchantment getVanillaEnchantment(ItemID id) {
             return Enchantment.DEPTH_STRIDER;
         }
+
+        @Override
+        public List<EnchantmentType> getIncompatibleEnchants() {
+            return List.of(FROST_WALKER);
+        }
     },
     FROST_WALKER {
         @Override
@@ -1120,6 +1193,11 @@ public enum EnchantmentType {
         @Override
         public Enchantment getVanillaEnchantment(ItemID id) {
             return Enchantment.FROST_WALKER;
+        }
+
+        @Override
+        public List<EnchantmentType> getIncompatibleEnchants() {
+            return List.of(DEPTH_STRIDER);
         }
     },
     SUGAR_RUSH {
@@ -1308,11 +1386,11 @@ public enum EnchantmentType {
         return null;
     }
 
-    public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, IncreaseType type) {
+    public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, EntityDamageEvent event, IncreaseType type) {
         return null;
     }
 
-    public ArmorStats getEventArmor(LivingEntity damager, Player target, int level, IncreaseType type) {
+    public ArmorStats getEventArmor(LivingEntity damager, Player target, int level, EntityDamageEvent event, IncreaseType type) {
         return null;
     }
 
@@ -1324,7 +1402,7 @@ public enum EnchantmentType {
         return null;
     }
 
-    public MiningStats getEventMining(Player miner, Block block, int level, IncreaseType type) {
+    public MiningStats getEventMining(Player miner, Block block, int level, CustomOreLocation ore, IncreaseType type) {
         return null;
     }
 
@@ -1386,15 +1464,11 @@ public enum EnchantmentType {
 
     public abstract List<ItemType> getItemTypes();
 
-    public EnchantmentObject createObject() {
-        return new EnchantmentObject(this);
-    }
-
     public EnchantmentObject createObject(int level) {
         return new EnchantmentObject(this, level);
     }
 
-    public ArrayList<EnchantmentType> getIncompatibleEnchants() {
+    public List<EnchantmentType> getIncompatibleEnchants() {
         return new ArrayList<>();
     }
 
@@ -1431,6 +1505,14 @@ public enum EnchantmentType {
 
     public Enchantment getVanillaEnchantment(ItemID id) {
         return null;
+    }
+
+    public void playerAttackAction(EnchantmentObject enchant, Player attacker, LivingEntity target, double damage, boolean critical, EntityDamageEvent event) {
+        return;
+    }
+
+    public void defenseAction(EnchantmentObject enchant, LivingEntity attacker, Player target, double damage, boolean critical, EntityDamageEvent event) {
+        return;
     }
 
 }

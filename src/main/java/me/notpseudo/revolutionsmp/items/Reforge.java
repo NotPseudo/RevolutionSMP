@@ -2,6 +2,7 @@ package me.notpseudo.revolutionsmp.items;
 
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
+import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
 import me.notpseudo.revolutionsmp.skills.SkillHolder;
 import me.notpseudo.revolutionsmp.skills.SkillType;
 import me.notpseudo.revolutionsmp.skills.SkillUtils;
@@ -13,6 +14,7 @@ import org.bukkit.entity.EntityCategory;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -279,7 +281,7 @@ public enum Reforge {
         }
 
         @Override
-        public WeaponStats getEventWeapon(Rarity rarity, Player attacker, LivingEntity target, IncreaseType type) {
+        public WeaponStats getEventWeapon(Rarity rarity, Player attacker, LivingEntity target, EntityDamageEvent event, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return null;
             }
@@ -342,7 +344,7 @@ public enum Reforge {
         }
 
         @Override
-        public WeaponStats getEventWeapon(Rarity rarity, Player attacker, LivingEntity target, IncreaseType type) {
+        public WeaponStats getEventWeapon(Rarity rarity, Player attacker, LivingEntity target, EntityDamageEvent event, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return null;
             }
@@ -1372,7 +1374,7 @@ public enum Reforge {
         }
 
         @Override
-        public ArmorStats getEventArmor(Rarity rarity, LivingEntity attacker, Player target, IncreaseType type) {
+        public ArmorStats getEventArmor(Rarity rarity, LivingEntity attacker, Player target, EntityDamageEvent event, IncreaseType type) {
             if (type != IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return null;
             }
@@ -1541,7 +1543,7 @@ public enum Reforge {
         }
 
         @Override
-        public ArmorStats getEventArmor(Rarity rarity, LivingEntity attacker, Player target, IncreaseType type) {
+        public ArmorStats getEventArmor(Rarity rarity, LivingEntity attacker, Player target, EntityDamageEvent event, IncreaseType type) {
             if (type != IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return null;
             }
@@ -1647,6 +1649,324 @@ public enum Reforge {
             return ItemID.TEMP_REFORGE_STONE;
         }
     },
+
+    UNYIELDING {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.PICKAXE, ItemType.DRILL);
+        }
+
+        @Override
+        public @NotNull ArmorStats getArmorStats(Rarity rarity, UUID player) {
+            return switch (rarity) {
+                case COMMON -> new ArmorStats(0, 0, 1);
+                case UNCOMMON -> new ArmorStats(0, 0, 2);
+                case RARE -> new ArmorStats(0, 0, 3);
+                case EPIC -> new ArmorStats(0, 0, 5);
+                case LEGENDARY -> new ArmorStats(0, 0, 7);
+                case MYTHIC -> new ArmorStats(0, 0, 9);
+                default -> ArmorStats.createZero();
+            };
+        }
+
+        @Override
+        public @NotNull MiningStats getMiningStats(Rarity rarity, UUID player) {
+            return new MiningStats(0, rarity.ordinal() + 1, 0);
+        }
+    },
+    PROSPECTORS {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.PICKAXE, ItemType.DRILL);
+        }
+
+        @Override
+        public @NotNull ArmorStats getArmorStats(Rarity rarity, UUID player) {
+            return switch (rarity) {
+                case COMMON -> new ArmorStats(0, 0, 1);
+                case UNCOMMON -> new ArmorStats(0, 0, 2);
+                case RARE -> new ArmorStats(0, 0, 3);
+                case EPIC -> new ArmorStats(0, 0, 5);
+                case LEGENDARY -> new ArmorStats(0, 0, 7);
+                case MYTHIC -> new ArmorStats(0, 0, 9);
+                default -> ArmorStats.createZero();
+            };
+        }
+
+        @Override
+        public @NotNull WisdomStats getWisdomStats(Rarity rarity, UUID player) {
+            int increase = rarity.ordinal();
+            return switch (rarity) {
+                case COMMON, UNCOMMON, RARE, EPIC -> new WisdomStats(0, 0.5 + increase * 0.25, 0, 0, 0, 0, 0);
+                case LEGENDARY -> new WisdomStats(0, 2, 0, 0, 0, 0, 0);
+                default -> new WisdomStats(0, 2.5, 0, 0, 0, 0, 0);
+            };
+        }
+    },
+    EXCELLENT {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.PICKAXE, ItemType.DRILL);
+        }
+
+        @Override
+        public @NotNull ArmorStats getArmorStats(Rarity rarity, UUID player) {
+            return switch (rarity) {
+                case COMMON, UNCOMMON, RARE, EPIC, LEGENDARY -> new ArmorStats(0, 0, rarity.ordinal() + 1);
+                default -> new ArmorStats(0, 0, rarity.ordinal() + 2);
+            };
+        }
+
+        @Override
+        public @NotNull MiningStats getMiningStats(Rarity rarity, UUID player) {
+            return switch (rarity) {
+                case COMMON, UNCOMMON, RARE, EPIC, LEGENDARY -> new MiningStats(4 + rarity.ordinal() * 4, 0, 0);
+                default -> new MiningStats(rarity.ordinal() * 5, 0, 0);
+            };
+        }
+    },
+    STURDY {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.PICKAXE, ItemType.DRILL);
+        }
+
+        @Override
+        public @NotNull ArmorStats getArmorStats(Rarity rarity, UUID player) {
+            return switch (rarity) {
+                case COMMON, UNCOMMON, RARE, EPIC, LEGENDARY -> new ArmorStats(0, 3 + rarity.ordinal() + 3, 0);
+                default -> new ArmorStats(0, rarity.ordinal() * 4, 0);
+            };
+        }
+
+        @Override
+        public @NotNull MiningStats getMiningStats(Rarity rarity, UUID player) {
+            return switch (rarity) {
+                case COMMON, UNCOMMON, RARE, EPIC, LEGENDARY -> new MiningStats(0, 3 + rarity.ordinal() + 3, 0);
+                default -> new MiningStats(0, rarity.ordinal() * 4, 0);
+            };
+        }
+    },
+    FORTUNATE {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.PICKAXE, ItemType.DRILL);
+        }
+
+        @Override
+        public @NotNull MiningStats getMiningStats(Rarity rarity, UUID player) {
+            return switch (rarity) {
+                case COMMON, UNCOMMON, RARE -> new MiningStats(rarity.ordinal() + 1, 1, 0);
+                case EPIC, LEGENDARY -> new MiningStats(rarity.ordinal() * 2 - 2, 2, 2);
+                default -> new MiningStats(rarity.ordinal() * 2 - 2, 3, 0);
+            };
+        }
+    },
+    GREAT {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.AXE);
+        }
+
+        @Override
+        public @NotNull WeaponStats getWeaponStats(Rarity rarity, UUID player) {
+            return switch (rarity) {
+                case COMMON, UNCOMMON, RARE -> new WeaponStats(0, rarity.ordinal() * 2 + 2, rarity.ordinal() * 2 + 2, 0, 0, 0);
+                case EPIC -> new WeaponStats(0, 9, 9, 0, 0, 0);
+                case LEGENDARY -> new WeaponStats(0, 12, 12, 0, 0, 0);
+                default -> new WeaponStats(0, 16, 16, 0, 0, 0);
+            };
+        }
+
+        @Override
+        public @NotNull ArmorStats getArmorStats(Rarity rarity, UUID player) {
+            return switch(rarity) {
+                case COMMON, UNCOMMON, RARE, EPIC, LEGENDARY -> new ArmorStats(0, 0, rarity.ordinal());
+                default -> new ArmorStats(0, 0, rarity.ordinal() + 2);
+            };
+        }
+    },
+    RUGGED {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.AXE);
+        }
+
+        @Override
+        public @NotNull WeaponStats getWeaponStats(Rarity rarity, UUID player) {
+            return switch (rarity) {
+                case COMMON -> new WeaponStats(0, 4, 3, 0, 0, 0);
+                case UNCOMMON -> new WeaponStats(0, 6, 5, 0, 0, 0);
+                case RARE -> new WeaponStats(0, 9, 8, 0, 0, 0);
+                case EPIC -> new WeaponStats(0, 13, 12, 0, 0, 0);
+                case LEGENDARY -> new WeaponStats(0, 18, 16, 0, 0, 0);
+                default -> new WeaponStats(0, 24, 22, 0, 0, 0);
+            };
+        }
+
+    },
+    LUSH {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.AXE);
+        }
+
+        @Override
+        public @NotNull ArmorStats getArmorStats(Rarity rarity, UUID player) {
+            return switch (rarity) {
+                case COMMON, UNCOMMON, RARE -> new ArmorStats(0, 0, rarity.ordinal() + 3);
+                case EPIC -> new ArmorStats(0, 0, 7);
+                case LEGENDARY -> new ArmorStats(0, 0, 10);
+                default -> new ArmorStats(0, 0, 15);
+            };
+        }
+
+        @Override
+        public @NotNull GatheringStats getGatheringStats(Rarity rarity, UUID player) {
+            return switch (rarity) {
+                case COMMON, UNCOMMON -> new GatheringStats(0, 1);
+                case RARE, EPIC -> new GatheringStats(0, 2);
+                case LEGENDARY -> new GatheringStats(0, 3);
+                default -> new GatheringStats(0, 5);
+            };
+        }
+    },
+    LUMBERJACKS {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.AXE);
+        }
+
+        @Override
+        public @NotNull ArmorStats getArmorStats(Rarity rarity, UUID player) {
+            return switch (rarity) {
+                case COMMON, UNCOMMON, RARE -> new ArmorStats(0, 0, rarity.ordinal());
+                case EPIC -> new ArmorStats(0, 0, 5);
+                case LEGENDARY -> new ArmorStats(0, 0, 7);
+                default -> new ArmorStats(0, 0, 9);
+            };
+        }
+
+        @Override
+        public @NotNull WisdomStats getWisdomStats(Rarity rarity, UUID player) {
+            return switch (rarity) {
+                case COMMON, UNCOMMON, RARE, EPIC -> new WisdomStats(0, 0, 0.5 + rarity.ordinal() * 0.25, 0, 0, 0, 0);
+                case LEGENDARY -> new WisdomStats(0, 0, 2, 0, 0, 0, 0);
+                default -> new WisdomStats(0, 0, 2.5, 0, 0, 0, 0);
+            };
+        }
+    },
+    DOUBLE_BIT {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.AXE);
+        }
+
+        @Override
+        public @NotNull ArmorStats getArmorStats(Rarity rarity, UUID player) {
+            return switch (rarity) {
+                case COMMON -> new ArmorStats(0, 0, 1);
+                case UNCOMMON, RARE -> new ArmorStats(0, 0, 2);
+                case EPIC -> new ArmorStats(0, 0, 4);
+                case LEGENDARY -> new ArmorStats(0, 0, 5);
+                default -> new ArmorStats(0, 0, 7);
+            };
+        }
+
+        @Override
+        public @NotNull GatheringStats getGatheringStats(Rarity rarity, UUID player) {
+            return new GatheringStats(0, rarity.ordinal() + 1);
+        }
+    },
+    ROBUST {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.HOE);
+        }
+
+        @Override
+        public @NotNull GatheringStats getGatheringStats(Rarity rarity, UUID player) {
+            return switch (rarity) {
+                case COMMON, UNCOMMON -> new GatheringStats(rarity.ordinal() + 2, 0);
+                default -> new GatheringStats(rarity.ordinal() * 2, 0);
+            };
+        }
+    },
+    ZOOMING {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.HOE);
+        }
+
+        @Override
+        public @NotNull ArmorStats getArmorStats(Rarity rarity, UUID player) {
+            return switch (rarity) {
+                case COMMON -> new ArmorStats(0, 0, 5);
+                case UNCOMMON, RARE, EPIC, LEGENDARY -> new ArmorStats(0, 0, (rarity.ordinal() + 1) * 4);
+                default -> new ArmorStats(0, 0, rarity.ordinal() * 5);
+            };
+        }
+    },
+    PLEASANTS {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.AXE);
+        }
+
+        @Override
+        public @NotNull ArmorStats getArmorStats(Rarity rarity, UUID player) {
+            return switch (rarity) {
+                case COMMON, UNCOMMON, RARE -> new ArmorStats(0, 0, rarity.ordinal());
+                case EPIC -> new ArmorStats(0, 0, 5);
+                case LEGENDARY -> new ArmorStats(0, 0, 7);
+                default -> new ArmorStats(0, 0, 9);
+            };
+        }
+
+        @Override
+        public @NotNull WisdomStats getWisdomStats(Rarity rarity, UUID player) {
+            return switch (rarity) {
+                case COMMON, UNCOMMON, RARE, EPIC -> new WisdomStats(0, 0, 0, 0.5 + rarity.ordinal() * 0.25, 0, 0, 0);
+                case LEGENDARY -> new WisdomStats(0, 0, 0, 2, 0, 0, 0);
+                default -> new WisdomStats(0, 0, 0,2.5, 0, 0, 0);
+            };
+        }
+    },
+    GREEN_THUMB {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.AXE);
+        }
+
+        @Override
+        public @NotNull ArmorStats getArmorStats(Rarity rarity, UUID player) {
+            return switch (rarity) {
+                case COMMON -> new ArmorStats(0, 0, 1);
+                case UNCOMMON, RARE -> new ArmorStats(0, 0, 2);
+                case EPIC -> new ArmorStats(0, 0, 4);
+                case LEGENDARY -> new ArmorStats(0, 0, 5);
+                default -> new ArmorStats(0, 0, 7);
+            };
+        }
+
+        @Override
+        public @NotNull GatheringStats getGatheringStats(Rarity rarity, UUID player) {
+            return new GatheringStats(rarity.ordinal() + 1, 0);
+        }
+    },
+
+    BLESSED {
+        @Override
+        public List<ItemType> getItemTypes() {
+            return List.of(ItemType.AXE, ItemType.HOE);
+        }
+
+        @Override
+        public ItemID getReforgeStone() {
+            return ItemID.TEMP_REFORGE_STONE;
+        }
+    },
+
     ARMORTEST {
         @Override
         public List<ItemType> getItemTypes() {
@@ -1725,18 +2045,8 @@ public enum Reforge {
         public ItemID getReforgeStone() {
             return ItemID.TEMP_REFORGE_STONE;
         }
-    },
-    BLESSED {
-        @Override
-        public List<ItemType> getItemTypes() {
-            return List.of(ItemType.AXE, ItemType.HOE);
-        }
-
-        @Override
-        public ItemID getReforgeStone() {
-            return ItemID.TEMP_REFORGE_STONE;
-        }
     };
+
 
     // Gets list of ItemTypes the Reforge can be applied to
     public abstract List<ItemType> getItemTypes();
@@ -1805,11 +2115,11 @@ public enum Reforge {
         return WisdomStats.createZero();
     }
 
-    public WeaponStats getEventWeapon(Rarity rarity, Player attacker, LivingEntity target, IncreaseType type) {
+    public WeaponStats getEventWeapon(Rarity rarity, Player attacker, LivingEntity target, EntityDamageEvent event, IncreaseType type) {
         return null;
     }
 
-    public ArmorStats getEventArmor(Rarity rarity, LivingEntity attacker, Player target, IncreaseType type) {
+    public ArmorStats getEventArmor(Rarity rarity, LivingEntity attacker, Player target, EntityDamageEvent event, IncreaseType type) {
         return null;
     }
 
@@ -1821,7 +2131,7 @@ public enum Reforge {
         return null;
     }
 
-    public MiningStats getEventMining(Rarity rarity, Player miner, Block block, IncreaseType type) {
+    public MiningStats getEventMining(Rarity rarity, Player miner, Block block, CustomOreLocation ore, IncreaseType type) {
         return null;
     }
 

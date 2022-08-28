@@ -9,15 +9,13 @@ import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
 import me.notpseudo.revolutionsmp.skills.SkillType;
 import me.notpseudo.revolutionsmp.skills.SkillUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
-import org.bukkit.event.inventory.BrewEvent;
-import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
@@ -41,6 +39,32 @@ public class CraftingListeners implements Listener {
             result.setItemMeta(meta);
         }
         SkillUtils.handleCraftingXP((Player) event.getView().getPlayer(), result);
+    }
+
+    @EventHandler
+    public void onSmith(PrepareSmithingEvent event) {
+        ItemStack first = event.getInventory().getInputEquipment();
+        if (first == null || first.getType() == Material.AIR) {
+            return;
+        }
+        ItemStack result = event.getResult();
+        if (result == null || result.getType() == Material.AIR) {
+            return;
+        }
+        ItemInfo firstInfo = ItemEditor.getInfo(first);
+        if (firstInfo == null) {
+            return;
+        }
+        ItemMeta meta = result.getItemMeta();
+        meta = ItemEditor.createMetaFromMat(meta, result.getType());
+        result.setItemMeta(meta);
+        ItemInfo info = ItemEditor.getInfo(result);
+        if (info == null) {
+            return;
+        }
+        info.copy(firstInfo);
+        ItemEditor.updateItemInfo(result, info);
+        event.setResult(result);
     }
 
     @EventHandler

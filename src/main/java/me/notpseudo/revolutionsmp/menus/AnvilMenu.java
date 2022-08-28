@@ -24,17 +24,14 @@ public class AnvilMenu extends Menu {
     public AnvilMenu(Player player) {
         super(player);
     }
-
     @Override
     public Component getTitle() {
         return Component.text("Custom Anvil");
     }
-
     @Override
     public int getSlots() {
         return 54;
     }
-
     @Override
     public void setItems() {
         setLeft(Material.RED_STAINED_GLASS_PANE);
@@ -62,7 +59,6 @@ public class AnvilMenu extends Menu {
         addBackType(MenuType.MAIN);
         addCloseButton();
     }
-
     @Override
     public void handleClick(InventoryClickEvent event) {
         if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) {
@@ -109,7 +105,6 @@ public class AnvilMenu extends Menu {
             }
         }
     }
-
     private boolean combine() {
         if (!checkBoth()) {
             return false;
@@ -124,15 +119,23 @@ public class AnvilMenu extends Menu {
         checkBoth();
         return true;
     }
-
     private boolean checkBoth() {
-        if (!(checkLeft() && checkRight())) {
+        boolean leftCheck = checkLeft(), rightCheck = checkRight();
+        if (!(leftCheck && rightCheck)) {
+            if (!leftCheck) {
+                setLeft(Material.RED_STAINED_GLASS_PANE);
+            }
+            if (!rightCheck) {
+                setRight(Material.RED_STAINED_GLASS_PANE);
+            }
+            setBlock();
             return false;
         }
         ItemStack left = inventory.getItem(29), right = inventory.getItem(33);
         ItemInfo leftInfo = ItemEditor.getInfo(left), rightInfo = ItemEditor.getInfo(right);
         if (leftInfo == null) {
             setLeft(Material.RED_STAINED_GLASS_PANE);
+            setRight(Material.RED_STAINED_GLASS_PANE);
             setBlock();
             return false;
         }
@@ -163,8 +166,11 @@ public class AnvilMenu extends Menu {
         setBottomRow(Material.LIME_STAINED_GLASS_PANE);
         return true;
     }
-
     private void setBlock() {
+        ItemStack item = inventory.getItem(13);
+        if (!(item == null || MenuUtils.getMenuInfo(item) != null)) {
+            return;
+        }
         ItemStack block = new ItemStack(Material.BARRIER);
         ItemMeta blockMeta = block.getItemMeta();
         blockMeta.displayName(Component.text("Valid Items Required", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
@@ -178,61 +184,70 @@ public class AnvilMenu extends Menu {
         block.setItemMeta(blockMeta);
         inventory.setItem(13, makeMenuType(block, null));
     }
-
     private boolean checkLeft() {
         ItemStack left = inventory.getItem(29);
         if (left == null || left.getType() == Material.AIR) {
+            setBlock();
             setLeft(Material.RED_STAINED_GLASS_PANE);
+            setBottomRow(Material.RED_STAINED_GLASS_PANE);
             return false;
         }
         ItemInfo info = ItemEditor.getInfo(left);
         if (info == null) {
+            setBlock();
             setLeft(Material.RED_STAINED_GLASS_PANE);
+            setBottomRow(Material.RED_STAINED_GLASS_PANE);
             return false;
         }
         if (!info.getItemType().allowAnvil()) {
+            setBlock();
             setLeft(Material.RED_STAINED_GLASS_PANE);
+            setBottomRow(Material.RED_STAINED_GLASS_PANE);
             return false;
         }
         setLeft(Material.LIME_STAINED_GLASS_PANE);
         return true;
     }
-
     private boolean checkRight() {
         ItemStack right = inventory.getItem(33);
         if (right == null || right.getType() == Material.AIR) {
+            setBlock();
             setRight(Material.RED_STAINED_GLASS_PANE);
+            setBottomRow(Material.RED_STAINED_GLASS_PANE);
             return false;
         }
         if (right.getAmount() > 1) {
+            setBlock();
             setRight(Material.RED_STAINED_GLASS_PANE);
+            setBottomRow(Material.RED_STAINED_GLASS_PANE);
             return false;
         }
         ItemInfo info = ItemEditor.getInfo(right);
         if (info == null) {
+            setBlock();
             setRight(Material.RED_STAINED_GLASS_PANE);
+            setBottomRow(Material.RED_STAINED_GLASS_PANE);
             return false;
         }
         if (!info.getItemType().allowAnvil()) {
+            setBlock();
             setRight(Material.RED_STAINED_GLASS_PANE);
+            setBottomRow(Material.RED_STAINED_GLASS_PANE);
             return false;
         }
         setRight(Material.LIME_STAINED_GLASS_PANE);
         return true;
     }
-
     private void setLeft(Material material) {
         inventory.setItem(11, makeMenuGlass(new ItemStack(material)));
         inventory.setItem(12, makeMenuGlass(new ItemStack(material)));
         inventory.setItem(20, makeMenuGlass(new ItemStack(material)));
     }
-
     private void setRight(Material material) {
         inventory.setItem(14, makeMenuGlass(new ItemStack(material)));
         inventory.setItem(15, makeMenuGlass(new ItemStack(material)));
         inventory.setItem(24, makeMenuGlass(new ItemStack(material)));
     }
-
     private void setBottomRow(Material material) {
         for (int i = 45; i < 54; i++) {
             if (i != 49 && i != 48) {

@@ -5,10 +5,7 @@ import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
+import java.io.*;
 
 public class PlacedLocationListDataType implements PersistentDataType<byte[], PlacedLocationList> {
 
@@ -33,10 +30,15 @@ public class PlacedLocationListDataType implements PersistentDataType<byte[], Pl
             InputStream is = new ByteArrayInputStream(primitive);
             ObjectInputStream o = new ObjectInputStream(is);
             return (PlacedLocationList) o.readObject();
-        } catch (IOException | ClassNotFoundException e) {
+        }catch (ClassNotFoundException e) {
             e.printStackTrace();
+        } catch (IOException exception) {
+            if (exception instanceof InvalidClassException) {
+                return new PlacedLocationList();
+            }
+            exception.printStackTrace();
         }
-        return null;
+        return new PlacedLocationList();
     }
 
 }

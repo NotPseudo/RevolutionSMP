@@ -6,6 +6,7 @@ import me.notpseudo.revolutionsmp.collections.CollectionType;
 import me.notpseudo.revolutionsmp.customcrafting.*;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
 import me.notpseudo.revolutionsmp.itemstats.*;
+import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
 import me.notpseudo.revolutionsmp.mining.GemstoneSlotType;
 import me.notpseudo.revolutionsmp.mining.GemstoneType;
 import me.notpseudo.revolutionsmp.mining.GemstoneUtils;
@@ -18,6 +19,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -3916,7 +3918,7 @@ public enum ItemID {
      */
 
     @NotNull
-    public WeaponStats getEventWeapon(Player damager, LivingEntity target, IncreaseType type) {
+    public WeaponStats getEventWeapon(Player damager, LivingEntity target, EntityDamageEvent event, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
             return WeaponStats.createMult();
         }
@@ -3924,7 +3926,7 @@ public enum ItemID {
     }
 
     @NotNull
-    public ArmorStats getEventArmor(LivingEntity damager, Player target, IncreaseType type) {
+    public ArmorStats getEventArmor(LivingEntity damager, Player target, EntityDamageEvent event, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
             return ArmorStats.createMult();
         }
@@ -3948,7 +3950,7 @@ public enum ItemID {
     }
 
     @NotNull
-    public MiningStats getEventMining(Player miner, Block block, IncreaseType type) {
+    public MiningStats getEventMining(Player miner, Block block, CustomOreLocation ore, IncreaseType type) {
         if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
             return MiningStats.createMult();
         }
@@ -4049,7 +4051,7 @@ public enum ItemID {
     }
 
     @NotNull
-    public WisdomStats getBreakingWisdom(Player player, Block block) {
+    public WisdomStats getBreakingWisdom(Player player, Block block, CustomOreLocation ore) {
         return WisdomStats.createZero();
     }
 

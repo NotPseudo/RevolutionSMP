@@ -8,7 +8,6 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.abilities.AbilityType;
-import me.notpseudo.revolutionsmp.enchantments.ActionEnchantment;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
@@ -402,9 +401,9 @@ public class HealthListeners implements Listener {
                     }
                 }
             }
-            damageInc = StatsListeners.getEventWeaponStats(player, target, IncreaseType.INCREASE);
-            damageAddPercent = StatsListeners.getEventWeaponStats(player, target, IncreaseType.ADDITIVE_PERCENT);
-            damageMult = StatsListeners.getEventWeaponStats(player, target, IncreaseType.MULTIPLICATIVE_PERCENT);
+            damageInc = StatsListeners.getEventWeaponStats(player, target, event, IncreaseType.INCREASE);
+            damageAddPercent = StatsListeners.getEventWeaponStats(player, target, event, IncreaseType.ADDITIVE_PERCENT);
+            damageMult = StatsListeners.getEventWeaponStats(player, target, event, IncreaseType.MULTIPLICATIVE_PERCENT);
         } else {
             damagerStats = MobListeners.getMobInfo(attacker);
             if (damagerStats != null) {
@@ -413,9 +412,9 @@ public class HealthListeners implements Listener {
         }
         if (target instanceof Player player) {
             targetStats = StatsListeners.getPlayerStats(player);
-            healthInc = StatsListeners.getEventArmorStats(attacker, player, IncreaseType.INCREASE);
-            healthAddPercent = StatsListeners.getEventArmorStats(attacker, player, IncreaseType.ADDITIVE_PERCENT);
-            healthMult = StatsListeners.getEventArmorStats(attacker, player, IncreaseType.MULTIPLICATIVE_PERCENT);
+            healthInc = StatsListeners.getEventArmorStats(attacker, player, event, IncreaseType.INCREASE);
+            healthAddPercent = StatsListeners.getEventArmorStats(attacker, player, event, IncreaseType.ADDITIVE_PERCENT);
+            healthMult = StatsListeners.getEventArmorStats(attacker, player, event, IncreaseType.MULTIPLICATIVE_PERCENT);
         } else {
             targetStats = MobListeners.getMobInfo(target);
         }
@@ -439,9 +438,7 @@ public class HealthListeners implements Listener {
         if (attacker instanceof Player player) {
             for (EnchantmentsHolder holder : StatsListeners.getEnchantmentHolders(player)) {
                 for (EnchantmentObject enchant : holder.getEnchants()) {
-                    if (enchant instanceof ActionEnchantment) {
-                        ((ActionEnchantment) enchant).action(attacker, target, finalDamage, critical, finalDamage);
-                    }
+                    enchant.attackAction(player, target, finalDamage, critical, event);
                 }
             }
             MobInfo mobInfo = MobListeners.getMobInfo(target);

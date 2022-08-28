@@ -188,9 +188,9 @@ public class HarvestingListeners implements Listener {
             return;
         }
         PlayerStats playerStats = StatsListeners.getPlayerStats(player);
-        MiningStats add = StatsListeners.getEventMining(player, block, IncreaseType.INCREASE),
-                addPercent = StatsListeners.getEventMining(player, block, IncreaseType.ADDITIVE_PERCENT),
-                mult = StatsListeners.getEventMining(player, block, IncreaseType.MULTIPLICATIVE_PERCENT);
+        MiningStats add = StatsListeners.getEventMining(player, block, null, IncreaseType.INCREASE),
+                addPercent = StatsListeners.getEventMining(player, block, null, IncreaseType.ADDITIVE_PERCENT),
+                mult = StatsListeners.getEventMining(player, block, null, IncreaseType.MULTIPLICATIVE_PERCENT);
         double miningSpeed = (playerStats.getStatValue(StatType.MINING_SPEED) + add.getStatValue(StatType.MINING_SPEED)) * (1 + (addPercent.getStatValue(StatType.MINING_SPEED) / 100)) * mult.getStatValue(StatType.MINING_SPEED);
         BreakingBlock breakBlock = CustomMiningUtils.getBreakingBlock(blockLoc);
         double damage = Math.max(1, miningSpeed) / 20;
@@ -232,9 +232,9 @@ public class HarvestingListeners implements Listener {
         }
         List<ItemDropObject> drops;
         PlayerStats playerStats = StatsListeners.getPlayerStats(player);
-        MiningStats add = StatsListeners.getEventMining(player, block, IncreaseType.INCREASE),
-                addPercent = StatsListeners.getEventMining(player, block, IncreaseType.ADDITIVE_PERCENT),
-                mult = StatsListeners.getEventMining(player, block, IncreaseType.MULTIPLICATIVE_PERCENT);
+        MiningStats add = StatsListeners.getEventMining(player, block, customOre, IncreaseType.INCREASE),
+                addPercent = StatsListeners.getEventMining(player, block, customOre, IncreaseType.ADDITIVE_PERCENT),
+                mult = StatsListeners.getEventMining(player, block, customOre, IncreaseType.MULTIPLICATIVE_PERCENT);
         double miningFortune = (playerStats.getStatValue(StatType.MINING_FORTUNE) + add.getStatValue(StatType.MINING_FORTUNE)) * (1 + (addPercent.getStatValue(StatType.MINING_FORTUNE) / 100)) * mult.getStatValue(StatType.MINING_FORTUNE),
                 pristine = (playerStats.getStatValue(StatType.PRISTINE) + add.getStatValue(StatType.PRISTINE)) * (1 + (addPercent.getStatValue(StatType.PRISTINE) / 100)) * mult.getStatValue(StatType.PRISTINE),
                 purity = (playerStats.getStatValue(StatType.PURITY) + add.getStatValue(StatType.PURITY)) * (1 + (addPercent.getStatValue(StatType.PURITY) / 100)) * mult.getStatValue(StatType.PURITY);
@@ -294,7 +294,7 @@ public class HarvestingListeners implements Listener {
             drop.drop(block.getLocation());
         }
         if (!playerPlaced) {
-            SkillUtils.addBreakingXpToPlayer(player, SkillType.MINING, block, exp);
+            SkillUtils.addBreakingXpToPlayer(player, SkillType.MINING, block, customOre, exp);
         }
         removeOreLocation(event);
         if (replaceBlock != null) {
@@ -358,7 +358,7 @@ public class HarvestingListeners implements Listener {
         for (ItemDropObject drop : getDropsForMaterial(event.getBlock().getType(), foragingFortune)) {
             drop.drop(event.getBlock().getLocation());
         }
-        SkillUtils.addBreakingXpToPlayer(player, SkillType.FORAGING, event.getBlock(), getXp(event.getBlock().getType()));
+        SkillUtils.addBreakingXpToPlayer(player, SkillType.FORAGING, event.getBlock(), null, getXp(event.getBlock().getType()));
     }
 
     @EventHandler
@@ -410,7 +410,7 @@ public class HarvestingListeners implements Listener {
             info.setExtraInfo(farmTool);
             mainHand.getItemMeta().getPersistentDataContainer().set(ItemEditor.getItemKey(), new ItemInfoDataType(), info);
         }
-        SkillUtils.addBreakingXpToPlayer(event.getPlayer(), SkillType.FARMING, block, exp);
+        SkillUtils.addBreakingXpToPlayer(event.getPlayer(), SkillType.FARMING, block, null, exp);
     }
 
     @EventHandler
@@ -462,7 +462,7 @@ public class HarvestingListeners implements Listener {
         for (ItemDropObject drop : getDropsForMaterial(event.getBlock().getType(), farmingFortune)) {
             drop.drop(event.getBlock().getLocation());
         }
-        SkillUtils.addBreakingXpToPlayer(event.getPlayer(), expType, event.getBlock(), getXp(mat));
+        SkillUtils.addBreakingXpToPlayer(event.getPlayer(), expType, event.getBlock(), null, getXp(mat));
     }
 
     @EventHandler

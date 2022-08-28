@@ -5,6 +5,7 @@ import me.notpseudo.revolutionsmp.itemstats.ArmorStats;
 import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -29,8 +30,8 @@ public class WitherImpactObject extends AbilityObject {
     }
 
     @Override
-    public @NotNull ArmorStats getEventArmor(LivingEntity damager, Player target, IncreaseType inc) {
-        return AbilityType.WITHER_SHIELD.getEventArmor(damager, target, inc);
+    public @NotNull ArmorStats getEventArmor(LivingEntity damager, Player target, EntityDamageEvent event, IncreaseType inc) {
+        return AbilityType.WITHER_SHIELD.getEventArmor(damager, target, event, inc);
     }
 
 }

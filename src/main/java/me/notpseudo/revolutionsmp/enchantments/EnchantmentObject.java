@@ -2,36 +2,32 @@ package me.notpseudo.revolutionsmp.enchantments;
 
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
+import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class EnchantmentObject implements Serializable, Comparable<EnchantmentObject> {
 
     private final EnchantmentType type;
     private int level;
-    private HashMap<UUID, Integer> attacked;
-    private UUID lastHit;
-    private int hitCount;
 
     public EnchantmentObject(EnchantmentType type) {
         this.type = type;
         level = type.getMinLevel();
-        attacked = new HashMap<>();
-        hitCount = 0;
     }
 
     public EnchantmentObject(EnchantmentType type, int level) {
         this.type = type;
         this.level = level;
-        attacked = new HashMap<>();
-        hitCount = 0;
     }
 
     public int getLevel() {
@@ -46,28 +42,12 @@ public class EnchantmentObject implements Serializable, Comparable<EnchantmentOb
         return type;
     }
 
-    public HashMap<UUID, Integer> getAttacked() {
-        return attacked;
+    public void attackAction(Player attacker, LivingEntity target, double damage, boolean critical, EntityDamageEvent event) {
+        type.playerAttackAction(this, attacker, target, damage, critical, event);
     }
 
-    public void setAttacked(HashMap<UUID, Integer> attacked) {
-        this.attacked = attacked;
-    }
-
-    public UUID getLastHit() {
-        return lastHit;
-    }
-
-    public void setLastHit(UUID lastHit) {
-        this.lastHit = lastHit;
-    }
-
-    public int getHitCount() {
-        return hitCount;
-    }
-
-    public void setHitCount(int hitCount) {
-        this.hitCount = hitCount;
+    public void defenseAction(LivingEntity attacker, Player target, double damage, boolean critical, EntityDamageEvent event) {
+        type.defenseAction(this, attacker, target, damage, critical, event);
     }
 
     public String getText() {
@@ -118,12 +98,12 @@ public class EnchantmentObject implements Serializable, Comparable<EnchantmentOb
         return type.getBonusWisdom(player, level, inc);
     }
 
-    public WeaponStats getEventWeapon(Player damager, LivingEntity target, IncreaseType inc) {
-        return type.getEventWeapon(damager, target, level, inc);
+    public WeaponStats getEventWeapon(Player damager, LivingEntity target, EntityDamageEvent event, IncreaseType inc) {
+        return type.getEventWeapon(damager, target, level, event, inc);
     }
 
-    public ArmorStats getEventArmor(LivingEntity damager, Player target, IncreaseType inc) {
-        return type.getEventArmor(damager, target, level, inc);
+    public ArmorStats getEventArmor(LivingEntity damager, Player target, EntityDamageEvent event, IncreaseType inc) {
+        return type.getEventArmor(damager, target, level, event, inc);
     }
 
     public AbilityStats getEventAbility(Player damager, LivingEntity target, IncreaseType inc) {
@@ -134,8 +114,8 @@ public class EnchantmentObject implements Serializable, Comparable<EnchantmentOb
         return type.getEventFishing(fisher, level, inc);
     }
 
-    public MiningStats getEventMining(Player miner, Block block, IncreaseType inc) {
-        return type.getEventMining(miner, block, level, inc);
+    public MiningStats getEventMining(Player miner, Block block, CustomOreLocation ore, IncreaseType inc) {
+        return type.getEventMining(miner, block, level, ore, inc);
     }
 
     public GatheringStats getEventGathering(Player harvester, Block block, IncreaseType inc) {

@@ -1,14 +1,18 @@
 package me.notpseudo.revolutionsmp.economy;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.listeners.MobListeners;
+import me.notpseudo.revolutionsmp.mobstats.MobInfo;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,6 +62,20 @@ public class EcoUtils implements Listener {
         } else {
             player.sendMessage(Component.text("You died but your coins were saved!", NamedTextColor.GOLD));
         }
+    }
+
+    @EventHandler
+    public void onEntityDeath(EntityDeathEvent event) {
+        LivingEntity dead = event.getEntity();
+        MobInfo info = MobListeners.getMobInfo(dead);
+        if (info == null) {
+            return;
+        }
+        Player player = event.getEntity().getKiller();
+        if (player == null) {
+            return;
+        }
+        getEcoInfo(player).addPurse(info.getCustomMobType().getCoins(info.getLevel()));
     }
 
 }

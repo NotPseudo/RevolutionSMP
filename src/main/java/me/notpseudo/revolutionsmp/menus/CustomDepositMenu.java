@@ -80,9 +80,6 @@ public class CustomDepositMenu extends Menu {
             return;
         }
         event.setCancelled(true);
-        if (menuItem.getType() == null) {
-            return;
-        }
         if (menuItem.getType() == MenuType.CLOSE) {
             BukkitRunnable close = new BukkitRunnable() {
                 @Override
@@ -111,6 +108,7 @@ public class CustomDepositMenu extends Menu {
             return;
         }
         if (inventory.getType() != InventoryType.ANVIL) {
+            player.sendMessage("Not an anvil");
             return;
         }
         AnvilInventory anvil = (AnvilInventory) inventory;

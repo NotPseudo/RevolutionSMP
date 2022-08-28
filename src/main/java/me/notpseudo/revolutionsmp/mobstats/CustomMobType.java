@@ -1779,6 +1779,21 @@ public enum CustomMobType {
         return getMobBehavior().getHighestLevel();
     }
 
+    public double getAverageLevel() {
+        return (getMinLevel() + getMaxLevel()) / 2.0;
+    }
+
+    public double getVanillaExp() {
+        return -1;
+    }
+    public double getExpMult() {
+        return getMobBehavior().getExpMult();
+    }
+
+    public int getCoins(int level) {
+        return level * 5;
+    }
+
     public ItemStack[] getEquipment() {
         return null;
     }

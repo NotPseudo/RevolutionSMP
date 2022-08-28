@@ -3,11 +3,13 @@ package me.notpseudo.revolutionsmp.abilities;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
+import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -178,7 +180,7 @@ public enum AbilityType {
         }
 
         @Override
-        public ArmorStats getEventArmor(LivingEntity damager, Player target, IncreaseType inc) {
+        public ArmorStats getEventArmor(LivingEntity damager, Player target, EntityDamageEvent event, IncreaseType inc) {
             if (inc == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 if (witherShieldCooldownList.contains(target.getUniqueId())) {
                     return new ArmorStats(0.9, 1, 1, 1);
@@ -374,11 +376,11 @@ public enum AbilityType {
         return new AbilityObject(holder, this);
     }
 
-    public WeaponStats getEventWeapon(Player damager, LivingEntity target, IncreaseType type) {
+    public WeaponStats getEventWeapon(Player damager, LivingEntity target, EntityDamageEvent event, IncreaseType type) {
         return null;
     }
 
-    public ArmorStats getEventArmor(LivingEntity damager, Player target, IncreaseType type) {
+    public ArmorStats getEventArmor(LivingEntity damager, Player target, EntityDamageEvent event, IncreaseType type) {
         return null;
     }
 
@@ -390,7 +392,7 @@ public enum AbilityType {
         return null;
     }
 
-    public MiningStats getEventMining(Player miner, Block block, IncreaseType type) {
+    public MiningStats getEventMining(Player miner, Block block, CustomOreLocation ore, IncreaseType type) {
         return null;
     }
 

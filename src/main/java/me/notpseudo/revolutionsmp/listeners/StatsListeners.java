@@ -8,6 +8,7 @@ import me.notpseudo.revolutionsmp.collections.CollectionsHolder;
 import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
+import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
 import me.notpseudo.revolutionsmp.mobstats.MobInfo;
 import me.notpseudo.revolutionsmp.mobstats.MobInfoDataType;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
@@ -30,6 +31,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -499,10 +501,10 @@ public class StatsListeners implements Listener {
     }
 
     @NotNull
-    public static WeaponStats getEventWeaponStats(Player attacker, LivingEntity target, IncreaseType type) {
-        WeaponStats eventWeapon = SkillUtils.getHolder(attacker).getEventWeapon(target, type);
+    public static WeaponStats getEventWeaponStats(Player attacker, LivingEntity target, EntityDamageEvent event, IncreaseType type) {
+        WeaponStats eventWeapon = SkillUtils.getHolder(attacker).getEventWeapon(target, event, type);
         for (ItemInfo info : getInfos(attacker)) {
-            WeaponStats infoStat = info.getEventWeaponStats(target, type);
+            WeaponStats infoStat = info.getEventWeaponStats(target, event, type);
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 eventWeapon.multiply(infoStat);
             } else {
@@ -513,10 +515,10 @@ public class StatsListeners implements Listener {
     }
 
     @NotNull
-    public static ArmorStats getEventArmorStats(LivingEntity attacker, Player target, IncreaseType type) {
-        ArmorStats eventArmor = SkillUtils.getHolder(target).getEventArmor(attacker, type);
+    public static ArmorStats getEventArmorStats(LivingEntity attacker, Player target, EntityDamageEvent event, IncreaseType type) {
+        ArmorStats eventArmor = SkillUtils.getHolder(target).getEventArmor(attacker, event, type);
         for (ItemInfo info : getInfos(attacker)) {
-            ArmorStats infoStat = info.getEventArmorStats(attacker, type);
+            ArmorStats infoStat = info.getEventArmorStats(attacker, event, type);
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 eventArmor.multiply(infoStat);
             } else {
@@ -555,10 +557,10 @@ public class StatsListeners implements Listener {
     }
 
     @NotNull
-    public static MiningStats getEventMining(Player miner, Block block, IncreaseType type) {
-        MiningStats eventMining = SkillUtils.getHolder(miner).getEventMining(block, type);
+    public static MiningStats getEventMining(Player miner, Block block, CustomOreLocation ore, IncreaseType type) {
+        MiningStats eventMining = SkillUtils.getHolder(miner).getEventMining(block, ore, type);
         for (ItemInfo info : getInfos(miner)) {
-            MiningStats infoStat = info.getEventMining(block, type);
+            MiningStats infoStat = info.getEventMining(block, ore, type);
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 eventMining.multiply(infoStat);
             } else {
@@ -735,7 +737,7 @@ public class StatsListeners implements Listener {
         return boost + wisdom.getStatValue(booster);
     }
 
-    public static double getBreakWisdomStat(SkillType type, Player player, Block block) {
+    public static double getBreakWisdomStat(SkillType type, Player player, Block block, CustomOreLocation ore) {
         StatType booster = type.getExpBooster();
         if (booster == null) {
             return 0;
@@ -743,7 +745,7 @@ public class StatsListeners implements Listener {
         double boost = getPlayerStats(player).getStatValue(booster);
         WisdomStats wisdom = WisdomStats.createZero();
         for (ItemInfo info : getInfos(player)) {
-            wisdom.combine(info.getBreakingWisdom(block));
+            wisdom.combine(info.getBreakingWisdom(block, ore));
         }
         return boost + wisdom.getStatValue(booster);
     }
