@@ -1,6 +1,5 @@
 package me.notpseudo.revolutionsmp;
 
-import me.notpseudo.revolutionsmp.abilities.AbilitiesUtil;
 import me.notpseudo.revolutionsmp.collections.CollectionUtils;
 import me.notpseudo.revolutionsmp.commands.*;
 import me.notpseudo.revolutionsmp.economy.EcoUtils;
@@ -46,7 +45,6 @@ public final class RevolutionSMP extends JavaPlugin {
         new MenuCommand(this);
         new MoneyCommand(this);
         new CraftingListeners(this);
-        AbilitiesUtil.createPassSet();
         plugin = this;
     }
 

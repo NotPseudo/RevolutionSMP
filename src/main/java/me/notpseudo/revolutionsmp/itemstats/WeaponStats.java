@@ -2,7 +2,6 @@ package me.notpseudo.revolutionsmp.itemstats;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.stream.Stream;
 
 // Weapon stats stored in an ItemStack's PersistentDataContainer
 public class WeaponStats extends StatHolder implements Serializable {

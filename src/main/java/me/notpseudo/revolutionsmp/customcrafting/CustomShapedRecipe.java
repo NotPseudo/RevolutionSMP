@@ -1,9 +1,7 @@
 package me.notpseudo.revolutionsmp.customcrafting;
 
 import me.notpseudo.revolutionsmp.items.ItemID;
-import net.kyori.adventure.text.Component;
 import org.apache.commons.lang3.Validate;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -204,13 +202,6 @@ public class CustomShapedRecipe extends CustomRecipe {
         return true;
     }
 
-    /**
-     * Returns the ingredient in the recipe for the specified row and column
-     *
-     * @param row    The row where the ItemStack should be
-     * @param column The column where the ItemStack should be
-     * @return The ItemStack ingredient located at the row and index. Will be null if no ingredient is stored there
-     */
     /*
     @Nullable
     public ItemStack getItemStack(int row, int column) {

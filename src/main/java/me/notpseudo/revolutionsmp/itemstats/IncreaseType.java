@@ -4,6 +4,6 @@ public enum IncreaseType {
 
     INCREASE,
     ADDITIVE_PERCENT,
-    MULTIPLICATIVE_PERCENT;
+    MULTIPLICATIVE_PERCENT
 
 }

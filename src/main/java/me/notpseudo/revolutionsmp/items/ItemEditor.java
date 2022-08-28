@@ -186,8 +186,11 @@ public class ItemEditor {
     }
 
     public static void updateItemOwner(ItemStack item, UUID newOwner) {
+        if (item == null || item.getType() == Material.AIR) {
+            return;
+        }
         ItemMeta meta = item.getItemMeta();
-        if (item.getType() == Material.AIR || meta == null) {
+        if (meta == null) {
             return;
         }
         ItemInfo itemInfo = getInfo(item);

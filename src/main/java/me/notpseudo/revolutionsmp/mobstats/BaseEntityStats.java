@@ -1,7 +1,6 @@
 package me.notpseudo.revolutionsmp.mobstats;
 
 import me.notpseudo.revolutionsmp.itemstats.ArmorStats;
-import me.notpseudo.revolutionsmp.itemstats.StatCategory;
 import me.notpseudo.revolutionsmp.itemstats.StatType;
 import me.notpseudo.revolutionsmp.itemstats.WeaponStats;
 

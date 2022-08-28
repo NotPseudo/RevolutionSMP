@@ -2,10 +2,7 @@ package me.notpseudo.revolutionsmp.menus;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
-import me.notpseudo.revolutionsmp.items.Reforge;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
-import me.notpseudo.revolutionsmp.itemstats.ItemInfoDataType;
-import me.notpseudo.revolutionsmp.specialiteminfo.ReforgeStoneInfo;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;

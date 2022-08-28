@@ -5,7 +5,6 @@ import me.notpseudo.revolutionsmp.menus.BankMenu;
 import me.notpseudo.revolutionsmp.menus.Menu;
 import me.notpseudo.revolutionsmp.menus.MenuUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
@@ -13,7 +12,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 public class MenuListeners implements Listener {

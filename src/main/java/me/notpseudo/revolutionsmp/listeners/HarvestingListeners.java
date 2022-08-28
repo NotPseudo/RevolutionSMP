@@ -246,7 +246,7 @@ public class HarvestingListeners implements Listener {
         int breakingPowerNeeded = getBreakingPower(block.getType());
         List<Material> replaceBlock = null;
         List<CustomOreType> replaceCustomBlock = null;
-        double exp = 0;
+        double exp;
         if (isCustom) {
             breakingPowerNeeded = customOre.getType().getBreakingPower();
             drops = customOre.getDrops();
@@ -254,11 +254,7 @@ public class HarvestingListeners implements Listener {
         } else {
             if (!miningCollectionBlocks.contains(event.getBlock().getType())) {
                 if (affectedByMiningSpeed.contains(event.getBlock().getType())) {
-                    if (breakingPower < breakingPowerNeeded) {
-                        event.setDropItems(false);
-                    } else {
-                        event.setDropItems(true);
-                    }
+                    event.setDropItems(breakingPower >= breakingPowerNeeded);
                     removeOreLocation(event);
                     return;
                 }

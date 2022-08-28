@@ -3,7 +3,6 @@ package me.notpseudo.revolutionsmp.mining;
 import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.listeners.HarvestingListeners;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.Serializable;
@@ -17,7 +16,7 @@ public class PlacedLocationList implements Serializable {
 
     public PlacedLocationList() {
         placedLocations = new ArrayList<>();
-        customOreLocations = new ArrayList();
+        customOreLocations = new ArrayList<>();
         locationsWithDrops = new ArrayList<>();
     }
 

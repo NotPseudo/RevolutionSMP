@@ -6,10 +6,7 @@ import me.notpseudo.revolutionsmp.abilities.AbilityUseType;
 import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.AbilitiesHolder;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
-import me.notpseudo.revolutionsmp.itemstats.ItemInfoDataType;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
-import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
-import me.notpseudo.revolutionsmp.playerstats.PlayerStatsDataType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -52,7 +49,7 @@ public class AbilityUseListeners implements Listener {
             return;
         }
         Player player = event.getPlayer();
-        AbilitiesHolder abilitiesHolder = event.getItem().getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType()).getAbilitiesHolder();
+        AbilitiesHolder abilitiesHolder = info.getAbilitiesHolder();
         if (abilitiesHolder == null) {
             return;
         }

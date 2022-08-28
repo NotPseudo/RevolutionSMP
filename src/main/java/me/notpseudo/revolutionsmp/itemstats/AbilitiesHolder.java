@@ -16,7 +16,7 @@ import java.util.List;
 public class AbilitiesHolder implements Serializable {
 
     private ArrayList<AbilityObject> abilities;
-    private ItemInfo holder;
+    private final ItemInfo holder;
 
     public AbilitiesHolder(ItemInfo holder) {
         abilities = new ArrayList<>();

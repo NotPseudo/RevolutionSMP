@@ -4,14 +4,16 @@ import me.notpseudo.revolutionsmp.collections.*;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
-import me.notpseudo.revolutionsmp.skills.*;
+import me.notpseudo.revolutionsmp.skills.SkillHolder;
+import me.notpseudo.revolutionsmp.skills.SkillObject;
+import me.notpseudo.revolutionsmp.skills.SkillType;
+import me.notpseudo.revolutionsmp.skills.SkillUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,8 +21,7 @@ import java.util.List;
 
 public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
 
-    private CollectionType collectionType;
-    private ArrayList<Material> vanillaMaterials;
+    private final CollectionType collectionType;
     private double counter;
     private int craftTier;
     private int countTier;
@@ -30,7 +31,6 @@ public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
     public FarmingToolInfo(ItemInfo holder, CollectionType type) {
         super(holder);
         collectionType = type;
-        this.vanillaMaterials = new ArrayList<>(type.getVanillaMaterials());
         counter = 0;
         craftTier = 1;
         countTier = 1;
@@ -141,7 +141,7 @@ public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
     }
 
     public boolean hasMaterial(Material material) {
-        return vanillaMaterials.contains(material);
+        return collectionType.getVanillaMaterials().contains(material);
     }
 
     @Override
@@ -161,7 +161,7 @@ public class FarmingToolInfo extends SpecialItemInfo implements Serializable {
 
     @Override
     public WisdomStats getBreakingWisdom(Block block, CustomOreLocation ore) {
-        if (!(vanillaMaterials.contains(block.getType()))) {
+        if (!(collectionType.getVanillaMaterials().contains(block.getType()))) {
             return WisdomStats.createZero();
         }
         return new WisdomStats(0, 0, 0, getXpBoost(), 0, 0, 0);

@@ -20,26 +20,28 @@ public enum ItemType {
     },
     AXE {
         @Override
-        public boolean allowPotatoBooks() {
+        public boolean allowModifiers() {
             return false;
         }
 
     },
     PICKAXE {
-        @Override
-        public boolean allowPotatoBooks() {
-            return false;
-        }
     },
     HOE {
+
         @Override
-        public boolean allowPotatoBooks() {
+        public boolean allowAbilities() {
             return false;
         }
     },
     SHOVEL {
         @Override
-        public boolean allowPotatoBooks() {
+        public boolean allowModifiers() {
+            return false;
+        }
+
+        @Override
+        public boolean allowAbilities() {
             return false;
         }
     },
@@ -59,7 +61,12 @@ public enum ItemType {
         }
 
         @Override
-        public boolean allowPotatoBooks() {
+        public boolean allowAbilities() {
+            return false;
+        }
+
+        @Override
+        public boolean allowModifiers() {
             return false;
         }
 
@@ -79,7 +86,7 @@ public enum ItemType {
         }
 
         @Override
-        public boolean allowPotatoBooks() {
+        public boolean allowModifiers() {
             return false;
         }
     },
@@ -90,12 +97,17 @@ public enum ItemType {
         }
 
         @Override
+        public boolean allowAbilities() {
+            return false;
+        }
+
+        @Override
         public boolean allowEnchants() {
             return false;
         }
 
         @Override
-        public boolean allowPotatoBooks() {
+        public boolean allowModifiers() {
             return false;
         }
 
@@ -116,7 +128,7 @@ public enum ItemType {
         }
 
         @Override
-        public boolean allowPotatoBooks() {
+        public boolean allowModifiers() {
             return false;
         }
 
@@ -142,7 +154,7 @@ public enum ItemType {
         }
 
         @Override
-        public boolean allowPotatoBooks() {
+        public boolean allowModifiers() {
             return false;
         }
     },
@@ -157,10 +169,6 @@ public enum ItemType {
             return false;
         }
 
-        @Override
-        public boolean allowPotatoBooks() {
-            return false;
-        }
     },
     DRILL {
 
@@ -186,7 +194,7 @@ public enum ItemType {
         return true;
     }
 
-    public boolean allowPotatoBooks() {
+    public boolean allowModifiers() {
         return true;
     }
 

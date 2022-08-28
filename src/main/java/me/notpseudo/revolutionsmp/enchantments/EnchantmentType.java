@@ -5,7 +5,6 @@ import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.items.ItemID;
 import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.*;
-import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
 import me.notpseudo.revolutionsmp.listeners.HealthListeners;
 import me.notpseudo.revolutionsmp.listeners.MobListeners;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
@@ -45,7 +44,6 @@ public enum EnchantmentType {
             }
             return switch (level) {
                 case 1, 2, 3, 4 -> new WeaponStats(level * 10, 0, 0, 0, 0, 0);
-                case 5, 6, 7 -> new WeaponStats((level - 2) * 20, 0, 0, 0, 0, 0);
                 default -> new WeaponStats((level - 2) * 20, 0, 0, 0, 0, 0);
             };
         }
@@ -80,20 +78,11 @@ public enum EnchantmentType {
         public void playerAttackAction(EnchantmentObject enchant, Player attacker, LivingEntity target, double damage, boolean critical, EntityDamageEvent event) {
             int level = enchant.getLevel();
             double damagePercent, range = 3 + (0.3 * level);
-            switch (level) {
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                    damagePercent = 0.03 * level;
-                    break;
-                case 6:
-                    damagePercent = 0.2;
-                    break;
-                default:
-                    damagePercent = 0.4 * level;
-            }
+            damagePercent = switch (level) {
+                case 1, 2, 3, 4, 5 -> 0.03 * level;
+                case 6 -> 0.2;
+                default -> 0.4 * level;
+            };
             Collection<LivingEntity> enemies = attacker.getLocation().getNearbyLivingEntities(range).stream()
                     .filter(c -> MobListeners.getMobInfo(c) != null
                             && MobListeners.getMobInfo(c).getMobBehavior() != MobCategory.TAMED
@@ -745,8 +734,8 @@ public enum EnchantmentType {
                 thunderlordHitCount.put(attacker, 0);
                 int level = enchant.getLevel();
                 double damagePercent = switch (level) {
-                    case 1, 2, 3, 4, 5 -> damagePercent = level * 0.08;
-                    default -> damagePercent = (level - 1) * 0.1;
+                    case 1, 2, 3, 4, 5 -> level * 0.08;
+                    default -> (level - 1) * 0.1;
                 };
                 target.getWorld().strikeLightningEffect(target.getLocation());
                 target.damage(damagePercent * damage);
@@ -1290,6 +1279,9 @@ public enum EnchantmentType {
 
         @Override
         public Enchantment getVanillaEnchantment(ItemID id) {
+            if (id == null) {
+                return null;
+            }
             if (id.getItemType() == ItemType.PICKAXE || id.getItemType() == ItemType.DRILL) {
                 return null;
             }
@@ -1508,11 +1500,9 @@ public enum EnchantmentType {
     }
 
     public void playerAttackAction(EnchantmentObject enchant, Player attacker, LivingEntity target, double damage, boolean critical, EntityDamageEvent event) {
-        return;
     }
 
     public void defenseAction(EnchantmentObject enchant, LivingEntity attacker, Player target, double damage, boolean critical, EntityDamageEvent event) {
-        return;
     }
 
 }

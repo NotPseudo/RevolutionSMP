@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -3852,7 +3853,7 @@ public enum ItemID {
         return false;
     }
 
-    public SpecialItemInfo getSpecialItemInfo(ItemInfo itemInfo) {
+    public @Nullable SpecialItemInfo getSpecialItemInfo(ItemInfo itemInfo) {
         return null;
     }
 

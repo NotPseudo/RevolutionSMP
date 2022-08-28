@@ -16,7 +16,10 @@ public class Particles {
     public static void dualSpiralUp(Particle particle, Entity target, double radius, double height, double seconds, int count) {
         BukkitRunnable dualSpiralUp = new BukkitRunnable() {
 
-            double degree = 0, degreeInc = 360 / (seconds * 20), y = 0, yInc = height / (seconds * 20);
+            double degree = 0;
+            final double degreeInc = 360 / (seconds * 20);
+            double y = 0;
+            final double yInc = height / (seconds * 20);
 
             @Override
             public void run() {
@@ -46,7 +49,10 @@ public class Particles {
     public static void dualSpiralUp(Particle particle, Location location, double radius, double height, double seconds, int count) {
         BukkitRunnable dualSpiralUp = new BukkitRunnable() {
 
-            double degree = 0, degreeInc = 360 / (seconds * 20), y = 0, yInc = height / (seconds * 20);
+            double degree = 0;
+            final double degreeInc = 360 / (seconds * 20);
+            double y = 0;
+            final double yInc = height / (seconds * 20);
 
             @Override
             public void run() {

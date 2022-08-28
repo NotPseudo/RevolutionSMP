@@ -16,16 +16,19 @@ public class GemstonesHolder implements Serializable {
 
     private ItemInfo holder;
     private GemstoneObject[] gems;
-    private GemstoneSlotType[] allowedSlots;
-    private int maxSlots;
+    private final GemstoneSlotType[] allowedSlots;
     private ArrayList<GemstoneObject> oldGems;
 
     public GemstonesHolder(ItemInfo holder, GemstoneSlotType[] allowed) {
         this.holder = holder;
         allowedSlots = allowed;
         gems = new GemstoneObject[allowedSlots.length];
-        this.maxSlots = allowedSlots.length;
         oldGems = new ArrayList<>();
+    }
+
+    public GemstonesHolder transfer(ItemInfo newHolder) {
+        holder = newHolder;
+        return this;
     }
 
     public GemstoneObject[] getGems() {
@@ -97,9 +100,7 @@ public class GemstonesHolder implements Serializable {
                 gemQualityColor = gems[i].getGem().getColor();
                 gemTypeColor = gems[i].getGem().getColor();
             }
-            line.append(gemQualityColor + "[" +
-                        gemTypeColor + allowedSlots[i].getSymbol() +
-                        gemQualityColor + "] ");
+            line.append(gemQualityColor).append("[").append(gemTypeColor).append(allowedSlots[i].getSymbol()).append(gemQualityColor).append("] ");
         }
         return Component.text(line.toString());
     }

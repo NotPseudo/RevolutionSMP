@@ -2,7 +2,7 @@ package me.notpseudo.revolutionsmp.skills;
 
 public class ExpDropObject {
 
-    private SkillType type;
+    private final SkillType type;
     private double value;
 
     public ExpDropObject(SkillType type, double value) {

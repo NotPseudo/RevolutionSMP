@@ -6,7 +6,6 @@ import me.notpseudo.revolutionsmp.items.ItemID;
 import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfoDataType;
-import me.notpseudo.revolutionsmp.listeners.HarvestingListeners;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.*;
@@ -14,7 +13,6 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -152,7 +150,10 @@ public class CollectionUtils implements Listener {
     }
 
     @Nullable
-    public static CollectionType getCollectionForCustom(ItemID material) {
+    public static CollectionType getCollectionForCustom(@Nullable ItemID material) {
+        if (material == null) {
+            return null;
+        }
         for (CollectionType type : CollectionType.values()) {
             if (type.getCustomMaterials().contains(material)) {
                 return type;
@@ -165,7 +166,7 @@ public class CollectionUtils implements Listener {
         if (item.getItemMeta().getPersistentDataContainer().get(playerDroppedKey, new UUIDDataType()) != null) {
             return;
         }
-        ItemInfo info = item.getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        ItemInfo info = ItemEditor.getInfo(item);
         int count;
         CollectionType type;
         if (info != null && info.getItemType() != ItemType.VANILLA_ITEM) {
@@ -208,7 +209,10 @@ public class CollectionUtils implements Listener {
         return 1;
     }
 
-    public static int getCollectionWorth(ItemID itemID) {
+    public static int getCollectionWorth(@Nullable ItemID itemID) {
+        if (itemID == null) {
+            return 0;
+        }
         return 1;
     }
 

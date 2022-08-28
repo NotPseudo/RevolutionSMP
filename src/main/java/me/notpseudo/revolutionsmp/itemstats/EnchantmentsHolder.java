@@ -30,8 +30,11 @@ public class EnchantmentsHolder implements Serializable {
             removeEnchant(incompatibleType);
         }
         if (addEnchant.getType() == EnchantmentType.CUSTOM_EFFICIENCY) {
+            int silex = 0;
             ModifierInfo mod = HOLDER.getModifiers();
-            int silex = mod.getSilex();
+            if (mod != null) {
+                silex = mod.getSilex();
+            }
             addEnchant.setLevel(Math.min(10, addEnchant.getLevel() + silex));
         }
         EnchantmentObject toAdd = getObjectForType(addEnchant.getType());

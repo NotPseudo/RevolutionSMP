@@ -10,6 +10,6 @@ public enum StatCategory {
     GATHERING,
     LUCK,
     WISDOM,
-    REGEN;
+    REGEN
 
 }

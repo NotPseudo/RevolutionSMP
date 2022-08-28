@@ -63,6 +63,9 @@ public class CustomRecipe {
         if (resultInfo == null) {
             return getResult();
         }
+        if (old.getItemID() == null) {
+            return getResult();
+        }
         if (old.getItemID().getUpgradedVersion() != null && old.getItemID().getUpgradedVersion().contains(RESULT_INFO.getItemID())) {
             resultInfo.upgradeFrom(old);
         } else {

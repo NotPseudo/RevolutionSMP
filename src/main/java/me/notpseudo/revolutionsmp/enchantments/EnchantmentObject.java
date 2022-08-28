@@ -1,7 +1,6 @@
 package me.notpseudo.revolutionsmp.enchantments;
 
 import me.notpseudo.revolutionsmp.itemstats.*;
-import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
 import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
@@ -11,9 +10,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 public class EnchantmentObject implements Serializable, Comparable<EnchantmentObject> {
 

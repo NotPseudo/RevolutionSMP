@@ -5,8 +5,6 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.FieldAccessException;
 import com.comphenix.protocol.wrappers.BlockPosition;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.SoundGroup;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -14,10 +12,10 @@ import org.bukkit.util.Vector;
 
 public class BreakingBlock {
 
-    private double damagePerStage;
+    private final double damagePerStage;
     private int previousStage;
     private double damage;
-    private Block block;
+    private final Block block;
 
     public BreakingBlock(Block block, double damagePerStage) {
         this.block = block;

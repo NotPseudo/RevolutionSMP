@@ -30,7 +30,7 @@ public class CreateCustomOreCommand implements CommandExecutor {
         if (args.length < 1) {
             return false;
         }
-        CustomOreType type = null;
+        CustomOreType type;
         try {
             type = CustomOreType.valueOf(args[0].toUpperCase());
         } catch (IllegalArgumentException exception) {

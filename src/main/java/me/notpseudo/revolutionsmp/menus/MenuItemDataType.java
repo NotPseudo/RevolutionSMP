@@ -1,6 +1,5 @@
 package me.notpseudo.revolutionsmp.menus;
 
-import me.notpseudo.revolutionsmp.economy.PlayerEcoInfo;
 import org.apache.commons.lang3.SerializationUtils;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;

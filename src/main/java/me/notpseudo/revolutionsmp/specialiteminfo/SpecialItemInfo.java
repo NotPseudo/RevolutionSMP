@@ -1,9 +1,7 @@
 package me.notpseudo.revolutionsmp.specialiteminfo;
 
 import me.notpseudo.revolutionsmp.itemstats.*;
-import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
 import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
-import me.notpseudo.revolutionsmp.skills.SkillType;
 import net.kyori.adventure.text.Component;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
@@ -18,7 +16,7 @@ import java.util.UUID;
 
 public class SpecialItemInfo implements Serializable {
 
-    private ItemInfo holder;
+    private final ItemInfo holder;
 
     public SpecialItemInfo(ItemInfo holder) {
         this.holder = holder;
@@ -28,8 +26,12 @@ public class SpecialItemInfo implements Serializable {
         return holder;
     }
 
-    public UUID getOwner() {
-        return holder.getOwner();
+    public @NotNull UUID getOwner() {
+        UUID holdOwner = holder.getOwner();
+        if (holdOwner == null) {
+            return UUID.randomUUID();
+        }
+        return holdOwner;
     }
 
     public WeaponStats getEventWeapon(Player damager, LivingEntity target, EntityDamageEvent event, IncreaseType type) {

@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public class SkillHolder implements Serializable {
 
-    private UUID player;
+    private final UUID player;
     private ArrayList<SkillObject> skills;
 
     /**

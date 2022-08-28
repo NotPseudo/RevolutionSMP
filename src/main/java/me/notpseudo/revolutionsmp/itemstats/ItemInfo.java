@@ -14,6 +14,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -61,14 +62,31 @@ public class ItemInfo implements Serializable {
         luckStats = itemID.getDefaultLuckStats();
         regenStats = itemID.getDefaultRegenStats();
         wisdomStats = itemID.getDefaultWisdomStats();
-        modifiers = new ModifierInfo(this);
+        if (itemType.allowModifiers()) {
+            modifiers = new ModifierInfo(this);
+        } else {
+            modifiers = null;
+        }
         if (itemID.getGemstoneSlots() != null) {
             gemstonesHolder = new GemstonesHolder(this, itemID.getGemstoneSlots());
+        } else {
+            gemstonesHolder = null;
         }
-        enchantmentsHolder = new EnchantmentsHolder(this);
-        abilitiesHolder = new AbilitiesHolder(this);
-        for (AbilityType type : itemID.getDefaultAbilities()) {
-            abilitiesHolder.addAbility(type);
+        if (itemType.allowEnchants() || itemID == ItemID.ENCHANTED_BOOK) {
+            enchantmentsHolder = new EnchantmentsHolder(this);
+            for (EnchantmentObject enchant : itemID.getDefaultEnchantments()) {
+                enchantmentsHolder.addEnchant(enchant);
+            }
+        } else {
+            enchantmentsHolder = null;
+        }
+        if (itemType.allowAbilities()) {
+            abilitiesHolder = new AbilitiesHolder(this);
+            for (AbilityType type : itemID.getDefaultAbilities()) {
+                abilitiesHolder.addAbility(type);
+            }
+        } else {
+            abilitiesHolder = null;
         }
         extraInfo = itemID.getSpecialItemInfo(this);
         vanillaMaterial = itemID.getMaterial();
@@ -94,14 +112,31 @@ public class ItemInfo implements Serializable {
             luckStats = itemID.getDefaultLuckStats();
             regenStats = itemID.getDefaultRegenStats();
             wisdomStats = itemID.getDefaultWisdomStats();
-            modifiers = new ModifierInfo(this);
+            if (itemType.allowModifiers()) {
+                modifiers = new ModifierInfo(this);
+            } else {
+                modifiers = null;
+            }
             if (itemID.getGemstoneSlots() != null) {
                 gemstonesHolder = new GemstonesHolder(this, itemID.getGemstoneSlots());
+            } else {
+                gemstonesHolder = null;
             }
-            enchantmentsHolder = new EnchantmentsHolder(this);
-            abilitiesHolder = new AbilitiesHolder(this);
-            for (AbilityType type : itemID.getDefaultAbilities()) {
-                abilitiesHolder.addAbility(type);
+            if (itemType.allowEnchants() || itemID == ItemID.ENCHANTED_BOOK) {
+                enchantmentsHolder = new EnchantmentsHolder(this);
+                for (EnchantmentObject enchant : itemID.getDefaultEnchantments()) {
+                    enchantmentsHolder.addEnchant(enchant);
+                }
+            } else {
+                enchantmentsHolder = null;
+            }
+            if (itemType.allowAbilities()) {
+                abilitiesHolder = new AbilitiesHolder(this);
+                for (AbilityType type : itemID.getDefaultAbilities()) {
+                    abilitiesHolder.addAbility(type);
+                }
+            } else {
+                abilitiesHolder = null;
             }
             extraInfo = itemID.getSpecialItemInfo(this);
             vanillaMaterial = itemID.getMaterial();
@@ -121,15 +156,15 @@ public class ItemInfo implements Serializable {
                 rarity = Rarity.COMMON;
             }
             itemType = ItemType.VANILLA_ITEM;
-            weaponStats = WeaponStats.createZero();
-            armorStats = ArmorStats.createZero();
-            abilityStats = AbilityStats.createZero();
-            fishingStats = FishingStats.createZero();
-            miningStats = MiningStats.createZero();
-            gatheringStats = GatheringStats.createZero();
-            luckStats = LuckStats.createZero();
-            regenStats = RegenStats.createZero();
-            wisdomStats = WisdomStats.createZero();
+            weaponStats = null;
+            armorStats = null;
+            abilityStats = null;
+            fishingStats = null;
+            miningStats = null;
+            gatheringStats = null;
+            luckStats = null;
+            regenStats = null;
+            wisdomStats = null;
             modifiers = null;
             gemstonesHolder = null;
             enchantmentsHolder = null;
@@ -148,7 +183,7 @@ public class ItemInfo implements Serializable {
         this.name = name;
     }
 
-    public Rarity getRarity() {
+    public @NotNull Rarity getRarity() {
         return rarity;
     }
 
@@ -161,7 +196,7 @@ public class ItemInfo implements Serializable {
         return recomb;
     }
 
-    public ItemType getItemType() {
+    public @NotNull ItemType getItemType() {
         return itemType;
     }
 
@@ -169,7 +204,7 @@ public class ItemInfo implements Serializable {
         this.itemType = itemType;
     }
 
-    public Reforge getReforge() {
+    public @Nullable Reforge getReforge() {
         return reforge;
     }
 
@@ -180,7 +215,7 @@ public class ItemInfo implements Serializable {
         }
     }
 
-    public ItemID getItemID() {
+    public @Nullable ItemID getItemID() {
         return itemID;
     }
 
@@ -189,11 +224,11 @@ public class ItemInfo implements Serializable {
         recalculate();
     }
 
-    public GemstonesHolder getGemstonesHolder() {
+    public @Nullable GemstonesHolder getGemstonesHolder() {
         return gemstonesHolder;
     }
 
-    public EnchantmentsHolder getEnchantmentsHolder() {
+    public @Nullable EnchantmentsHolder getEnchantmentsHolder() {
         return enchantmentsHolder;
     }
 
@@ -211,7 +246,7 @@ public class ItemInfo implements Serializable {
         }
     }
 
-    public AbilitiesHolder getAbilitiesHolder() {
+    public @Nullable AbilitiesHolder getAbilitiesHolder() {
         return abilitiesHolder;
     }
 
@@ -229,11 +264,11 @@ public class ItemInfo implements Serializable {
         }
     }
 
-    public ModifierInfo getModifiers() {
+    public @Nullable ModifierInfo getModifiers() {
         return modifiers;
     }
 
-    public SpecialItemInfo getExtraInfo() {
+    public @Nullable SpecialItemInfo getExtraInfo() {
         return extraInfo;
     }
 
@@ -242,7 +277,7 @@ public class ItemInfo implements Serializable {
         recalculate();
     }
 
-    public Material getVanillaMaterial() {
+    public @NotNull Material getVanillaMaterial() {
         return vanillaMaterial;
     }
 
@@ -251,7 +286,7 @@ public class ItemInfo implements Serializable {
         recalculate();
     }
 
-    public String getTexture() {
+    public @Nullable String getTexture() {
         return texture;
     }
 
@@ -259,16 +294,22 @@ public class ItemInfo implements Serializable {
         this.texture = texture;
     }
 
-    public UUID getOwner() {
+    public @Nullable UUID getOwner() {
         return owner;
     }
 
     public void setOwner(UUID owner) {
+        if (itemType == ItemType.VANILLA_ITEM) {
+            return;
+        }
         this.owner = owner;
         recalculate();
     }
 
     public void recomb() {
+        if (!itemType.allowRecomb()) {
+            return;
+        }
         if (!recomb) {
             recomb = true;
             upgradeRarity();
@@ -284,6 +325,9 @@ public class ItemInfo implements Serializable {
     }
 
     public void copy(ItemInfo older) {
+        if (itemType == ItemType.VANILLA_ITEM) {
+            return;
+        }
         modifiers = older.modifiers;
         reforge = older.reforge;
         if (older.recomb) {
@@ -306,11 +350,14 @@ public class ItemInfo implements Serializable {
     }
 
     public boolean canCombine(@NotNull ItemInfo other) {
+        if (itemType == ItemType.VANILLA_ITEM) {
+            return false;
+        }
         if (other.itemID == ItemID.HOT_POTATO_BOOK) {
-            return itemType.allowPotatoBooks() && modifiers.getTotalPotatoBooks() < 10;
+            return itemType.allowModifiers() && modifiers.getTotalPotatoBooks() < 10;
         }
         if (other.itemID == ItemID.FUMING_POTATO_BOOK) {
-            return itemType.allowPotatoBooks() && modifiers.getTotalPotatoBooks() < 15;
+            return itemType.allowModifiers() && modifiers.getTotalPotatoBooks() < 15;
         }
         if (other.itemID == ItemID.RECOMBOBULATOR_3000) {
             return itemType.allowRecomb() && !isRecomb();
@@ -366,6 +413,9 @@ public class ItemInfo implements Serializable {
     }
 
     public void upgradeFrom(ItemInfo older) {
+        if (itemType == ItemType.VANILLA_ITEM) {
+            return;
+        }
         modifiers.combine(older.modifiers);
         reforge = older.reforge;
         if (older.recomb) {
@@ -389,6 +439,9 @@ public class ItemInfo implements Serializable {
     }
 
     public void recalculate() {
+        if (itemType == ItemType.VANILLA_ITEM) {
+            return;
+        }
         if (itemID != null) {
             weaponStats = itemID.getDefaultWeaponStats();
             armorStats = itemID.getDefaultArmorStats();
@@ -458,74 +511,101 @@ public class ItemInfo implements Serializable {
 
     public double getStatValue(StatType type) {
         return switch (type.getStatCategory()) {
-            case COMBAT -> weaponStats.getStatValue(type);
-            case ARMOR -> armorStats.getStatValue(type);
-            case INTELLIGENCE -> abilityStats.getStatValue(type);
-            case FISHING -> fishingStats.getStatValue(type);
-            case MINING -> miningStats.getStatValue(type);
-            case GATHERING -> gatheringStats.getStatValue(type);
-            case LUCK -> luckStats.getStatValue(type);
-            case WISDOM -> wisdomStats.getStatValue(type);
-            case REGEN -> regenStats.getStatValue(type);
+            case COMBAT -> getWeaponStats().getStatValue(type);
+            case ARMOR -> getArmorStats().getStatValue(type);
+            case INTELLIGENCE -> getAbilityStats().getStatValue(type);
+            case FISHING -> getFishingStats().getStatValue(type);
+            case MINING -> getMiningStats().getStatValue(type);
+            case GATHERING -> getGatheringStats().getStatValue(type);
+            case LUCK -> getLuckStats().getStatValue(type);
+            case WISDOM -> getWisdomStats().getStatValue(type);
+            case REGEN -> getRegenStats().getStatValue(type);
         };
     }
 
     public StatObject getStatObject(StatType type) {
         return switch (type.getStatCategory()) {
-            case COMBAT -> weaponStats.getStatObject(type);
-            case ARMOR -> armorStats.getStatObject(type);
-            case INTELLIGENCE -> abilityStats.getStatObject(type);
-            case FISHING -> fishingStats.getStatObject(type);
-            case MINING -> miningStats.getStatObject(type);
-            case GATHERING -> gatheringStats.getStatObject(type);
-            case LUCK -> luckStats.getStatObject(type);
-            case WISDOM -> wisdomStats.getStatObject(type);
-            case REGEN -> regenStats.getStatObject(type);
+            case COMBAT -> getWeaponStats().getStatObject(type);
+            case ARMOR -> getArmorStats().getStatObject(type);
+            case INTELLIGENCE -> getAbilityStats().getStatObject(type);
+            case FISHING -> getFishingStats().getStatObject(type);
+            case MINING -> getMiningStats().getStatObject(type);
+            case GATHERING -> getGatheringStats().getStatObject(type);
+            case LUCK -> getLuckStats().getStatObject(type);
+            case WISDOM -> getWisdomStats().getStatObject(type);
+            case REGEN -> getRegenStats().getStatObject(type);
         };
     }
 
     @NotNull
     public WeaponStats getWeaponStats() {
+        if (weaponStats == null) {
+            return WeaponStats.createZero();
+        }
         return weaponStats;
     }
 
     @NotNull
     public ArmorStats getArmorStats() {
+        if (armorStats == null) {
+            return ArmorStats.createZero();
+        }
         return armorStats;
     }
 
     @NotNull
     public AbilityStats getAbilityStats() {
+        if (abilityStats == null) {
+            return AbilityStats.createZero();
+        }
         return abilityStats;
     }
 
     @NotNull
     public FishingStats getFishingStats() {
+        if (fishingStats == null) {
+            return FishingStats.createZero();
+        }
         return fishingStats;
     }
 
     @NotNull
     public MiningStats getMiningStats() {
+        if (miningStats == null) {
+            return MiningStats.createZero();
+        }
         return miningStats;
     }
 
     @NotNull
     public GatheringStats getGatheringStats() {
+        if (gatheringStats == null) {
+            return GatheringStats.createZero();
+        }
         return gatheringStats;
     }
 
     @NotNull
     public LuckStats getLuckStats() {
+        if (luckStats == null) {
+            return LuckStats.createZero();
+        }
         return luckStats;
     }
 
     @NotNull
     public RegenStats getRegenStats() {
+        if (regenStats == null) {
+            return RegenStats.createZero();
+        }
         return regenStats;
     }
 
     @NotNull
     public WisdomStats getWisdomStats() {
+        if (wisdomStats == null) {
+            return WisdomStats.createZero();
+        }
         return wisdomStats;
     }
 

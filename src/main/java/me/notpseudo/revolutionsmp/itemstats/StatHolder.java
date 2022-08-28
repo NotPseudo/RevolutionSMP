@@ -1,6 +1,5 @@
 package me.notpseudo.revolutionsmp.itemstats;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
@@ -59,7 +58,7 @@ public class StatHolder implements Serializable {
         stats.add(newStat);
     }
 
-    public StatObject getStatObject(StatType type) {
+    public @Nullable StatObject getStatObject(StatType type) {
         for (StatObject stat : stats) {
             if (stat.getType() == type) {
                 return stat;

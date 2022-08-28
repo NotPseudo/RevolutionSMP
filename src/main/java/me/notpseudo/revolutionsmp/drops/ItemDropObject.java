@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class ItemDropObject {
 
-    private double chance;
+    private final double chance;
     private ItemStack item;
     private boolean isCustom;
 

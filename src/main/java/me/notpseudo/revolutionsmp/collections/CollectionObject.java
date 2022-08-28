@@ -19,8 +19,6 @@ public class CollectionObject implements Serializable, Comparable<CollectionObje
     private final CollectionsHolder holder;
     private final CollectionType TYPE;
     private final SkillType CATEGORY;
-    private ArrayList<Material> vanillaMaterials;
-    private ArrayList<ItemID> customMaterials;
     private double totalCollected;
     private int currentCollected;
     private int itemsForNextLevel;
@@ -30,8 +28,6 @@ public class CollectionObject implements Serializable, Comparable<CollectionObje
         this.holder = holder;
         TYPE = type;
         CATEGORY = type.getCategory();
-        vanillaMaterials = new ArrayList<>(type.getVanillaMaterials());
-        customMaterials = new ArrayList<>(type.getCustomMaterials());
         totalCollected = 0;
         currentCollected = 0;
         itemsForNextLevel = CollectionUtils.getCountForNextLevel(TYPE, 1);
@@ -64,11 +60,11 @@ public class CollectionObject implements Serializable, Comparable<CollectionObje
     }
 
     public boolean contains(Material material) {
-        return vanillaMaterials.contains(material);
+        return TYPE.getVanillaMaterials().contains(material);
     }
 
     public boolean contains(ItemID itemID) {
-        return customMaterials.contains(itemID);
+        return TYPE.getCustomMaterials().contains(itemID);
     }
 
     public void add(int count) {
@@ -89,31 +85,19 @@ public class CollectionObject implements Serializable, Comparable<CollectionObje
     public void recalculate() {
         while (currentCollected < 0) {
             level--;
-            itemsForNextLevel = CollectionUtils.getCountForNextLevel(TYPE, (int) level + 1);
+            itemsForNextLevel = CollectionUtils.getCountForNextLevel(TYPE, level + 1);
             currentCollected += itemsForNextLevel;
         }
         while (currentCollected >= itemsForNextLevel && level <= TYPE.getMaxLevel()) {
             currentCollected -= itemsForNextLevel;
             level++;
-            itemsForNextLevel = CollectionUtils.getCountForNextLevel(TYPE, (int) level + 1);
+            itemsForNextLevel = CollectionUtils.getCountForNextLevel(TYPE, level + 1);
             Player player = Bukkit.getPlayer(holder.getPlayer());
             if (player != null) {
                 sendLevelUpMessage(player);
             }
         }
-        itemsForNextLevel = CollectionUtils.getCountForNextLevel(TYPE, (int) level + 1);
-    }
-
-    public void addNewMaterial(Material material) {
-        if (!contains(material)) {
-            vanillaMaterials.add(material);
-        }
-    }
-
-    public void addNewMaterial(ItemID material) {
-        if (!contains(material)) {
-            customMaterials.add(material);
-        }
+        itemsForNextLevel = CollectionUtils.getCountForNextLevel(TYPE, level + 1);
     }
 
     private void sendLevelUpMessage(Player player) {

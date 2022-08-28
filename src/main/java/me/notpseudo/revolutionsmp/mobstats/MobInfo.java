@@ -12,7 +12,7 @@ import java.util.*;
 
 public class MobInfo extends BaseEntityStats implements Serializable {
 
-    private UUID holder;
+    private final UUID holder;
     private UUID owningPlayer;
     private HashMap<UUID, Double> attackers;
     private MobCategory mobCategory;

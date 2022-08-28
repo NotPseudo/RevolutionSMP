@@ -6,7 +6,6 @@ import me.notpseudo.revolutionsmp.listeners.HealthListeners;
 import me.notpseudo.revolutionsmp.listeners.MobListeners;
 import me.notpseudo.revolutionsmp.listeners.StatsListeners;
 import me.notpseudo.revolutionsmp.mobstats.MobCategory;
-import me.notpseudo.revolutionsmp.mobstats.MobInfoDataType;
 import me.notpseudo.revolutionsmp.particles.Particles;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStatsDataType;
@@ -24,14 +23,14 @@ import java.util.*;
 public class AbilitiesUtil {
 
     // A Set of non-solid block materials that players can walk through. Used in teleportation abilities
-    private static Set<Material> passSet = new HashSet<>();
+    private final static Set<Material> passSet;
     private static final NamespacedKey playerKey = StatsListeners.getPlayerStatsKey();
-    private static final NamespacedKey mobKey = MobListeners.getMobKey();
     private static HashMap<UUID, Location> shadowWarpActivate = new HashMap<>();
     private static ArrayList<UUID> noMana = new ArrayList<>();
     private static ArrayList<UUID> noCooldown = new ArrayList<>();
 
-    public static void createPassSet() {
+    static {
+        passSet = new HashSet<>();
         for (Material material : Material.values()) {
             if (material.isBlock() && !material.isCollidable()) {
                 passSet.add(material);
@@ -77,8 +76,8 @@ public class AbilitiesUtil {
 
     public static void implosion(Player player, double range) {
         Collection<LivingEntity> enemies = player.getLocation().getNearbyLivingEntities(range).stream()
-                .filter(c -> c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()) != null
-                        && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobCategory.TAMED
+                .filter(c -> MobListeners.getMobInfo(c) != null
+                        && MobListeners.getMobInfo(c).getMobBehavior() != MobCategory.TAMED
                 ).toList();
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1F, 1F);
         Particles.explode(player.getLocation());
@@ -118,8 +117,8 @@ public class AbilitiesUtil {
         if (shadowWarpActivate.containsKey(playerID)) {
             location = shadowWarpActivate.get(playerID);
             Collection<LivingEntity> enemies = location.getNearbyLivingEntities(3).stream()
-                    .filter(c -> c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()) != null
-                            && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobCategory.TAMED
+                    .filter(c -> MobListeners.getMobInfo(c) != null
+                            && MobListeners.getMobInfo(c).getMobBehavior() != MobCategory.TAMED
                     ).toList();
             player.getWorld().playSound(location, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1F, 1F);
             Particles.explode(location);
@@ -210,8 +209,8 @@ public class AbilitiesUtil {
     public static void suckEnemies(Location location, double range) {
         double x  = location.getX(), z = location.getZ();
         for (LivingEntity entity : location.getNearbyLivingEntities(range).stream()
-                .filter(c -> c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()) != null
-                        && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobCategory.TAMED
+                .filter(c -> MobListeners.getMobInfo(c) != null
+                        && MobListeners.getMobInfo(c).getMobBehavior() != MobCategory.TAMED
                 ).toList()) {
             entity.setVelocity(new Location(location.getWorld(), x, entity.getLocation().getY(), z).toVector().subtract(entity.getLocation().toVector()).multiply(Math.random() * 1.5));
         }

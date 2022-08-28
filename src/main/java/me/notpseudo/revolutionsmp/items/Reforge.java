@@ -1,7 +1,6 @@
 package me.notpseudo.revolutionsmp.items;
 
 import me.notpseudo.revolutionsmp.itemstats.*;
-import me.notpseudo.revolutionsmp.itemstats.IncreaseType;
 import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
 import me.notpseudo.revolutionsmp.skills.SkillHolder;
 import me.notpseudo.revolutionsmp.skills.SkillType;
@@ -15,8 +14,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -368,7 +367,10 @@ public enum Reforge {
         @Override
         public @NotNull WeaponStats getWeaponStats(Rarity rarity, UUID player) {
             int strength = 0;
-            Player holder = Bukkit.getPlayer(player);
+            Player holder = null;
+            if (player != null) {
+                holder = Bukkit.getPlayer(player);
+            }
             if (holder != null) {
                 SkillHolder skillContainer = SkillUtils.getHolder(holder);
                 strength = (int) skillContainer.getSkill(SkillType.ABYSS).getLevel();
@@ -2069,7 +2071,7 @@ public enum Reforge {
 
     // Gets the weapon stats the Reforge boosts
     @NotNull
-    public WeaponStats getWeaponStats(Rarity rarity, UUID player) {
+    public WeaponStats getWeaponStats(Rarity rarity, @Nullable UUID player) {
         return WeaponStats.createZero();
     }
 

@@ -29,7 +29,7 @@ public class ModifierInfo implements Serializable {
     }
 
     public boolean addHotPotatoBook() {
-        if (!HOLDER.getItemType().allowPotatoBooks()) {
+        if (!HOLDER.getItemType().allowModifiers()) {
             return false;
         }
         if (totalPotatoBooks < 10) {
@@ -41,7 +41,7 @@ public class ModifierInfo implements Serializable {
     }
 
     public boolean addFumingPotatoBook() {
-        if (!HOLDER.getItemType().allowPotatoBooks()) {
+        if (!HOLDER.getItemType().allowModifiers()) {
             return false;
         }
         if (totalPotatoBooks < 15) {
@@ -57,7 +57,7 @@ public class ModifierInfo implements Serializable {
     }
 
     public void setTotalBooks(int books) {
-        if (!HOLDER.getItemType().allowPotatoBooks()) {
+        if (!HOLDER.getItemType().allowModifiers()) {
             return;
         }
         totalPotatoBooks = books;
@@ -69,6 +69,9 @@ public class ModifierInfo implements Serializable {
     }
 
     public boolean addWoodSingularity() {
+        if (HOLDER.getItemID() == null) {
+            return false;
+        }
         if (!(ItemEditor.isWeapon(HOLDER) && HOLDER.getItemID().getMaterial().toString().contains("WOODEN"))) {
             return false;
         }
@@ -81,6 +84,9 @@ public class ModifierInfo implements Serializable {
     }
 
     public void setWoodSingularity(int total) {
+        if (HOLDER.getItemID() == null) {
+            return;
+        }
         if (!(ItemEditor.isWeapon(HOLDER) && HOLDER.getItemID().getMaterial().toString().contains("WOODEN"))) {
             return;
         }

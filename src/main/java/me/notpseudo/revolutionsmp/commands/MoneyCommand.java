@@ -35,7 +35,7 @@ public class MoneyCommand implements CommandExecutor {
         }
         String type = args[0];
         String action = args[1];
-        double amount = 0;
+        double amount;
         try {
             amount = Double.parseDouble(args[2]);
         } catch (NumberFormatException exception) {

@@ -24,7 +24,7 @@ public interface CustomRecipeChoice extends Predicate<ItemStack>, Cloneable {
      * Returns the amount of the material needed
      * @return The amount of the material needed
      */
-    public int getCount();
+    int getCount();
 
     /**
      * Checks if an item satisfies the CustomRecipeChoice
@@ -32,15 +32,14 @@ public interface CustomRecipeChoice extends Predicate<ItemStack>, Cloneable {
      * @return true if the ItemStack satisfies the CustomRecipeChoice
      */
     @Override
-    public boolean test(ItemStack item);
+    boolean test(ItemStack item);
 
-    @NotNull
-    public CustomRecipeChoice clone();
+    @NotNull CustomRecipeChoice clone();
 
     /**
      * Represents a choice that be valid only if the tested item has a matching ItemID and a sufficient amount
      */
-    public static class ItemIDChoice implements CustomRecipeChoice {
+    class ItemIDChoice implements CustomRecipeChoice {
 
         private List<ItemID> ids;
         private int count;
@@ -153,7 +152,7 @@ public interface CustomRecipeChoice extends Predicate<ItemStack>, Cloneable {
     /**
      * Represents a choice that will be valid only if the tested item has a matching material and sufficient amount. The item must also be a vanilla item
      */
-    public static class ItemStackChoice implements CustomRecipeChoice {
+    class ItemStackChoice implements CustomRecipeChoice {
 
         private List<Material> materials;
         private int count;

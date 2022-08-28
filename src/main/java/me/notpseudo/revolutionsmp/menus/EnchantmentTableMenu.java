@@ -242,6 +242,9 @@ public class EnchantmentTableMenu extends Menu {
             return;
         }
         EnchantmentsHolder holder = info.getEnchantmentsHolder();
+        if (holder == null) {
+            return;
+        }
         EnchantmentObject enchant = holder.getObjectForType(type);
         for (int enchLevel = type.getMinLevel(); enchLevel <= type.getEnchTableMax(); enchLevel++) {
             int levelFromLowest = enchLevel - type.getMinLevel();

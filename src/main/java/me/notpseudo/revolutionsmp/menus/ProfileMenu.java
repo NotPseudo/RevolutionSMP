@@ -1,8 +1,6 @@
 package me.notpseudo.revolutionsmp.menus;
 
 import me.notpseudo.revolutionsmp.itemstats.StatType;
-import me.notpseudo.revolutionsmp.listeners.StatsListeners;
-import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
