@@ -166,10 +166,7 @@ public class AdvancedReforgeMenu extends Menu {
             return false;
         }
         infoClone.setReforge(reforge);
-        ItemMeta meta = itemClone.getItemMeta();
-        meta.getPersistentDataContainer().set(ItemEditor.getItemKey(), new ItemInfoDataType(), infoClone);
-        ItemEditor.updateLore(meta);
-        itemClone.setItemMeta(meta);
+        ItemEditor.updateItemInfo(itemClone, infoClone);
         inventory.setItem(13, makeMenuType(itemClone, null));
         setBottomRow(Material.LIME_STAINED_GLASS_PANE);
         return true;

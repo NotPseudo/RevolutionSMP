@@ -19,8 +19,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 public class GemstoneUtils {
 
-    private static final NamespacedKey itemKey = ItemEditor.getItemKey();
-
     public static double rubyValue(Rarity quality, Rarity rarity) {
         return switch (quality) {
             case COMMON -> switch (rarity) {
@@ -395,7 +393,7 @@ public class GemstoneUtils {
         PlayerProfile profile = Bukkit.getServer().createProfile(ItemEditor.getSkullUUID());
         profile.setProperty(new ProfileProperty("textures", gemInfo.getTexture()));
         ((SkullMeta) meta).setPlayerProfile(profile);
-        meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), info);
+        meta.getPersistentDataContainer().set(ItemEditor.getItemKey(), new ItemInfoDataType(), info);
         ItemEditor.updateLore(meta);
         item.setItemMeta(meta);
         item.setAmount(count);
@@ -403,10 +401,10 @@ public class GemstoneUtils {
     }
 
     public static boolean isGemstone(ItemStack item) {
-        if (item.getType() == Material.AIR) {
+        if (item == null || item.getType() == Material.AIR) {
             return false;
         }
-        ItemInfo info = item.getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        ItemInfo info = ItemEditor.getInfo(item);
         if (info == null) {
             return false;
         }
@@ -421,10 +419,10 @@ public class GemstoneUtils {
     }
 
     public static GemstoneType getGemTypeFromItem(ItemStack item) {
-        if (item.getType() == Material.AIR) {
+        if (item == null ||item.getType() == Material.AIR) {
             return null;
         }
-        ItemInfo info = item.getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        ItemInfo info = ItemEditor.getInfo(item);
         if (info == null) {
             return null;
         }
@@ -438,10 +436,10 @@ public class GemstoneUtils {
     }
 
     public static GemstoneObject getGemObject(ItemStack item) {
-        if (item.getType() == Material.AIR) {
+        if (item == null ||item.getType() == Material.AIR) {
             return null;
         }
-        ItemInfo info = item.getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        ItemInfo info = ItemEditor.getInfo(item);
         if (info == null) {
             return null;
         }
@@ -455,10 +453,10 @@ public class GemstoneUtils {
     }
 
     public static String getRating(ItemStack item) {
-        if (item.getType() == Material.AIR) {
+        if (item == null ||item.getType() == Material.AIR) {
             return null;
         }
-        ItemInfo info = item.getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        ItemInfo info = ItemEditor.getInfo(item);
         if (info == null) {
             return null;
         }

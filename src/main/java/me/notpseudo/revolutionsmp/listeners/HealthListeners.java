@@ -21,6 +21,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -38,14 +39,7 @@ public class HealthListeners implements Listener {
      * Holds an instance of the plugin
      */
     private static RevolutionSMP plugin = RevolutionSMP.getPlugin();
-    /**
-     * The NamespacedKey from the MobListeners class used to access MobInfo stored in Persistent Data
-     */
-    private final static NamespacedKey mobKey = MobListeners.getMobKey();
-    /**
-     * The NamespacedKey from the StatsListeners class used to access PlayerStats stored in Persistent Data
-     */
-    private final static NamespacedKey playerKey = StatsListeners.getPlayerStatsKey();
+
     /**
      * Number to represent the next available Entity ID used for creating custom armor stands with packets
      */
@@ -92,6 +86,9 @@ public class HealthListeners implements Listener {
      */
     public static int getNextIndicatorCount() {
         indicatorCount++;
+        if (indicatorCount == 9999999) {
+            indicatorCount = 999999;
+        }
         return indicatorCount - 1;
     }
 
@@ -104,12 +101,9 @@ public class HealthListeners implements Listener {
         if (!(entity instanceof Creature || entity instanceof ComplexLivingEntity)) {
             return;
         }
-        MobInfo mobInfo = entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
+        MobInfo mobInfo = MobListeners.getMobInfo(entity);
         if (mobInfo == null) {
-            mobInfo = MobListeners.createMobInfo(entity);
-            if (mobInfo == null) {
-                return;
-            }
+            return;
         }
         String nameString = "" + mobInfo.getMobBehavior().getBehaviorColor() + mobInfo.getName();
         String healthString;
@@ -164,12 +158,9 @@ public class HealthListeners implements Listener {
         if (!(entity instanceof Creature || entity instanceof ComplexLivingEntity)) {
             return;
         }
-        MobInfo mobInfo = entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
+        MobInfo mobInfo = MobListeners.getMobInfo(entity);
         if (mobInfo == null) {
-            mobInfo = MobListeners.createMobInfo(entity);
-            if (mobInfo == null) {
-                return;
-            }
+            return;
         }
         String nameString = "" + mobInfo.getMobBehavior().getBehaviorColor() + mobInfo.getName();
         String healthString;
@@ -392,13 +383,11 @@ public class HealthListeners implements Listener {
             weaponDamage += 5;
             damagerStats = StatsListeners.getPlayerStats(player);
             attackCharge = player.getAttackCooldown();
-            if (player.getInventory().getItemInMainHand().getType() != Material.AIR && player.getInventory().getItemInMainHand().getItemMeta() != null) {
-                ItemMeta mainHandMeta = player.getInventory().getItemInMainHand().getItemMeta();
-                if (mainHandMeta != null) {
-                    ItemInfo mainHandInfo = mainHandMeta.getPersistentDataContainer().get(ItemEditor.getItemKey(), new ItemInfoDataType());
+            ItemStack mainHand = player.getInventory().getItemInMainHand();
+            if (mainHand.getType() != Material.AIR && mainHand.getItemMeta() != null) {
+                    ItemInfo mainHandInfo = ItemEditor.getInfo(player.getInventory().getItemInMainHand());
                     if (mainHandInfo != null) {
                         weaponDamage = mainHandInfo.getWeaponStats().getStatValue(StatType.DAMAGE) + 5;
-                    }
                 }
             }
             damageInc = StatsListeners.getEventWeaponStats(player, target, event, IncreaseType.INCREASE);
@@ -505,12 +494,12 @@ public class HealthListeners implements Listener {
         if (remainAbsorption <= 0) {
             playerStats.setAbsorption(0);
             player.setAbsorptionAmount(0);
-            player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
+            StatsListeners.updatePlayerStats(player, playerStats);
             return Math.max(0, damageLeft);
         } else {
             playerStats.setAbsorption(remainAbsorption);
             player.setAbsorptionAmount(Math.min(40, remainAbsorption));
-            player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
+            StatsListeners.updatePlayerStats(player, playerStats);
             return 0;
         }
     }
@@ -520,7 +509,7 @@ public class HealthListeners implements Listener {
             PlayerStats playerStats = StatsListeners.getPlayerStats(player);
             double currentHealth = playerStats.getStatValue(StatType.HEALTH), healthLeft = Math.max(currentHealth - amount, 0);
             playerStats.setStatValue(StatType.HEALTH, healthLeft);
-            player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
+            StatsListeners.updatePlayerStats(player, playerStats);
             if (currentHealth > 2048) {
                 if (healthLeft < 2048) {
                     return 2048 - healthLeft;
@@ -539,7 +528,7 @@ public class HealthListeners implements Listener {
         }
         double currentHealth = mobInfo.getStatValue(StatType.HEALTH), healthLeft = Math.max(currentHealth - amount, 0);
         mobInfo.setStatValue(StatType.HEALTH, healthLeft);
-        target.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
+        MobListeners.updateMobInfo(target, mobInfo);
         StatsListeners.updateEntityStats(target);
         updateHealthBar(target);
         if (currentHealth > 2048) {
@@ -556,7 +545,7 @@ public class HealthListeners implements Listener {
             PlayerStats playerStats = StatsListeners.getPlayerStats(player);
             double original = playerStats.getStatValue(StatType.HEALTH), updated = Math.min(original + amount, playerStats.getMaxHealth());
             playerStats.setStatValue(StatType.HEALTH, updated);
-            player.getPersistentDataContainer().set(playerKey, new PlayerStatsDataType(), playerStats);
+            StatsListeners.updatePlayerStats(player, playerStats);
             StatsListeners.updateStats(player);
             if (original >= 2048) {
                 return 0;
@@ -572,7 +561,7 @@ public class HealthListeners implements Listener {
         }
         double original = mobInfo.getStatValue(StatType.HEALTH), updated = Math.min(original + amount, mobInfo.getMaxHealth());
         mobInfo.setStatValue(StatType.HEALTH, updated);
-        target.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
+        MobListeners.updateMobInfo(target, mobInfo);
         StatsListeners.updateEntityStats(target);
         updateHealthBar(target);
         if (original >= 2048) {

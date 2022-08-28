@@ -56,12 +56,6 @@ public class StatsListeners implements Listener {
      * The NamespacedKey used to access PlayerStats held in persistent data
      */
     private final static NamespacedKey playerStatsKey = new NamespacedKey(RevolutionSMP.getPlugin(RevolutionSMP.class), "playerStats");
-    /**
-     * The NamedspacedKey from the ItemEditor class used to access ItemStats stored in Persistent Data
-     */
-    private final static NamespacedKey itemKey = ItemEditor.getItemKey();
-
-    private final static NamespacedKey mobKey = MobListeners.getMobKey();
 
     private static ArrayList<UUID> showAbilities = new ArrayList<>();
     private static ArrayList<UUID> noMana = new ArrayList<>();
@@ -116,7 +110,7 @@ public class StatsListeners implements Listener {
         }
         ItemStack main = player.getInventory().getItemInMainHand();
         if (main.getType() != Material.AIR) {
-            ItemEditor.updateItemOwner(player.getInventory().getItemInMainHand(), player.getUniqueId());
+            ItemEditor.updateItemOwner(main, player.getUniqueId());
         }
         // Assign base values for each stat
         WeaponStats damageStats = new WeaponStats(0, 0, 30, 50, 0, 0);
@@ -173,9 +167,11 @@ public class StatsListeners implements Listener {
         double healthPercent = playerStats.getStatValue(StatType.HEALTH) / playerStats.getMaxHealth();
         playerStats.setMaxHealth(healthStats.getStatValue(StatType.HEALTH));
         player.setAbsorptionAmount(Math.min(playerStats.getAbsorption(), 40));
-        healthStats.setStatValue(StatType.HEALTH_REGEN, healthPercent * healthStats.getStatValue(StatType.HEALTH));
-        player.setHealth(Math.min(2048, healthStats.getStatValue(StatType.HEALTH)));
-        playerStats.setHealthStats(healthStats);
+        playerStats.setStatValue(StatType.HEALTH, healthPercent * healthStats.getStatValue(StatType.HEALTH));
+        player.setHealth(Math.min(2048, playerStats.getStatValue(StatType.HEALTH)));
+        playerStats.setStatValue(StatType.DEFENSE, healthStats.getStatValue(StatType.DEFENSE));
+        playerStats.setStatValue(StatType.TRUE_DEFENSE, healthStats.getStatValue(StatType.TRUE_DEFENSE));
+        playerStats.setStatValue(StatType.SPEED, healthStats.getStatValue(StatType.SPEED));
         playerStats.setDamageStats(damageStats);
         playerStats.setAbilityStats(abilityStats);
         playerStats.setFishingStats(fishingStats);
@@ -221,7 +217,7 @@ public class StatsListeners implements Listener {
         mobInfo.setStatValue(StatType.CRIT_DAMAGE, damageStats.getStatValue(StatType.CRIT_DAMAGE));
         mobInfo.setStatValue(StatType.ATTACK_SPEED, damageStats.getStatValue(StatType.ATTACK_SPEED));
         mobInfo.setStatValue(StatType.FEROCITY, damageStats.getStatValue(StatType.FEROCITY));
-        entity.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
+        MobListeners.updateMobInfo(entity, mobInfo);
     }
 
     /**
@@ -444,7 +440,7 @@ public class StatsListeners implements Listener {
             }
         }
         if (equipment.getItemInMainHand().getType() != Material.AIR) {
-            ItemInfo mainHandInfo = equipment.getItemInMainHand().getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+            ItemInfo mainHandInfo = ItemEditor.getInfo(equipment.getItemInMainHand());
             if (mainHandInfo != null && !ItemEditor.isArmor(mainHandInfo)) {
                 equippedItems.add(equipment.getItemInMainHand());
             }
@@ -459,7 +455,7 @@ public class StatsListeners implements Listener {
         }
         ArrayList<ItemInfo> infos = new ArrayList<>();
         for (ItemStack item : getAllEquipped(entity)) {
-            ItemInfo info = item.getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+            ItemInfo info = ItemEditor.getInfo(item);
             if (info != null) {
                 infos.add(info);
             }

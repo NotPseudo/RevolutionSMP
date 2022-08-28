@@ -6,6 +6,7 @@ import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentType;
 import me.notpseudo.revolutionsmp.items.*;
 import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
+import me.notpseudo.revolutionsmp.specialiteminfo.InvalidClassInfo;
 import me.notpseudo.revolutionsmp.specialiteminfo.SpecialItemInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -299,7 +300,7 @@ public class ItemInfo implements Serializable {
     }
 
     public void setOwner(UUID owner) {
-        if (itemType == ItemType.VANILLA_ITEM) {
+        if (itemType == ItemType.VANILLA_ITEM || itemType == ItemType.ITEM) {
             return;
         }
         this.owner = owner;
@@ -413,7 +414,7 @@ public class ItemInfo implements Serializable {
     }
 
     public void upgradeFrom(ItemInfo older) {
-        if (itemType == ItemType.VANILLA_ITEM) {
+        if (itemType == ItemType.VANILLA_ITEM || itemType == ItemType.ITEM) {
             return;
         }
         modifiers.combine(older.modifiers);
@@ -454,55 +455,70 @@ public class ItemInfo implements Serializable {
             wisdomStats = itemID.getDefaultWisdomStats();
         }
         if (reforge != null) {
-            weaponStats.combine(reforge.getWeaponStats(rarity, owner));
-            armorStats.combine(reforge.getArmorStats(rarity, owner));
-            abilityStats.combine(reforge.getAbilityStats(rarity, owner));
-            fishingStats.combine(reforge.getFishingStats(rarity, owner));
-            miningStats.combine(reforge.getMiningStats(rarity, owner));
-            gatheringStats.combine(reforge.getGatheringStats(rarity, owner));
-            luckStats.combine(reforge.getLuckStats(rarity, owner));
-            regenStats.combine(reforge.getRegenStats(rarity, owner));
-            wisdomStats.combine(reforge.getWisdomStats(rarity, owner));
+            getWeaponStats().combine(reforge.getWeaponStats(rarity, owner));
+            getArmorStats().combine(reforge.getArmorStats(rarity, owner));
+            getAbilityStats().combine(reforge.getAbilityStats(rarity, owner));
+            getFishingStats().combine(reforge.getFishingStats(rarity, owner));
+            getMiningStats().combine(reforge.getMiningStats(rarity, owner));
+            getGatheringStats().combine(reforge.getGatheringStats(rarity, owner));
+            getLuckStats().combine(reforge.getLuckStats(rarity, owner));
+            getRegenStats().combine(reforge.getRegenStats(rarity, owner));
+            getWisdomStats().combine(reforge.getWisdomStats(rarity, owner));
         }
         if (enchantmentsHolder != null && itemType != ItemType.ITEM) {
             for (EnchantmentObject enchant : enchantmentsHolder.getEnchants()) {
                 int level = enchant.getLevel();
-                weaponStats.combine(enchant.getType().getApplyWeaponStats(level));
-                armorStats.combine(enchant.getType().getApplyArmorStats(level));
-                abilityStats.combine(enchant.getType().getApplyAbilityStats(level));
-                fishingStats.combine(enchant.getType().getApplyFishingStats(level));
-                miningStats.combine(enchant.getType().getApplyMiningStats(level));
-                gatheringStats.combine(enchant.getType().getApplyGatheringStats(level));
-                luckStats.combine(enchant.getType().getApplyLuckStats(level));
-                regenStats.combine(enchant.getType().getApplyRegenStats(level));
-                wisdomStats.combine(enchant.getType().getApplyWisdomStats(level));
+                getWeaponStats().combine(enchant.getType().getApplyWeaponStats(level));
+                getArmorStats().combine(enchant.getType().getApplyArmorStats(level));
+                getAbilityStats().combine(enchant.getType().getApplyAbilityStats(level));
+                getFishingStats().combine(enchant.getType().getApplyFishingStats(level));
+                getMiningStats().combine(enchant.getType().getApplyMiningStats(level));
+                getGatheringStats().combine(enchant.getType().getApplyGatheringStats(level));
+                getLuckStats().combine(enchant.getType().getApplyLuckStats(level));
+                getRegenStats().combine(enchant.getType().getApplyRegenStats(level));
+                getWisdomStats().combine(enchant.getType().getApplyWisdomStats(level));
             }
         }
         if (gemstonesHolder != null) {
-            weaponStats.combine(gemstonesHolder.getGemWeapon());
-            armorStats.combine(gemstonesHolder.getGemArmor());
-            abilityStats.combine(gemstonesHolder.getGemAbility());
-            fishingStats.combine(gemstonesHolder.getGemFishing());
-            miningStats.combine(gemstonesHolder.getGemMining());
-            gatheringStats.combine(gemstonesHolder.getGemGathering());
-            luckStats.combine(gemstonesHolder.getGemLuck());
-            regenStats.combine(gemstonesHolder.getGemRegen());
-            wisdomStats.combine(gemstonesHolder.getGemWisdom());
+            getWeaponStats().combine(gemstonesHolder.getGemWeapon());
+            getArmorStats().combine(gemstonesHolder.getGemArmor());
+            getAbilityStats().combine(gemstonesHolder.getGemAbility());
+            getFishingStats().combine(gemstonesHolder.getGemFishing());
+            getMiningStats().combine(gemstonesHolder.getGemMining());
+            getGatheringStats().combine(gemstonesHolder.getGemGathering());
+            getLuckStats().combine(gemstonesHolder.getGemLuck());
+            getRegenStats().combine(gemstonesHolder.getGemRegen());
+            getWisdomStats().combine(gemstonesHolder.getGemWisdom());
         }
         if (abilitiesHolder != null) {
             abilitiesHolder.reorganize();
         }
         if (modifiers != null) {
-            weaponStats.combine(modifiers.getWeaponStats());
-            armorStats.combine(modifiers.getArmorStats());
-            abilityStats.combine(modifiers.getArmorStats());
-            fishingStats.combine(modifiers.getFishingStats());
-            miningStats.combine(modifiers.getMiningStats());
-            gatheringStats.combine(modifiers.getGatheringStats());
-            luckStats.combine(modifiers.getLuckStats());
-            regenStats.combine(modifiers.getRegenStats());
-            wisdomStats.combine(modifiers.getWisdomStats());
+            getWeaponStats().combine(modifiers.getWeaponStats());
+            getArmorStats().combine(modifiers.getArmorStats());
+            getAbilityStats().combine(modifiers.getArmorStats());
+            getFishingStats().combine(modifiers.getFishingStats());
+            getMiningStats().combine(modifiers.getMiningStats());
+            getGatheringStats().combine(modifiers.getGatheringStats());
+            getLuckStats().combine(modifiers.getLuckStats());
+            getRegenStats().combine(modifiers.getRegenStats());
+            getWisdomStats().combine(modifiers.getWisdomStats());
         }
+    }
+
+    private ItemInfo() {
+        extraInfo = new InvalidClassInfo(this);
+
+    }
+
+    /**
+     * Returns a new empty ItemInfo when one can not be deserialized
+     * <b>Should only be used by ItemInfoDataType for InvalidClassException</b>
+     *
+     * @return A new ItemInfo with InvalidClass special info
+     */
+    public static ItemInfo newForInvalid() {
+        return new ItemInfo();
     }
 
     /*

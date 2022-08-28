@@ -8,6 +8,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -45,11 +46,17 @@ public class GemstonesHolder implements Serializable {
         }
         ArrayList<GemstoneObject> failedGems = new ArrayList<>();
         for (GemstoneObject gem : other.gems) {
+            if (gem == null) {
+                continue;
+            }
             if (!add(gem)) {
                 failedGems.add(gem);
             }
         }
         for (GemstoneObject gem : other.oldGems) {
+            if (gem == null) {
+                continue;
+            }
             if (!add(gem)) {
                 failedGems.add(gem);
             }
@@ -82,7 +89,7 @@ public class GemstonesHolder implements Serializable {
         return true;
     }
 
-    private boolean add(GemstoneObject newGem) {
+    private boolean add(@NotNull GemstoneObject newGem) {
         for (int i = 0; i < allowedSlots.length; i++) {
             if (gems[i] == null && allowedSlots[i].allows(newGem.getGem())) {
                 gems[i] = newGem;

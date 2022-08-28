@@ -1813,8 +1813,8 @@ public enum CustomMobType {
     public ExpDropObject getExp(int level) {
         return switch (getMobBehavior()) {
             case PASSIVE, TAMED -> new ExpDropObject(SkillType.COMBAT, level);
-            case NEUTRAL, HOSTILE -> new ExpDropObject(SkillType.COMBAT, 5 * level);
-            case BOSS -> new ExpDropObject(SkillType.COMBAT, 100 * level);
+            case NEUTRAL, HOSTILE -> new ExpDropObject(SkillType.COMBAT, 2 * level);
+            case BOSS -> new ExpDropObject(SkillType.COMBAT, 10 * level);
             case SEA_CREATURE -> new ExpDropObject(SkillType.FISHING, SeaCreature.valueOf(this.toString()).getFishXP());
         };
     }

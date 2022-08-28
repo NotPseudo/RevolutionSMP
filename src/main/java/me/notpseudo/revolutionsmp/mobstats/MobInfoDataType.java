@@ -33,9 +33,11 @@ public class MobInfoDataType implements PersistentDataType<byte[], MobInfo> {
             InputStream is = new ByteArrayInputStream(primitive);
             ObjectInputStream o = new ObjectInputStream(is);
             return (MobInfo) o.readObject();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        } catch (IOException ioException) {
+            return MobInfo.newForInvalid();
         }
-        return null;
+        return MobInfo.newForInvalid();
     }
 }

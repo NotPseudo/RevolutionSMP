@@ -22,8 +22,6 @@ import java.util.Map;
 
 public class EnchantmentUtils implements Listener {
 
-    private static final NamespacedKey itemKey = ItemEditor.getItemKey();
-
     public EnchantmentUtils(RevolutionSMP plugin) {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }

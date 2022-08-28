@@ -100,10 +100,7 @@ public class ReforgeMenu extends Menu {
         }
         Reforge reforge = matches.get((int) (Math.random() * matches.size()));
         info.setReforge(reforge);
-        ItemMeta meta = item.getItemMeta();
-        meta.getPersistentDataContainer().set(ItemEditor.getItemKey(), new ItemInfoDataType(), info);
-        ItemEditor.updateLore(meta);
-        item.setItemMeta(meta);
+        ItemEditor.updateItemInfo(item, info);
         eco.addPurse(-1 * cost);
         player.sendMessage(Component.text(info.getName() + " was reforged to " + reforge.getName(), NamedTextColor.GREEN));
         return true;

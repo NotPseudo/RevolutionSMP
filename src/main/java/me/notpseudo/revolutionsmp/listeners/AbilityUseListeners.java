@@ -22,9 +22,6 @@ import org.bukkit.inventory.ItemStack;
 // Methods that run to simulate Abilities
 public class AbilityUseListeners implements Listener {
 
-    private static final NamespacedKey itemKey = ItemEditor.getItemKey();
-    private static final NamespacedKey playerKey = StatsListeners.getPlayerStatsKey();
-
     public AbilityUseListeners(RevolutionSMP plugin) {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }

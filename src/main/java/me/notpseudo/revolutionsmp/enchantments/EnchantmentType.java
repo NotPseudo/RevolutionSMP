@@ -11,6 +11,7 @@ import me.notpseudo.revolutionsmp.listeners.StatsListeners;
 import me.notpseudo.revolutionsmp.mining.CustomOreLocation;
 import me.notpseudo.revolutionsmp.mobstats.BaseEntityStats;
 import me.notpseudo.revolutionsmp.mobstats.MobCategory;
+import me.notpseudo.revolutionsmp.mobstats.MobInfo;
 import me.notpseudo.revolutionsmp.mobstats.MobInfoDataType;
 import me.notpseudo.revolutionsmp.playerstats.PlayerStats;
 import net.kyori.adventure.text.Component;
@@ -315,17 +316,21 @@ public enum EnchantmentType {
     },
     GIANT_KILLER {
         @Override
-        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, EntityDamageEvent event, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player attacker, LivingEntity target, int level, EntityDamageEvent event, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return null;
             }
             if (type != IncreaseType.ADDITIVE_PERCENT) {
                 return null;
             }
-            BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType()), damagerStats = damager.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
+            BaseEntityStats targetStats = MobListeners.getMobInfo(target);
+            if (target instanceof Player player) {
+                targetStats = StatsListeners.getPlayerStats(player);
+            }
+            PlayerStats damagerStats = StatsListeners.getPlayerStats(attacker);
             int morePercent;
-            if (targetStats == null || damagerStats == null) {
-                morePercent = (int) ((target.getHealth() - damager.getHealth()) / damager.getHealth()) * 100;
+            if (targetStats == null) {
+                morePercent = (int) ((target.getHealth() - attacker.getHealth()) / attacker.getHealth()) * 100;
             } else {
                 morePercent = (int) ((targetStats.getStatValue(StatType.HEALTH) - damagerStats.getStatValue(StatType.HEALTH)) / damagerStats.getStatValue(StatType.HEALTH)) * 100;
             }
@@ -498,14 +503,14 @@ public enum EnchantmentType {
     },
     PROSECUTE {
         @Override
-        public WeaponStats getEventWeapon(Player damager, LivingEntity target, int level, EntityDamageEvent event, IncreaseType type) {
+        public WeaponStats getEventWeapon(Player attacker, LivingEntity target, int level, EntityDamageEvent event, IncreaseType type) {
             if (type == IncreaseType.MULTIPLICATIVE_PERCENT) {
                 return null;
             }
             if (type != IncreaseType.ADDITIVE_PERCENT) {
                 return null;
             }
-            BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
+            BaseEntityStats targetStats = MobListeners.getMobInfo(target);
             if (target instanceof Player player) {
                 targetStats = StatsListeners.getPlayerStats(player);
             }
@@ -752,7 +757,7 @@ public enum EnchantmentType {
             if (type != IncreaseType.ADDITIVE_PERCENT) {
                 return null;
             }
-            BaseEntityStats targetStats = target.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
+            BaseEntityStats targetStats = MobListeners.getMobInfo(target);
             if (target instanceof Player player) {
                 targetStats = StatsListeners.getPlayerStats(player);
             }
@@ -963,9 +968,9 @@ public enum EnchantmentType {
                 return null;
             }
             Collection<LivingEntity> enemies = damager.getLocation().getNearbyLivingEntities(10).stream()
-                    .filter(c -> c instanceof Creature && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()) != null
-                            && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobCategory.PASSIVE
-                            && c.getPersistentDataContainer().get(mobKey, new MobInfoDataType()).getMobBehavior() != MobCategory.TAMED
+                    .filter(c -> MobListeners.getMobInfo(c) != null
+                            && MobListeners.getMobInfo(c).getMobBehavior() != MobCategory.PASSIVE
+                            && MobListeners.getMobInfo(c).getMobBehavior() != MobCategory.TAMED
                     ).toList();
             int enemyCount = Math.min(16, enemies.size());
             return new WeaponStats(level * 1.25 * enemyCount, 0, 0, 0, 0, 0);
@@ -1332,11 +1337,6 @@ public enum EnchantmentType {
             return List.of(ItemType.FISHING_ROD, ItemType.FISHING_WEAPON);
         }
     };
-
-    /**
-     * The NamespacedKey from the MobListeners class used to access MobInfo stored in Persistent Data
-     */
-    private final static NamespacedKey mobKey = MobListeners.getMobKey();
 
     public String getName() {
         return ItemEditor.getStringFromEnum(this);

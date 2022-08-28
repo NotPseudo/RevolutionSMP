@@ -404,7 +404,7 @@ public class HarvestingListeners implements Listener {
         if (info != null && info.getExtraInfo() != null && info.getExtraInfo() instanceof FarmingToolInfo farmTool) {
             farmTool.add(block.getType(), notPlaced);
             info.setExtraInfo(farmTool);
-            mainHand.getItemMeta().getPersistentDataContainer().set(ItemEditor.getItemKey(), new ItemInfoDataType(), info);
+            ItemEditor.updateItemInfo(mainHand, info);
         }
         SkillUtils.addBreakingXpToPlayer(event.getPlayer(), SkillType.FARMING, block, null, exp);
     }

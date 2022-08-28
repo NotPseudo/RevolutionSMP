@@ -52,6 +52,13 @@ public class BaseEntityStats implements Serializable {
     }
 
     /**
+     * Constructor only for use for InvalidClassException
+     */
+    public BaseEntityStats() {
+
+    }
+
+    /**
      * Returns the maximum health of the entity
      *
      * @return The maximum health
@@ -121,7 +128,7 @@ public class BaseEntityStats implements Serializable {
             multiplier = ((level - average) / range) + 1;
         }
         double difference = multiplier - 1;
-        maxHealth = customMobType.getHealth() * multiplier;
+        maxHealth = (int) (customMobType.getHealth() * multiplier);
         double damage = customMobType.getDamage() * multiplier;
         double defense = customMobType.getDefense() * (1 + difference * 0.75);
         double speed = customMobType.getSpeed() * (1 + difference * 0.2);

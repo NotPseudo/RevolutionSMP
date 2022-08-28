@@ -60,7 +60,7 @@ public class MobListeners implements Listener {
                     mob.setTarget(owner);
                 }
             }
-            living.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
+            updateMobInfo(living, mobInfo);
             double vanillaHealth = Math.min(2048, mobInfo.getMaxHealth());
             double healthPercent = living.getHealth() / living.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
             living.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(vanillaHealth);
@@ -111,11 +111,10 @@ public class MobListeners implements Listener {
         if (entity instanceof Tameable && (((Tameable) entity).isTamed())) {
             mobInfo.setMobBehavior(MobCategory.TAMED);
         }
-        entity.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
+        updateMobInfo(entity, mobInfo);
         double vanillaHealth = Math.min(2048, mobInfo.getMaxHealth());
-        double healthPercent = entity.getHealth() / entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-        entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(vanillaHealth);
-        entity.setHealth(healthPercent * vanillaHealth);
+        entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue((int) vanillaHealth);
+        entity.setHealth((int) vanillaHealth);
         // Adjusts an entity's Speed
         double speed = mobInfo.getStatValue(StatType.SPEED);
         double defaultSpeed = entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue();
@@ -169,11 +168,11 @@ public class MobListeners implements Listener {
         BukkitRunnable rename = new BukkitRunnable() {
             @Override
             public void run() {
-                if (event.getRightClicked().customName() == null) {
+                if (living.customName() == null) {
                     return;
                 }
-                mobInfo.setName(((TextComponent) event.getRightClicked().customName()).content());
-                event.getRightClicked().getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
+                mobInfo.setName(((TextComponent) living.customName()).content());
+                updateMobInfo(living, mobInfo);
             }
         };
         rename.runTaskLater(plugin, 20);
@@ -190,9 +189,9 @@ public class MobListeners implements Listener {
         if (mobInfo == null) {
             return;
         }
-        mobInfo.setVanillaMobType(entity.getType());
+        mobInfo.setVanillaMobType(living.getType());
         mobInfo.updateMobStats();
-        entity.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
+        updateMobInfo(living, mobInfo);
     }
 
     // Updates MobInfo when an Entity gets tamed
@@ -208,7 +207,7 @@ public class MobListeners implements Listener {
         mobInfo.setMobBehavior(MobCategory.TAMED);
         double vanillaMaxHealth = Math.min(2048, mobInfo.getMaxHealth());
         event.getEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(vanillaMaxHealth);
-        event.getEntity().getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
+        updateMobInfo(event.getEntity(), mobInfo);
     }
 
     // Updates MobInfo when an Entity targets or untargets
@@ -228,7 +227,7 @@ public class MobListeners implements Listener {
             } else {
                 mobInfo.setMobBehavior(mobInfo.getCustomMobType().getMobBehavior());
             }
-            entity.getPersistentDataContainer().set(mobKey, new MobInfoDataType(), mobInfo);
+            updateMobInfo(living, mobInfo);
         }
     }
 
@@ -238,8 +237,14 @@ public class MobListeners implements Listener {
             return null;
         }
         MobInfo mobInfo = entity.getPersistentDataContainer().get(mobKey, new MobInfoDataType());
-        if (mobInfo == null) {
+        if (mobInfo == null || mobInfo.getCustomMobType() == null) {
             mobInfo = createMobInfo(entity);
+            if (entity instanceof Tameable tame && tame.getOwner() != null) {
+                mobInfo.setMobBehavior(MobCategory.TAMED);
+            }
+            if (entity.customName() != null) {
+                mobInfo.setName(((TextComponent) entity.customName()).content());
+            }
         }
         return mobInfo;
     }

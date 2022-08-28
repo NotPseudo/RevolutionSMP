@@ -4,10 +4,7 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
+import java.io.*;
 
 // Credit: CodedRed's Custom Persistent Data Types Tutorial: https://youtu.be/3OLSfOkgPMw
 // PersistentDataType for ItemInfo
@@ -33,9 +30,11 @@ public class ItemInfoDataType implements PersistentDataType<byte[], ItemInfo> {
             InputStream is = new ByteArrayInputStream(primitive);
             ObjectInputStream o = new ObjectInputStream(is);
             return (ItemInfo) o.readObject();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        } catch (IOException ioException) {
+            return ItemInfo.newForInvalid();
         }
-        return null;
+        return ItemInfo.newForInvalid();
     }
 }

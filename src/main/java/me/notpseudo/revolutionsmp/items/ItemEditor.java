@@ -7,6 +7,7 @@ import me.notpseudo.revolutionsmp.abilities.AbilityType;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentObject;
 import me.notpseudo.revolutionsmp.enchantments.EnchantmentType;
 import me.notpseudo.revolutionsmp.itemstats.*;
+import me.notpseudo.revolutionsmp.specialiteminfo.InvalidClassInfo;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -564,6 +565,9 @@ public class ItemEditor {
     }
 
     public static ItemMeta createMetaFromID(ItemMeta meta, ItemID itemID) {
+        if (meta == null) {
+            return null;
+        }
         meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), new ItemInfo(itemID));
         if (meta instanceof LeatherArmorMeta leatherMeta && itemID.getColor() != null) {
             leatherMeta.setColor(itemID.getColor());
@@ -578,6 +582,9 @@ public class ItemEditor {
     }
 
     public static ItemMeta createMetaFromMat(ItemMeta meta, Material material) {
+        if (meta == null) {
+            return null;
+        }
         try {
             ItemID itemID = ItemID.valueOf(material.toString());
             return createMetaFromID(meta, itemID);
@@ -620,7 +627,16 @@ public class ItemEditor {
         if (item == null || item.getType() == Material.AIR) {
             return null;
         }
-        return item.getItemMeta().getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) {
+            return null;
+        }
+        ItemInfo info = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        if (info == null || info.getExtraInfo() instanceof InvalidClassInfo) {
+            info = new ItemInfo(item.getType());
+            updateItemInfo(item, info);
+        }
+        return info;
     }
 
     /**

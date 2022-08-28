@@ -1912,7 +1912,7 @@ public enum Reforge {
     PLEASANTS {
         @Override
         public List<ItemType> getItemTypes() {
-            return List.of(ItemType.AXE);
+            return List.of(ItemType.HOE);
         }
 
         @Override
@@ -1937,7 +1937,7 @@ public enum Reforge {
     GREEN_THUMB {
         @Override
         public List<ItemType> getItemTypes() {
-            return List.of(ItemType.AXE);
+            return List.of(ItemType.HOE);
         }
 
         @Override

@@ -5,19 +5,22 @@ import me.notpseudo.revolutionsmp.items.ItemEditor;
 import me.notpseudo.revolutionsmp.items.ItemID;
 import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.ItemInfo;
-import me.notpseudo.revolutionsmp.itemstats.ItemInfoDataType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.Container;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -32,8 +35,6 @@ public class CollectionUtils implements Listener {
     private static final NamespacedKey collectionsKey = new NamespacedKey(RevolutionSMP.getPlugin(RevolutionSMP.class), "collectionsKey");
 
     private static final NamespacedKey playerDroppedKey = new NamespacedKey(RevolutionSMP.getPlugin(RevolutionSMP.class), "playerDroppedKey");
-
-    private static final NamespacedKey itemKey = ItemEditor.getItemKey();
 
     public CollectionUtils(RevolutionSMP plugin) {
         Bukkit.getPluginManager().registerEvents(this, plugin);
@@ -55,6 +56,24 @@ public class CollectionUtils implements Listener {
             return;
         }
         item.getPersistentDataContainer().set(playerDroppedKey, new UUIDDataType(), player.getUniqueId());
+    }
+
+    @EventHandler
+    public void onContainerBreak(BlockBreakEvent event) {
+        Block block = event.getBlock();
+        if (!(block.getState() instanceof Container container)) {
+            return;
+        }
+        Inventory inventory = container.getInventory();
+        Player player = event.getPlayer();
+        World world = block.getWorld();
+        Location location = block.getLocation();
+        for (ItemStack item : inventory.getContents()) {
+            if (item != null && item.getType() != Material.AIR) {
+                makePlayerDropped(player, world.dropItem(location, item));
+            }
+        }
+        inventory.clear();
     }
 
     @EventHandler
@@ -116,12 +135,11 @@ public class CollectionUtils implements Listener {
     @EventHandler
     public void onDropSpawn(ItemSpawnEvent event) {
         ItemStack item = event.getEntity().getItemStack();
-        ItemMeta meta = item.getItemMeta();
-        ItemInfo info = meta.getPersistentDataContainer().get(itemKey, new ItemInfoDataType());
+        ItemInfo info = ItemEditor.getInfo(item);
         if (info != null) {
             return;
         }
-        item.setItemMeta(ItemEditor.createMetaFromMat(meta, item.getType()));
+        ItemEditor.updateItemInfo(item, info);
     }
 
     @NotNull

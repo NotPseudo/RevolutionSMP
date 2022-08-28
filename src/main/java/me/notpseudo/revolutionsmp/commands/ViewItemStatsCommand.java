@@ -42,8 +42,7 @@ public class ViewItemStatsCommand implements CommandExecutor {
                         return;
                     }
                     count++;
-                    ItemMeta meta = player.getInventory().getItemInMainHand().getItemMeta();
-                    ItemInfo info = meta.getPersistentDataContainer().get(ItemEditor.getItemKey(), new ItemInfoDataType());
+                    ItemInfo info = ItemEditor.getInfo(player.getInventory().getItemInMainHand());
                     if (info == null) {
                         this.cancel();
                         return;

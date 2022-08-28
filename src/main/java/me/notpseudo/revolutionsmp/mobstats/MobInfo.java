@@ -133,4 +133,12 @@ public class MobInfo extends BaseEntityStats implements Serializable {
         super.updateStats(customMobType, level);
     }
 
+    private MobInfo() {
+        super();
+        holder = null;
+    }
+    public static MobInfo newForInvalid() {
+        return new MobInfo();
+    }
+
 }

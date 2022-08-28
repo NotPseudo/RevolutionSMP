@@ -32,6 +32,9 @@ public class CraftingListeners implements Listener {
         ItemStack result = event.getRecipe().getResult();
         ItemInfo info = ItemEditor.getInfo(result);
         ItemMeta meta = result.getItemMeta();
+        if (meta == null) {
+            return;
+        }
         if (info == null) {
             meta = ItemEditor.createMetaFromMat(meta, result.getType());
             result.setItemMeta(meta);
