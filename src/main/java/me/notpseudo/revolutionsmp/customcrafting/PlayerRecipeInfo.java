@@ -32,8 +32,13 @@ public class PlayerRecipeInfo implements Serializable {
     }
 
     public boolean unlockNewRecipe(CustomRecipe recipe) {
+        if (recipe == null) {
+            return false;
+        }
         boolean added = unlockedRecipes.add(recipe.getKey().getKey());
-        CustomCraftingUtils.updateRecipeInfo(Bukkit.getPlayer(PLAYER), this);
+        if (added) {
+            CustomCraftingUtils.updateRecipeInfo(Bukkit.getPlayer(PLAYER), this);
+        }
         return added;
     }
 

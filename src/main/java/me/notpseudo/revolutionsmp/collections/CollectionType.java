@@ -233,6 +233,13 @@ public enum CollectionType {
         public List<Material> getVanillaMaterials() {
             return List.of(Material.COBBLESTONE, Material.STONE, Material.ANDESITE, Material.DIORITE, Material.GRANITE, Material.CALCITE);
         }
+        @Override
+        public List<ItemID> getLevelRecipeRewards(int level) {
+            return switch (level) {
+                default -> new ArrayList<>(0);
+                case 1 -> List.of(ItemID.ENCHANTED_COBBLESTONE);
+            };
+        }
     },
     GRAVEL {
         @Override
@@ -243,6 +250,7 @@ public enum CollectionType {
         public List<Material> getVanillaMaterials() {
             return List.of(Material.GRAVEL);
         }
+
     },
     SAND {
         @Override
@@ -252,6 +260,13 @@ public enum CollectionType {
         @Override
         public List<Material> getVanillaMaterials() {
             return List.of(Material.SAND);
+        }
+        @Override
+        public List<ItemID> getLevelRecipeRewards(int level) {
+            return switch (level) {
+                default -> new ArrayList<>(0);
+                case 1 -> List.of(ItemID.ENCHANTED_SAND);
+            };
         }
     },
     ICE {
@@ -263,6 +278,13 @@ public enum CollectionType {
         public List<Material> getVanillaMaterials() {
             return List.of(Material.ICE, Material.PACKED_ICE, Material.BLUE_ICE);
         }
+        @Override
+        public List<ItemID> getLevelRecipeRewards(int level) {
+            return switch (level) {
+                default -> new ArrayList<>(0);
+                case 1 -> List.of(ItemID.ENCHANTED_ICE);
+            };
+        }
     },
     COAL {
         @Override
@@ -272,6 +294,13 @@ public enum CollectionType {
         @Override
         public List<Material> getVanillaMaterials() {
             return List.of(Material.COAL, Material.COAL_BLOCK);
+        }
+        @Override
+        public List<ItemID> getLevelRecipeRewards(int level) {
+            return switch (level) {
+                default -> new ArrayList<>(0);
+                case 1 -> List.of(ItemID.ENCHANTED_COAL);
+            };
         }
     },
     DIAMOND {
@@ -283,6 +312,13 @@ public enum CollectionType {
         public List<Material> getVanillaMaterials() {
             return List.of(Material.DIAMOND, Material.DIAMOND_BLOCK);
         }
+        @Override
+        public List<ItemID> getLevelRecipeRewards(int level) {
+            return switch (level) {
+                default -> new ArrayList<>(0);
+                case 1 -> List.of(ItemID.ENCHANTED_DIAMOND);
+            };
+        }
     },
     EMERALD {
         @Override
@@ -292,6 +328,13 @@ public enum CollectionType {
         @Override
         public List<Material> getVanillaMaterials() {
             return List.of(Material.EMERALD, Material.EMERALD_BLOCK);
+        }
+        @Override
+        public List<ItemID> getLevelRecipeRewards(int level) {
+            return switch (level) {
+                default -> new ArrayList<>(0);
+                case 1 -> List.of(ItemID.ENCHANTED_EMERALD);
+            };
         }
     },
     GOLD {
@@ -303,6 +346,13 @@ public enum CollectionType {
         public List<Material> getVanillaMaterials() {
             return List.of(Material.GOLD_INGOT, Material.GOLD_NUGGET, Material.RAW_GOLD, Material.GOLD_BLOCK, Material.RAW_GOLD_BLOCK);
         }
+        @Override
+        public List<ItemID> getLevelRecipeRewards(int level) {
+            return switch (level) {
+                default -> new ArrayList<>(0);
+                case 1 -> List.of(ItemID.ENCHANTED_GOLD);
+            };
+        }
     },
     IRON {
         @Override
@@ -312,6 +362,13 @@ public enum CollectionType {
         @Override
         public List<Material> getVanillaMaterials() {
             return List.of(Material.IRON_INGOT, Material.RAW_IRON, Material.IRON_BLOCK, Material.RAW_IRON_BLOCK);
+        }
+        @Override
+        public List<ItemID> getLevelRecipeRewards(int level) {
+            return switch (level) {
+                default -> new ArrayList<>(0);
+                case 1 -> List.of(ItemID.ENCHANTED_IRON);
+            };
         }
     },
     COPPER {
@@ -323,6 +380,13 @@ public enum CollectionType {
         public List<Material> getVanillaMaterials() {
             return List.of(Material.COPPER_INGOT, Material.RAW_COPPER, Material.COPPER_BLOCK, Material.RAW_COPPER_BLOCK);
         }
+        @Override
+        public List<ItemID> getLevelRecipeRewards(int level) {
+            return switch (level) {
+                default -> new ArrayList<>(0);
+                case 1 -> List.of(ItemID.ENCHANTED_COPPER);
+            };
+        }
     },
     LAPIS {
         @Override
@@ -332,6 +396,13 @@ public enum CollectionType {
         @Override
         public List<Material> getVanillaMaterials() {
             return List.of(Material.LAPIS_LAZULI, Material.LAPIS_BLOCK);
+        }
+        @Override
+        public List<ItemID> getLevelRecipeRewards(int level) {
+            return switch (level) {
+                default -> new ArrayList<>(0);
+                case 1 -> List.of(ItemID.ENCHANTED_LAPIS_LAZULI);
+            };
         }
     },
     REDSTONE {
@@ -343,6 +414,13 @@ public enum CollectionType {
         public List<Material> getVanillaMaterials() {
             return List.of(Material.REDSTONE, Material.REDSTONE_BLOCK);
         }
+        @Override
+        public List<ItemID> getLevelRecipeRewards(int level) {
+            return switch (level) {
+                default -> new ArrayList<>(0);
+                case 1 -> List.of(ItemID.ENCHANTED_REDSTONE);
+            };
+        }
     },
     SCULK {
         @Override
@@ -352,6 +430,13 @@ public enum CollectionType {
         @Override
         public List<Material> getVanillaMaterials() {
             return List.of(Material.SCULK, Material.SCULK_VEIN, Material.SCULK_SENSOR, Material.SCULK_CATALYST, Material.SCULK_SHRIEKER);
+        }
+        @Override
+        public List<ItemID> getLevelRecipeRewards(int level) {
+            return switch (level) {
+                default -> new ArrayList<>(0);
+                case 1 -> List.of(ItemID.ENCHANTED_SCULK);
+            };
         }
     },
     NETHERRACK {
@@ -363,6 +448,13 @@ public enum CollectionType {
         public List<Material> getVanillaMaterials() {
             return List.of(Material.NETHERRACK, Material.CRIMSON_NYLIUM, Material.WARPED_NYLIUM);
         }
+        @Override
+        public List<ItemID> getLevelRecipeRewards(int level) {
+            return switch (level) {
+                default -> new ArrayList<>(0);
+                case 1 -> List.of(ItemID.ENCHANTED_NETHERRACK);
+            };
+        }
     },
     QUARTZ {
         @Override
@@ -372,6 +464,13 @@ public enum CollectionType {
         @Override
         public List<Material> getVanillaMaterials() {
             return List.of(Material.QUARTZ, Material.QUARTZ_BLOCK);
+        }
+        @Override
+        public List<ItemID> getLevelRecipeRewards(int level) {
+            return switch (level) {
+                default -> new ArrayList<>(0);
+                case 1 -> List.of(ItemID.ENCHANTED_QUARTZ);
+            };
         }
     },
     GLOWSTONE {
@@ -383,6 +482,13 @@ public enum CollectionType {
         public List<Material> getVanillaMaterials() {
             return List.of(Material.GLOWSTONE_DUST, Material.GLOWSTONE);
         }
+        @Override
+        public List<ItemID> getLevelRecipeRewards(int level) {
+            return switch (level) {
+                default -> new ArrayList<>(0);
+                case 1 -> List.of(ItemID.ENCHANTED_GLOWSTONE_DUST);
+            };
+        }
     },
     BASALT {
         @Override
@@ -392,6 +498,13 @@ public enum CollectionType {
         @Override
         public List<Material> getVanillaMaterials() {
             return List.of(Material.BASALT, Material.BLACKSTONE, Material.POLISHED_BASALT, Material.SMOOTH_BASALT);
+        }
+        @Override
+        public List<ItemID> getLevelRecipeRewards(int level) {
+            return switch (level) {
+                default -> new ArrayList<>(0);
+                case 1 -> List.of(ItemID.ENCHANTED_BASALT);
+            };
         }
     },
     NETHERITE {
@@ -403,6 +516,13 @@ public enum CollectionType {
         public List<Material> getVanillaMaterials() {
             return List.of(Material.NETHERITE_INGOT, Material.ANCIENT_DEBRIS, Material.NETHERITE_BLOCK, Material.NETHERITE_SCRAP);
         }
+        @Override
+        public List<ItemID> getLevelRecipeRewards(int level) {
+            return switch (level) {
+                default -> new ArrayList<>(0);
+                case 1 -> List.of(ItemID.ENCHANTED_NETHERITE);
+            };
+        }
     },
     OBSIDIAN {
         @Override
@@ -412,6 +532,13 @@ public enum CollectionType {
         @Override
         public List<Material> getVanillaMaterials() {
             return List.of(Material.OBSIDIAN, Material.CRYING_OBSIDIAN, Material.TUFF);
+        }
+        @Override
+        public List<ItemID> getLevelRecipeRewards(int level) {
+            return switch (level) {
+                default -> new ArrayList<>(0);
+                case 1 -> List.of(ItemID.ENCHANTED_OBSIDIAN);
+            };
         }
     },
     DEEPSLATE {
@@ -423,6 +550,13 @@ public enum CollectionType {
         public List<Material> getVanillaMaterials() {
             return List.of(Material.DEEPSLATE, Material.COBBLED_DEEPSLATE);
         }
+        @Override
+        public List<ItemID> getLevelRecipeRewards(int level) {
+            return switch (level) {
+                default -> new ArrayList<>(0);
+                case 1 -> List.of(ItemID.ENCHANTED_DEEPSLATE);
+            };
+        }
     },
     MITHRIL {
         @Override
@@ -432,6 +566,13 @@ public enum CollectionType {
         @Override
         public List<ItemID> getCustomMaterials() {
             return List.of(ItemID.MITHRIL, ItemID.TITANIUM);
+        }
+        @Override
+        public List<ItemID> getLevelRecipeRewards(int level) {
+            return switch (level) {
+                default -> new ArrayList<>(0);
+                case 1 -> List.of(ItemID.ENCHANTED_MITHRIL);
+            };
         }
     },
     GEMSTONE {

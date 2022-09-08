@@ -195,24 +195,23 @@ public class ItemEditor {
             return;
         }
         ItemInfo itemInfo = getInfo(item);
-        if (itemInfo != null) {
-            if (itemInfo.getVanillaMaterial() != item.getType()) {
-                item.setType(itemInfo.getVanillaMaterial());
-            }
-            if (!(itemInfo.getItemType() == ItemType.VANILLA_ITEM || itemInfo.getItemType() == ItemType.ITEM)) {
-                if (itemInfo.getOwner() == null) {
-                    itemInfo.setOwner(newOwner);
-                }
-                if (!newOwner.equals(itemInfo.getOwner())) {
-                    itemInfo.setOwner(newOwner);
-                }
-            }
-            meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), itemInfo);
-            updateLore(meta);
-            item.setItemMeta(meta);
-        } else {
+        if (itemInfo == null) {
             item.setItemMeta(createMetaFromMat(meta, item.getType()));
+            return;
         }
+        if (itemInfo.getItemType() == ItemType.VANILLA_ITEM || itemInfo.getItemType() == ItemType.ITEM) {
+            return;
+        }
+        if (itemInfo.getVanillaMaterial() != item.getType()) {
+            item.setType(itemInfo.getVanillaMaterial());
+        }
+        if (itemInfo.getOwner() == null) {
+            itemInfo.setOwner(newOwner);
+        }
+        if (!newOwner.equals(itemInfo.getOwner())) {
+            itemInfo.setOwner(newOwner);
+        }
+        updateItemInfo(item, itemInfo);
     }
 
     public static ItemStack updateItemInfo(ItemStack item, ItemInfo info) {
@@ -220,6 +219,9 @@ public class ItemEditor {
             return item;
         }
         ItemMeta meta = item.getItemMeta();
+        if (meta == null) {
+            return item;
+        }
         meta.getPersistentDataContainer().set(itemKey, new ItemInfoDataType(), info);
         updateLore(meta);
         item.setItemMeta(meta);

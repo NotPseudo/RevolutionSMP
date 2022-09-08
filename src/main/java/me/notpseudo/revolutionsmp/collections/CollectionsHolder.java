@@ -6,10 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.UUID;
+import java.util.*;
 
 public class CollectionsHolder implements Serializable {
 
@@ -18,21 +15,21 @@ public class CollectionsHolder implements Serializable {
 
     public CollectionsHolder() {
         player = null;
-        collections = new ArrayList<>();
-        addAllTypes();
-        // reorder();
     }
 
     public CollectionsHolder(UUID player) {
         this.player = player;
         collections = new ArrayList<>();
         addAllTypes();
-        // reorder();
         CollectionUtils.updatePlayerCollections(Bukkit.getPlayer(player), this);
     }
 
     public UUID getPlayer() {
         return player;
+    }
+
+    public List<CollectionObject> getCollections() {
+        return Collections.unmodifiableList(collections);
     }
 
     @NotNull

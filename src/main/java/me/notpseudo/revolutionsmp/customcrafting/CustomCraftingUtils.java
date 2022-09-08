@@ -1,6 +1,10 @@
 package me.notpseudo.revolutionsmp.customcrafting;
 
 import me.notpseudo.revolutionsmp.RevolutionSMP;
+import me.notpseudo.revolutionsmp.collections.CollectionObject;
+import me.notpseudo.revolutionsmp.collections.CollectionType;
+import me.notpseudo.revolutionsmp.collections.CollectionUtils;
+import me.notpseudo.revolutionsmp.collections.CollectionsHolder;
 import me.notpseudo.revolutionsmp.items.ItemID;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -42,6 +46,26 @@ public class CustomCraftingUtils {
             player.sendMessage(Component.text("There was a slight issue while processing your Unlocked Recipes. If you notice any issues, please contact a staff member", NamedTextColor.YELLOW));
         }
         return info;
+    }
+
+    public static void reloadRecipes(Player player) {
+        if (player == null) {
+            return;
+        }
+        PlayerRecipeInfo recipeInfo = getRecipeInfo(player);
+        CollectionsHolder collectionsHolder = CollectionUtils.getCollectionHolder(player);
+        for (CollectionObject collection : collectionsHolder.getCollections()) {
+            int collectionLevel = collection.getLevel();
+            if (collectionLevel == 0) {
+                continue;
+            }
+            CollectionType type = collection.getType();
+            for (int i = 1 ; i <= collectionLevel; i++) {
+                for (ItemID unlock : type.getLevelRecipeRewards(i)) {
+                    recipeInfo.unlockNewRecipe(unlock.getRecipe());
+                }
+            }
+        }
     }
 
     public static void updateRecipeInfo(Player player, PlayerRecipeInfo info) {

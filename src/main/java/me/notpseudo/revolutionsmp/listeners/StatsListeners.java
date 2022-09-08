@@ -5,6 +5,8 @@ import me.notpseudo.revolutionsmp.RevolutionSMP;
 import me.notpseudo.revolutionsmp.abilities.AbilityType;
 import me.notpseudo.revolutionsmp.collections.CollectionUtils;
 import me.notpseudo.revolutionsmp.collections.CollectionsHolder;
+import me.notpseudo.revolutionsmp.customcrafting.CustomCraftingUtils;
+import me.notpseudo.revolutionsmp.customcrafting.PlayerRecipeInfo;
 import me.notpseudo.revolutionsmp.items.ItemType;
 import me.notpseudo.revolutionsmp.itemstats.*;
 import me.notpseudo.revolutionsmp.items.ItemEditor;
@@ -107,10 +109,6 @@ public class StatsListeners implements Listener {
     public static void updateStats(Player player) {
         if (player.isDead()) {
             return;
-        }
-        ItemStack main = player.getInventory().getItemInMainHand();
-        if (main.getType() != Material.AIR) {
-            ItemEditor.updateItemOwner(main, player.getUniqueId());
         }
         // Assign base values for each stat
         WeaponStats damageStats = new WeaponStats(0, 0, 30, 50, 0, 0);
@@ -356,7 +354,6 @@ public class StatsListeners implements Listener {
      */
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        // Update stats, give full mana
         Player player = event.getPlayer();
         updateStats(player);
         PlayerStats playerStats = getPlayerStats(player);
@@ -370,6 +367,7 @@ public class StatsListeners implements Listener {
         SkillUtils.updatePlayerSkills(player, skills);
         CollectionsHolder collections = CollectionUtils.getCollectionHolder(player);
         collections.addAllTypes();
+        CustomCraftingUtils.reloadRecipes(player);
     }
 
     /**
